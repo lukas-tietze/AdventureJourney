@@ -41,8 +41,9 @@ char util::terminal_view::read_char()
 }
 
 std::string util::terminal_view::read_line()
-{   
-    getstr();
+{
+    getstr(m_input_buf);
+    return std::string(m_input_buf);
 }
 
 void util::terminal_view::print(const std::string &text)
