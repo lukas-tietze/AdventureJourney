@@ -60,4 +60,8 @@ class array
         }
     }
 };
+
+int hex4ToNumber(const char *data)
+
+int hexToNumber(char c);
 } // namespace util
