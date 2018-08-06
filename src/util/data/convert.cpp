@@ -52,3 +52,8 @@ int util::hexToNumber(char c)
         return 15;
     }
 }
+
+double util::clock_to_ms(clock_t clocks)
+{
+    return clocks / (double)(CLOCKS_PER_SEC / 1000);
+}

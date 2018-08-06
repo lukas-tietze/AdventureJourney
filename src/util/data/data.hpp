@@ -267,9 +267,11 @@ class cache
     util::cache_policy cache_policy;
 }; /*cache*/
 
-int hex4ToNumber(const char *data);
+int hex4ToNumber(const char *);
 
-int hexToNumber(char c);
+int hexToNumber(char);
+
+double clock_to_ms(clock_t);
 } // namespace util
 
 #endif /*DATA_HPP*/

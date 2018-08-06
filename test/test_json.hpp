@@ -7,7 +7,10 @@
 
 namespace test
 {
-    void test_simple_tokenizing();
-} // test
+namespace json
+{
+test_result test_simple_tokenizing();
+}
+} // namespace test
 
 #endif /*JSON_HPP*/

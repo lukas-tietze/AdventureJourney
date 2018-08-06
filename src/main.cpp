@@ -2,5 +2,5 @@
 
 int main(int argc, char **argv)
 {
-    return interactive_terminal::run_test(argc, argv);
+    
 }
