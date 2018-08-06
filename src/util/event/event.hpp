@@ -13,23 +13,24 @@ template <class T>
 class listener_event
 {
   private:
-    std::vector<i_event_listener<T> *> m_listeners;
+    std::vector<i_event_listener<T> *> listeners;
 
   public:
     void operator+=(i_event_listener<T> *listener)
     {
-        if(m_listeners.find(listener) == std::vector<i_event_listener<T>>::npos)
+        if(this.listeners.find(listener) == std::vector<i_event_listener<T>>::npos)
         {
-            m_listeners.push_back(listener);
+            this.listeners.push_back(listener);
         }
     }
 
     void operator-=(i_event_listener<T> listener)
     {
-        pos = m_listeners.find(listener)
+        auto pos = this.listeners.find(listener);
+
         if(pos != std::vector<i_event_listener<T>>::npos)
         {
-            m_listeners.remove(pos);
+            this.listeners.remove(pos);
         }
     }
 };
@@ -40,15 +41,23 @@ class function_event
   public:
     typedef void (*event_function)(void *, T);
 
-    void operator+=(event_function func)
+    void operator+=(std::pair<void*, event_function> data)
     {
     }
 
-    void operator-=(event_function func)
+    void operator-=(std::pair<void*, event_function> data)
     {
+    }
+
+    void operator()(const T &args) const
+    {
+        for(const auto &item : this.targets)
+        {
+            (item.first->*item.second)(args);
+        }
     }
 
   private:
-    std::vector<event_func> m_targets;
+    std::vector<std::pair<void*, event_function>> targets;
 };
 } // namespace util

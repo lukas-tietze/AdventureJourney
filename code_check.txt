@@ -1,5 +1,5 @@
-[src/util/terminal/terminal.cpp:6]: (warning) Member variable 'terminal_view::m_input_buf' is not initialized in the constructor.
-[src/util/terminal/terminal.cpp:43]: (style) The function 'read_line' is never used.
-[src/util/terminal/terminal.cpp:26]: (style) The function 'set_echo' is never used.
-[src/util/terminal/terminal.cpp:22]: (style) The function 'set_input_mode' is never used.
+[src/util/terminal/terminal.hpp:50]: (style) The class 'control_base' does not have a constructor.
+[src/util/terminal/terminal.cpp:73]: (style) The function 'read_line' is never used.
+[src/util/terminal/terminal.cpp:50]: (style) The function 'set_echo' is never used.
+[src/util/terminal/terminal.cpp:26]: (style) The function 'set_input_mode' is never used.
 (information) Cppcheck cannot find all the include files (use --check-config for details)

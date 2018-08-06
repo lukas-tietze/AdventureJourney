@@ -3,63 +3,106 @@
 
 #include "terminal.hpp"
 
-util::terminal_view::terminal_view(int width, int height) : m_width(width),
-                                                            m_height(height)
+using namespace util::terminal;
+
+util::terminal::terminal_view::terminal_view(int width, int height) : width(width),
+                                                                      height(height)
 {
-    m_window = newwin(m_width, m_height, 0, 0);
-    box(m_window, 0, 0);
-    wrefresh(m_window);
+    this->window = newwin(this->width, this->height, 0, 0);
+
+    keypad(this->window, true);
+    box(this->window, 0, 0);
+    wrefresh(this->window);
     refresh();
 }
 
-util::terminal_view::~terminal_view()
+util::terminal::terminal_view::~terminal_view()
 {
-    wrefresh(m_window);
-    delwin(m_window);
+    wrefresh(this->window);
+    delwin(this->window);
     refresh();
 }
 
-void util::terminal_view::set_input_mode(input_mode mode)
+void util::terminal::terminal_view::set_input_mode(util::terminal::input_mode mode)
 {
-}
-
-void util::terminal_view::set_echo(bool enableEcho)
-{
-    if (enableEcho)
+    if (mode != this->input_mode)
     {
-        echo();
+        switch (mode)
+        {
+        case input_mode::BREAK:
+            raw();
+            break;
+        case input_mode::RAW:
+            cbreak();
+            break;
+        case input_mode::LINE:
+            nocbreak();
+            break;
+        default:
+            throw std::exception();
+        }
+
+        this->input_mode = mode;
+        this->on_terminal_property_changed();
     }
-    else
+}
+
+void util::terminal::terminal_view::set_echo(bool enableEcho)
+{
+    if (enableEcho != this->echo_on)
     {
-        noecho();
+        if (enableEcho)
+        {
+            echo();
+        }
+        else
+        {
+            noecho();
+        }
+
+        this->echo_on = enableEcho;
+        this->on_terminal_property_changed();
     }
 }
 
-char util::terminal_view::read_char()
+int util::terminal::terminal_view::read_key()
 {
-    return getch();
+    return wgetch(this->window);
 }
 
-std::string util::terminal_view::read_line()
+std::string util::terminal::terminal_view::read_line()
 {
-    getstr(m_input_buf);
-    return std::string(m_input_buf);
+    wgetstr(this->window, this->input_buf);
+    return std::string(this->input_buf);
 }
 
-void util::terminal_view::print(const std::string &text)
+bool util::terminal::terminal_view::read_key(long timeOut, int &result)
 {
-    wprintw(m_window, text.c_str());
-    wrefresh(m_window);
 }
 
-void util::terminal_view::print(const std::string &text, int x, int y)
+bool util::terminal::terminal_view::read_line(long timeOut, std::string &result)
 {
-    mvwprintw(m_window, x, y, text.c_str());
-    wrefresh(m_window);
 }
 
-void util::terminal_view::print(char c)
+void util::terminal::terminal_view::print(const std::string &text)
 {
-    waddch(m_window, c);
-    wrefresh(m_window);
+    wprintw(this->window, text.c_str());
+    wrefresh(this->window);
+}
+
+void util::terminal::terminal_view::print(const std::string &text, int x, int y)
+{
+    mvwprintw(this->window, x, y, text.c_str());
+    wrefresh(this->window);
+}
+
+void util::terminal::terminal_view::print(char c)
+{
+    waddch(this->window, c);
+    wrefresh(this->window);
+}
+
+void util::terminal::terminal_view::on_terminal_property_changed()
+{
+    wrefresh(this->window);
 }
