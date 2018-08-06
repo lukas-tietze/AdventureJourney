@@ -266,6 +266,10 @@ class cache
     int max_size;
     util::cache_policy cache_policy;
 }; /*cache*/
+
+int hex4ToNumber(const char *data);
+
+int hexToNumber(char c);
 } // namespace util
 
 #endif /*DATA_HPP*/
