@@ -71,36 +71,90 @@ void json::parser::tokenizer::read_next()
     }
     else if (c == '{')
     {
-        this->tokens.push_back({token_type::ObjectStart});
+        this->tokens.push_back({token_type::ObjectStart, this->data + this->pos, 1});
         this->pos++;
     }
     else if (c == '[')
     {
-        this->tokens.push_back({token_type::ArrayStart});
+        this->tokens.push_back({token_type::ArrayStart, this->data + this->pos, 1});
         this->pos++;
     }
     else if (c == '}')
     {
-        s->tokens.push_back({token_type::ObjectEnd});
+        s->tokens.push_back({token_type::ObjectEnd, this->data + this->pos, 1});
         this->pos++;
     }
     else if (c == ']')
     {
-        s->tokens.push_back({token_type::ArrayEnd});
+        s->tokens.push_back({token_type::ArrayEnd, this->data + this->pos, 1});
         this->pos++;
     }
     else if (c == ':')
     {
-        s->tokens.push_back({token_type::ObjectAssignment});
+        s->tokens.push_back({token_type::ObjectAssignment, this->data + this->pos, 1});
         this->pos++;
+    }
+    else if(c == ',')
+    {
+        this->tokens.push_back({token_type::ObjectSeperator, this->data + this->pos, 1})
     }
     else if (this->is_start_of_number(c))
     {
         this->read_number();
     }
+    else if (this->is_start_of_special(c))
+    {
+        this->read_special();
+    }
     else
     {
         ////TODO Exceptions
+        throw std::exception();
+    }
+}
+
+bool json::parser::tokenizer::can_escape(char c)
+{
+    return c == 'a' ||
+           c == 'b' ||
+           c == 't' ||
+           c == 'n' ||
+           c == 'v' ||
+           c == 'f' ||
+           c == 'r' ||
+           c == 'e' ||
+           c == '"' ||
+           c == '\'' ||
+           c == 'u' ||
+           c == '\\';
+}
+
+bool json::parser::tokenizer::is_start_of_special(char c)
+{
+    return c == 't' ||
+           c == 'f' ||
+           c == 'n';
+}
+
+void json::parser::tokenizer::read_special(char c)
+{
+    if (this->pos < this->end - 4 && std::strcmp(this->data + this->pos, "true", 4) == 0)
+    {
+        this->tokens.push_back({token_type::ValueTrue, this->data + this->pos, 4});
+        this->pos += 4;
+    }
+    else if (this->pos < this->end - 4 && std::strcmp(this->data + this->pos, "null", 4) == 0)
+    {
+        this->tokens.push_back({token_type::ValueNull, this->data + this->pos, 4});
+        this->pos += 4;
+    }
+    else if (this->pos < this->end - 5 && std::strcmp(this->data + this->pos, "false", 5) == 0)
+    {
+        this->tokens.push_back({token_type::ValueFalse, this->data + this->pos, 5});
+        this->pos += 5;
+    }
+    else
+    {
         throw std::exception();
     }
 }

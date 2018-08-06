@@ -36,6 +36,10 @@ class parser
         ObjectStart,
         ObjectEnd,
         ObjectAssignment,
+        ObjectSeperator,
+        ValueTrue,
+        ValueFalse,
+        ValueNull,
     };
 
     struct token
@@ -60,6 +64,9 @@ class parser
         void read_number();
         void read_string();
         void skip_whitespace();
+        bool can_escape(char);
+        bool is_start_of_special(char);
+        void read_special();
 
       public:
         tokenizer();
