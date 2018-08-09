@@ -4,7 +4,7 @@
 #include <string>
 #include <ctime>
 
-#include "src/util.hpp"
+#include "util.hpp"
 
 namespace test
 {
@@ -32,16 +32,18 @@ typedef std::vector<test_run> test_collection;
 
 namespace assert
 {
-class assert_exception : public std::exception
+class assert_exception : public std::runtime_error
 {
   public:
-    assert_exception(const std::string &msg);
+    assert_exception(const std::string &msg) : std::runtime_error(msg)
+    {
+    }
 };
 
 void fail();
 
 template <class T>
-void are_equal(T x, T y)
+void are_equal(const T &x, const T &y)
 {
     if (!(x == y))
     {
@@ -50,7 +52,7 @@ void are_equal(T x, T y)
 }
 
 template <class T>
-void are_not_equal(T x, T y)
+void are_not_equal(const T &x, const T &y)
 {
     if (x == y)
     {
@@ -75,7 +77,7 @@ void is_false(bool x)
 }
 
 template <class T>
-void is_greater(T x, T y)
+void is_greater(const T &x, const T &y)
 {
     if (!(x > y))
     {
@@ -84,7 +86,7 @@ void is_greater(T x, T y)
 }
 
 template <class T>
-void is_equal_or_greater()
+void is_equal_or_greater(const T &x, const T &y)
 {
     if (!(x >= y))
     {
@@ -93,7 +95,7 @@ void is_equal_or_greater()
 }
 
 template <class T>
-void is_less()
+void is_less(const T &x, const T &y)
 {
     if (!(x < y))
     {
@@ -102,7 +104,7 @@ void is_less()
 }
 
 template <class T>
-void is_equal_or_less()
+void is_equal_or_less(const T &x, const T &y)
 {
     if (!(x <= y))
     {

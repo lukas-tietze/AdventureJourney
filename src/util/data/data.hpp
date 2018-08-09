@@ -2,7 +2,7 @@
 #define DATA_HPP
 
 #include <stdexcept>
-#include <hash_map>
+#include <unordered_map>
 
 #include "util.hpp"
 
@@ -86,7 +86,7 @@ class color
     {
     }
 
-    color(byte r, byte g, byte b, byte a = 255) : data(a << A_SHIFT) | (r << R_SHIFT) | (g < G_SHIFT) | (b << B_SHIFT)
+    color(byte r, byte g, byte b, byte a = 255) : data((a << A_SHIFT) | (r << R_SHIFT) | (g < G_SHIFT) | (b << B_SHIFT))
     {
     }
 
@@ -146,12 +146,12 @@ class point
     {
     }
 
-    int x()
+    int get_x() const
     {
         return this->x;
     }
 
-    int y()
+    int get_y() const
     {
         return this->y;
     }
@@ -188,6 +188,16 @@ class dimension
                   height(0)
     {
     }
+
+    int get_width() const
+    {
+        return this->width;
+    }
+
+    int get_height() const
+    {
+        return this->height;
+    }
 }; /*dimension*/
 
 class rectangle
@@ -207,7 +217,7 @@ class rectangle
     {
     }
 
-    rectangle(const point &location, int width, int heith) : location(location),
+    rectangle(const point &location, int width, int height) : location(location),
                                                              size(width, height)
     {
     }
@@ -218,36 +228,36 @@ class rectangle
     }
 
     rectangle(int x, int y, int width, int height) : location(x, y),
-                                                     sizw(width, height)
+                                                     size(width, height)
     {
     }
 
-    int x() const
+    int get_x() const
     {
-        return this->location.x();
+        return this->location.get_x();
     }
 
-    int y() const
+    int get_y() const
     {
-        return this->location.y();
+        return this->location.get_y();
     }
 
-    int width() const
+    int get_width() const
     {
-        return this->size.width();
+        return this->size.get_width();
     }
 
-    int height() const
+    int get_height() const
     {
-        return this->size.height();
+        return this->size.get_height();
     }
 
-    const point &location() const
+    const point &get_location() const
     {
         return this->location;
     }
 
-    const dimension &size() const
+    const dimension &get_size() const
     {
         return this->size;
     }
@@ -262,7 +272,7 @@ template <class TKey, class TData>
 class cache
 {
   private:
-    std::hash_map<TKey, TData> data;
+    std::unordered_map<TKey, TData> data;
     int max_size;
     util::cache_policy cache_policy;
 }; /*cache*/

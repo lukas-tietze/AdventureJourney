@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "test/test.hpp"
+#include "test.hpp"
 
 namespace test
 {

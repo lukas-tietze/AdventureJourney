@@ -45,11 +45,27 @@ void execute_tests(test::test_collection &tests)
 
 void print_results(test::test_collection &tests)
 {
+    auto successfullRuns = 0;
+
     for (const auto &test : tests)
     {
         if (test.result.good)
         {
-            std::printf("[+] [%f] %s\n", util::clock_to_ms(test.duration), test.name.c_str());
+            successfullRuns++;
+        }
+    }
+
+    std::printf("Finished %i tests. %i/%i (%f%%) successfull.\n",
+                tests.size(),
+                successfullRuns,
+                tests.size(),
+                successfullRuns / (double)tests.size());
+
+    for (const auto &test : tests)
+    {
+        if (test.result.good)
+        {
+            std::printf("[+] [%f] %s\n", util::clock_to_ms(test.duration), test.result.name.c_str());
         }
     }
 
@@ -57,7 +73,7 @@ void print_results(test::test_collection &tests)
     {
         if (test.result.good)
         {
-            std::printf("[+] [%f] %s\n", util::clock_to_ms(test.duration), test.name.c_str());
+            std::printf("[+] [%f] %s\n", util::clock_to_ms(test.duration), test.result.name.c_str());
         }
     }
 }
