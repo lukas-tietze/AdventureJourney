@@ -1,0 +1,56 @@
+#include "json.hpp"
+
+json::object_node::object_node(const std::string &name) : node(name),
+                                                          children()
+{
+}
+
+json::object_node::~object_node()
+{
+    for (const auto &kvp : this->children)
+    {
+        delete kvp.second;
+    }
+}
+
+json::value_type json::object_node::get_type() const
+{
+    return json::value_type::Object;
+}
+
+const std::string &json::object_node::get_value_as_string() const
+{
+    throw json::operation_exception();
+}
+
+double json::object_node::get_value_as_number() const
+{
+    throw json::operation_exception();
+}
+
+const json::node *json::object_node::get_value_as_object() const
+{
+    throw json::operation_exception();
+}
+
+const std::vector<json::node *> &json::object_node::get_value_as_array() const
+{
+    throw json::operation_exception();
+}
+
+const json::node *json::object_node::find_child(const std::string &name)
+{
+    auto res = this->children.find(name);
+
+    if (res != this->children.end())
+    {
+        return (*res).second;
+    }
+
+    return nullptr;
+}
+
+void json::object_node::add_child(json::node *node)
+{
+    this->children.insert({node->get_name(), node});
+}

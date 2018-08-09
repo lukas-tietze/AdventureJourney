@@ -10,10 +10,18 @@ namespace test
 {
 struct test_result
 {
-    std::string name = "";
-    bool good = false;
-    int custom_error_code = -1;
-    std::string custom_error_message = "";
+    test_result(const std::string &name, bool good) : name(name),
+                                                      good(good)
+    {
+    }
+
+    test_result() : name(""),
+                    good(false)
+    {
+    }
+
+    std::string name;
+    bool good;
 };
 
 typedef test_result (*test_function)();

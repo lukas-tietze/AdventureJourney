@@ -284,7 +284,9 @@ int hexToNumber(char);
 
 double clock_to_ms(clock_t);
 
-template<class TStruct, class TArg1>
+std::string read_file(const std::string &file);
+
+template <class TStruct, class TArg1>
 TStruct init_struct(TArg1 arg1)
 {
     TStruct res = {arg1};

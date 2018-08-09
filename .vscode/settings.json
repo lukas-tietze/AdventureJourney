@@ -48,7 +48,9 @@
         "cinttypes": "cpp",
         "__config": "cpp",
         "atomic": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "mutex": "cpp",
+        "numeric": "cpp"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }

@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <stack>
+#include <iostream>
+
 #include "data.hpp"
 
 namespace json
@@ -14,9 +16,9 @@ enum class value_type
     Number,
     Object,
     Array,
-    BOOL_TRUE,
-    BOOL_FALSE,
-    EMPTY,
+    BoolTrue,
+    BoolFalse,
+    Empty,
 };
 
 class node
@@ -32,12 +34,101 @@ class node
 
     virtual value_type get_type() const = 0;
 
+    virtual void is_value_true() const = 0;
+    virtual void is_value_false() const = 0;
+    virtual void is_value_null() const = 0;
     virtual const std::string &get_value_as_string() const = 0;
     virtual double get_value_as_number() const = 0;
     virtual const node *get_value_as_object() const = 0;
-    virtual const std::vector<node> &get_value_as_array() const = 0;
+    virtual const std::vector<node *> &get_value_as_array() const = 0;
 
     virtual const node *find_child(const std::string &name) = 0;
+};
+
+class object_node : public node
+{
+  private:
+    std::unordered_map<std::string, node *> children;
+
+  public:
+    object_node(const std::string &name);
+    ~object_node();
+
+    value_type get_type() const;
+
+    const std::string &get_value_as_string() const;
+    double get_value_as_number() const;
+    const node *get_value_as_object() const;
+    const std::vector<node *> &get_value_as_array() const;
+
+    const node *find_child(const std::string &name);
+
+    void add_child(json::node *node);
+};
+
+class array_node : public node
+{
+  private:
+    std::vector<node *> children;
+
+  public:
+    array_node(const std::string &name);
+    ~array_node();
+
+    value_type get_type() const;
+
+    const std::string &get_value_as_string() const;
+    double get_value_as_number() const;
+    const node *get_value_as_object() const;
+    const std::vector<node *> &get_value_as_array() const;
+
+    const node *find_child(const std::string &name);
+
+    void add_child(json::node *node);
+};
+
+class value_node : public node
+{
+  private:
+    std::string string_value;
+    double numeric_value;
+    json::value_type type;
+    node *object_value;
+
+    void clear_values();
+
+  public:
+    value_node(const std::string &name);
+    ~value_node();
+
+    value_type get_type() const;
+
+    const std::string &get_value_as_string() const;
+    double get_value_as_number() const;
+    const node *get_value_as_object() const;
+    const std::vector<node *> &get_value_as_array() const;
+
+    const node *find_child(const std::string &name);
+
+    void set_value(bool value);
+    void set_value_null();
+    void set_value(const std::string &stringValue);
+    void set_value(double doubleValue);
+    void set_value(node *nodeValue);
+};
+
+class value_exception : std::runtime_error
+{
+  public:
+    value_exception();
+    value_exception(const std::string &msg);
+};
+
+class operation_exception : std::runtime_error
+{
+  public:
+    operation_exception();
+    operation_exception(const std::string &msg);
 };
 
 class parser
@@ -46,7 +137,7 @@ class parser
     parser();
     ~parser();
 
-    void parse(const std::string &data, node **target);
+    void parse(const std::string &, node **);
 
   private:
     enum class token_type
@@ -78,7 +169,7 @@ class parser
         std::stack<char> bracket_stack;
         int pos;
         int length;
-        const char *data;      
+        const char *data;
 
         bool is_start_of_number(char);
         char escape_char(char);
@@ -96,6 +187,31 @@ class parser
 
         const std::vector<token> &tokenize(const char *data, int length);
     };
+
+    class parser_exception : std::runtime_error
+    {
+      public:
+        parser_exception();
+        parser_exception(const std::string &msg);
+    };
+
+    std::stack<node *> nodeStack;
+    std::vector<json::parser::token> working_set;
+    std::vector<json::parser::token>::const_iterator pos;
+
+    bool has_next() const;
+    json::parser::token next();
+    json::parser::token peek() const;
+    node *parse(const std::vector<token> &tokens);
+
+    node *read_start();
+    node *read_value();
+    node *read_object();
+    node *read_array();
+    std::string read_string();
+    double read_double();
+    json::parser::token read_token(json::parser::token_type type);
+    bool can_read_token(json::parser::token_type type) const;
 };
 } // namespace json
 

@@ -24,6 +24,14 @@ bool json::parser::tokenizer::is_start_of_number(char c)
            c == '.';
 }
 
+void json::parser::tokenizer::skip_whitespace()
+{
+    while(this->pos < this->length && std::isspace(this->data[this->pos]))
+    {
+        pos++;
+    }
+}
+
 char json::parser::tokenizer::escape_char(char c)
 {
     switch (c)
