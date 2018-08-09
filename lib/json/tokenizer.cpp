@@ -3,7 +3,7 @@
 #include <cstring>
 #include <stdexcept>
 
-#include "util/json/json.hpp"
+#include "json.hpp"
 
 json::parser::tokenizer::tokenizer() : tokens(),
                                        bracket_stack(),
@@ -61,7 +61,7 @@ void json::parser::tokenizer::read_next()
 {
     auto c = this->data[this->pos];
 
-    if (std::is_space(c))
+    if (std::isspace(c))
     {
         this->skip_whitespace();
     }
@@ -81,22 +81,22 @@ void json::parser::tokenizer::read_next()
     }
     else if (c == '}')
     {
-        s->tokens.push_back({token_type::ObjectEnd, this->data + this->pos, 1});
+        this->tokens.push_back({token_type::ObjectEnd, this->data + this->pos, 1});
         this->pos++;
     }
     else if (c == ']')
     {
-        s->tokens.push_back({token_type::ArrayEnd, this->data + this->pos, 1});
+        this->tokens.push_back({token_type::ArrayEnd, this->data + this->pos, 1});
         this->pos++;
     }
     else if (c == ':')
     {
-        s->tokens.push_back({token_type::ObjectAssignment, this->data + this->pos, 1});
+        this->tokens.push_back({token_type::ObjectAssignment, this->data + this->pos, 1});
         this->pos++;
     }
     else if(c == ',')
     {
-        this->tokens.push_back({token_type::ObjectSeperator, this->data + this->pos, 1})
+        this->tokens.push_back({token_type::ObjectSeperator, this->data + this->pos, 1});
     }
     else if (this->is_start_of_number(c))
     {
@@ -136,19 +136,19 @@ bool json::parser::tokenizer::is_start_of_special(char c)
            c == 'n';
 }
 
-void json::parser::tokenizer::read_special(char c)
+void json::parser::tokenizer::read_special()
 {
-    if (this->pos < this->end - 4 && std::strcmp(this->data + this->pos, "true", 4) == 0)
+    if (this->pos < this->length - 4 && std::strncmp(this->data + this->pos, "true", 4) == 0)
     {
         this->tokens.push_back({token_type::ValueTrue, this->data + this->pos, 4});
         this->pos += 4;
     }
-    else if (this->pos < this->end - 4 && std::strcmp(this->data + this->pos, "null", 4) == 0)
+    else if (this->pos < this->length - 4 && std::strncmp(this->data + this->pos, "null", 4) == 0)
     {
         this->tokens.push_back({token_type::ValueNull, this->data + this->pos, 4});
         this->pos += 4;
     }
-    else if (this->pos < this->end - 5 && std::strcmp(this->data + this->pos, "false", 5) == 0)
+    else if (this->pos < this->length - 5 && std::strncmp(this->data + this->pos, "false", 5) == 0)
     {
         this->tokens.push_back({token_type::ValueFalse, this->data + this->pos, 5});
         this->pos += 5;
@@ -175,7 +175,7 @@ void json::parser::tokenizer::read_number()
     int state = STATE_START;
     int start = this->pos;
 
-    while (this->pos < this->end && state != STATE_END)
+    while (this->pos < this->length && state != STATE_END)
     {
         char c = this->data[this->pos];
 
@@ -186,7 +186,7 @@ void json::parser::tokenizer::read_number()
                 state = STATE_MINUS;
             else if (c == '0')
                 state = STATE_FIRST_ZERO;
-            else if (c >= '1' && <= '9')
+            else if (c >= '1' && c <= '9')
                 state = STATE_FIRST_DIGITS;
             else
                 throw std::exception();
@@ -194,7 +194,7 @@ void json::parser::tokenizer::read_number()
         case STATE_MINUS:
             if (c == '0')
                 state = STATE_FIRST_ZERO;
-            else if (c >= '1' && <= '9')
+            else if (c >= '1' && c <= '9')
                 state = STATE_FIRST_DIGITS;
             else
                 throw std::exception();
@@ -204,7 +204,7 @@ void json::parser::tokenizer::read_number()
                 state = STATE_SEPERATOR;
             else if (c == 'e' || c == 'E')
                 state = STATE_EXPONENT_START;
-            else if (std::is_space(c))
+            else if (std::isspace(c))
                 state = STATE_END;
             else
                 throw std::exception();
@@ -214,7 +214,7 @@ void json::parser::tokenizer::read_number()
                 state = STATE_SEPERATOR;
             else if (c == 'e' || c == 'E')
                 state = STATE_EXPONENT_START;
-            else if (std::is_space(c))
+            else if (std::isspace(c))
                 state = STATE_END;
             else if (c < '0' || c > '9')
                 throw std::exception();
@@ -230,7 +230,7 @@ void json::parser::tokenizer::read_number()
                 state = STATE_LAST_DIGITS;
             else if (c == 'e' || state == 'E')
                 state = STATE_EXPONENT_START;
-            else if (std::is_space(c))
+            else if (std::isspace(c))
                 state = STATE_END;
             else
                 throw std::exception();
@@ -252,7 +252,7 @@ void json::parser::tokenizer::read_number()
         case STATE_EXPONENT_DIGITS:
             if (c >= '0' && c <= '9')
                 state = STATE_EXPONENT_DIGITS;
-            else if (std::is_space(c))
+            else if (std::isspace(c))
                 state = STATE_END;
             else
                 throw std::exception();
@@ -274,7 +274,7 @@ void json::parser::tokenizer::read_string()
 
     this->pos++;
 
-    while (this->pos < this->end)
+    while (this->pos < this->length)
     {
         char c = this->data[this->pos];
 
@@ -299,17 +299,18 @@ void json::parser::tokenizer::read_string()
         this->pos++;
     }
 
-    this->tokens.push_back({token_type::String, this->data + (this->pos - start), this->pos - start});
+    json::parser::token t = {token_type::String, this->data + (this->pos - start), this->pos - start};
+    this->tokens.push_back(t);
     this->pos++;
 }
 
-const std::vector<json::token> json::parser::tokenizer::tokenize(const char *data, int length)
+const std::vector<json::parser::token> &json::parser::tokenizer::tokenize(const char *data, int length)
 {
     this->data = data;
-    this->len = length;
+    this->length = length;
     this->pos = 0;
 
-    while (this->pos < this->len)
+    while (this->pos < this->length)
     {
         this->read_next();
     }

@@ -4,7 +4,8 @@
 #include <stdexcept>
 #include <unordered_map>
 
-#include "util.hpp"
+#include "defs.hpp"
+#include "event.hpp"
 
 namespace util
 {
@@ -218,7 +219,7 @@ class rectangle
     }
 
     rectangle(const point &location, int width, int height) : location(location),
-                                                             size(width, height)
+                                                              size(width, height)
     {
     }
 
@@ -282,6 +283,12 @@ int hex4ToNumber(const char *);
 int hexToNumber(char);
 
 double clock_to_ms(clock_t);
+
+template<class TStruct, class TArg1>
+TStruct init_struct(TArg1 arg1)
+{
+    TStruct res = {arg1};
+}
 } // namespace util
 
 #endif /*DATA_HPP*/

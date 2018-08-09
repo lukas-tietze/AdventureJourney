@@ -1,17 +1,15 @@
 cmake_minimum_required (VERSION 2.8.9)
 
-file(GLOB SOURCES "src/*.cpp")
-file(GLOB TESTS "tests/**/*.cpp")
-
-project (Journey)
-include_directories(src)
-add_executable(Journey ${SOURCES})
-
-#--------------------------------------------------------------------
-#
-#--------------------------------------------------------------------
-
 project (Test)
-include_directories(src)
+file(GLOB_RECURSE SOURCES "src/**/*.cpp")
+file(GLOB_RECURSE TESTS "test/**/*.cpp")
+file(GLOB_RECURSE LIB "lib/**/*.cpp")
+
+include_directories(include)
 include_directories(test)
-add_executable(Test test/main.cpp ${TESTS} ${SOURCES})
+include_directories(src)
+
+add_library(COMMON STATIC ${LIB})
+
+add_executable(Test test/main.cpp ${TESTS})
+target_link_libraries(Test COMMON)

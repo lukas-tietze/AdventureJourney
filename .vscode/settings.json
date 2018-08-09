@@ -36,6 +36,19 @@
         "cmath": "cpp",
         "cstring": "cpp",
         "iostream": "cpp",
-        "optional": "cpp"
-    }
+        "optional": "cpp",
+        "chrono": "cpp",
+        "condition_variable": "cpp",
+        "cstdarg": "cpp",
+        "ctime": "cpp",
+        "deque": "cpp",
+        "memory": "cpp",
+        "ratio": "cpp",
+        "thread": "cpp",
+        "cinttypes": "cpp",
+        "__config": "cpp",
+        "atomic": "cpp",
+        "list": "cpp"
+    },
+    "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }

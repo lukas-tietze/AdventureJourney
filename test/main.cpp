@@ -1,18 +1,11 @@
 #include <vector>
 
 #include "test.hpp"
-#include "test_json.hpp"
-
-test::test_run create_run(test::test_function f)
-{
-    return {
-        f,
-        test::test_result()};
-}
 
 void gather_tests(test::test_collection &tests)
 {
-    tests.push_back(create_run(test::json::test_simple_tokenizing));
+    tests.push_back(test::test_run(&test::json::test_simple_tokenizing));
+    tests.push_back(test::test_run(&test::json::test_complex_tokenizing));
 }
 
 ////TODO nochmal durchdenken
@@ -27,7 +20,7 @@ void execute_tests(test::test_collection &tests)
         try
         {
             start = clock();
-            result = test.function();
+            (*(test.function))();
             end = clock();
         }
         catch (const std::exception &e)

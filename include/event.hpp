@@ -1,3 +1,6 @@
+#ifndef EVENT_HPP
+#define EVENT_HPP
+
 #include <vector>
 
 namespace util
@@ -61,3 +64,5 @@ class function_event
     std::vector<std::pair<void*, event_function>> targets;
 };
 } // namespace util
+
+#endif /*EVENT_HPP*/

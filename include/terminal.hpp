@@ -1,6 +1,8 @@
 #ifndef TERMINAL_HPP
 #define TERMINAL_HPP
 
+#include "data.hpp"
+
 #include <string>
 #include <ncurses.h>
 
@@ -50,7 +52,7 @@ class terminal_view
 class control_base
 {
   private:
-    rectangle bounds;
+    util::rectangle bounds;
     control_base *parent;
   public:
     

@@ -20,14 +20,28 @@ typedef test_result (*test_function)();
 
 struct test_run
 {
-    test_function function = nullptr;
-    test_result result = test_result();
-    std::exception occurred_exception = std::exception();
-    bool exception_occurred = false;
-    clock_t duration = 0;
+    test_run(test_function f) : function(f),
+                                result(),
+                                occurred_exception(),
+                                exception_occurred(false),
+                                duration(-1)
+    {
+    }
+
+    test_function function;
+    test_result result;
+    std::exception occurred_exception;
+    bool exception_occurred;
+    clock_t duration;
 };
 
 typedef std::vector<test_run> test_collection;
+
+namespace json
+{
+test::test_result test_simple_tokenizing();
+test::test_result test_complex_tokenizing();
+} // namespace json
 } // namespace test
 
 namespace assert
@@ -35,9 +49,7 @@ namespace assert
 class assert_exception : public std::runtime_error
 {
   public:
-    assert_exception(const std::string &msg) : std::runtime_error(msg)
-    {
-    }
+    assert_exception(const std::string &msg);
 };
 
 void fail();
@@ -60,21 +72,8 @@ void are_not_equal(const T &x, const T &y)
     }
 }
 
-void is_true(bool x)
-{
-    if (!x)
-    {
-        throw assert_exception("Value is not true!");
-    }
-}
-
-void is_false(bool x)
-{
-    if (x)
-    {
-        throw assert_exception("Value is not false!");
-    }
-}
+void is_true(bool x);
+void is_false(bool x);
 
 template <class T>
 void is_greater(const T &x, const T &y)
