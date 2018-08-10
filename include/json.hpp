@@ -126,14 +126,14 @@ class primitive_node : public node
     std::ostream &operator<<(std::ostream &stream) const;
 };
 
-class value_exception : std::runtime_error
+class value_exception : public util::exception
 {
   public:
     value_exception();
     value_exception(const std::string &msg);
 };
 
-class operation_exception : std::runtime_error
+class operation_exception : public util::exception
 {
   public:
     operation_exception();
@@ -147,6 +147,13 @@ class parser
     ~parser();
 
     void parse(const std::string &, node **);
+
+    class parser_exception : public util::exception
+    {
+      public:
+        parser_exception();
+        parser_exception(const std::string &msg);
+    };
 
   private:
     enum class token_type
@@ -195,13 +202,6 @@ class parser
         ~tokenizer();
 
         const std::vector<token> &tokenize(const char *data, int length);
-    };
-
-    class parser_exception : std::runtime_error
-    {
-      public:
-        parser_exception();
-        parser_exception(const std::string &msg);
     };
 
     std::stack<node *> nodeStack;

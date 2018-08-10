@@ -309,6 +309,20 @@ int printp(const T *obj)
     return std::printf("%s", stream.str().c_str());
 }
 
+class exception : public std::exception
+{
+  private:
+    std::string msg;
+
+  public:
+    exception();
+    exception(const std::string &msg);
+
+    virtual const char* what() const throw();
+
+    virtual const std::string &get_message() const;
+};
+
 template <class TStruct, class TArg1>
 TStruct init_struct(TArg1 arg1)
 {
