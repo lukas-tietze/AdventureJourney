@@ -57,15 +57,15 @@ std::ostream &json::array_node::operator<<(std::ostream &stream) const
 {
     stream << '[';
 
-    const auto &it = this->children.begin();
-    const auto &end = this->children.end();
+    auto it = this->children.begin();
+    auto end = this->children.end();
 
     if (it != end)
     {
         stream << "\n" << *it;
     }
 
-    while(it != end)
+    while(++it != end)
     {
         stream << ",\n" << *it;
     }

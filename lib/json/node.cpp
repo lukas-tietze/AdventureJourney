@@ -19,7 +19,7 @@ const std::string &json::node::get_name() const
 
 void json::node::set_name(const std::string &name)
 {
-    this->name = name;
+    this->name.assign(name);
 }
 
 std::ostream &json::node::operator<<(std::ostream &stream) const

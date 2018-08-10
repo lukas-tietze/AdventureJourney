@@ -64,15 +64,15 @@ std::ostream &json::object_node::operator<<(std::ostream &stream) const
 {
     stream << '{';
 
-    const auto &it = this->children.begin();
-    const auto &end = this->children.end();
+    auto it = this->children.begin();
+    auto end = this->children.end();
 
     if (it != end)
     {
         stream << "\n" << it->first << ": " << it->second;
     }
 
-    while(it != end)
+    while(++it != end)
     {
         stream << ",\n" << it->first << ": " << it->second;
     }

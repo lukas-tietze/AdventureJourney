@@ -54,7 +54,7 @@ json::node *json::parser::read_start()
 json::node *json::parser::read_value()
 {
     auto name = this->read_string();
-    this->read_token(token_type::ObjectSeperator);
+    this->read_token(token_type::ObjectAssignment);
 
     auto res = this->read_item();
     res->set_name(name);
@@ -172,8 +172,8 @@ json::node *json::parser::read_item()
 std::string json::parser::read_string()
 {
     auto token = this->read_token(token_type::String);
-    auto res = std::string();
     auto escaped = false;
+    std::string res;
 
     res.reserve(token.data_len);
 
@@ -183,6 +183,8 @@ std::string json::parser::read_string()
 
         if (escaped)
         {
+            escaped = false;
+
             switch (c)
             {
             case '\"':

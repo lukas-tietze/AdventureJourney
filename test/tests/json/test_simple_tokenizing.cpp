@@ -16,5 +16,11 @@ int test::json::test_simple_tokenizing()
         util::printr(token);
     }
 
+    ::json::node *n;
+    ::json::parser p;
+    p.parse(text, &n);
+
+    util::printp(n);
+
     return 0;
 }
