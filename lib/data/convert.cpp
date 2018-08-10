@@ -50,6 +50,8 @@ int util::hexToNumber(char c)
     case 'f':
     case 'F':
         return 15;
+    default:
+        throw std::runtime_error("illegal value for hexadecimal digit!");
     }
 }
 

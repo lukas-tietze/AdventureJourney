@@ -20,7 +20,7 @@ void execute_tests(test::test_collection &tests)
         try
         {
             start = clock();
-            (*(test.function))();
+            result = (*test.function)();
             end = clock();
         }
         catch (const std::exception &e)

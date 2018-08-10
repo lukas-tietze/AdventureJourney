@@ -26,7 +26,7 @@ bool json::parser::tokenizer::is_start_of_number(char c)
 
 void json::parser::tokenizer::skip_whitespace()
 {
-    while(this->pos < this->length && std::isspace(this->data[this->pos]))
+    while (this->pos < this->length && std::isspace(this->data[this->pos]))
     {
         pos++;
     }
@@ -102,7 +102,7 @@ void json::parser::tokenizer::read_next()
         this->tokens.push_back({token_type::ObjectAssignment, this->data + this->pos, 1});
         this->pos++;
     }
-    else if(c == ',')
+    else if (c == ',')
     {
         this->tokens.push_back({token_type::ObjectSeperator, this->data + this->pos, 1});
     }
@@ -123,18 +123,15 @@ void json::parser::tokenizer::read_next()
 
 bool json::parser::tokenizer::can_escape(char c)
 {
-    return c == 'a' ||
+    return c == '\"' ||
+           c == '\\' ||
+           c == '/' ||
            c == 'b' ||
-           c == 't' ||
-           c == 'n' ||
-           c == 'v' ||
            c == 'f' ||
+           c == 'n' ||
            c == 'r' ||
-           c == 'e' ||
-           c == '"' ||
-           c == '\'' ||
-           c == 'u' ||
-           c == '\\';
+           c == 't' ||
+           c == 'u';
 }
 
 bool json::parser::tokenizer::is_start_of_special(char c)

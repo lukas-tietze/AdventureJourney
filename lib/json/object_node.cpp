@@ -5,6 +5,11 @@ json::object_node::object_node(const std::string &name) : node(name),
 {
 }
 
+json::object_node::object_node() : node(),
+                                   children()
+{
+}
+
 json::object_node::~object_node()
 {
     for (const auto &kvp : this->children)

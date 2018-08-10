@@ -5,6 +5,11 @@ json::array_node::array_node(const std::string &name) : node(name),
 {
 }
 
+json::array_node::array_node() : node(),
+                                 children()
+{
+}
+
 json::array_node::~array_node()
 {
     for (auto &node : this->children)

@@ -24,19 +24,18 @@ enum class value_type
 class node
 {
   private:
-    const std::string name;
+    std::string name;
 
   public:
     node(const std::string &name);
+    node();
     virtual ~node();
 
-    const std::string &get_name();
+    const std::string &get_name() const;
+    void set_name(const std::string &name);
 
     virtual value_type get_type() const = 0;
 
-    virtual void is_value_true() const = 0;
-    virtual void is_value_false() const = 0;
-    virtual void is_value_null() const = 0;
     virtual const std::string &get_value_as_string() const = 0;
     virtual double get_value_as_number() const = 0;
     virtual const node *get_value_as_object() const = 0;
@@ -52,6 +51,7 @@ class object_node : public node
 
   public:
     object_node(const std::string &name);
+    object_node();
     ~object_node();
 
     value_type get_type() const;
@@ -73,6 +73,7 @@ class array_node : public node
 
   public:
     array_node(const std::string &name);
+    array_node();
     ~array_node();
 
     value_type get_type() const;
@@ -87,19 +88,19 @@ class array_node : public node
     void add_child(json::node *node);
 };
 
-class value_node : public node
+class primitive_node : public node
 {
   private:
     std::string string_value;
     double numeric_value;
     json::value_type type;
-    node *object_value;
 
     void clear_values();
 
   public:
-    value_node(const std::string &name);
-    ~value_node();
+    primitive_node(const std::string &name);
+    primitive_node();
+    ~primitive_node();
 
     value_type get_type() const;
 
@@ -201,15 +202,16 @@ class parser
 
     bool has_next() const;
     json::parser::token next();
-    json::parser::token peek() const;
+    json::parser::token_type peek_type() const;
     node *parse(const std::vector<token> &tokens);
 
     node *read_start();
     node *read_value();
     node *read_object();
     node *read_array();
+    node *read_item();
     std::string read_string();
-    double read_double();
+    double read_number();
     json::parser::token read_token(json::parser::token_type type);
     bool can_read_token(json::parser::token_type type) const;
 };
