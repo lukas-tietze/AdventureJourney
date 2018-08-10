@@ -5,8 +5,6 @@
 
 int test::json::test_simple_tokenizing()
 {
-    std::printf("Testing simple tokenizing:\n");
-
     std::string text = "{"
                        "\"foo\": 3"
                        "}";

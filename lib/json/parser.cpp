@@ -268,15 +268,17 @@ double json::parser::read_number()
 
 json::parser::token json::parser::read_token(json::parser::token_type type)
 {
-    if (!this->has_next())
+    if (this->pos != this->working_set.end())
         throw json::parser::parser_exception();
 
-    auto next = this->next();
+    auto current = *this->pos;
 
-    if (next.type != type)
+    if (current.type != type)
         throw json::parser::parser_exception();
 
-    return next;
+    this->pos++;
+
+    return current;
 }
 
 bool json::parser::can_read_token(json::parser::token_type type) const
