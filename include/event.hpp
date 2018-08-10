@@ -41,45 +41,87 @@ class listener_event
     }
 };
 
-struct signal_handler
-{
-    
-}
-
 template <class T>
 class function_event
 {
   public:
-    typedef void (*event_function)(void *, T);
+    typedef void (*event_function)(T &);
 
-    void operator+=(std::pair<void *, event_function> data)
+    struct event_handler
     {
+        void *target;
+        event_function function;
+    };
+
+    void operator+=(event_function function)
+    {
+        *this += {nullptr, function};
     }
 
-    void operator-=(std::pair<void *, event_function> data)
+    void operator-=(event_function function)
     {
+        *this -= {nullptr, function};
     }
 
-    void operator()(const T &args) const
-    {
-        for (const auto &item : this.targets)
-        {
-            (item.first->*item.second)(args);
-        }
-    }
+    void operator+=(const event_handler &handler);
+    void operator-=(const event_handler &data);
+    void operator()(T &args) const;
 
   private:
-    std::vector<std::pair<void *, event_function>> targets;
+    std::vector<event_handler> targets;
 };
 
-class signal_event
+template <class T>
+void function_event<T>::operator+=(const event_handler &handler)
+{
+    this->targets.push_back(handler);
+}
+
+template <class T>
+void function_event<T>::operator-=(const event_handler &handler)
+{
+    auto pos = this->targets.find(handler);
+
+    if (pos != this->targets.npos)
+        this->targets.erase(pos);
+}
+
+template <class T>
+void function_event<T>::operator()(T &args) const
+{
+    // TODO: Fixen!
+    // for (const auto &item : this->targets)
+    // {
+    //     if (item.target != nullptr)
+    //         (item.target->*item.function)(args);
+    //     else
+    //         (*item.function)(args);
+    // }
+}
+
+enum class signal
+{
+    SigAbrt,
+    SigFpe,
+    SigIll,
+    SigInt,
+    SigSegv,
+    SigTerm,
+    Unknown,
+};
+
+struct signal_event_args
+{
+    util::signal signal;
+    int code;
+};
+
+class signal_event : public function_event<signal_event_args>
 {
   public:
     signal_event();
     ~signal_event();
 };
-
-signal_event on_signal;
 } // namespace util
 
 #endif /*EVENT_HPP*/
