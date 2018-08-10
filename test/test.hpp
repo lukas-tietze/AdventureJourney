@@ -9,7 +9,7 @@
 
 namespace test
 {
-typedef void (*test_function)();
+typedef int (*test_function)();
 
 class test_base
 {
@@ -63,12 +63,14 @@ class test_run
     friend std::ostream &operator<<(std::ostream &, const test_run &testRun);
 };
 
+std::ostream &operator<<(std::ostream &, const test_run &testRun);
+
 typedef std::vector<test_run> test_collection;
 
 namespace json
 {
-void test_simple_tokenizing();
-void test_complex_tokenizing();
+int test_simple_tokenizing();
+int test_complex_tokenizing();
 } // namespace json
 } // namespace test
 

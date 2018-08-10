@@ -2,6 +2,7 @@
 
 #include <cstdio>
 
-void test::json::test_complex_tokenizing()
+int test::json::test_complex_tokenizing()
 {
+    return 0;
 }

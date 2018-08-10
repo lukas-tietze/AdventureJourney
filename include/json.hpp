@@ -188,6 +188,7 @@ class parser
         bool can_escape(char);
         bool is_start_of_special(char);
         void read_special();
+        bool is_valid_number_end(char);
 
       public:
         tokenizer();

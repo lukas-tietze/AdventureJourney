@@ -3,7 +3,7 @@
 #include "test.hpp"
 #include "json.hpp"
 
-void test::json::test_simple_tokenizing()
+int test::json::test_simple_tokenizing()
 {
     std::printf("Testing simple tokenizing:\n");
 
@@ -18,7 +18,9 @@ void test::json::test_simple_tokenizing()
     assert::are_equal(::json::value_type::Object, n->get_type());
     assert::is_not_null(dynamic_cast<::json::object_node *>(n));
 
-    util::printf(&n);
+    util::printp(n);
 
     delete n;
+
+    return 0;
 }

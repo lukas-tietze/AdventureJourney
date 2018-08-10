@@ -288,11 +288,23 @@ double clock_to_ms(clock_t);
 std::string read_file(const std::string &file);
 
 template <class T>
-int printf(const T &obj)
+int printr(const T &obj)
 {
     std::stringstream stream;
 
     stream << obj << std::endl;
+
+    return std::printf("%s", stream.str().c_str());
+}
+
+template <class T>
+int printp(const T *obj)
+{
+    std::stringstream stream;
+
+    obj->operator<<(stream);
+
+    stream << std::endl;
 
     return std::printf("%s", stream.str().c_str());
 }

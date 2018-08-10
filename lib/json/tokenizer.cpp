@@ -131,6 +131,11 @@ void json::parser::tokenizer::read_special()
     }
 }
 
+bool json::parser::tokenizer::is_valid_number_end(char c)
+{
+    return std::isspace(c) || c == '}' || c == ',' || c == ']';
+}
+
 void json::parser::tokenizer::read_number()
 {
     constexpr int STATE_START = 0;
@@ -176,7 +181,7 @@ void json::parser::tokenizer::read_number()
                 state = STATE_SEPERATOR;
             else if (c == 'e' || c == 'E')
                 state = STATE_EXPONENT_START;
-            else if (std::isspace(c))
+            else if (this->is_valid_number_end(c))
                 state = STATE_END;
             else
                 throw std::exception();
@@ -186,7 +191,7 @@ void json::parser::tokenizer::read_number()
                 state = STATE_SEPERATOR;
             else if (c == 'e' || c == 'E')
                 state = STATE_EXPONENT_START;
-            else if (std::isspace(c))
+            else if (this->is_valid_number_end(c))
                 state = STATE_END;
             else if (c < '0' || c > '9')
                 throw std::exception();
@@ -202,7 +207,7 @@ void json::parser::tokenizer::read_number()
                 state = STATE_LAST_DIGITS;
             else if (c == 'e' || state == 'E')
                 state = STATE_EXPONENT_START;
-            else if (std::isspace(c))
+            else if (this->is_valid_number_end(c))
                 state = STATE_END;
             else
                 throw std::exception();
@@ -224,7 +229,7 @@ void json::parser::tokenizer::read_number()
         case STATE_EXPONENT_DIGITS:
             if (c >= '0' && c <= '9')
                 state = STATE_EXPONENT_DIGITS;
-            else if (std::isspace(c))
+            else if (this->is_valid_number_end(c))
                 state = STATE_END;
             else
                 throw std::exception();
@@ -288,6 +293,6 @@ const std::vector<json::parser::token> &json::parser::tokenizer::tokenize(const 
     {
         this->read_next();
     }
-    
+
     return this->tokens;
 }

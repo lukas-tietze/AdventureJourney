@@ -12,7 +12,10 @@ test::test_run::test_run(test_base *test) : test(test),
 
 test::test_run::~test_run()
 {
-    delete this->test;
+    if (this->is_finished())
+    {
+        delete this->test;
+    }
 }
 
 void test::test_run::execute()
