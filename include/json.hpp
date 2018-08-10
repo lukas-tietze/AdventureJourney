@@ -140,6 +140,60 @@ class operation_exception : public util::exception
     operation_exception(const std::string &msg);
 };
 
+enum class token_type
+{
+    String,
+    Number,
+    ArrayStart,
+    ArrayEnd,
+    ObjectStart,
+    ObjectEnd,
+    ObjectAssignment,
+    ObjectSeperator,
+    ValueTrue,
+    ValueFalse,
+    ValueNull,
+};
+
+struct token
+{
+    token_type type;
+    const char *data;
+    int data_len;
+
+    friend std::ostream &operator<<(std::ostream &, const token &);
+};
+
+std::ostream &operator<<(std::ostream &, const token &);
+std::ostream &operator<<(std::ostream &, const token_type &);
+
+class tokenizer
+{
+  private:
+    std::vector<token> tokens;
+    std::stack<char> bracket_stack;
+    int pos;
+    int length;
+    const char *data;
+
+    bool is_start_of_number(char);
+    void read_next();
+    void read_number();
+    void read_string();
+    void skip_whitespace();
+    bool can_escape(char);
+    bool is_start_of_special(char);
+    void read_special();
+    bool is_valid_number_end(char);
+
+  public:
+    tokenizer();
+    ~tokenizer();
+
+    const std::vector<token> &tokenize(const std::string &data);
+    const std::vector<token> &tokenize(const char *data, int length);
+};
+
 class parser
 {
   public:
@@ -156,62 +210,14 @@ class parser
     };
 
   private:
-    enum class token_type
-    {
-        String,
-        Number,
-        ArrayStart,
-        ArrayEnd,
-        ObjectStart,
-        ObjectEnd,
-        ObjectAssignment,
-        ObjectSeperator,
-        ValueTrue,
-        ValueFalse,
-        ValueNull,
-    };
-
-    struct token
-    {
-        token_type type;
-        const char *data;
-        int data_len;
-    };
-
-    class tokenizer
-    {
-      private:
-        std::vector<token> tokens;
-        std::stack<char> bracket_stack;
-        int pos;
-        int length;
-        const char *data;
-
-        bool is_start_of_number(char);
-        void read_next();
-        void read_number();
-        void read_string();
-        void skip_whitespace();
-        bool can_escape(char);
-        bool is_start_of_special(char);
-        void read_special();
-        bool is_valid_number_end(char);
-
-      public:
-        tokenizer();
-        ~tokenizer();
-
-        const std::vector<token> &tokenize(const char *data, int length);
-    };
-
     std::stack<node *> nodeStack;
-    std::vector<json::parser::token> working_set;
-    std::vector<json::parser::token>::const_iterator pos;
+    std::vector<json::token> working_set;
+    std::vector<json::token>::const_iterator pos;
 
     bool has_next() const;
-    json::parser::token next();
-    json::parser::token_type peek_type() const;
+    json::token_type peek_type() const;
     node *parse(const std::vector<token> &tokens);
+    json::token read_token(json::token_type type);
 
     node *read_start();
     node *read_value();
@@ -220,8 +226,6 @@ class parser
     node *read_item();
     std::string read_string();
     double read_number();
-    json::parser::token read_token(json::parser::token_type type);
-    bool can_read_token(json::parser::token_type type) const;
 };
 } // namespace json
 

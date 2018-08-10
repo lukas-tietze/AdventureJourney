@@ -22,27 +22,12 @@ void json::parser::parse(const std::string &data, json::node **target)
 
     std::memcpy(buf, data.data(), len);
 
-    json::parser::tokenizer t;
+    json::tokenizer t;
     const auto &tokens = t.tokenize(buf, len);
 
+    delete[] buf;
+
     *target = this->parse(tokens);
-}
-
-bool json::parser::has_next() const
-{
-    return this->pos != this->working_set.end();
-}
-
-json::parser::token json::parser::next()
-{
-    return *++this->pos;
-}
-
-json::parser::token_type json::parser::peek_type() const
-{
-    auto tmp = this->pos;
-
-    return (++tmp)->type;
 }
 
 json::node *json::parser::parse(const std::vector<token> &tokens)
@@ -83,7 +68,7 @@ json::node *json::parser::read_object()
 
     auto res = new object_node();
 
-    if (this->can_read_token(token_type::ObjectEnd))
+    if (this->peek_type() == token_type::ObjectEnd)
     {
         return res;
     }
@@ -94,7 +79,7 @@ json::node *json::parser::read_object()
     {
         res->add_child(this->read_value());
 
-        if (this->can_read_token(token_type::ObjectEnd))
+        if (this->peek_type() == token_type::ObjectEnd)
         {
             loop = false;
         }
@@ -115,7 +100,7 @@ json::node *json::parser::read_array()
 
     auto res = new array_node();
 
-    if (this->can_read_token(token_type::ArrayEnd))
+    if (this->peek_type() == token_type::ArrayEnd)
     {
         return res;
     }
@@ -126,7 +111,7 @@ json::node *json::parser::read_array()
     {
         res->add_child(this->read_item());
 
-        if (this->can_read_token(token_type::ArrayEnd))
+        if (this->peek_type() == token_type::ArrayEnd)
         {
             loop = false;
         }
@@ -188,7 +173,7 @@ std::string json::parser::read_string()
 {
     auto token = this->read_token(token_type::String);
     auto res = std::string();
-    auto escaped = true;
+    auto escaped = false;
 
     res.reserve(token.data_len);
 
@@ -266,9 +251,9 @@ double json::parser::read_number()
     return std::strtod(token.data, nullptr);
 }
 
-json::parser::token json::parser::read_token(json::parser::token_type type)
+json::token json::parser::read_token(json::token_type type)
 {
-    if (this->pos != this->working_set.end())
+    if (this->pos == this->working_set.end())
         throw json::parser::parser_exception();
 
     auto current = *this->pos;
@@ -281,7 +266,12 @@ json::parser::token json::parser::read_token(json::parser::token_type type)
     return current;
 }
 
-bool json::parser::can_read_token(json::parser::token_type type) const
+bool json::parser::has_next() const
 {
-    return this->peek_type() == type;
+    return this->pos != this->working_set.end();
+}
+
+json::token_type json::parser::peek_type() const
+{
+    return this->pos->type;
 }

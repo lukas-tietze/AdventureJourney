@@ -5,20 +5,16 @@
 
 int test::json::test_simple_tokenizing()
 {
-    std::string text = "{"
-                       "\"foo\": 3"
-                       "}";
+    std::string text = "{\"foo\": 3}";
 
-    ::json::node *n;
-    ::json::parser parser;
-    parser.parse(text, &n);
+    ::json::tokenizer t;
 
-    assert::are_equal(::json::value_type::Object, n->get_type());
-    assert::is_not_null(dynamic_cast<::json::object_node *>(n));
+    auto tokens = t.tokenize(text);
 
-    util::printp(n);
-
-    delete n;
+    for (const auto &token : tokens)
+    {
+        util::printr(token);
+    }
 
     return 0;
 }

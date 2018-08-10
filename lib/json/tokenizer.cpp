@@ -5,26 +5,26 @@
 
 #include "json.hpp"
 
-json::parser::tokenizer::tokenizer() : tokens(),
-                                       bracket_stack(),
-                                       pos(0),
-                                       length(0),
-                                       data(0)
+json::tokenizer::tokenizer() : tokens(),
+                               bracket_stack(),
+                               pos(0),
+                               length(0),
+                               data(0)
 {
 }
 
-json::parser::tokenizer::~tokenizer()
+json::tokenizer::~tokenizer()
 {
 }
 
-bool json::parser::tokenizer::is_start_of_number(char c)
+bool json::tokenizer::is_start_of_number(char c)
 {
     return (c >= '0' && c <= '9') ||
            c == '-' ||
            c == '.';
 }
 
-void json::parser::tokenizer::skip_whitespace()
+void json::tokenizer::skip_whitespace()
 {
     while (this->pos < this->length && std::isspace(this->data[this->pos]))
     {
@@ -32,7 +32,7 @@ void json::parser::tokenizer::skip_whitespace()
     }
 }
 
-void json::parser::tokenizer::read_next()
+void json::tokenizer::read_next()
 {
     auto c = this->data[this->pos];
 
@@ -88,7 +88,7 @@ void json::parser::tokenizer::read_next()
     }
 }
 
-bool json::parser::tokenizer::can_escape(char c)
+bool json::tokenizer::can_escape(char c)
 {
     return c == '\"' ||
            c == '\\' ||
@@ -101,14 +101,14 @@ bool json::parser::tokenizer::can_escape(char c)
            c == 'u';
 }
 
-bool json::parser::tokenizer::is_start_of_special(char c)
+bool json::tokenizer::is_start_of_special(char c)
 {
     return c == 't' ||
            c == 'f' ||
            c == 'n';
 }
 
-void json::parser::tokenizer::read_special()
+void json::tokenizer::read_special()
 {
     if (this->pos < this->length - 4 && std::strncmp(this->data + this->pos, "true", 4) == 0)
     {
@@ -131,12 +131,12 @@ void json::parser::tokenizer::read_special()
     }
 }
 
-bool json::parser::tokenizer::is_valid_number_end(char c)
+bool json::tokenizer::is_valid_number_end(char c)
 {
     return std::isspace(c) || c == '}' || c == ',' || c == ']';
 }
 
-void json::parser::tokenizer::read_number()
+void json::tokenizer::read_number()
 {
     constexpr int STATE_START = 0;
     constexpr int STATE_MINUS = 1;
@@ -240,18 +240,24 @@ void json::parser::tokenizer::read_number()
             throw std::runtime_error("Illegal case!");
         }
 
-        this->pos++;
+        if (state != STATE_END)
+        {
+            this->pos++;
+        }
     }
 
-    this->tokens.push_back({token_type::Number, this->data + (this->pos - start), this->pos - start});
+    token t;
+    t.type = token_type::Number;
+    t.data = this->data + start;
+    t.data_len = this->pos - start;
+
+    this->tokens.push_back(t);
 }
 
-void json::parser::tokenizer::read_string()
+void json::tokenizer::read_string()
 {
-    int start = this->pos;
+    int start = ++this->pos;
     bool escaped = false;
-
-    this->pos++;
 
     while (this->pos < this->length)
     {
@@ -278,12 +284,21 @@ void json::parser::tokenizer::read_string()
         this->pos++;
     }
 
-    json::parser::token t = {token_type::String, this->data + (this->pos - start), this->pos - start};
+    json::token t;
+    t.type = token_type::String;
+    t.data = this->data + start;
+    t.data_len = this->pos - start;
+
     this->tokens.push_back(t);
     this->pos++;
 }
 
-const std::vector<json::parser::token> &json::parser::tokenizer::tokenize(const char *data, int length)
+const std::vector<json::token> &json::tokenizer::tokenize(const std::string &data)
+{
+    return this->tokenize(data.c_str(), data.length());
+}
+
+const std::vector<json::token> &json::tokenizer::tokenize(const char *data, int length)
 {
     this->data = data;
     this->length = length;
