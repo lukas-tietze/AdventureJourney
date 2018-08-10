@@ -1,10 +1,12 @@
+#include <cstdio>
+
 #include "test.hpp"
 #include "json.hpp"
 
-#include <cstdio>
-
-test::test_result test::json::test_simple_tokenizing()
+void test::json::test_simple_tokenizing()
 {
+    std::printf("Testing simple tokenizing:\n");
+
     std::string text = "{"
                        "\"foo\": 3"
                        "}";
@@ -13,6 +15,10 @@ test::test_result test::json::test_simple_tokenizing()
     ::json::parser parser;
     parser.parse(text, &n);
 
-    test::test_result res;
-    return res;
+    assert::are_equal(::json::value_type::Object, n->get_type());
+    assert::is_not_null(dynamic_cast<::json::object_node *>(n));
+
+    util::printf(&n);
+
+    delete n;
 }

@@ -3,52 +3,72 @@
 
 #include <string>
 #include <ctime>
+#include <iostream>
 
 #include "util.hpp"
 
 namespace test
 {
-struct test_result
+typedef void (*test_function)();
+
+class test_base
 {
-    test_result(const std::string &name, bool good) : name(name),
-                                                      good(good)
-    {
-    }
-
-    test_result() : name(""),
-                    good(false)
-    {
-    }
-
+  private:
     std::string name;
-    bool good;
+
+  public:
+    test_base(const std::string &name);
+    virtual ~test_base();
+
+    const std::string &get_name() const;
+
+    virtual void init();
+    virtual void run() = 0;
+    virtual void dispose();
 };
 
-typedef test_result (*test_function)();
-
-struct test_run
+class simple_test : public test_base
 {
-    test_run(test_function f) : function(f),
-                                result(),
-                                occurred_exception(),
-                                exception_occurred(false),
-                                duration(-1)
-    {
-    }
+  private:
+    test_function func;
 
-    test_function function;
-    test_result result;
-    std::exception occurred_exception;
-    bool exception_occurred;
-    clock_t duration;
+  public:
+    simple_test(const std::string &name, test_function func);
+
+    void run();
+};
+
+class test_run
+{
+  private:
+    test_base *test;
+    std::string message;
+    bool good;
+    clock_t start;
+    clock_t end;
+
+  public:
+    test_run(test_base *test);
+    ~test_run();
+
+    void execute();
+
+    double get_time_ms() const;
+    clock_t get_time() const;
+    bool is_good() const;
+    bool is_started() const;
+    bool is_finished() const;
+    const std::string &get_message() const;
+
+    friend std::ostream &operator<<(std::ostream &, const test_run &testRun);
 };
 
 typedef std::vector<test_run> test_collection;
 
 namespace json
 {
-test::test_result test_simple_tokenizing();
-test::test_result test_complex_tokenizing();
+void test_simple_tokenizing();
+void test_complex_tokenizing();
 } // namespace json
 } // namespace test
 
@@ -61,6 +81,10 @@ class assert_exception : public std::runtime_error
 };
 
 void fail();
+void is_null(const void *);
+void is_not_null(const void *);
+void is_true(bool x);
+void is_false(bool x);
 
 template <class T>
 void are_equal(const T &x, const T &y)
@@ -79,9 +103,6 @@ void are_not_equal(const T &x, const T &y)
         throw assert_exception("Values are equal!");
     }
 }
-
-void is_true(bool x);
-void is_false(bool x);
 
 template <class T>
 void is_greater(const T &x, const T &y)

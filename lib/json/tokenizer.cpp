@@ -32,39 +32,6 @@ void json::parser::tokenizer::skip_whitespace()
     }
 }
 
-char json::parser::tokenizer::escape_char(char c)
-{
-    switch (c)
-    {
-    case 'a':
-        return '\a';
-    case 'b':
-        return '\b';
-    case 't':
-        return '\t';
-    case 'n':
-        return '\n';
-    case 'v':
-        return '\v';
-    case 'f':
-        return '\f';
-    case 'r':
-        return '\r';
-    case 'e':
-        return '\e';
-    case '"':
-        return '\"';
-    case '\'':
-        return '\'';
-    case '?':
-        return '\?';
-    case '\\':
-        return '\\';
-    default:
-        return c;
-    }
-}
-
 void json::parser::tokenizer::read_next()
 {
     auto c = this->data[this->pos];
@@ -264,6 +231,8 @@ void json::parser::tokenizer::read_number()
             break;
         case STATE_END:
             break;
+        default:
+            throw std::runtime_error("Illegal case!");
         }
 
         this->pos++;
@@ -319,4 +288,6 @@ const std::vector<json::parser::token> &json::parser::tokenizer::tokenize(const 
     {
         this->read_next();
     }
+    
+    return this->tokens;
 }

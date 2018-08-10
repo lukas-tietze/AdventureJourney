@@ -3,6 +3,7 @@
 
 #include <stdexcept>
 #include <unordered_map>
+#include <sstream>
 
 #include "defs.hpp"
 #include "event.hpp"
@@ -286,10 +287,22 @@ double clock_to_ms(clock_t);
 
 std::string read_file(const std::string &file);
 
+template <class T>
+int printf(const T &obj)
+{
+    std::stringstream stream;
+
+    stream << obj << std::endl;
+
+    return std::printf("%s", stream.str().c_str());
+}
+
 template <class TStruct, class TArg1>
 TStruct init_struct(TArg1 arg1)
 {
     TStruct res = {arg1};
+
+    return res;
 }
 } // namespace util
 

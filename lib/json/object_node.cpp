@@ -59,3 +59,25 @@ void json::object_node::add_child(json::node *node)
 {
     this->children.insert({node->get_name(), node});
 }
+
+std::ostream &json::object_node::operator<<(std::ostream &stream) const
+{
+    stream << '{';
+
+    const auto &it = this->children.begin();
+    const auto &end = this->children.end();
+
+    if (it != end)
+    {
+        stream << "\n" << it->first << ": " << it->second;
+    }
+
+    while(it != end)
+    {
+        stream << ",\n" << it->first << ": " << it->second;
+    }
+
+    stream << "\n}";
+
+    return stream;
+}

@@ -42,6 +42,8 @@ class node
     virtual const std::vector<node *> &get_value_as_array() const = 0;
 
     virtual const node *find_child(const std::string &name) = 0;
+
+    virtual std::ostream &operator<<(std::ostream &stream) const;
 };
 
 class object_node : public node
@@ -64,6 +66,8 @@ class object_node : public node
     const node *find_child(const std::string &name);
 
     void add_child(json::node *node);
+
+    std::ostream &operator<<(std::ostream &stream) const;
 };
 
 class array_node : public node
@@ -86,6 +90,8 @@ class array_node : public node
     const node *find_child(const std::string &name);
 
     void add_child(json::node *node);
+
+    std::ostream &operator<<(std::ostream &stream) const;
 };
 
 class primitive_node : public node
@@ -116,6 +122,8 @@ class primitive_node : public node
     void set_value(const std::string &stringValue);
     void set_value(double doubleValue);
     void set_value(node *nodeValue);
+
+    std::ostream &operator<<(std::ostream &stream) const;
 };
 
 class value_exception : std::runtime_error
@@ -173,7 +181,6 @@ class parser
         const char *data;
 
         bool is_start_of_number(char);
-        char escape_char(char);
         void read_next();
         void read_number();
         void read_string();

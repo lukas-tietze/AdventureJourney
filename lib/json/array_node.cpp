@@ -52,3 +52,25 @@ void json::array_node::add_child(json::node *node)
 {
     this->children.push_back(node);
 }
+
+std::ostream &json::array_node::operator<<(std::ostream &stream) const
+{
+    stream << '[';
+
+    const auto &it = this->children.begin();
+    const auto &end = this->children.end();
+
+    if (it != end)
+    {
+        stream << "\n" << *it;
+    }
+
+    while(it != end)
+    {
+        stream << ",\n" << *it;
+    }
+
+    stream << "\n]";
+
+    return stream;
+}

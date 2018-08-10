@@ -21,3 +21,10 @@ void json::node::set_name(const std::string &name)
 {
     this->name = name;
 }
+
+std::ostream &json::node::operator<<(std::ostream &stream) const
+{
+    stream << this->name;
+
+    return stream;
+}

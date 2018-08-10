@@ -1,16 +1,16 @@
 #include "json.hpp"
 
 json::primitive_node::primitive_node(const std::string &name) : node(name),
-                                                        string_value(""),
-                                                        numeric_value(0),
-                                                        type(json::value_type::Empty)
+                                                                string_value(""),
+                                                                numeric_value(0),
+                                                                type(json::value_type::Empty)
 {
 }
 
 json::primitive_node::primitive_node() : node(),
-                                 string_value(""),
-                                 numeric_value(0),
-                                 type(json::value_type::Empty)
+                                         string_value(""),
+                                         numeric_value(0),
+                                         type(json::value_type::Empty)
 {
 }
 
@@ -88,4 +88,32 @@ void json::primitive_node::clear_values()
 {
     this->numeric_value = 0;
     this->string_value.clear();
+}
+
+std::ostream &json::primitive_node::operator<<(std::ostream &stream) const
+{
+    switch (this->get_type())
+    {
+    case json::value_type::String:
+        stream << this->string_value;
+        break;
+    case json::value_type::Number:
+        stream << this->numeric_value;
+        break;
+    case json::value_type::BoolTrue:
+        stream << "true";
+        break;
+    case json::value_type::BoolFalse:
+        stream << "false";
+        break;
+    case json::value_type::Empty:
+        stream << "null";
+        break;
+    case json::value_type::Object:
+    case json::value_type::Array:
+    default:
+        throw std::runtime_error("Invalid case!");
+    }
+
+    return stream;
 }

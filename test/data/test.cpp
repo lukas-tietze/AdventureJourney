@@ -4,6 +4,22 @@ assert::assert_exception::assert_exception(const std::string &msg) : std::runtim
 {
 }
 
+void assert::is_null(const void *ptr)
+{
+    if (ptr != nullptr)
+    {
+        throw assert::assert_exception("Pointer is not null!");
+    }
+}
+
+void assert::is_not_null(const void *ptr)
+{
+    if (ptr == nullptr)
+    {
+        throw assert::assert_exception("Pointer is null!");
+    }
+}
+
 void assert::fail()
 {
     throw assert_exception("Fail");

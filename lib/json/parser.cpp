@@ -189,7 +189,6 @@ std::string json::parser::read_string()
     auto token = this->read_token(token_type::String);
     auto res = std::string();
     auto escaped = true;
-    auto wPos = 0;
 
     res.reserve(token.data_len);
 
@@ -226,14 +225,15 @@ std::string json::parser::read_string()
                 res.push_back('\t');
                 break;
             case 'u':
+            {
                 if (token.data_len - i < 4)
                 {
                     throw parser_exception();
                 }
 
-                auto res = std::to_string(util::hex4ToNumber(token.data + i + 1));
+                auto digits = std::to_string(util::hex4ToNumber(token.data + i + 1));
 
-                for (const char &digit : res)
+                for (const char &digit : digits)
                 {
                     res.push_back(digit);
                 }
@@ -241,6 +241,9 @@ std::string json::parser::read_string()
                 i += 4;
 
                 break;
+            }
+            default:
+                throw parser_exception("illegal escape sequence!");
             }
         }
         else if (c == '\\')
