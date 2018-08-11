@@ -69,12 +69,14 @@ std::ostream &json::object_node::operator<<(std::ostream &stream) const
 
     if (it != end)
     {
-        stream << "\n" << it->first << ": " << it->second;
+        stream << "\n" << it->first << ": ";
+        (it->second)->operator<<(stream);
     }
 
     while(++it != end)
     {
-        stream << ",\n" << it->first << ": " << it->second;
+        stream << ",\n" << it->first << ": ";
+        (it->second)->operator<<(stream);
     }
 
     stream << "\n}";

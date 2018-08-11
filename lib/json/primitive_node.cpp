@@ -92,6 +92,8 @@ void json::primitive_node::clear_values()
 
 std::ostream &json::primitive_node::operator<<(std::ostream &stream) const
 {
+    printf("Value assigned is %f\n", this->get_value_as_number());
+
     switch (this->get_type())
     {
     case json::value_type::String:
@@ -113,6 +115,7 @@ std::ostream &json::primitive_node::operator<<(std::ostream &stream) const
     case json::value_type::Array:
     default:
         throw std::runtime_error("Invalid case!");
+        break;
     }
 
     return stream;

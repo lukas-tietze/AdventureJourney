@@ -62,12 +62,14 @@ std::ostream &json::array_node::operator<<(std::ostream &stream) const
 
     if (it != end)
     {
-        stream << "\n" << *it;
+        stream << "\n";
+        (*it)->operator<<(stream);
     }
 
-    while(++it != end)
+    while (++it != end)
     {
-        stream << ",\n" << *it;
+        stream << ",\n";
+        (*it)->operator<<(stream);
     }
 
     stream << "\n]";

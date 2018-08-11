@@ -25,9 +25,9 @@ void json::parser::parse(const std::string &data, json::node **target)
     json::tokenizer t;
     const auto &tokens = t.tokenize(buf, len);
 
-    delete[] buf;
-
     *target = this->parse(tokens);
+
+    delete[] buf;
 }
 
 json::node *json::parser::parse(const std::vector<token> &tokens)
@@ -141,14 +141,17 @@ json::node *json::parser::read_item()
         ((primitive_node *)res)->set_value(this->read_number());
         break;
     case token_type::ValueTrue:
+        this->read_token(token_type::ValueTrue);
         res = new primitive_node();
         ((primitive_node *)res)->set_value(true);
         break;
     case token_type::ValueFalse:
+        this->read_token(token_type::ValueFalse);
         res = new primitive_node();
         ((primitive_node *)res)->set_value(false);
         break;
     case token_type::ValueNull:
+        this->read_token(token_type::ValueNull);
         res = new primitive_node();
         ((primitive_node *)res)->set_value_null();
         break;
@@ -249,7 +252,7 @@ std::string json::parser::read_string()
 double json::parser::read_number()
 {
     auto token = this->read_token(token_type::Number);
-
+    
     return std::strtod(token.data, nullptr);
 }
 
