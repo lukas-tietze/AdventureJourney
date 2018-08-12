@@ -16,12 +16,14 @@ $(DEBUG_DIR): $(BUILD_DIR)
 $(RELEASE_DIR): $(BUILD_DIR)
 	mkdir $(RELEASE_DIR)
 
-debug: $(DEBUG_DIR)
-	cd $(DEBUG_DIR) && \
-	cmake $(DEBUG_OPTIONS) $(BASE_DIR) && \
-	make
+$(DEBUG_DIR)/Makefile: $(DEBUG_DIR)
+	cd $(DEBUG_DIR) && cmake $(DEBUG_OPTIONS) $(BASE_DIR)
 
-release: $(RELEASE_DIR)
-	cd $(RELEASE_DIR) && \
-	cmake $(RELEASE_OPTIONS) $(BASE_DIR) && \
-	make
+$(RELEASE_DIR)/Makefile: $(RELEASE_DIR)
+	cd $(RELEASE_DIR) && cmake $(RELEASE_OPTIONS) $(BASE_DIR)
+
+debug: $(DEBUG_DIR)/Makefile
+	cd $(DEBUG_DIR) && make
+
+release: $(RELEASE_DIR)/Makefile
+	cd $(RELEASE_DIR) && make
