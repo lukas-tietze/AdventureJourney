@@ -3,6 +3,7 @@
 #include <iostream>
 
 #include "test.hpp"
+#include "config.hpp"
 
 int main(int argc, char **argv)
 {
@@ -15,6 +16,10 @@ int main(int argc, char **argv)
         testRun.execute();
         util::printr(testRun);
     }
+
+    #ifdef DEBUG
+        std::printf("debug is active")
+    #endif
 
     return 0;
 }
