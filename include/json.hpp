@@ -204,6 +204,13 @@ class tokenizer
     const std::vector<token> &tokenize(const char *data, int length);
 };
 
+class parser_exception : public util::exception
+{
+  public:
+    parser_exception();
+    parser_exception(const std::string &msg);
+};
+
 class parser
 {
   public:
@@ -211,13 +218,6 @@ class parser
     ~parser();
 
     void parse(const std::string &, node **);
-
-    class parser_exception : public util::exception
-    {
-      public:
-        parser_exception();
-        parser_exception(const std::string &msg);
-    };
 
   private:
     std::stack<node *> nodeStack;
@@ -241,7 +241,9 @@ class parser
 class i_json_mappable
 {
   public:
-    void *map(const std::string &name, json::value_type type);
+    virtual ~i_json_mappable();
+
+    virtual void *map(const std::string &name, json::value_type type) = 0;
 };
 
 class json_mapper : protected json::parser

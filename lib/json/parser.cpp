@@ -259,12 +259,12 @@ double json::parser::read_number()
 json::token json::parser::read_token(json::token_type type)
 {
     if (this->pos == this->working_set.end())
-        throw json::parser::parser_exception();
+        throw json::parser_exception();
 
     auto current = *this->pos;
 
     if (current.type != type)
-        throw json::parser::parser_exception();
+        throw json::parser_exception();
 
     this->pos++;
 
