@@ -287,6 +287,8 @@ double clock_to_ms(clock_t);
 
 std::string read_file(const std::string &file);
 
+bool try_read_file(const std::string &file, std::string &buf);
+
 template <class T>
 int printr(const T &obj)
 {
@@ -318,9 +320,16 @@ class exception : public std::exception
     exception();
     exception(const std::string &msg);
 
-    virtual const char* what() const throw();
+    virtual const char *what() const throw();
 
     virtual const std::string &get_message() const;
+};
+
+class file_not_found_exception : util::exception
+{
+  public:
+    file_not_found_exception();
+    file_not_found_exception(const std::string &path);
 };
 
 template <class TStruct, class TArg1>

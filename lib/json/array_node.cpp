@@ -81,18 +81,13 @@ json::formatted_printer &json::array_node::print_formatted(json::formatted_print
 {
     auto it = this->children.begin();
     auto end = this->children.end();
-    
+
     p.begin_array();
 
-    if (it != end)
+    while (it != end)
     {
         (*it)->print_formatted(p);
-    }
-
-    while (++it != end)
-    {
-        p.next_property();
-        (*it)->print_formatted(p);
+        it++;
     }
 
     p.end_array();

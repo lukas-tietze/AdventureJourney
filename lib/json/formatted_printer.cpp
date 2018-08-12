@@ -15,6 +15,7 @@ json::formatted_printer::formatted_printer(int indentLength, bool useTabs) : for
 json::formatted_printer::formatted_printer(const std::string &indentTemplate) : indent_level(0),
                                                                                 indent(""),
                                                                                 indent_template(indentTemplate),
+                                                                                value_written(false),
                                                                                 buf(std::ios_base::openmode::_S_out)
 {
 }
@@ -39,8 +40,10 @@ json::formatted_printer &json::formatted_printer::end_indent()
 
 json::formatted_printer &json::formatted_printer::begin_array()
 {
+    this->next_property();
     this->buf << this->indent << '[' << std::endl;
     this->begin_indent();
+    this->value_written = false;
 
     return *this;
 }
@@ -50,14 +53,17 @@ json::formatted_printer &json::formatted_printer::end_array()
     this->end_indent();
     this->buf << std::endl
               << this->indent << ']';
+    this->value_written = true;
 
     return *this;
 }
 
 json::formatted_printer &json::formatted_printer::begin_object()
 {
+    this->next_property();
     this->buf << this->indent << '{' << std::endl;
     this->begin_indent();
+    this->value_written = false;
 
     return *this;
 }
@@ -67,27 +73,26 @@ json::formatted_printer &json::formatted_printer::end_object()
     this->end_indent();
     this->buf << std::endl
               << this->indent << '}';
+    this->value_written = true;
 
     return *this;
 }
 
 json::formatted_printer &json::formatted_printer::print_property(const std::string &name)
 {
+    this->next_property();
     this->buf << this->indent << '"' << name << "\": ";
+    this->value_written = true;
 
     return *this;
 }
 
 json::formatted_printer &json::formatted_printer::next_property()
 {
-    this->buf << this->indent << ',' << std::endl;
-
-    return *this;
-}
-
-json::formatted_printer &json::formatted_printer::new_line()
-{
-    this->buf << std::endl;
+    if (this->value_written)
+    {
+        this->buf << this->indent << ',' << std::endl;
+    }
 
     return *this;
 }
@@ -127,7 +132,7 @@ json::formatted_printer &json::formatted_printer::print_null()
     return *this;
 }
 
-std::string json::formatted_printer::to_string()
+std::string json::formatted_printer::to_string() const
 {
     return this->buf.str();
 }
