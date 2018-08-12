@@ -238,6 +238,20 @@ class parser
     double read_number();
 };
 
+class i_json_mappable
+{
+  public:
+    void *map(const std::string &name, json::value_type type);
+};
+
+class json_mapper : protected json::parser
+{
+  public:
+    json_mapper();
+
+    void map(const std::string &, i_json_mappable *);
+};
+
 class formatted_printer
 {
   private:
