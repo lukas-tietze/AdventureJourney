@@ -93,7 +93,7 @@ json::formatted_printer &json::object_node::print_formatted(json::formatted_prin
 
     p.begin_object();
 
-    while (++it != end)
+    while (it != end)
     {
         p.print_property(it->first);
         it->second->print_formatted(p);

@@ -24,7 +24,7 @@ std::string util::read_file(const std::string &file)
     return str;
 }
 
-bool try_read_file(const std::string &file, std::string &buf)
+bool util::try_read_file(const std::string &file, std::string &buf)
 {
     try
     {

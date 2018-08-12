@@ -5,10 +5,8 @@
 
 int test::json::test_simple_tokenizing()
 {
-    std::string textFromFile = util::read_file("test/tests/json/simple_test.json");
-    std::string text = "{\"foo\": 3}";
-
-    std::printf("Read text:\n%s", textFromFile.c_str());
+    std::string text;
+    assert::is_true(util::try_read_file("test/tests/json/simple_test.json", text));
 
     ::json::tokenizer t;
 

@@ -72,6 +72,7 @@ void json::tokenizer::read_next()
     else if (c == ',')
     {
         this->tokens.push_back({token_type::ValueSeperator, this->data + this->pos, 1});
+        this->pos++;
     }
     else if (this->is_start_of_number(c))
     {
