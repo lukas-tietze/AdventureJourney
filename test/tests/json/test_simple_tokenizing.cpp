@@ -5,7 +5,10 @@
 
 int test::json::test_simple_tokenizing()
 {
+    std::string textFromFile = util::read_file("test/tests/json/simple_test.json");
     std::string text = "{\"foo\": 3}";
+
+    std::printf("Read text:\n%s", textFromFile.c_str());
 
     ::json::tokenizer t;
 
