@@ -10,16 +10,22 @@
 
 namespace json
 {
+constexpr auto ValueTrue = "true";
+constexpr auto ValueFalse = "false";
+constexpr auto ValueNull = "null";
+
 enum class value_type
 {
     String,
     Number,
     Object,
     Array,
-    BoolTrue,
-    BoolFalse,
-    Empty,
+    True,
+    False,
+    Null,
 };
+
+class formatted_printer;
 
 class node
 {
@@ -44,6 +50,7 @@ class node
     virtual const node *find_child(const std::string &name) = 0;
 
     virtual std::ostream &operator<<(std::ostream &stream) const;
+    virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
 };
 
 class object_node : public node
@@ -67,7 +74,8 @@ class object_node : public node
 
     void add_child(json::node *node);
 
-    std::ostream &operator<<(std::ostream &stream) const;
+    virtual std::ostream &operator<<(std::ostream &stream) const;
+    virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
 };
 
 class array_node : public node
@@ -91,7 +99,8 @@ class array_node : public node
 
     void add_child(json::node *node);
 
-    std::ostream &operator<<(std::ostream &stream) const;
+    virtual std::ostream &operator<<(std::ostream &stream) const;
+    virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
 };
 
 class primitive_node : public node
@@ -123,7 +132,8 @@ class primitive_node : public node
     void set_value(double doubleValue);
     void set_value(node *nodeValue);
 
-    std::ostream &operator<<(std::ostream &stream) const;
+    virtual std::ostream &operator<<(std::ostream &stream) const;
+    virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
 };
 
 class value_exception : public util::exception
@@ -148,8 +158,8 @@ enum class token_type
     ArrayEnd,
     ObjectStart,
     ObjectEnd,
-    ObjectAssignment,
-    ObjectSeperator,
+    ValueAssignment,
+    ValueSeperator,
     ValueTrue,
     ValueFalse,
     ValueNull,
@@ -226,6 +236,41 @@ class parser
     node *read_item();
     std::string read_string();
     double read_number();
+};
+
+class formatted_printer
+{
+  private:
+    std::string indent;
+    std::string indent_template;
+    int indent_level;
+    std::stringstream buf;
+
+  public:
+    formatted_printer();
+    formatted_printer(bool useTabs);
+    formatted_printer(int indentLength);
+    formatted_printer(int indentLength, bool useTabs);
+    formatted_printer(const std::string &indentTemplate);
+
+    formatted_printer &begin_indent();
+    formatted_printer &end_indent();
+    formatted_printer &begin_array();
+    formatted_printer &end_array();
+    formatted_printer &begin_object();
+    formatted_printer &end_object();
+    formatted_printer &print_property(const std::string &names);
+    formatted_printer &next_property();
+    formatted_printer &new_line();
+    formatted_printer &print(const std::string &);
+    formatted_printer &print(double);
+    formatted_printer &print_false();
+    formatted_printer &print_true();
+    formatted_printer &print_null();
+
+    std::string to_string();
+
+    std::ostream &operator<<(std::ostream &) const;
 };
 } // namespace json
 

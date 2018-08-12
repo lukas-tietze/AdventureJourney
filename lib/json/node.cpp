@@ -28,3 +28,10 @@ std::ostream &json::node::operator<<(std::ostream &stream) const
 
     return stream;
 }
+
+json::formatted_printer &json::node::print_formatted(json::formatted_printer &p) const
+{
+    p.print(this->name);
+
+    return p;
+}

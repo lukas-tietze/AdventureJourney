@@ -18,9 +18,11 @@ int test::json::test_simple_tokenizing()
 
     ::json::node *n;
     ::json::parser p;
+    ::json::formatted_printer fp;
     p.parse(text, &n);
 
-    util::printp(n);
+    n->print_formatted(fp);
+    std::printf("%s\n", fp.to_string().c_str());
 
     return 0;
 }

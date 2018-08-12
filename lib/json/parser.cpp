@@ -54,7 +54,7 @@ json::node *json::parser::read_start()
 json::node *json::parser::read_value()
 {
     auto name = this->read_string();
-    this->read_token(token_type::ObjectAssignment);
+    this->read_token(token_type::ValueAssignment);
 
     auto res = this->read_item();
     res->set_name(name);
@@ -85,7 +85,7 @@ json::node *json::parser::read_object()
         }
         else
         {
-            this->read_token(token_type::ObjectSeperator);
+            this->read_token(token_type::ValueSeperator);
         }
     }
 
@@ -117,7 +117,7 @@ json::node *json::parser::read_array()
         }
         else
         {
-            this->read_token(token_type::ObjectSeperator);
+            this->read_token(token_type::ValueSeperator);
         }
     }
 
@@ -161,8 +161,8 @@ json::node *json::parser::read_item()
     case token_type::ObjectStart:
         res = this->read_object();
         break;
-    case token_type::ObjectAssignment:
-    case token_type::ObjectSeperator:
+    case token_type::ValueAssignment:
+    case token_type::ValueSeperator:
     case token_type::ObjectEnd:
     case token_type::ArrayEnd:
     default:

@@ -66,12 +66,12 @@ void json::tokenizer::read_next()
     }
     else if (c == ':')
     {
-        this->tokens.push_back({token_type::ObjectAssignment, this->data + this->pos, 1});
+        this->tokens.push_back({token_type::ValueAssignment, this->data + this->pos, 1});
         this->pos++;
     }
     else if (c == ',')
     {
-        this->tokens.push_back({token_type::ObjectSeperator, this->data + this->pos, 1});
+        this->tokens.push_back({token_type::ValueSeperator, this->data + this->pos, 1});
     }
     else if (this->is_start_of_number(c))
     {
@@ -110,17 +110,17 @@ bool json::tokenizer::is_start_of_special(char c)
 
 void json::tokenizer::read_special()
 {
-    if (this->pos < this->length - 4 && std::strncmp(this->data + this->pos, "true", 4) == 0)
+    if (this->pos < this->length - 4 && std::strncmp(this->data + this->pos, json::ValueTrue, 4) == 0)
     {
         this->tokens.push_back({token_type::ValueTrue, this->data + this->pos, 4});
         this->pos += 4;
     }
-    else if (this->pos < this->length - 4 && std::strncmp(this->data + this->pos, "null", 4) == 0)
+    else if (this->pos < this->length - 4 && std::strncmp(this->data + this->pos, json::ValueNull, 4) == 0)
     {
         this->tokens.push_back({token_type::ValueNull, this->data + this->pos, 4});
         this->pos += 4;
     }
-    else if (this->pos < this->length - 5 && std::strncmp(this->data + this->pos, "false", 5) == 0)
+    else if (this->pos < this->length - 5 && std::strncmp(this->data + this->pos, json::ValueFalse, 5) == 0)
     {
         this->tokens.push_back({token_type::ValueFalse, this->data + this->pos, 5});
         this->pos += 5;

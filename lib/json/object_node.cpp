@@ -69,17 +69,44 @@ std::ostream &json::object_node::operator<<(std::ostream &stream) const
 
     if (it != end)
     {
-        stream << "\n" << it->first << ": ";
+        stream << "\n"
+               << it->first << ": ";
         (it->second)->operator<<(stream);
     }
 
-    while(++it != end)
+    while (++it != end)
     {
-        stream << ",\n" << it->first << ": ";
+        stream << ",\n"
+               << it->first << ": ";
         (it->second)->operator<<(stream);
     }
 
     stream << "\n}";
 
     return stream;
+}
+
+json::formatted_printer &json::object_node::print_formatted(json::formatted_printer &p) const
+{
+    auto it = this->children.begin();
+    auto end = this->children.end();
+
+    p.begin_object();
+
+    if (it != end)
+    {
+        p.print_property(it->first);
+        it->second->print_formatted(p);
+    }
+
+    while (++it != end)
+    {
+        p.next_property();
+        p.print_property(it->first);
+        it->second->print_formatted(p);
+    }
+
+    p.end_object();
+
+    return p;
 }

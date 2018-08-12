@@ -76,3 +76,26 @@ std::ostream &json::array_node::operator<<(std::ostream &stream) const
 
     return stream;
 }
+
+json::formatted_printer &json::array_node::print_formatted(json::formatted_printer &p) const
+{
+    auto it = this->children.begin();
+    auto end = this->children.end();
+    
+    p.begin_array();
+
+    if (it != end)
+    {
+        (*it)->print_formatted(p);
+    }
+
+    while (++it != end)
+    {
+        p.next_property();
+        (*it)->print_formatted(p);
+    }
+
+    p.end_array();
+
+    return p;
+}

@@ -29,10 +29,10 @@ std::ostream &json::operator<<(std::ostream &stream, const json::token_type &tok
     case json::token_type::ObjectEnd:
         stream << "ObjectEnd";
         break;
-    case json::token_type::ObjectAssignment:
+    case json::token_type::ValueAssignment:
         stream << "ObjectAssignment";
         break;
-    case json::token_type::ObjectSeperator:
+    case json::token_type::ValueSeperator:
         stream << "ObjectSeperator";
         break;
     case json::token_type::ValueTrue:
