@@ -1,0 +1,16 @@
+{
+    "number": 3,
+    "string": "some string",
+    "array": [
+        1,
+        2,
+        3,
+        "eins",
+        "zwei",
+        "drei"
+    ],
+    "object": {
+        "prop1": 1,
+        "prop2": "zwei"
+    }
+}
