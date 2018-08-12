@@ -266,6 +266,7 @@ class formatted_printer
     formatted_printer &begin_indent();
     formatted_printer &end_indent();
     formatted_printer &next_property();
+    formatted_printer &indent_property();
 
   public:
     formatted_printer();

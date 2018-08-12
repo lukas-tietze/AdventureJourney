@@ -41,8 +41,8 @@ json::formatted_printer &json::formatted_printer::end_indent()
 json::formatted_printer &json::formatted_printer::begin_array()
 {
     this->next_property();
-    this->buf << this->indent << '[' << std::endl;
     this->begin_indent();
+    this->buf << '[' << std::endl << this->indent;
     this->value_written = false;
 
     return *this;
@@ -61,7 +61,9 @@ json::formatted_printer &json::formatted_printer::end_array()
 json::formatted_printer &json::formatted_printer::begin_object()
 {
     this->next_property();
-    this->buf << this->indent << '{' << std::endl;
+
+    this->buf << '{' << std::endl;
+
     this->begin_indent();
     this->value_written = false;
 
@@ -82,7 +84,7 @@ json::formatted_printer &json::formatted_printer::print_property(const std::stri
 {
     this->next_property();
     this->buf << this->indent << '"' << name << "\": ";
-    this->value_written = true;
+    this->value_written = false;
 
     return *this;
 }
@@ -91,7 +93,17 @@ json::formatted_printer &json::formatted_printer::next_property()
 {
     if (this->value_written)
     {
-        this->buf << this->indent << ',' << std::endl;
+        this->buf << ',' << std::endl;
+    }
+
+    return *this;
+}
+
+json::formatted_printer &json::formatted_printer::indent_property()
+{
+    if (this->value_written)
+    {
+        this->buf << this->indent;
     }
 
     return *this;
@@ -99,35 +111,50 @@ json::formatted_printer &json::formatted_printer::next_property()
 
 json::formatted_printer &json::formatted_printer::print(const std::string &s)
 {
-    this->buf << s;
+    this->next_property();
+    this->indent_property();
+    this->buf << '"' << s << '"';
+    this->value_written = true;
 
     return *this;
 }
 
 json::formatted_printer &json::formatted_printer::print(double d)
 {
+    this->next_property();
+    this->indent_property();
     this->buf << d;
+    this->value_written = true;
 
     return *this;
 }
 
 json::formatted_printer &json::formatted_printer::print_false()
 {
+    this->next_property();
+    this->indent_property();
     this->buf << json::ValueFalse;
+    this->value_written = true;
 
     return *this;
 }
 
 json::formatted_printer &json::formatted_printer::print_true()
 {
+    this->next_property();
+    this->indent_property();
     this->buf << json::ValueTrue;
+    this->value_written = true;
 
     return *this;
 }
 
 json::formatted_printer &json::formatted_printer::print_null()
 {
+    this->next_property();
+    this->indent_property();
     this->buf << json::ValueNull;
+    this->value_written = true;
 
     return *this;
 }
