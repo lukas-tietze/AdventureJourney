@@ -117,7 +117,7 @@ class primitive_node : public node
     const std::string &get_value_as_string() const;
     double get_value_as_number() const;
     bool get_value_as_bool() const;
-    void is_value_null() const;
+    bool is_value_null() const;
 
     void set_value(bool value);
     void set_value(const std::string &stringValue);

@@ -22,7 +22,7 @@ void assert::is_not_null(const void *ptr)
 
 void assert::fail()
 {
-    throw assert_exception("Fail");
+    throw assert_exception("Assert failed!");
 }
 
 void assert::is_true(bool x)

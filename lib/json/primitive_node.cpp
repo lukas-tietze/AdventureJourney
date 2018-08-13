@@ -57,6 +57,21 @@ double json::primitive_node::get_value_as_number() const
     return this->numeric_value;
 }
 
+bool json::primitive_node::is_value_null() const
+{
+    return this->type == json::value_type::Null;
+}
+
+bool json::primitive_node::get_value_as_bool() const
+{
+    if (this->type == json::value_type::True)
+        return true;
+    else if (this->type == json::value_type::False)
+        return false;
+    else
+        throw json::value_exception();
+}
+
 void json::primitive_node::set_value(bool value)
 {
     this->clear_values();

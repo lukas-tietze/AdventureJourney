@@ -355,6 +355,16 @@ class file_not_found_exception : util::exception
 
 std::string format(const std::string &format, ...);
 
+template <class T>
+std::string to_string(const T &arg)
+{
+    std::stringstream s;
+
+    s << arg;
+
+    return s.str();
+}
+
 template <class TStruct, class TArg1>
 TStruct init_struct(TArg1 arg1)
 {

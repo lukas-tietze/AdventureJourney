@@ -1,13 +1,23 @@
 {
     "number": 3,
     "string": "some string",
+    "false": false,
+    "true": true,
+    "null": null,
     "array": [
         1,
-        2,
-        3,
-        "four",
-        "five",
-        "six"
+        true,
+        false,
+        null,
+        "three",
+        {
+            "dummy": null
+        },
+        [
+            1,
+            2,
+            3
+        ]
     ],
     "object": {
         "prop1": 1,

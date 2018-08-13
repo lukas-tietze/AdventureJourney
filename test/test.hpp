@@ -93,7 +93,7 @@ void are_equal(const T &x, const T &y)
 {
     if (!(x == y))
     {
-        throw assert_exception("Values are not equal!");
+        throw assert_exception(util::to_string(x) + " does not equal " + util::to_string(y) + "!");
     }
 }
 
@@ -102,7 +102,7 @@ void are_not_equal(const T &x, const T &y)
 {
     if (x == y)
     {
-        throw assert_exception("Values are equal!");
+        throw assert_exception(util::to_string(x) + " does equal " + util::to_string(y) + "!");
     }
 }
 
@@ -111,7 +111,7 @@ void is_greater(const T &x, const T &y)
 {
     if (!(x > y))
     {
-        throw assert_exception("");
+        throw assert_exception(util::to_string(x) + " is not greater than " + util::to_string(y) + "!");
     }
 }
 
@@ -120,7 +120,7 @@ void is_equal_or_greater(const T &x, const T &y)
 {
     if (!(x >= y))
     {
-        throw assert_exception("");
+        throw assert_exception(util::to_string(x) + "is not greater than or equal to " + util::to_string(y) + "!");
     }
 }
 
@@ -129,7 +129,7 @@ void is_less(const T &x, const T &y)
 {
     if (!(x < y))
     {
-        throw assert_exception("");
+        throw assert_exception(util::to_string(x) + "is not less than " + util::to_string(y) + "!");
     }
 }
 
@@ -138,7 +138,16 @@ void is_equal_or_less(const T &x, const T &y)
 {
     if (!(x <= y))
     {
-        throw assert_exception("");
+        throw assert_exception(util::to_string(x) + "is not less than or equal to " + util::to_string(y) + "!");
+    }
+}
+
+template<class T>
+void is(void *obj)
+{
+    if(static_cast<T*>(obj) == nullptr)
+    {
+        throw assert_exception(util::to_string(&obj) + "is not of type " + typeid(T).name());
     }
 }
 } // namespace assert
