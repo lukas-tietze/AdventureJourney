@@ -19,7 +19,7 @@ int test::json::test_simple_tokenizing()
 
     ::json::object_node *obj = static_cast<::json::object_node *>(n);
 
-    assert::are_equal(4, obj->get_child_count());
+    assert::are_equal(7, obj->get_child_count());
 
     assert::is_true(obj->has_child("number"));
     ::json::node *vNumber = obj->get("number");
@@ -55,7 +55,7 @@ int test::json::test_simple_tokenizing()
     assert::is<::json::array_node>(obj->get("array"));
     ::json::array_node *vArray = static_cast<::json::array_node *>(obj->get("array"));
     assert::are_equal(::json::value_type::Array, vArray->get_type());
-    assert::are_equal(6, vArray->get_child_count());
+    assert::are_equal(7, vArray->get_child_count());
 
     assert::are_equal(::json::value_type::Number, vArray->get(0)->get_type());
     assert::are_equal(::json::value_type::True, vArray->get(1)->get_type());
@@ -72,7 +72,7 @@ int test::json::test_simple_tokenizing()
     assert::are_equal(3, vObject->get_child_count());
 
     assert::is_true(vObject->has_child("prop1"));
-    assert::are_equal(::json::value_type::String, vObject->get("prop1")->get_type());
+    assert::are_equal(::json::value_type::Number, vObject->get("prop1")->get_type());
     assert::is_true(vObject->has_child("prop2"));
     assert::are_equal(::json::value_type::String, vObject->get("prop2")->get_type());
     assert::is_true(vObject->has_child("prop3"));

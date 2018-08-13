@@ -166,8 +166,9 @@ struct token
     friend std::ostream &operator<<(std::ostream &, const token &);
 };
 
-std::ostream &operator<<(std::ostream &, const token &);
-std::ostream &operator<<(std::ostream &, const token_type &);
+std::ostream &operator<<(std::ostream &, const json::token &);
+std::ostream &operator<<(std::ostream &, const json::token_type &);
+std::ostream &operator<<(std::ostream &, const json::value_type &);
 
 class tokenizer
 {

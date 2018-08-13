@@ -93,7 +93,7 @@ void are_equal(const T &x, const T &y)
 {
     if (!(x == y))
     {
-        throw assert_exception(util::to_string(x) + " does not equal " + util::to_string(y) + "!");
+        throw assert_exception("Expected " + util::to_string(x) + ", got " + util::to_string(y) + "!");
     }
 }
 
@@ -142,10 +142,10 @@ void is_equal_or_less(const T &x, const T &y)
     }
 }
 
-template<class T>
+template <class T>
 void is(void *obj)
 {
-    if(static_cast<T*>(obj) == nullptr)
+    if (static_cast<T *>(obj) == nullptr)
     {
         throw assert_exception(util::to_string(&obj) + "is not of type " + typeid(T).name());
     }

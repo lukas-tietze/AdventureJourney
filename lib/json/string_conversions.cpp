@@ -51,3 +51,32 @@ std::ostream &json::operator<<(std::ostream &stream, const json::token_type &tok
 
     return stream;
 }
+
+std::ostream &json::operator<<(std::ostream &stream, const json::value_type &valueType)
+{
+    switch (valueType)
+    {
+    case json::value_type::String:
+        stream << "String";
+        break;
+    case json::value_type::Number:
+        stream << "Number";
+        break;
+    case json::value_type::Object:
+        stream << "Object";
+        break;
+    case json::value_type::Array:
+        stream << "Array";
+        break;
+    case json::value_type::True:
+        stream << "True";
+        break;
+    case json::value_type::False:
+        stream << "False";
+        break;
+    case json::value_type::Null:
+        stream << "Null";
+        break;
+    }
+    return stream;
+}
