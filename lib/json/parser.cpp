@@ -15,7 +15,7 @@ json::parser::~parser()
 {
 }
 
-void json::parser::parse(const std::string &data, json::node **target)
+void json::parser::parse(const std::string &data, json::node *&target)
 {
     auto len = data.length();
     auto buf = new char[len];
@@ -25,7 +25,7 @@ void json::parser::parse(const std::string &data, json::node **target)
     json::tokenizer t;
     const auto &tokens = t.tokenize(buf, len);
 
-    *target = this->parse(tokens);
+    target = this->parse(tokens);
 
     delete[] buf;
 }

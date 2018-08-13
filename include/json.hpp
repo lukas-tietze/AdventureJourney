@@ -209,7 +209,7 @@ class parser
     parser();
     ~parser();
 
-    void parse(const std::string &, node **);
+    void parse(const std::string &, node *&);
 
   private:
     std::vector<json::token> working_set;

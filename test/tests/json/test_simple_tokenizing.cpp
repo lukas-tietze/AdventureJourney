@@ -11,7 +11,9 @@ int test::json::test_simple_tokenizing()
     ::json::node *n;
 
     assert::is_true(util::try_read_file("test/tests/json/simple_test.json", text));
-    p.parse(text, &n);
+    p.parse(text, n);
+
+    assert::is_not_null(n);
 
     return 0;
 }
