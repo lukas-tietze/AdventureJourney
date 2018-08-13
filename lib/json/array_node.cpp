@@ -1,10 +1,5 @@
 #include "json.hpp"
 
-json::array_node::array_node(const std::string &name) : node(name),
-                                                        children()
-{
-}
-
 json::array_node::array_node() : node(),
                                  children()
 {
@@ -23,34 +18,91 @@ json::value_type json::array_node::get_type() const
     return json::value_type::Array;
 }
 
-const std::string &json::array_node::get_value_as_string() const
+void json::array_node::put(const std::string &value)
 {
-    throw json::operation_exception();
+    this->put(new json::primitive_node(value));
 }
 
-double json::array_node::get_value_as_number() const
+void json::array_node::put(double value)
 {
-    throw json::operation_exception();
+    this->put(new json::primitive_node(value));
 }
 
-const json::node *json::array_node::get_value_as_object() const
+void json::array_node::put(bool value)
 {
-    throw json::operation_exception();
+    this->put(new json::primitive_node(value));
 }
 
-const std::vector<json::node *> &json::array_node::get_value_as_array() const
+void json::array_node::put(json::node *value)
 {
-    return this->children;
+    this->children.push_back(value);
 }
 
-const json::node *json::array_node::find_child(const std::string &name)
+void json::array_node::put_null()
 {
-    throw json::operation_exception();
+    this->put(new json::primitive_node());
 }
 
-void json::array_node::add_child(json::node *node)
+void json::array_node::insert(int at, const std::string &value)
 {
-    this->children.push_back(node);
+    this->insert(at, new json::primitive_node(value));
+}
+
+void json::array_node::insert(int at, double value)
+{
+    this->insert(at, new json::primitive_node(value));
+}
+
+void json::array_node::insert(int at, bool value)
+{
+    this->insert(at, new json::primitive_node(value));
+}
+
+void json::array_node::insert(int at, json::node *value)
+{
+    if (at < 0 || at > this->children.size())
+        throw util::index_out_of_range_exception(at, this->children.size());
+
+    if (at == this->children.size())
+        this->children.push_back(value);
+    else
+        this->children.insert(this->children.begin() + at, value);
+}
+
+void json::array_node::insert_null(int at)
+{
+    this->insert(at, new json::primitive_node());
+}
+
+int json::array_node::get_child_count()
+{
+    return this->children.size();
+}
+
+json::node *json::array_node::get(int index)
+{
+    if (index < 0 || index >= this->children.size())
+        throw util::index_out_of_range_exception(index, this->children.size());
+
+    return this->children.at(index);
+}
+
+const json::node *json::array_node::get(int index) const
+{
+    if (index < 0 || index >= this->children.size())
+        throw util::index_out_of_range_exception(index, this->children.size());
+
+    return this->children.at(index);
+}
+
+bool json::array_node::try_get(int index, json::node *&buf) const
+{
+    if (index < 0 || index >= this->children.size())
+        return false;
+
+    buf = this->children.at(index);
+
+    return true;
 }
 
 std::ostream &json::array_node::operator<<(std::ostream &stream) const

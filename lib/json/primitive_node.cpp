@@ -1,9 +1,23 @@
 #include "json.hpp"
 
-json::primitive_node::primitive_node(const std::string &name) : node(name),
-                                                                string_value(""),
-                                                                numeric_value(0),
-                                                                type(json::value_type::Null)
+json::primitive_node::primitive_node(const std::string &value) : node(),
+                                                                 string_value(value),
+                                                                 numeric_value(0),
+                                                                 type(json::value_type::String)
+{
+}
+
+json::primitive_node::primitive_node(double value) : node(),
+                                                     string_value(""),
+                                                     numeric_value(value),
+                                                     type(json::value_type::Number)
+{
+}
+
+json::primitive_node::primitive_node(bool value) : node(),
+                                                   string_value(""),
+                                                   numeric_value(0),
+                                                   type(value ? json::value_type::True : json::value_type::False)
 {
 }
 
@@ -41,21 +55,6 @@ double json::primitive_node::get_value_as_number() const
     }
 
     return this->numeric_value;
-}
-
-const json::node *json::primitive_node::get_value_as_object() const
-{
-    throw json::value_exception();
-}
-
-const std::vector<json::node *> &json::primitive_node::get_value_as_array() const
-{
-    throw json::value_exception();
-}
-
-const json::node *json::primitive_node::find_child(const std::string &name)
-{
-    throw json::operation_exception();
 }
 
 void json::primitive_node::set_value(bool value)

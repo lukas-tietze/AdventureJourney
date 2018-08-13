@@ -329,12 +329,31 @@ class exception : public std::exception
     virtual const std::string &get_message() const;
 };
 
+class index_out_of_range_exception : util::exception
+{
+  public:
+    index_out_of_range_exception();
+    index_out_of_range_exception(int index, int max);
+    index_out_of_range_exception(int index, int max, const std::string &custom_msg);
+};
+
+class missing_key_exception : util::exception
+{
+  public:
+    missing_key_exception();
+    missing_key_exception(const std::string &key);
+    missing_key_exception(const std::string &key, const std::string &custom_msg);
+};
+
 class file_not_found_exception : util::exception
 {
   public:
     file_not_found_exception();
     file_not_found_exception(const std::string &path);
+    file_not_found_exception(const std::string &path, const std::string &custom_msg);
 };
+
+std::string format(const std::string &format, ...);
 
 template <class TStruct, class TArg1>
 TStruct init_struct(TArg1 arg1)

@@ -1,10 +1,5 @@
 #include "json.hpp"
 
-json::object_node::object_node(const std::string &name) : node(name),
-                                                          children()
-{
-}
-
 json::object_node::object_node() : node(),
                                    children()
 {
@@ -23,41 +18,71 @@ json::value_type json::object_node::get_type() const
     return json::value_type::Object;
 }
 
-const std::string &json::object_node::get_value_as_string() const
+void json::object_node::put(const std::string &name, const std::string &value)
 {
-    throw json::operation_exception();
+    this->put(name, new json::primitive_node(value));
 }
 
-double json::object_node::get_value_as_number() const
+void json::object_node::put(const std::string &name, double value)
 {
-    throw json::operation_exception();
+    this->put(name, new json::primitive_node(value));
 }
 
-const json::node *json::object_node::get_value_as_object() const
+void json::object_node::put(const std::string &name, bool value)
 {
-    throw json::operation_exception();
+    this->put(name, new json::primitive_node(value));
 }
 
-const std::vector<json::node *> &json::object_node::get_value_as_array() const
+void json::object_node::put(const std::string &name, json::node *value)
 {
-    throw json::operation_exception();
+    this->children.insert({name, value});
 }
 
-const json::node *json::object_node::find_child(const std::string &name)
+void json::object_node::put_null(const std::string &name)
 {
-    auto res = this->children.find(name);
-
-    if (res != this->children.end())
-    {
-        return (*res).second;
-    }
-
-    return nullptr;
+    this->put(name, new json::primitive_node());
 }
 
-void json::object_node::add_child(json::node *node)
+bool json::object_node::has_child(const std::string &name) const
 {
-    this->children.insert({node->get_name(), node});
+    return this->children.find(name) != this->children.end();
+}
+
+int json::object_node::get_child_count() const
+{
+    return this->children.size();
+}
+
+json::node *json::object_node::get(const std::string &name)
+{
+    auto it = this->children.find(name);
+
+    if (it == this->children.end())
+        throw util::missing_key_exception();
+
+    return it->second;
+}
+
+const json::node *json::object_node::get(const std::string &name) const
+{
+    auto it = this->children.find(name);
+
+    if (it == this->children.end())
+        throw util::missing_key_exception();
+
+    return it->second;
+}
+
+bool json::object_node::try_get(const std::string &name, json::node *&buf) const
+{
+    auto it = this->children.find(name);
+
+    if (it == this->children.end())
+        return false;
+
+    buf = it->second;
+
+    return true;
 }
 
 std::ostream &json::object_node::operator<<(std::ostream &stream) const

@@ -34,7 +34,6 @@ json::node *json::parser::parse(const std::vector<token> &tokens)
 {
     this->working_set = tokens;
     this->pos = this->working_set.begin();
-    std::stack<json::node *>().swap(this->nodeStack);
 
     return this->read_start();
 }
@@ -47,17 +46,6 @@ json::node *json::parser::read_start()
     {
         throw parser_exception();
     }
-
-    return res;
-}
-
-json::node *json::parser::read_value()
-{
-    auto name = this->read_string();
-    this->read_token(token_type::ValueAssignment);
-
-    auto res = this->read_item();
-    res->set_name(name);
 
     return res;
 }
@@ -77,7 +65,10 @@ json::node *json::parser::read_object()
 
     while (loop)
     {
-        res->add_child(this->read_value());
+        auto name = this->read_string();
+        this->read_token(token_type::ValueAssignment);
+        
+        res->put(name, this->read_item());
 
         if (this->peek_type() == token_type::ObjectEnd)
         {
@@ -109,7 +100,7 @@ json::node *json::parser::read_array()
 
     while (loop)
     {
-        res->add_child(this->read_item());
+        res->put(this->read_item());
 
         if (this->peek_type() == token_type::ArrayEnd)
         {
@@ -252,7 +243,7 @@ std::string json::parser::read_string()
 double json::parser::read_number()
 {
     auto token = this->read_token(token_type::Number);
-    
+
     return std::strtod(token.data, nullptr);
 }
 

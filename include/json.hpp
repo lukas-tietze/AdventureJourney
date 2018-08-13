@@ -29,28 +29,13 @@ class formatted_printer;
 
 class node
 {
-  private:
-    std::string name;
-
   public:
-    node(const std::string &name);
-    node();
     virtual ~node();
-
-    const std::string &get_name() const;
-    void set_name(const std::string &name);
 
     virtual value_type get_type() const = 0;
 
-    virtual const std::string &get_value_as_string() const = 0;
-    virtual double get_value_as_number() const = 0;
-    virtual const node *get_value_as_object() const = 0;
-    virtual const std::vector<node *> &get_value_as_array() const = 0;
-
-    virtual const node *find_child(const std::string &name) = 0;
-
     virtual std::ostream &operator<<(std::ostream &stream) const;
-    virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
+    virtual json::formatted_printer &print_formatted(json::formatted_printer &) const = 0;
 };
 
 class object_node : public node
@@ -59,20 +44,22 @@ class object_node : public node
     std::unordered_map<std::string, node *> children;
 
   public:
-    object_node(const std::string &name);
     object_node();
     ~object_node();
 
     value_type get_type() const;
 
-    const std::string &get_value_as_string() const;
-    double get_value_as_number() const;
-    const node *get_value_as_object() const;
-    const std::vector<node *> &get_value_as_array() const;
+    void put(const std::string &, const std::string &);
+    void put(const std::string &, double);
+    void put(const std::string &, bool);
+    void put(const std::string &, json::node *);
+    void put_null(const std::string &);
 
-    const node *find_child(const std::string &name);
-
-    void add_child(json::node *node);
+    bool has_child(const std::string &name) const;
+    int get_child_count() const;
+    json::node *get(const std::string &name);
+    const json::node *get(const std::string &name) const;
+    bool try_get(const std::string &name, json::node *&) const;
 
     virtual std::ostream &operator<<(std::ostream &stream) const;
     virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
@@ -84,20 +71,26 @@ class array_node : public node
     std::vector<node *> children;
 
   public:
-    array_node(const std::string &name);
     array_node();
     ~array_node();
 
     value_type get_type() const;
 
-    const std::string &get_value_as_string() const;
-    double get_value_as_number() const;
-    const node *get_value_as_object() const;
-    const std::vector<node *> &get_value_as_array() const;
+    void put(const std::string &);
+    void put(double);
+    void put(bool);
+    void put(json::node *);
+    void put_null();
+    void insert(int at, const std::string &);
+    void insert(int at, double);
+    void insert(int at, bool);
+    void insert(int at, json::node *);
+    void insert_null(int at);
 
-    const node *find_child(const std::string &name);
-
-    void add_child(json::node *node);
+    int get_child_count();
+    json::node *get(int index);
+    const json::node *get(int index) const;
+    bool try_get(int index, json::node *&) const;
 
     virtual std::ostream &operator<<(std::ostream &stream) const;
     virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
@@ -113,7 +106,9 @@ class primitive_node : public node
     void clear_values();
 
   public:
-    primitive_node(const std::string &name);
+    primitive_node(const std::string &value);
+    primitive_node(bool value);
+    primitive_node(double value);
     primitive_node();
     ~primitive_node();
 
@@ -121,16 +116,13 @@ class primitive_node : public node
 
     const std::string &get_value_as_string() const;
     double get_value_as_number() const;
-    const node *get_value_as_object() const;
-    const std::vector<node *> &get_value_as_array() const;
-
-    const node *find_child(const std::string &name);
+    bool get_value_as_bool() const;
+    void is_value_null() const;
 
     void set_value(bool value);
-    void set_value_null();
     void set_value(const std::string &stringValue);
     void set_value(double doubleValue);
-    void set_value(node *nodeValue);
+    void set_value_null();
 
     virtual std::ostream &operator<<(std::ostream &stream) const;
     virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
@@ -220,7 +212,6 @@ class parser
     void parse(const std::string &, node **);
 
   private:
-    std::stack<node *> nodeStack;
     std::vector<json::token> working_set;
     std::vector<json::token>::const_iterator pos;
 
@@ -251,7 +242,7 @@ class json_mapper : protected json::parser
   public:
     json_mapper();
 
-    void map(const std::string &, i_json_mappable *);
+    void map(const json::node &, i_json_mappable *);
 };
 
 class formatted_printer
@@ -285,6 +276,9 @@ class formatted_printer
     formatted_printer &print_false();
     formatted_printer &print_true();
     formatted_printer &print_null();
+
+    void print(json::node *);
+    void print(json::node *, std::ostream);
 
     std::string to_string() const;
 

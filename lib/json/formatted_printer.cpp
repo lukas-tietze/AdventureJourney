@@ -42,7 +42,8 @@ json::formatted_printer &json::formatted_printer::begin_array()
 {
     this->next_property();
     this->begin_indent();
-    this->buf << '[' << std::endl << this->indent;
+    this->buf << '[' << std::endl
+              << this->indent;
     this->value_written = false;
 
     return *this;
@@ -157,6 +158,20 @@ json::formatted_printer &json::formatted_printer::print_null()
     this->value_written = true;
 
     return *this;
+}
+
+void json::formatted_printer::print(json::node *n)
+{
+    n->print_formatted(*this);
+
+    std::printf("%s", this->buf.str().c_str());
+}
+
+void json::formatted_printer::print(json::node *n, std::ostream stream)
+{
+    n->print_formatted(*this);
+
+    stream << this->buf.str();
 }
 
 std::string json::formatted_printer::to_string() const
