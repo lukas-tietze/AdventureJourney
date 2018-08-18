@@ -285,13 +285,19 @@ int hexToNumber(char);
 
 double clock_to_ms(clock_t);
 
+double clock_to_seconds(clock_t);
+
 std::string read_file(const std::string &file);
 
 bool try_read_file(const std::string &file, std::string &buf);
 
 void write_file(const std::string &file, const std::string &data);
 
+void write_file(const std::string &path, const std::vector<std::string &> data);
+
 bool try_write_file(const std::string &file, const std::string &data);
+
+bool try_write_file(const std::string &path, const std::vector<std::string &> data);
 
 template <class T>
 int printr(const T &obj)
@@ -372,6 +378,110 @@ TStruct init_struct(TArg1 arg1)
 
     return res;
 }
+
+class args
+{
+  public:
+    // Normaler Konstruktor.
+    // Erhält die Anzahl der Argumente und einen Vektor mit den Zeigern zu den Arugmenten.
+    args(int argc, char **argv);
+
+    // Versucht, dass nächste Argument auszulesen und in target zu speichern.
+    // Gibt true zurück, falls es ein nöchstes Argument gab, sonst false.
+    bool next(std::string &target);
+
+    // Versucht, dass nächste Argument als int auszulesen und in target zu speichern.
+    // Gibt true zurück, falls es ein nöchstes Argument gab und es sich als int interpretieren ließ, sonst false.
+    bool next_int(int &target);
+
+    // Versucht, dass nächste Argument als uint auszulesen und in target zu speichern.
+    // Gibt true zurück, falls es ein nöchstes Argument gab und es sich als uint interpretieren ließ, sonst false.
+    bool next_uint(uint &target);
+
+    // Gibt das aktuell bearbeitete Argument zurück.
+    const std::string &current();
+
+    // Gibt true zurück, wenn es ein nächstes Argument gibt.
+    bool has_next() const;
+
+    // Gibt true zurück, wenn es nächstes Argument gibt und es ein int ist.
+    bool has_next_int() const;
+
+    // Gibt true zurück, wenn es ein nächstes Argument gibt und es ein uint ist.
+    bool has_next_uint() const;
+
+    // Versucht das nächste Argument zu betrachten und in target zu speichern.
+    // Gibt true zurück, wenn es näcshtes Argument gibt.
+    bool peek(std::string &target) const;
+
+  private:
+    int m_pos;
+    int m_argc;
+    char **m_argv;
+    std::string m_last;
+
+    bool next();
+};
+
+std::string &to_lower(std::string &nameBuf);
+
+std::string to_lower(const std::string &nameBuf);
+
+std::string &to_upper(std::string &nameBuf);
+
+std::string to_upper(const std::string &nameBuf);
+
+// Teilt einen String zwischen den Vorkommen von Kommata auf.
+std::vector<std::string> split(const std::string &str);
+
+std::vector<std::string> split(const std::string &str, char seperator);
+
+std::vector<std::string> split(const std::string &str, char seperator[]);
+
+// Versucht, den gegebenen String in eine ganze Zahl umzuwandeln.
+// Gibt true zurück, wenn die Umwandlung erfolgreich war, sonst false.
+// Der umgewandelte Wert wird in target geschrieben.
+template <typename NumT>
+bool parse_integral(const std::string &text, NumT &target)
+{
+    try
+    {
+        target = (NumT)std::stol(text);
+    }
+    catch (const std::invalid_argument &e)
+    {
+        return false;
+    }
+    catch (const std::out_of_range &e)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+// Versucht, den gegebenen String in eine Gleitkommazahl umzuwandeln.
+// Gibt true zurück, wenn die Umwandlung erfolgreich war, sonst false.
+// Der umgewandelte Wert wird in target geschrieben.
+template <typename NumT>
+bool parse_float(const std::string &text, NumT &target)
+{
+    try
+    {
+        target = (NumT)std::stod(text);
+    }
+    catch (const std::invalid_argument &e)
+    {
+        return false;
+    }
+    catch (const std::out_of_range &e)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 } // namespace util
 
 #endif /*DATA_HPP*/
