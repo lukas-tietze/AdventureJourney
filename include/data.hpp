@@ -382,36 +382,15 @@ TStruct init_struct(TArg1 arg1)
 class args
 {
   public:
-    // Normaler Konstruktor.
-    // Erhält die Anzahl der Argumente und einen Vektor mit den Zeigern zu den Arugmenten.
     args(int argc, char **argv);
 
-    // Versucht, dass nächste Argument auszulesen und in target zu speichern.
-    // Gibt true zurück, falls es ein nöchstes Argument gab, sonst false.
     bool next(std::string &target);
-
-    // Versucht, dass nächste Argument als int auszulesen und in target zu speichern.
-    // Gibt true zurück, falls es ein nöchstes Argument gab und es sich als int interpretieren ließ, sonst false.
     bool next_int(int &target);
-
-    // Versucht, dass nächste Argument als uint auszulesen und in target zu speichern.
-    // Gibt true zurück, falls es ein nöchstes Argument gab und es sich als uint interpretieren ließ, sonst false.
     bool next_uint(uint &target);
-
-    // Gibt das aktuell bearbeitete Argument zurück.
     const std::string &current();
-
-    // Gibt true zurück, wenn es ein nächstes Argument gibt.
     bool has_next() const;
-
-    // Gibt true zurück, wenn es nächstes Argument gibt und es ein int ist.
     bool has_next_int() const;
-
-    // Gibt true zurück, wenn es ein nächstes Argument gibt und es ein uint ist.
     bool has_next_uint() const;
-
-    // Versucht das nächste Argument zu betrachten und in target zu speichern.
-    // Gibt true zurück, wenn es näcshtes Argument gibt.
     bool peek(std::string &target) const;
 
   private:
