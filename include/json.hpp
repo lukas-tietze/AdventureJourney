@@ -25,6 +25,8 @@ enum class value_type
     Null,
 };
 
+std::ostream &operator<<(std::ostream &, const value_type &); 
+
 class formatted_printer;
 
 class node
@@ -81,16 +83,16 @@ class array_node : public node
     void put(bool);
     void put(json::node *);
     void put_null();
-    void insert(int at, const std::string &);
-    void insert(int at, double);
-    void insert(int at, bool);
-    void insert(int at, json::node *);
-    void insert_null(int at);
+    void insert(uint at, const std::string &);
+    void insert(uint at, double);
+    void insert(uint at, bool);
+    void insert(uint at, json::node *);
+    void insert_null(uint at);
 
     int get_child_count();
-    json::node *get(int index);
-    const json::node *get(int index) const;
-    bool try_get(int index, json::node *&) const;
+    json::node *get(uint index);
+    const json::node *get(uint index) const;
+    bool try_get(uint index, json::node *&) const;
 
     virtual std::ostream &operator<<(std::ostream &stream) const;
     virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
