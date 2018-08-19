@@ -60,7 +60,7 @@ void json::array_node::insert(uint at, bool value)
 
 void json::array_node::insert(uint at, json::node *value)
 {
-    if (at < 0 || at > this->children.size())
+    if (at > this->children.size())
         throw util::index_out_of_range_exception(at, this->children.size());
 
     if (at == this->children.size())
@@ -79,9 +79,9 @@ int json::array_node::get_child_count()
     return this->children.size();
 }
 
-json::node *json::array_node::get(int index)
+json::node *json::array_node::get(uint index)
 {
-    if (index < 0 || index >= this->children.size())
+    if (index >= this->children.size())
         throw util::index_out_of_range_exception(index, this->children.size());
 
     return this->children.at(index);
@@ -89,7 +89,7 @@ json::node *json::array_node::get(int index)
 
 const json::node *json::array_node::get(uint index) const
 {
-    if (index < 0 || index >= this->children.size())
+    if (index >= this->children.size())
         throw util::index_out_of_range_exception(index, this->children.size());
 
     return this->children.at(index);
@@ -97,7 +97,7 @@ const json::node *json::array_node::get(uint index) const
 
 bool json::array_node::try_get(uint index, json::node *&buf) const
 {
-    if (index < 0 || index >= this->children.size())
+    if (index >= this->children.size())
         return false;
 
     buf = this->children.at(index);

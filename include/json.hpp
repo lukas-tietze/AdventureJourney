@@ -25,9 +25,17 @@ enum class value_type
     Null,
 };
 
-std::ostream &operator<<(std::ostream &, const value_type &); 
+std::ostream &operator<<(std::ostream &, const value_type &);
 
 class formatted_printer;
+
+class i_json_mappable
+{
+  public:
+    virtual ~i_json_mappable();
+
+    virtual void *map(const std::string &name, json::value_type type) = 0;
+};
 
 class node
 {
@@ -38,6 +46,8 @@ class node
 
     virtual std::ostream &operator<<(std::ostream &stream) const;
     virtual json::formatted_printer &print_formatted(json::formatted_printer &) const = 0;
+
+    void map(i_json_mappable *);
 };
 
 class object_node : public node
@@ -62,6 +72,9 @@ class object_node : public node
     json::node *get(const std::string &name);
     const json::node *get(const std::string &name) const;
     bool try_get(const std::string &name, json::node *&) const;
+
+    typedef std::unordered_map<std::string, json::node *>::const_iterator const_child_iterator;
+    typedef std::unordered_map<std::string, json::node *>::iterator child_iterator;
 
     virtual std::ostream &operator<<(std::ostream &stream) const;
     virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
@@ -231,29 +244,14 @@ class parser
     double read_number();
 };
 
-class i_json_mappable
-{
-  public:
-    virtual ~i_json_mappable();
-
-    virtual void *map(const std::string &name, json::value_type type) = 0;
-};
-
-class json_mapper : protected json::parser
-{
-  public:
-    json_mapper();
-
-    void map(const json::node &, i_json_mappable *);
-};
-
 class formatted_printer
 {
   private:
     std::string indent;
     std::string indent_template;
     int indent_level;
-    std::stringstream buf;
+    std::iostream *out;
+    bool out_is_managed;
     bool value_written;
 
     formatted_printer &begin_indent();
@@ -267,6 +265,13 @@ class formatted_printer
     formatted_printer(int indentLength);
     formatted_printer(int indentLength, bool useTabs);
     formatted_printer(const std::string &indentTemplate);
+    formatted_printer(std::iostream *);
+    formatted_printer(std::iostream *, bool useTabs);
+    formatted_printer(std::iostream *, int indentLength);
+    formatted_printer(std::iostream *, int indentLength, bool useTabs);
+    formatted_printer(std::iostream *, const std::string &indentTemplate);
+
+    ~formatted_printer();
 
     formatted_printer &begin_array();
     formatted_printer &end_array();
@@ -279,11 +284,14 @@ class formatted_printer
     formatted_printer &print_true();
     formatted_printer &print_null();
 
-    void print(json::node *);
-    void print(json::node *, std::ostream);
+    formatted_printer &print(json::node *);
 
+    const std::string &get_indent_template() const;
+    uint get_indent_length() const;
+    const std::iostream *get_output() const;
+
+    bool is_independent() const;
     std::string to_string() const;
-
     std::ostream &operator<<(std::ostream &) const;
 };
 } // namespace json
