@@ -76,6 +76,12 @@ class object_node : public node
     typedef std::unordered_map<std::string, json::node *>::const_iterator const_child_iterator;
     typedef std::unordered_map<std::string, json::node *>::iterator child_iterator;
 
+    child_iterator begin();
+    const_child_iterator begin() const;
+
+    child_iterator end();
+    const_child_iterator end() const;
+
     virtual std::ostream &operator<<(std::ostream &stream) const;
     virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
 };
@@ -106,6 +112,15 @@ class array_node : public node
     json::node *get(uint index);
     const json::node *get(uint index) const;
     bool try_get(uint index, json::node *&) const;
+
+    typedef std::vector<node *>::const_iterator const_child_iterator;
+    typedef std::vector<node *>::iterator child_iterator;
+
+    child_iterator begin();
+    const_child_iterator begin() const;
+
+    child_iterator end();
+    const_child_iterator end() const;
 
     virtual std::ostream &operator<<(std::ostream &stream) const;
     virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;

@@ -146,3 +146,23 @@ json::formatted_printer &json::array_node::print_formatted(json::formatted_print
 
     return p;
 }
+
+json::array_node::child_iterator json::array_node::begin()
+{
+    return this->children.begin();
+}
+
+json::array_node::const_child_iterator json::array_node::begin() const
+{
+    return this->children.begin();
+}
+
+json::array_node::child_iterator json::array_node::end()
+{
+    return this->children.end();
+}
+
+json::array_node::const_child_iterator json::array_node::end() const
+{
+    return this->children.end();
+}

@@ -129,3 +129,23 @@ json::formatted_printer &json::object_node::print_formatted(json::formatted_prin
 
     return p;
 }
+
+json::object_node::child_iterator json::object_node::begin()
+{
+    return this->children.begin();
+}
+
+json::object_node::const_child_iterator json::object_node::begin() const
+{
+    return this->children.begin();
+}
+
+json::object_node::child_iterator json::object_node::end()
+{
+    return this->children.end();
+}
+
+json::object_node::const_child_iterator json::object_node::end() const
+{
+    return this->children.end();
+}
