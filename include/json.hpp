@@ -46,8 +46,6 @@ class node
 
     virtual std::ostream &operator<<(std::ostream &stream) const;
     virtual json::formatted_printer &print_formatted(json::formatted_printer &) const = 0;
-
-    void map(i_json_mappable *);
 };
 
 class object_node : public node
