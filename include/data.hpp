@@ -410,23 +410,13 @@ class args
 };
 
 std::string &to_lower(std::string &nameBuf);
-
 std::string to_lower(const std::string &nameBuf);
-
 std::string &to_upper(std::string &nameBuf);
-
 std::string to_upper(const std::string &nameBuf);
-
-// Teilt einen String zwischen den Vorkommen von Kommata auf.
 std::vector<std::string> split(const std::string &str);
-
 std::vector<std::string> split(const std::string &str, char seperator);
-
 std::vector<std::string> split(const std::string &str, char seperator[]);
 
-// Versucht, den gegebenen String in eine ganze Zahl umzuwandeln.
-// Gibt true zurück, wenn die Umwandlung erfolgreich war, sonst false.
-// Der umgewandelte Wert wird in target geschrieben.
 template <typename NumT>
 bool parse_integral(const std::string &text, NumT &target)
 {
@@ -446,9 +436,6 @@ bool parse_integral(const std::string &text, NumT &target)
     return true;
 }
 
-// Versucht, den gegebenen String in eine Gleitkommazahl umzuwandeln.
-// Gibt true zurück, wenn die Umwandlung erfolgreich war, sonst false.
-// Der umgewandelte Wert wird in target geschrieben.
 template <typename NumT>
 bool parse_float(const std::string &text, NumT &target)
 {
