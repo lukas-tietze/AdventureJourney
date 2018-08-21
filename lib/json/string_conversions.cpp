@@ -46,7 +46,38 @@ std::ostream &json::operator<<(std::ostream &stream, const json::token_type &tok
         break;
     default:
         throw std::exception();
+    }
+
+    return stream;
+}
+
+std::ostream &json::operator<<(std::ostream &stream, const value_type &value)
+{
+    switch (value)
+    {
+    case json::value_type::String:
+        stream << "String";
         break;
+    case json::value_type::Number:
+        stream << "Number";
+        break;
+    case json::value_type::Object:
+        stream << "Object";
+        break;
+    case json::value_type::Array:
+        stream << "Array";
+        break;
+    case json::value_type::True:
+        stream << "True";
+        break;
+    case json::value_type::False:
+        stream << "False";
+        break;
+    case json::value_type::Null:
+        stream << "Null";
+        break;
+    default:
+        throw std::exception();
     }
 
     return stream;

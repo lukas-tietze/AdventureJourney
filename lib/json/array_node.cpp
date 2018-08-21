@@ -43,24 +43,24 @@ void json::array_node::put_null()
     this->put(new json::primitive_node());
 }
 
-void json::array_node::insert(int at, const std::string &value)
+void json::array_node::insert(uint at, const std::string &value)
 {
     this->insert(at, new json::primitive_node(value));
 }
 
-void json::array_node::insert(int at, double value)
+void json::array_node::insert(uint at, double value)
 {
     this->insert(at, new json::primitive_node(value));
 }
 
-void json::array_node::insert(int at, bool value)
+void json::array_node::insert(uint at, bool value)
 {
     this->insert(at, new json::primitive_node(value));
 }
 
-void json::array_node::insert(int at, json::node *value)
+void json::array_node::insert(uint at, json::node *value)
 {
-    if (at < 0 || at > this->children.size())
+    if (at > this->children.size())
         throw util::index_out_of_range_exception(at, this->children.size());
 
     if (at == this->children.size())
@@ -69,7 +69,7 @@ void json::array_node::insert(int at, json::node *value)
         this->children.insert(this->children.begin() + at, value);
 }
 
-void json::array_node::insert_null(int at)
+void json::array_node::insert_null(uint at)
 {
     this->insert(at, new json::primitive_node());
 }
@@ -79,25 +79,25 @@ int json::array_node::get_child_count()
     return this->children.size();
 }
 
-json::node *json::array_node::get(int index)
+json::node *json::array_node::get(uint index)
 {
-    if (index < 0 || index >= this->children.size())
+    if (index >= this->children.size())
         throw util::index_out_of_range_exception(index, this->children.size());
 
     return this->children.at(index);
 }
 
-const json::node *json::array_node::get(int index) const
+const json::node *json::array_node::get(uint index) const
 {
-    if (index < 0 || index >= this->children.size())
+    if (index >= this->children.size())
         throw util::index_out_of_range_exception(index, this->children.size());
 
     return this->children.at(index);
 }
 
-bool json::array_node::try_get(int index, json::node *&buf) const
+bool json::array_node::try_get(uint index, json::node *&buf) const
 {
-    if (index < 0 || index >= this->children.size())
+    if (index >= this->children.size())
         return false;
 
     buf = this->children.at(index);
@@ -145,4 +145,24 @@ json::formatted_printer &json::array_node::print_formatted(json::formatted_print
     p.end_array();
 
     return p;
+}
+
+json::array_node::child_iterator json::array_node::begin()
+{
+    return this->children.begin();
+}
+
+json::array_node::const_child_iterator json::array_node::begin() const
+{
+    return this->children.begin();
+}
+
+json::array_node::child_iterator json::array_node::end()
+{
+    return this->children.end();
+}
+
+json::array_node::const_child_iterator json::array_node::end() const
+{
+    return this->children.end();
 }

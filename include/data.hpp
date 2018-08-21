@@ -267,12 +267,25 @@ class rectangle
 
 enum class cache_policy
 {
-
+    FirstInFirstOut,
+    LastInFirstOut,
+    LeastUsedFirst
 }; /*cache_policy*/
 
 template <class TKey, class TData>
 class cache
 {
+  public:
+    cache(uint size);
+    ~cache();
+
+    void set_policy(util::cache_policy);
+    util::cache_policy get_policy() const;
+
+    TData &get(const TKey &key);
+    const TData &get(const TKey &key) const;
+    bool contains(const TKey &key) const;
+
   private:
     std::unordered_map<TKey, TData> data;
     int max_size;
@@ -285,13 +298,19 @@ int hexToNumber(char);
 
 double clock_to_ms(clock_t);
 
+double clock_to_seconds(clock_t);
+
 std::string read_file(const std::string &file);
 
 bool try_read_file(const std::string &file, std::string &buf);
 
 void write_file(const std::string &file, const std::string &data);
 
+void write_file(const std::string &path, const std::vector<std::string &> data);
+
 bool try_write_file(const std::string &file, const std::string &data);
+
+bool try_write_file(const std::string &path, const std::vector<std::string &> data);
 
 template <class T>
 int printr(const T &obj)
@@ -372,6 +391,83 @@ TStruct init_struct(TArg1 arg1)
 
     return res;
 }
+
+class args
+{
+  public:
+    args(int argc, char **argv);
+
+    bool next(std::string &);
+    bool has_next() const;
+    bool next_int(int &t);
+    bool has_next_int() const;
+    bool next_uint(uint &);
+    bool has_next_uint() const;
+    bool next_double(double &);
+    bool has_next_double() const;
+    bool next_float(float &);
+    bool has_next_float() const;
+    bool next_bool(bool &);
+    bool has_next_bool() const;
+
+    const std::string &current();
+    bool peek(std::string &target) const;
+
+  private:
+    int m_pos;
+    int m_argc;
+    char **m_argv;
+    std::string m_last;
+
+    bool next();
+};
+
+std::string &to_lower(std::string &nameBuf);
+std::string to_lower(const std::string &nameBuf);
+std::string &to_upper(std::string &nameBuf);
+std::string to_upper(const std::string &nameBuf);
+std::vector<std::string> split(const std::string &str);
+std::vector<std::string> split(const std::string &str, char seperator);
+std::vector<std::string> split(const std::string &str, char seperator[]);
+
+template <typename NumT>
+bool parse_integral(const std::string &text, NumT &target)
+{
+    try
+    {
+        target = (NumT)std::stol(text);
+    }
+    catch (const std::invalid_argument &e)
+    {
+        return false;
+    }
+    catch (const std::out_of_range &e)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+template <typename NumT>
+bool parse_float(const std::string &text, NumT &target)
+{
+    try
+    {
+        target = (NumT)std::stod(text);
+    }
+    catch (const std::invalid_argument &e)
+    {
+        return false;
+    }
+    catch (const std::out_of_range &e)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 } // namespace util
 
 #endif /*DATA_HPP*/
