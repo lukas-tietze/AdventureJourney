@@ -6,8 +6,6 @@
 #include <string>
 #include <ncurses.h>
 
-namespace util
-{
 namespace terminal
 {
 enum class input_mode
@@ -25,7 +23,7 @@ class terminal_view
     int height;
     char input_buf[4096];
 
-    util::terminal::input_mode input_mode;
+    terminal::input_mode input_mode;
     bool echo_on;
 
   protected:
@@ -35,8 +33,13 @@ class terminal_view
     terminal_view(int width, int height);
     ~terminal_view();
 
-    void set_input_mode(util::terminal::input_mode mode);
+    void set_input_mode(terminal::input_mode mode);
     void set_echo(bool echo);
+
+    util::dimension get_buffer_size();
+    bool set_buffer_size(const util::dimension &);
+    util::dimension get_screen_size();
+    bool set_screen_size(const util::dimension &);
 
     int read_key();
     std::string read_line();
@@ -47,6 +50,8 @@ class terminal_view
     void print(const std::string &text);
     void print(const std::string &text, int x, int y);
     void print(char c);
+    void clear(int x, int y);
+    void clear(const util::dimension &area);
 };
 
 class control_base
@@ -54,16 +59,40 @@ class control_base
   private:
     util::rectangle bounds;
     control_base *parent;
+    int z_index;
+
   public:
-    
+    control_base();
+
+    control_base *get_parent();
+    const control_base *get_parent() const;
+    bool has_parent() const;
+    const util::rectangle &get_bounds() const;
+    void set_bounds(const util::rectangle &);
+    void set_z_index(int);
+    int get_z_index() const;
+
+    virtual void render(const util::rectangle &, const terminal_view &) = 0;
+};
+
+class terminal_window : public control_base
+{
+  public:
+    terminal_window();
+
+    void add_control(control_base *);
+    virtual void render(const util::rectangle &, const terminal_view &);
 };
 
 class container_base : public control_base
+{
+};
+
+class text_view : public container_base
 {
 
 };
 
 } // namespace terminal
-} // namespace util
 
 #endif /*TERMINAL_HPP*/

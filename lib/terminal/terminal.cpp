@@ -3,9 +3,7 @@
 
 #include "terminal.hpp"
 
-using namespace util::terminal;
-
-util::terminal::terminal_view::terminal_view(int width, int height) : width(width),
+terminal::terminal_view::terminal_view(int width, int height) : width(width),
                                                                       height(height)
 {
     this->window = newwin(this->width, this->height, 0, 0);
@@ -16,14 +14,14 @@ util::terminal::terminal_view::terminal_view(int width, int height) : width(widt
     refresh();
 }
 
-util::terminal::terminal_view::~terminal_view()
+terminal::terminal_view::~terminal_view()
 {
     wrefresh(this->window);
     delwin(this->window);
     refresh();
 }
 
-void util::terminal::terminal_view::set_input_mode(util::terminal::input_mode mode)
+void terminal::terminal_view::set_input_mode(terminal::input_mode mode)
 {
     if (mode != this->input_mode)
     {
@@ -47,7 +45,7 @@ void util::terminal::terminal_view::set_input_mode(util::terminal::input_mode mo
     }
 }
 
-void util::terminal::terminal_view::set_echo(bool enableEcho)
+void terminal::terminal_view::set_echo(bool enableEcho)
 {
     if (enableEcho != this->echo_on)
     {
@@ -65,44 +63,44 @@ void util::terminal::terminal_view::set_echo(bool enableEcho)
     }
 }
 
-int util::terminal::terminal_view::read_key()
+int terminal::terminal_view::read_key()
 {
     return wgetch(this->window);
 }
 
-std::string util::terminal::terminal_view::read_line()
+std::string terminal::terminal_view::read_line()
 {
     wgetstr(this->window, this->input_buf);
     return std::string(this->input_buf);
 }
 
-bool util::terminal::terminal_view::read_key(long timeOut, int &result)
+bool terminal::terminal_view::read_key(long timeOut, int &result)
 {
 }
 
-bool util::terminal::terminal_view::read_line(long timeOut, std::string &result)
+bool terminal::terminal_view::read_line(long timeOut, std::string &result)
 {
 }
 
-void util::terminal::terminal_view::print(const std::string &text)
+void terminal::terminal_view::print(const std::string &text)
 {
     wprintw(this->window, text.c_str());
     wrefresh(this->window);
 }
 
-void util::terminal::terminal_view::print(const std::string &text, int x, int y)
+void terminal::terminal_view::print(const std::string &text, int x, int y)
 {
     mvwprintw(this->window, x, y, text.c_str());
     wrefresh(this->window);
 }
 
-void util::terminal::terminal_view::print(char c)
+void terminal::terminal_view::print(char c)
 {
     waddch(this->window, c);
     wrefresh(this->window);
 }
 
-void util::terminal::terminal_view::on_terminal_property_changed()
+void terminal::terminal_view::on_terminal_property_changed()
 {
     wrefresh(this->window);
 }
