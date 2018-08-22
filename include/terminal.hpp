@@ -2,6 +2,7 @@
 #define TERMINAL_HPP
 
 #include "data.hpp"
+#include "tupel.hpp"
 
 #include <string>
 #include <ncurses.h>
@@ -13,6 +14,31 @@ enum class input_mode
     RAW,
     BREAK,
     LINE,
+};
+
+enum class resize_mode
+{
+    North = 1,
+    South = 2,
+    West = 4,
+    East = 8,
+    Horizontal = West | East,
+    Vertical = North | South,
+    All = North | South | West | East,
+};
+
+struct key_input
+{
+    int key;
+    bool handled;
+};
+
+struct mouse_input
+{
+    int cx;
+    int cy;
+    int button;
+    bool handled;
 };
 
 class terminal_view
@@ -36,10 +62,8 @@ class terminal_view
     void set_input_mode(terminal::input_mode mode);
     void set_echo(bool echo);
 
-    util::dimension get_buffer_size();
-    bool set_buffer_size(const util::dimension &);
-    util::dimension get_screen_size();
-    bool set_screen_size(const util::dimension &);
+    util::dimension get_size() const;
+    bool set_size(const util::dimension &);
 
     int read_key();
     std::string read_line();
@@ -60,9 +84,11 @@ class control_base
     util::rectangle bounds;
     control_base *parent;
     int z_index;
+    bool has_focus;
 
   public:
     control_base();
+    virtual ~control_base();
 
     control_base *get_parent();
     const control_base *get_parent() const;
@@ -72,27 +98,76 @@ class control_base
     void set_z_index(int);
     int get_z_index() const;
 
-    virtual void render(const util::rectangle &, const terminal_view &) = 0;
+    virtual void handle_focus_aquired();
+    virtual void handle_focus_lost();
+    virtual void handle_key(key_input &);
+    virtual void handle_mouse(mouse_input &);
+    virtual void handle_add_to_control(control_base *);
+
+    virtual void render(const util::rectangle &, const terminal_view &);
 };
 
 class terminal_window : public control_base
 {
+  private:
+    std::vector<terminal::control_base *> controls;
+    int focused_control_index;
+
   public:
     terminal_window();
+    virtual ~terminal_window();
 
     void add_control(control_base *);
     virtual void render(const util::rectangle &, const terminal_view &);
+
+    control_base *get_focused_control() const;
+};
+
+class text_control_base : public control_base
+{
+  public:
+    text_control_base();
+    text_control_base(const std::string &text);
+    virtual ~text_control_base();
+
+    std::string &get_text();
+    const std::string &get_text() const;
+    void set_text(const std::string &);
+
+  private:
+    const std::string text;
 };
 
 class container_base : public control_base
 {
 };
 
-class text_view : public container_base
+class text_view : public text_control_base
 {
-
+  public:
+    text_view();
+    text_view(const std::string &);
+    virtual ~text_view();
 };
 
+class pattern
+{
+  private:
+    std::vector<util::tupel2<int, char>> items;
+
+  public:
+};
+
+class canvas
+{
+  private:
+    terminal_view *view;
+
+  public:
+    canvas();
+
+    canvas &draw_vertical_line();
+};
 } // namespace terminal
 
 #endif /*TERMINAL_HPP*/

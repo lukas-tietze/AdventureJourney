@@ -4,7 +4,7 @@
 #include "terminal.hpp"
 
 terminal::terminal_view::terminal_view(int width, int height) : width(width),
-                                                                      height(height)
+                                                                height(height)
 {
     this->window = newwin(this->width, this->height, 0, 0);
 
@@ -103,4 +103,18 @@ void terminal::terminal_view::print(char c)
 void terminal::terminal_view::on_terminal_property_changed()
 {
     wrefresh(this->window);
+}
+
+util::dimension terminal::terminal_view::get_size() const
+{
+    int x, y;
+
+    getmaxyx(this->window, y, x);
+
+    return util::dimension(x, y);
+}
+
+bool terminal::terminal_view::set_size(const util::dimension &dim)
+{
+    resizeterm(dim.get_height(), dim.get_width());
 }
