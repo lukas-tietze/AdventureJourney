@@ -1,7 +1,7 @@
 #include <cstdio>
 
 #include "test.hpp"
-#include "json.hpp"
+#include "data/json.hpp"
 
 int test::json::test_simple_tokenizing()
 {

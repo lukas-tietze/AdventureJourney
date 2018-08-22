@@ -1,4 +1,6 @@
-#include "data.hpp"
+#include "data/numeric_conversions.hpp"
+#include "exception.hpp"
+#include "defs.hpp"
 
 int util::hex4ToNumber(const char *data)
 {
@@ -53,14 +55,4 @@ int util::hexToNumber(char c)
     default:
         throw std::runtime_error("illegal value for hexadecimal digit!");
     }
-}
-
-double util::clock_to_ms(clock_t clocks)
-{
-    return clocks / (double)(CLOCKS_PER_SEC / 1000);
-}
-
-double util::clock_to_seconds(clock_t clocks)
-{
-    return clocks / (double)CLOCKS_PER_SEC;
 }

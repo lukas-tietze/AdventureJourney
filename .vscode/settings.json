@@ -72,7 +72,8 @@
         "xstddef": "cpp",
         "xtr1common": "cpp",
         "xtree": "cpp",
-        "csignal": "cpp"
+        "csignal": "cpp",
+        "random": "cpp"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }

@@ -1,11 +1,12 @@
 #ifndef TERMINAL_HPP
 #define TERMINAL_HPP
 
-#include "data.hpp"
-#include "tupel.hpp"
-
 #include <string>
+#include <vector>
 #include <ncurses.h>
+
+#include "data/collection/tupel.hpp"
+#include "geometry/rectangle.hpp"
 
 namespace terminal
 {
@@ -135,7 +136,7 @@ class text_control_base : public control_base
     void set_text(const std::string &);
 
   private:
-    const std::string text;
+    std::string text;
 };
 
 class container_base : public control_base
@@ -148,14 +149,8 @@ class text_view : public text_control_base
     text_view();
     text_view(const std::string &);
     virtual ~text_view();
-};
 
-class pattern
-{
-  private:
-    std::vector<util::tupel2<int, char>> items;
-
-  public:
+    virtual void render(const util::rectangle &, const terminal_view &);
 };
 
 class canvas

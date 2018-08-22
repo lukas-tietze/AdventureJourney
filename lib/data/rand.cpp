@@ -1,7 +1,7 @@
 #include <functional>
 #include <random>
 
-#include "rand.hpp"
+#include "data/rand.hpp"
 
 namespace
 {

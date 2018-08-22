@@ -3,9 +3,12 @@
 
 #include <string>
 #include <ctime>
+#include <vector>
 #include <iostream>
 
-#include "util.hpp"
+#include "data/string_conversions.hpp"
+#include "data/io.hpp"
+#include "datetime/datetime_conversions.hpp"
 
 namespace test
 {
