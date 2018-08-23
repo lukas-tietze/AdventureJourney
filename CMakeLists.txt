@@ -1,3 +1,7 @@
+#--------------------------------------------------------
+# General
+#--------------------------------------------------------
+
 cmake_minimum_required (VERSION 3.6.2)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -12,18 +16,38 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wswitch-default -Wswitch-enum")
 endif()
 
-project (Test)
 file(GLOB_RECURSE SOURCES "src/**/*.cpp")
 file(GLOB_RECURSE TESTS "test/**/*.cpp")
 file(GLOB_RECURSE LIB "lib/**/*.cpp")
 
+#--------------------------------------------------------
+# Library
+#--------------------------------------------------------
+project(Common)
+configure_file(include/config.in.hpp include/config.hpp)
+add_library(COMMON STATIC ${LIB})
+
+#--------------------------------------------------------
+# Test
+#--------------------------------------------------------
+project (Test)
 include_directories(include)
 include_directories(test)
 include_directories(src)
 
-configure_file(include/config.in.hpp include/config.hpp)
-
-add_library(COMMON STATIC ${LIB})
-
 add_executable(Test test/main.cpp ${TESTS})
 target_link_libraries(Test COMMON)
+target_link_libraries(Test ncurses)
+
+#--------------------------------------------------------
+# Runtime
+#--------------------------------------------------------
+
+project(Runtime)
+
+include_directories(include)
+include_directories(src)
+
+add_executable(Runtime src/main.cpp ${SORUCES})
+target_link_libraries(Runtime COMMON)
+target_link_libraries(Runtime ncurses)

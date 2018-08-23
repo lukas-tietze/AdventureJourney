@@ -159,9 +159,11 @@ class canvas
     terminal_view *view;
 
   public:
-    canvas();
+    canvas(terminal_view *);
 
-    canvas &draw_vertical_line();
+    canvas &draw_vertical_line(int x, int y, int length, char c);
+    canvas &draw_horizontal_line(int y, char c);
+    canvas &draw_box(int x, int y, char c);
 };
 } // namespace terminal
 
