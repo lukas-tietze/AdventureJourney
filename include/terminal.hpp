@@ -99,10 +99,10 @@ class canvas
     util::rectangle clipped_area;
     util::point origin;
 
-    bool draw_area_changed;
-
     int fg_color;
+    util::color real_fg_color;
     int bg_color;
+    util::color real_bg_color;
     bool color_changed;
 
     terminal::output_attribute active_attributes;
@@ -111,6 +111,7 @@ class canvas
     bool multiple_colors_supported;
 
     void buffer_color(const util::color &, bool);
+    void read_buffered_color(bool);
     void buffer_data();
 
   public:
@@ -128,7 +129,8 @@ class canvas
     const util::dimension &get_size() const;
     const util::point &get_origin() const;
     const util::rectangle &get_clipped_area() const;
-    const util::color &get_active_color() const;
+    const util::color &get_active_foreground_color() const;
+    const util::color &get_active_background_color() const;
     terminal::output_attribute get_active_attributes() const;
     int get_supported_colors() const;
 
