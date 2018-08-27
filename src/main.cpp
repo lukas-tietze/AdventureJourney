@@ -5,22 +5,10 @@
 
 int run()
 {
-    terminal::terminal_view t(100, 200);
-    t.set_input_mode(terminal::input_mode::BREAK);
+    terminal::terminal_view v;
+    terminal::canvas c(&v);
 
-    t.set_size(util::dimension(40, 40));
-
-    t.print("(0, 0)", 10, 10);
-
-    int key = t.read_key();
-
-    while (key != 330)
-    {
-        t.print(util::format("You Pressed: %i", key), 10, 10);
-        key = t.read_key();
-    }
-
-    t.print("Goodbye");
+    c.dr
 }
 
 int main(int argc, char **argv)

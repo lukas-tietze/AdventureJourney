@@ -7,6 +7,7 @@
 
 #include "data/collection/tupel.hpp"
 #include "geometry/rectangle.hpp"
+#include "graphics/color.hpp"
 
 namespace terminal
 {
@@ -26,6 +27,15 @@ enum class resize_mode
     Horizontal = West | East,
     Vertical = North | South,
     All = North | South | West | East,
+};
+
+enum class output_attribute
+{
+    None = 0,
+    Italic = 1,
+    Bold = 2,
+    Underline = 4,
+    All = Italic | Bold | Underline,
 };
 
 struct key_input
@@ -57,6 +67,7 @@ class terminal_view
     void on_terminal_property_changed();
 
   public:
+    terminal_view();
     terminal_view(int width, int height);
     ~terminal_view();
 
@@ -77,6 +88,82 @@ class terminal_view
     void print(char c);
     void clear(int x, int y);
     void clear(const util::dimension &area);
+    void flush();
+};
+
+class canvas
+{
+  private:
+    terminal_view *view;
+    util::dimension size;
+    util::rectangle clipped_area;
+    util::point origin;
+
+    bool draw_area_changed;
+
+    int fg_color;
+    int bg_color;
+    bool color_changed;
+
+    terminal::output_attribute active_attributes;
+    bool active_attributes_changed;
+
+    bool multiple_colors_supported;
+
+    void buffer_color(const util::color &, bool);
+    void buffer_data();
+
+  public:
+    canvas(terminal_view *);
+    canvas(const canvas &);
+
+    terminal::canvas &draw_vertical_line(const util::point &, int length, char c);
+    terminal::canvas &draw_horizontal_line(const util::point &, int y, char c);
+    terminal::canvas &draw_box(const util::rectangle &, char c);
+    terminal::canvas &fill(const util::rectangle &, char c);
+    terminal::canvas &clear(char c);
+    terminal::canvas &clear();
+    terminal::canvas &draw_string(const util::point &, const std::string &);
+
+    const util::dimension &get_size() const;
+    const util::point &get_origin() const;
+    const util::rectangle &get_clipped_area() const;
+    const util::color &get_active_color() const;
+    terminal::output_attribute get_active_attributes() const;
+    int get_supported_colors() const;
+
+    void set_origin(const util::point &);
+    void clip_area(const util::dimension &);
+    void clip_area(const util::rectangle &);
+    void disable_clip();
+    void enable_attribute(terminal::output_attribute);
+    void disable_attribute(terminal::output_attribute);
+    void set_foreground_color(const util::color &);
+    void set_background_color(const util::color &);
+    void set_foreground_color(int);
+    void set_background_color(int);
+    void reset_foreground_color(const util::color &);
+    void reset_background_color(const util::color &);
+
+    void flush();
+};
+
+class terminal_window
+{
+  private:
+    std::vector<terminal::control_base *> controls;
+    int focused_control_index;
+    terminal_view view;
+
+  public:
+    terminal_window();
+    ~terminal_window();
+
+    control_base *add_control(control_base *);
+
+    void start();
+
+    control_base *get_focused_control() const;
 };
 
 class control_base
@@ -105,23 +192,7 @@ class control_base
     virtual void handle_mouse(mouse_input &);
     virtual void handle_add_to_control(control_base *);
 
-    virtual void render(const util::rectangle &, const terminal_view &);
-};
-
-class terminal_window : public control_base
-{
-  private:
-    std::vector<terminal::control_base *> controls;
-    int focused_control_index;
-
-  public:
-    terminal_window();
-    virtual ~terminal_window();
-
-    void add_control(control_base *);
-    virtual void render(const util::rectangle &, const terminal_view &);
-
-    control_base *get_focused_control() const;
+    virtual void render(const util::rectangle &, canvas &);
 };
 
 class text_control_base : public control_base
@@ -150,20 +221,7 @@ class text_view : public text_control_base
     text_view(const std::string &);
     virtual ~text_view();
 
-    virtual void render(const util::rectangle &, const terminal_view &);
-};
-
-class canvas
-{
-  private:
-    terminal_view *view;
-
-  public:
-    canvas(terminal_view *);
-
-    canvas &draw_vertical_line(const util::point &, int length, char c);
-    canvas &draw_horizontal_line(const util::point &, int y, char c);
-    canvas &draw_box(const util::rectangle &, char c);
+    virtual void render(const util::rectangle &, canvas &);
 };
 } // namespace terminal
 

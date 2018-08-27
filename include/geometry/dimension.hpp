@@ -43,10 +43,18 @@ class basic_dimension
         return this->width * this->height;
     }
 
-    friend basic_dimension<T> operator*(const double &, const basic_dimension<T> &);
-    friend basic_dimension<T> operator*(const basic_dimension<T> &, const double &);
-    friend basic_dimension<T> operator/(const basic_dimension<T> &, const double &);
-    friend std::ostream &operator<<(std::ostream &, util::basic_dimension<T> &);
+    
+    template <class Tx>
+    friend basic_dimension<Tx> operator*(const double &, const basic_dimension<Tx> &);
+    
+    template <class Tx>
+    friend basic_dimension<Tx> operator*(const basic_dimension<Tx> &, const double &);
+    
+    template <class Tx>
+    friend basic_dimension<Tx> operator/(const basic_dimension<Tx> &, const double &);
+    
+    template <class Tx>
+    friend std::ostream &operator<<(std::ostream &, const util::basic_dimension<Tx> &);
 }; /*basic_dimension*/
 
 template <class T>
@@ -68,7 +76,7 @@ util::basic_dimension<T> operator/(const basic_dimension<T> &d, const double &f)
 }
 
 template <class T>
-std::ostream &operator<<(std::ostream &s, util::basic_dimension<T> &d)
+std::ostream &operator<<(std::ostream &s, const util::basic_dimension<T> &d)
 {
     s << '(' << d.width << 'x' << d.height << ')';
 

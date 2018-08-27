@@ -4,6 +4,10 @@ terminal::canvas::canvas(terminal_view *view) : view(view)
 {
 }
 
+terminal::canvas::canvas(const canvas &copy) : view(copy.view)
+{
+}
+
 terminal::canvas &terminal::canvas::draw_vertical_line(const util::point &p, int length, char c)
 {
 }

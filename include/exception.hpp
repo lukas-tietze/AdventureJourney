@@ -10,13 +10,13 @@ namespace util
 namespace error_codes
 {
     const std::string &get_message(int error_code);    
-};
+}
 
 class exception : public std::exception
 {
   private:
-    std::string msg;
     int error_code;
+    std::string msg;
 
   public:
     exception();
