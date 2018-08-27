@@ -31,11 +31,11 @@ class color
     int value();
 }; /*color*/
 
-util::color color_red;
-util::color color_green;
-util::color color_blue;
-util::color color_black;
-util::color color_white;
+const util::color color_red = color(1, 0, 0);
+const util::color color_green = color(0, 1, 0);
+const util::color color_blue = color(0, 0, 1);
+const util::color color_black = color(0, 0, 0);
+const util::color color_white = color(1, 1, 1);
 } // namespace util
 
 #endif /*COLOR_HPP*/

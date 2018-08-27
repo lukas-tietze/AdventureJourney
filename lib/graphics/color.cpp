@@ -40,9 +40,3 @@ int util::color::value()
 {
     return this->data;
 }
-
-util::color util::color_red = color(1, 0, 0);
-util::color util::color_green = color(0, 1, 0);
-util::color util::color_blue = color(0, 0, 1);
-util::color util::color_black = color(0, 0, 0);
-util::color util::color_white = color(1, 1, 1);

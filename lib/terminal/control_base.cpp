@@ -66,6 +66,6 @@ void terminal::control_base::handle_add_to_control(control_base *)
 {
 }
 
-void terminal::control_base::render(const util::rectangle &, const terminal::terminal_view &)
+void terminal::control_base::render(const util::rectangle &, terminal::canvas &)
 {
 }

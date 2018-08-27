@@ -150,24 +150,6 @@ class canvas
     void flush();
 };
 
-class terminal_window
-{
-  private:
-    std::vector<terminal::control_base *> controls;
-    int focused_control_index;
-    terminal_view view;
-
-  public:
-    terminal_window();
-    ~terminal_window();
-
-    control_base *add_control(control_base *);
-
-    void start();
-
-    control_base *get_focused_control() const;
-};
-
 class control_base
 {
   private:
@@ -195,6 +177,24 @@ class control_base
     virtual void handle_add_to_control(control_base *);
 
     virtual void render(const util::rectangle &, canvas &);
+};
+
+class terminal_window
+{
+  private:
+    std::vector<terminal::control_base *> controls;
+    int focused_control_index;
+    terminal_view view;
+
+  public:
+    terminal_window();
+    ~terminal_window();
+
+    control_base *add_control(control_base *);
+
+    void start();
+
+    control_base *get_focused_control() const;
 };
 
 class text_control_base : public control_base

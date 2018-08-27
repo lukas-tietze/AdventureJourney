@@ -3,6 +3,10 @@
 
 #include "terminal.hpp"
 
+terminal::terminal_view::terminal_view()
+{
+}
+
 terminal::terminal_view::terminal_view(int width, int height) : width(width),
                                                                 height(height)
 {
