@@ -7,18 +7,26 @@
 namespace util
 {
 
+namespace error_codes
+{
+    const std::string &get_message(int error_code);    
+};
+
 class exception : public std::exception
 {
   private:
     std::string msg;
+    int error_code;
 
   public:
     exception();
-    exception(const std::string &msg);
+    exception(int);
+    exception(const std::string &);
+    exception(int, const std::string &);
 
     virtual const char *what() const throw();
-
     virtual const std::string &get_message() const;
+    int get_error_code() const;
 };
 
 class index_out_of_range_exception : util::exception
