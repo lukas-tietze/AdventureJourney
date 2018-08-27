@@ -6,9 +6,9 @@ terminal::canvas::canvas(terminal_view *view) : view(view),
                                                 clipped_area(0, 0, this->size),
                                                 origin(0, 0),
                                                 fg_color(COLOR_WHITE),
-                                                real_fg_color(0),
+                                                real_fg_color(util::color_white),
                                                 bg_color(COLOR_BLACK),
-                                                real_bg_color(1),
+                                                real_bg_color(util::color_black),
                                                 color_changed(false),
                                                 active_attributes(terminal::output_attribute::None),
                                                 active_attributes_changed(false),
@@ -108,7 +108,7 @@ void terminal::canvas::clip_area(const util::rectangle &p)
 
 void terminal::canvas::disable_clip()
 {
-    this->clipped_area = this->size;
+    this->clipped_area = util::rectangle(this->origin, this->size);
 }
 
 void terminal::canvas::enable_attribute(terminal::output_attribute a)
@@ -149,12 +149,12 @@ void terminal::canvas::set_background_color(int c)
 
 void terminal::canvas::reset_foreground_color(const util::color &c)
 {
-    this->set_foreground_color(util::color(0));
+    this->set_foreground_color(util::color_white);
 }
 
 void terminal::canvas::reset_background_color(const util::color &c)
 {
-    this->set_background_color(util::color(0));
+    this->set_background_color(util::color_black);
 }
 
 void terminal::canvas::buffer_color(const util::color &c, bool fg)

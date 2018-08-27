@@ -20,47 +20,22 @@ class color
     static constexpr int LOW_BYTE_MASK = 0x000000ff;
 
   public:
-    color(const color &copy) : data(copy.data)
-    {
-    }
-
-    color(byte r, byte g, byte b, byte a = 255) : data((a << A_SHIFT) | (r << R_SHIFT) | (g < G_SHIFT) | (b << B_SHIFT))
-    {
-    }
-
-    color(float r, float g, float b, float a = 1.0f) : color((byte)(r * 255), (byte)(g * 255), (byte)(b * 255), (byte)(a * 255))
-    {
-    }
-
-    color(int color) : data(color)
-    {
-    }
-
-    int alpha()
-    {
-        return (this->data >> A_SHIFT) & LOW_BYTE_MASK;
-    }
-
-    int red()
-    {
-        return (this->data >> R_SHIFT) & LOW_BYTE_MASK;
-    }
-
-    int green()
-    {
-        return (this->data >> G_SHIFT) & LOW_BYTE_MASK;
-    }
-
-    int blue()
-    {
-        return (this->data >> B_SHIFT) & LOW_BYTE_MASK;
-    }
-
-    int value()
-    {
-        return this->data;
-    }
+    color(const color &copy);
+    color(int r, int g, int b, int a = 255);
+    color(float r, float g, float b, float a = 1.0f);
+    color(int color);
+    int alpha();
+    int red();
+    int green();
+    int blue();
+    int value();
 }; /*color*/
+
+util::color color_red;
+util::color color_green;
+util::color color_blue;
+util::color color_black;
+util::color color_white;
 } // namespace util
 
 #endif /*COLOR_HPP*/
