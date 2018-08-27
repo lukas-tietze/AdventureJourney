@@ -6,7 +6,7 @@
 #include <vector>
 #include <iostream>
 
-#include "data/string_conversions.hpp"
+#include "data/string.hpp"
 #include "data/io.hpp"
 #include "datetime/datetime_conversions.hpp"
 

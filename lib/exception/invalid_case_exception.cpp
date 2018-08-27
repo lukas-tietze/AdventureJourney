@@ -1,5 +1,5 @@
 #include "exception.hpp"
-#include "data/string_conversions.hpp"
+#include "data/string.hpp"
 
 std::string make_msg(const std::string &which)
 {

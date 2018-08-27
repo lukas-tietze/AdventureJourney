@@ -161,9 +161,9 @@ class canvas
   public:
     canvas(terminal_view *);
 
-    canvas &draw_vertical_line(int x, int y, int length, char c);
-    canvas &draw_horizontal_line(int y, char c);
-    canvas &draw_box(int x, int y, char c);
+    canvas &draw_vertical_line(const util::point &, int length, char c);
+    canvas &draw_horizontal_line(const util::point &, int y, char c);
+    canvas &draw_box(const util::rectangle &, char c);
 };
 } // namespace terminal
 

@@ -6,7 +6,7 @@
 #include <cstdlib>
 
 #include "data/json.hpp"
-#include "data/numeric_conversions.hpp"
+#include "data/math.hpp"
 
 json::parser::parser()
 {

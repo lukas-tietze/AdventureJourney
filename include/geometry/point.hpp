@@ -1,6 +1,8 @@
 #ifndef POINT_HPP
 #define POINT_HPP
 
+#include "data/math.hpp"
+
 namespace util
 {
 template <class T>
@@ -12,17 +14,17 @@ class basic_point
 
   public:
     basic_point(const basic_point<T> &copy) : x(copy.x),
-                                  y(copy.y)
+                                              y(copy.y)
     {
     }
 
     basic_point(T x, T y) : x(x),
-                      y(y)
+                            y(y)
     {
     }
 
     basic_point() : x(0),
-              y(0)
+                    y(0)
     {
     }
 
@@ -36,36 +38,56 @@ class basic_point
         return this->y;
     }
 
-    basic_point<T> operator+(const basic_point<T> &other)
-    {
-        return basic_point(this->x + other.x, this->y + other.y);
-    }
+    template <class Tx>
+    friend basic_point<Tx> operator+(const basic_point<Tx> &, const basic_point<Tx> &);
+    template <class Tx>
+    friend basic_point<Tx> operator-(const basic_point<Tx> &, const basic_point<Tx> &);
+    template <class Tx>
+    friend basic_point<Tx> operator*(const basic_point<Tx> &, const double &);
+    template <class Tx>
+    friend basic_point<Tx> operator/(const basic_point<Tx> &, const double &);
+    template <class Tx>
+    friend basic_point<Tx> operator*(const double &, const basic_point<Tx> &);
+    template <class Tx>
+    friend std::ostream &operator<<(std::ostream &, const basic_point<Tx> &);
+};
+template <class T>
+basic_point<T> operator+(const basic_point<T> &p, const basic_point<T> &f)
+{
+    return basic_point<T>(p.x + f.x, p.y + f.y);
+}
 
-    basic_point<T> operator-(const basic_point<T> &other)
-    {
-        return basic_point(this->x + other.x, this->y + other.y);
-    }
+template <class T>
+basic_point<T> operator-(const basic_point<T> &p, const basic_point<T> &f)
+{
+    return basic_point<T>(p.x - f.x, p.y - f.y);
+}
 
-    basic_point<T> operator*(const double &fac)
-    {
-        return basic_point(this->x * fac, this->y * fac);
-    }
+template <class T>
+basic_point<T> operator*(const basic_point<T> &p, const double &f)
+{
+    return basic_point<T>(p.x * f, p.y * f);
+}
 
-    basic_point<T> operator/(const double &fac)
-    {
-        return basic_point((int)this->x * fac, this->y * fac);
-    }
+template <class T>
+basic_point<T> operator/(const basic_point<T> &p, const double &f)
+{
+    return basic_point<T>(p.x / f, p.y / f);
+}
 
-    bool operator==(const basic_point<T> &other)
-    {
-        return this->x == other.x && this->y == other.y;
-    }
+template <class T>
+basic_point<T> operator*(const double &f, const basic_point<T> &p)
+{
+    return basic_point<T>(f * p.x, f * p.x);
+}
 
-    bool operator!=(const basic_point<T> &other)
-    {
-        return this->x != other.x || this->y != other.y;
-    }
-}; /*basic_point*/
+template <class T>
+std::ostream &operator<<(std::ostream &s, const basic_point<T> &p)
+{
+    s << '(' << p.x << ", " << p.y << ')';
+
+    return s;
+}
 
 typedef basic_point<int> point;
 typedef basic_point<float> pointf;

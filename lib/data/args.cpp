@@ -3,7 +3,7 @@
 #include <cstdio>
 
 #include "data/args.hpp"
-#include "data/numeric_conversions.hpp"
+#include "data/string.hpp"
 
 util::args::args(int argc, char **argv) : m_pos(1),
                                           m_argc(argc),

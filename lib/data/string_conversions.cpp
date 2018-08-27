@@ -1,7 +1,7 @@
 #include <stdarg.h>
 #include <algorithm>
 
-#include "data/string_conversions.hpp"
+#include "data/string.hpp"
 
 std::string util::format(const std::string &format, ...)
 {
