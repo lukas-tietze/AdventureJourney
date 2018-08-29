@@ -14,6 +14,7 @@ terminal::canvas::canvas(terminal_view *view) : view(view),
                                                 active_attributes_changed(false),
                                                 multiple_colors_supported(can_change_color())
 {
+    this->view->set_live_mode(false);
 }
 
 terminal::canvas::canvas(const canvas &copy) : view(copy.view),
@@ -33,42 +34,103 @@ terminal::canvas::canvas(const canvas &copy) : view(copy.view),
 
 terminal::canvas &terminal::canvas::draw_vertical_line(const util::point &p, int length, char c)
 {
+    auto start = this->clipped_area.fit(p);
+    auto end = this->clipped_area.fit(p + util::point(0, length));
+
+    for (int y = start.get_y(); y < end.get_y(); y++)
+    {
+        this->view->print(c, start.get_x(), y);
+    }
+
+    return *this;
 }
 
-terminal::canvas &terminal::canvas::draw_horizontal_line(const util::point &p, int y, char c)
+terminal::canvas &terminal::canvas::draw_horizontal_line(const util::point &p, int length, char c)
 {
+    auto start = this->clipped_area.fit(p);
+    auto end = this->clipped_area.fit(p + util::point(length, 0));
+
+    for (int x = start.get_x(); x < end.get_x(); x++)
+    {
+        this->view->print(c, x, start.get_y());
+    }
+
+    return *this;
 }
 
-terminal::canvas &terminal::canvas::draw_box(const util::rectangle &p, char c)
+terminal::canvas &terminal::canvas::draw_box(const util::rectangle &r, char horizontal, char vertical, char cornor)
 {
+    auto tlc = this->clipped_area.fit(util::point(r.get_min_x(), r.get_min_y()));
+    auto brc = this->clipped_area.fit(util::point(r.get_max_x() - 1, r.get_max_y() - 1));
+
+    for (int x = tlc.get_x() + 1; x < brc.get_x(); x++)
+    {
+        this->view->print(horizontal, x, tlc.get_y());
+        this->view->print(horizontal, x, brc.get_y());
+    }
+
+    for (int y = tlc.get_y() + 1; y < brc.get_y(); y++)
+    {
+        this->view->print(vertical, tlc.get_x(), y);
+        this->view->print(vertical, brc.get_x(), y);
+    }
+
+    this->view->print(cornor, tlc.get_x(), tlc.get_y());
+    this->view->print(cornor, brc.get_x(), tlc.get_y());
+    this->view->print(cornor, tlc.get_x(), brc.get_y());
+    this->view->print(cornor, brc.get_x(), brc.get_y());
+
+    return *this;
 }
 
-terminal::canvas &terminal::canvas::fill(const util::rectangle &p, char c)
+terminal::canvas &terminal::canvas::draw_box(const util::rectangle &r, char c)
 {
+    return this->draw_box(r, c, c, c);
+}
+
+terminal::canvas &terminal::canvas::fill(const util::rectangle &r, char c)
+{
+    for (int x = r.get_min_x(); x < r.get_max_x(); x++)
+    {
+        for (int y = r.get_min_y(); y < r.get_max_y(); y++)
+        {
+            this->view->print(c, x, y);
+        }
+    }
+
+    return *this;
 }
 
 terminal::canvas &terminal::canvas::clear(char c)
 {
+    return this->fill(this->clipped_area, c);
 }
 
 terminal::canvas &terminal::canvas::clear()
 {
+    return this->clear(' ');
 }
 
 terminal::canvas &terminal::canvas::draw_string(const util::point &p, const std::string &s)
 {
+    this->view->print(s, p.get_x(), p.get_y());
+
+    return *this;
 }
 
 const util::dimension &terminal::canvas::get_size() const
 {
+    return this->size;
 }
 
 const util::point &terminal::canvas::get_origin() const
 {
+    return this->origin;
 }
 
 const util::rectangle &terminal::canvas::get_clipped_area() const
 {
+    return this->clipped_area;
 }
 
 const util::color &terminal::canvas::get_active_foreground_color() const
@@ -171,4 +233,5 @@ void terminal::canvas::buffer_data()
 
 void terminal::canvas::flush()
 {
+    this->view->flush();
 }

@@ -59,7 +59,7 @@ class basic_rectangle
 
     T get_max_x() const
     {
-        return this->location.get_x() + this->dimension.get_width();
+        return this->location.get_x() + this->size.get_width();
     }
 
     T get_min_y() const
@@ -69,7 +69,7 @@ class basic_rectangle
 
     T get_max_y() const
     {
-        return this->location.get_y() + this->dimension.get_height();
+        return this->location.get_y() + this->size.get_height();
     }
 
     T get_width() const
@@ -112,10 +112,10 @@ class basic_rectangle
         return basic_rectangle<T>(p, this->dimension);
     }
 
-    basic_point<T> fit(const util::basic_rectangle<T> &rect)
+    basic_point<T> fit(const util::basic_point<T> &p)
     {
-        return basic_point<T>(util::crop(this->x, rect.get_min_x(), rect.get_max_x()),
-                              util::crop(this->y, rect.get_min_y(), rect.get_max_y()));
+        return basic_point<T>(util::crop(p.get_x(), this->get_min_x(), this->get_max_x()),
+                              util::crop(p.get_y(), this->get_min_y(), this->get_max_y()));
     }
 
     util::basic_rectangle<T> intersect(const basic_rectangle<T> &other) const

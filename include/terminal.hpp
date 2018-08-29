@@ -62,6 +62,7 @@ class terminal_view
 
     terminal::input_mode input_mode;
     bool echo_on;
+    bool live_mode;
 
   protected:
     void on_terminal_property_changed();
@@ -86,9 +87,12 @@ class terminal_view
     void print(const std::string &text);
     void print(const std::string &text, int x, int y);
     void print(char c);
-    void clear(int x, int y);
-    void clear(const util::dimension &area);
+    void print(char c, int x, int y);
+    void clear(const util::rectangle &area);
     void flush();
+
+    void maximise();
+    void set_live_mode(bool);
 };
 
 class canvas
@@ -120,6 +124,7 @@ class canvas
 
     terminal::canvas &draw_vertical_line(const util::point &, int length, char c);
     terminal::canvas &draw_horizontal_line(const util::point &, int y, char c);
+    terminal::canvas &draw_box(const util::rectangle &, char horizontal, char vertical, char cornor);
     terminal::canvas &draw_box(const util::rectangle &, char c);
     terminal::canvas &fill(const util::rectangle &, char c);
     terminal::canvas &clear(char c);

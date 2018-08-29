@@ -3,17 +3,17 @@
 
 #include "terminal.hpp"
 
-terminal::terminal_view::terminal_view()
+terminal::terminal_view::terminal_view() : terminal_view(std::numeric_limits<int>::max(), std::numeric_limits<int>::max())
 {
+    this->maximise();
 }
 
 terminal::terminal_view::terminal_view(int width, int height) : width(width),
                                                                 height(height)
 {
     this->window = newwin(this->width, this->height, 0, 0);
-
-    keypad(this->window, true);
     box(this->window, 0, 0);
+    keypad(this->window, true);
     wrefresh(this->window);
     refresh();
 }
@@ -89,19 +89,33 @@ bool terminal::terminal_view::read_line(long timeOut, std::string &result)
 void terminal::terminal_view::print(const std::string &text)
 {
     wprintw(this->window, text.c_str());
-    wrefresh(this->window);
+
+    if (this->live_mode)
+        wrefresh(this->window);
 }
 
 void terminal::terminal_view::print(const std::string &text, int x, int y)
 {
-    mvwprintw(this->window, x, y, text.c_str());
-    wrefresh(this->window);
+    mvwprintw(this->window, y, x, text.c_str());
+
+    if (this->live_mode)
+        wrefresh(this->window);
 }
 
 void terminal::terminal_view::print(char c)
 {
     waddch(this->window, c);
-    wrefresh(this->window);
+
+    if (this->live_mode)
+        wrefresh(this->window);
+}
+
+void terminal::terminal_view::print(char c, int x, int y)
+{
+    mvwaddch(this->window, y, x, c);
+
+    if (this->live_mode)
+        wrefresh(this->window);
 }
 
 void terminal::terminal_view::on_terminal_property_changed()
@@ -121,4 +135,37 @@ util::dimension terminal::terminal_view::get_size() const
 bool terminal::terminal_view::set_size(const util::dimension &dim)
 {
     resizeterm(dim.get_height(), dim.get_width());
+}
+
+void terminal::terminal_view::set_live_mode(bool live)
+{
+    this->live_mode = live;
+}
+
+void terminal::terminal_view::clear(const util::rectangle &area)
+{
+    std::string buf(area.get_width(), ' ');
+    auto liveRestore = this->live_mode;
+    this->live_mode = false;
+
+    for (int y = area.get_min_y(); y < area.get_max_y(); y++)
+    {
+        this->print(buf, area.get_min_x(), y);
+    }
+
+    this->flush();
+    this->live_mode = liveRestore;
+}
+
+void terminal::terminal_view::flush()
+{
+    wrefresh(this->window);
+    refresh();
+}
+
+void terminal::terminal_view::maximise()
+{
+    int x, y;
+    getmaxyx(this->window, y, x);
+    resize_term(y, x);
 }
