@@ -169,6 +169,7 @@ class control_base
 
     control_base *get_parent();
     const control_base *get_parent() const;
+    
     bool has_parent() const;
     const util::rectangle &get_bounds() const;
     void set_bounds(const util::rectangle &);
@@ -227,6 +228,12 @@ class text_view : public text_control_base
     text_view();
     text_view(const std::string &);
     virtual ~text_view();
+
+    virtual void handle_focus_aquired();
+    virtual void handle_focus_lost();
+    virtual void handle_key(key_input &);
+    virtual void handle_mouse(mouse_input &);
+    virtual void handle_add_to_control(control_base *);
 
     virtual void render(const util::rectangle &, canvas &);
 };
