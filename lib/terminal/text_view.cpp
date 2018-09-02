@@ -1,11 +1,12 @@
 #include "terminal.hpp"
 
-terminal::text_view::text_view() : text_control_base()
+terminal::text_view::text_view() : control_base()
 {
 }
 
-terminal::text_view::text_view(const std::string &text) : text_control_base(text)
+terminal::text_view::text_view(const std::string &text) : control_base()
 {
+    this->set_text(text);
 }
 
 terminal::text_view::~text_view()

@@ -6,7 +6,7 @@
 
 namespace terminal
 {
-class text_view : public text_control_base
+class text_view : public control_base
 {
   public:
     text_view();

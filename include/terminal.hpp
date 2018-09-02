@@ -5,3 +5,4 @@
 #include "terminal/canvas.hpp"
 #include "terminal/control_base.hpp"
 #include "terminal/terminal_window.hpp"
+#include "terminal/text_view.hpp"

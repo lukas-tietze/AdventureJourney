@@ -46,6 +46,21 @@ int terminal::control_base::get_z_index() const
     return this->z_index;
 }
 
+std::string &terminal::control_base::get_text()
+{
+    return this->text;
+}
+
+const std::string &terminal::control_base::get_text() const
+{
+    return this->text;
+}
+
+void terminal::control_base::set_text(const std::string &text)
+{
+    this->text = text;
+}
+
 void terminal::control_base::handle_focus_aquired()
 {
 }
