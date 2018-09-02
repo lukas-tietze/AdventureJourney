@@ -3,19 +3,18 @@
 
 #include "terminal.hpp"
 
-terminal::terminal_view::terminal_view() : terminal_view(std::numeric_limits<int>::max(), std::numeric_limits<int>::max())
+terminal::terminal_view::terminal_view() : terminal_view(LINES, COLS)
 {
-    this->maximise();
+    this->maximise(); 
+    this->flush();
 }
 
 terminal::terminal_view::terminal_view(int width, int height) : width(width),
                                                                 height(height)
 {
     this->window = newwin(this->width, this->height, 0, 0);
-    box(this->window, 0, 0);
     keypad(this->window, true);
-    wrefresh(this->window);
-    refresh();
+    this->flush();
 }
 
 terminal::terminal_view::~terminal_view()
@@ -168,4 +167,6 @@ void terminal::terminal_view::maximise()
     int x, y;
     getmaxyx(this->window, y, x);
     resize_term(y, x);
+    wresize(this->window, y, x);
+    this->flush();
 }

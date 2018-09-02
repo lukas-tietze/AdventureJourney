@@ -27,3 +27,6 @@ debug: $(DEBUG_DIR)/Makefile
 
 release: $(RELEASE_DIR)/Makefile
 	cd $(RELEASE_DIR) && make
+
+clean:
+	rm -rf build/*

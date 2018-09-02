@@ -6,7 +6,7 @@
 
 int run()
 {
-    terminal::terminal_view v(100, 100);
+    terminal::terminal_view v = terminal::terminal_view();
 
     v.set_echo(false);
     v.set_input_mode(terminal::input_mode::BREAK);
