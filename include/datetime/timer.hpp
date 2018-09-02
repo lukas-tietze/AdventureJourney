@@ -1,5 +1,4 @@
-#ifndef TIMER_HPP
-#define TIMER_HPP
+#pragma once
 
 #include <ctime>
 #include <vector>
@@ -74,5 +73,3 @@ double clocks_to_ms(double clocks);
 // Rechnet clocks in Sekunden um.
 double clocks_to_seconds(double clocks);
 } // namespace util
-
-#endif /*TIMER_HPP*/

@@ -1,5 +1,4 @@
-#ifndef CACHE_HPP
-#define CACHE_HPP
+#pragma once
 
 namespace util
 {
@@ -30,4 +29,3 @@ class cache
     util::cache_policy cache_policy;
 }; /*cache*/
 } // namespace util
-#endif /*CACHE_HPP*/

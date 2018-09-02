@@ -1,5 +1,4 @@
-#ifndef TERMINAL_TERMINAL_WINDOW_HPP
-#define TERMINAL_TERMINAL_WINDOW_HPP
+#pragma once
 
 #include <vector>
 
@@ -26,5 +25,3 @@ class terminal_window
     control_base *get_focused_control() const;
 };
 } // namespace terminal
-
-#endif /*TERMINAL_TERMINAL_WINDOW_HPP*/

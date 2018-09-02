@@ -1,5 +1,4 @@
-#ifndef POINT_HPP
-#define POINT_HPP
+#pragma once
 
 #include "data/math.hpp"
 
@@ -92,5 +91,3 @@ std::ostream &operator<<(std::ostream &s, const basic_point<T> &p)
 typedef basic_point<int> point;
 typedef basic_point<float> pointf;
 } // namespace util
-
-#endif /*POINT_HPP*/

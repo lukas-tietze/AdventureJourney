@@ -1,5 +1,4 @@
-#ifndef TERMINAL_CANVAS_HPP
-#define TERMINAL_CANVAS_HPP
+#pragma once
 
 #include <string>
 
@@ -69,5 +68,3 @@ class canvas
     void flush();
 };
 } // namespace terminal
-
-#endif /*TERMINAL_CANVAS_HPP*/

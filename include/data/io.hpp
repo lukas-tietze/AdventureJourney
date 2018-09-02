@@ -1,5 +1,4 @@
-#ifndef IO_HPP
-#define IO_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -40,6 +39,4 @@ int printp(const T *obj)
 
     return std::printf("%s", stream.str().c_str());
 }
-
 } // namespace util
-#endif /*IO_HPP*/

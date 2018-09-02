@@ -1,5 +1,4 @@
-#ifndef EVENT_HPP
-#define EVENT_HPP
+#pragma once
 
 #include <vector>
 #include <csignal>
@@ -123,5 +122,3 @@ class signal_event : public function_event<signal_event_args>
     ~signal_event();
 };
 } // namespace util
-
-#endif /*EVENT_HPP*/

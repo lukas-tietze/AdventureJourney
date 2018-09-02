@@ -1,5 +1,4 @@
-#ifndef TUPEL_HPP
-#define TUPEL_HPP
+#pragma once
 
 namespace util
 {
@@ -137,5 +136,3 @@ tupel5<T1, T2, T3, T4, T5> make_tupel(const T1 &item1, const T2 &item2, const T3
     return tupel5<T1, T2, T3, T4, T5>(item1, item2, item3, item4, item5);
 }
 } // namespace util
-
-#endif /*TUPEL_HPP*/

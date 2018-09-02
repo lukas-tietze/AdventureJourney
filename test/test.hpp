@@ -1,5 +1,4 @@
-#ifndef TEST_HPP
-#define TEST_HPP
+#pragma once
 
 #include <string>
 #include <ctime>
@@ -154,5 +153,3 @@ void is(void *obj)
     }
 }
 } // namespace assert
-
-#endif /*TEST_HPP*/

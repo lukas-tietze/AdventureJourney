@@ -1,5 +1,4 @@
-#ifndef EXCEPTION_HPP
-#define EXCEPTION_HPP
+#pragma once
 
 #include <stdexcept>
 #include <string>
@@ -61,5 +60,3 @@ class invalid_case_exception : util::exception
     invalid_case_exception(const std::string &which, const std::string &custom_msg);
 };
 } // namespace util
-
-#endif /*EXCEPTION_HPP*/

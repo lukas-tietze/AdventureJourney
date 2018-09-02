@@ -1,5 +1,4 @@
-#ifndef TERMINAL_CONTROL_BASE_HPP
-#define TERMINAL_CONTROL_BASE_HPP
+#pragma once
 
 #include "canvas.hpp"
 #include "geometry.hpp"
@@ -54,5 +53,3 @@ class control_base
     virtual void render(const util::rectangle &, canvas &);
 };
 } // namespace terminal
-
-#endif /*TERMINAL_CONTROL_BASE_HPP*/

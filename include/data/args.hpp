@@ -1,5 +1,4 @@
-#ifndef ARGS_HPP
-#define ARGS_HPP
+#pragma once
 
 #include <string>
 #include "defs.hpp"
@@ -37,5 +36,3 @@ class args
 };
 
 } // namespace util
-
-#endif /*ARGS_HPP*/

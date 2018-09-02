@@ -1,9 +1,6 @@
-#ifndef INTERFACE_HPP
-#define INTERFACE_HPP
+#pragma once
 
 namespace interactive_terminal
 {
     int run_test(int argc, char **argv);
 }
-
-#endif /*INTERFACE_HPP*/

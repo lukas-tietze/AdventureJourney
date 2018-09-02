@@ -1,5 +1,4 @@
-#ifndef COLOR_HPP
-#define COLOR_HPP
+#pragma once
 
 #include "defs.hpp"
 
@@ -37,5 +36,3 @@ const util::color color_blue = color(0, 0, 1);
 const util::color color_black = color(0, 0, 0);
 const util::color color_white = color(1, 1, 1);
 } // namespace util
-
-#endif /*COLOR_HPP*/

@@ -1,5 +1,4 @@
-#ifndef DIMENSION_HPP
-#define DIMENSION_HPP
+#pragma once
 
 #include <iostream>
 
@@ -86,5 +85,3 @@ std::ostream &operator<<(std::ostream &s, const util::basic_dimension<T> &d)
 typedef basic_dimension<int> dimension;
 typedef basic_dimension<float> dimensionf;
 } // namespace util
-
-#endif /*DIMENSION_HPP*/

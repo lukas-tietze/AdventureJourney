@@ -1,5 +1,4 @@
-#ifndef JSON_HPP
-#define JSON_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -311,5 +310,3 @@ class formatted_printer
     std::ostream &operator<<(std::ostream &) const;
 };
 } // namespace json
-
-#endif /*JSON_HPP*/

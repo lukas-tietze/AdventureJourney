@@ -1,5 +1,4 @@
-#ifndef VERSION_HPP
-#define VERSION_HPP
+#pragma once
 
 #include <string>
 #include <cstring>
@@ -33,5 +32,3 @@ const std::string &get_version()
     return version_string;
 }
 } // namespace version
-
-#endif /*VERSION_HPP*/

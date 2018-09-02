@@ -1,5 +1,4 @@
-#ifndef TERMINAL_VALUE_HPP
-#define TERMINAL_VALUE_HPP
+#pragma once
 
 #include <curses.h>
 
@@ -49,5 +48,3 @@ enum class default_colors
     White = COLOR_WHITE,
 };
 } // namespace terminal
-
-#endif /*TERMINAL_VALUE_HPP*/

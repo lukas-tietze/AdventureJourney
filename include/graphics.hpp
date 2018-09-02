@@ -1,5 +1,4 @@
-#ifndef GRAPHICS_HPP
-#define GRAPHICS_HPP
+#pragma once
 
 namespace gr
 {
@@ -15,5 +14,3 @@ class render_object
 {
 };
 } // namespace gr
-
-#endif /*GRAPHICS_HPP*/

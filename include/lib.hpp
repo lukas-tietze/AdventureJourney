@@ -1,2 +1,1 @@
-#include "defs.hpp"
-#include "data.hpp"
+#pragma once

@@ -1,5 +1,4 @@
-#ifndef RECTANGLE_HPP
-#define RECTANGLE_HPP
+#pragma once
 
 #include <cmath>
 #include <algorithm>
@@ -142,5 +141,3 @@ class basic_rectangle
 typedef basic_rectangle<int> rectangle;
 typedef basic_rectangle<float> rectanglef;
 } // namespace util
-
-#endif /*RECTANGLE_HPP*/

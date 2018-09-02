@@ -1,8 +1,5 @@
-#ifndef LIST_HPP
-#define LIST_HPP
+#pragma once
 
 namespace util
 {
 } // namespace util
-
-#endif /*LIST_HPP*/

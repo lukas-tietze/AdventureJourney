@@ -1,5 +1,4 @@
-#ifndef TERMINAL_TERMINAL_VIEW_HPP
-#define TERMINAL_TERMINAL_VIEW_HPP
+#pragma once
 
 #include <curses.h>
 #include <string>
@@ -52,4 +51,3 @@ class terminal_view
     void set_live_mode(bool);
 };
 } // namespace terminal
-#endif /*TERMINAL_TERMINAL_VIEW_HPP*/
