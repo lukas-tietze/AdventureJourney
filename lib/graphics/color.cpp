@@ -1,5 +1,9 @@
 #include "graphics/color.hpp"
 
+util::color::color() : util::color(0)
+{
+}
+
 util::color::color(const util::color &copy) : data(copy.data)
 {
 }

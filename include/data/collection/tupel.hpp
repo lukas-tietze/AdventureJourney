@@ -10,6 +10,11 @@ class tupel2
     T2 item2;
 
   public:
+    tupel2() : item1(),
+               item2()
+    {
+    }
+
     tupel2(const T1 &item1, const T2 &item2) : item1(item1),
                                                item2(item2)
     {
@@ -31,6 +36,12 @@ class tupel3
     T3 item3;
 
   public:
+    tupel3() : item1(),
+               item2(),
+               item3()
+    {
+    }
+
     tupel3(const T1 &item1, const T2 &item2, const T3 &item3) : item1(item1),
                                                                 item2(item2),
                                                                 item3(item3)
@@ -57,6 +68,13 @@ class tupel4
     T4 item4;
 
   public:
+    tupel4() : item1(),
+               item2(),
+               item3(),
+               item4()
+    {
+    }
+
     tupel4(const T1 &item1, const T2 &item2, const T3 &item3, const T4 &item4) : item1(item1),
                                                                                  item2(item2),
                                                                                  item3(item3),
@@ -88,6 +106,14 @@ class tupel5
     T5 item5;
 
   public:
+    tupel5() : item1(),
+               item2(),
+               item3(),
+               item4(),
+               item5()
+    {
+    }
+
     tupel5(const T1 &item1, const T2 &item2, const T3 &item3, const T4 &item4, const T5 &item5) : item1(item1),
                                                                                                   item2(item2),
                                                                                                   item3(item3),

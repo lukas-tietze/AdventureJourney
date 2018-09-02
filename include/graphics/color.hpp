@@ -19,6 +19,7 @@ class color
     static constexpr int LOW_BYTE_MASK = 0x000000ff;
 
   public:
+    color();
     color(const color &copy);
     color(int r, int g, int b, int a = 255);
     color(float r, float g, float b, float a = 1.0f);
