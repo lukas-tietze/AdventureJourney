@@ -153,6 +153,11 @@ int terminal::canvas::get_supported_colors() const
     return COLORS;
 }
 
+int terminal::canvas::get_supported_color_pairs() const
+{
+    return COLOR_PAIRS;
+}
+
 void terminal::canvas::set_origin(const util::point &p)
 {
     this->origin = p;

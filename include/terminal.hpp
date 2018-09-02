@@ -138,6 +138,7 @@ class canvas
     const util::color &get_active_background_color() const;
     terminal::output_attribute get_active_attributes() const;
     int get_supported_colors() const;
+    int get_supported_color_pairs() const;
 
     void set_origin(const util::point &);
     void clip_area(const util::dimension &);
@@ -169,7 +170,7 @@ class control_base
 
     control_base *get_parent();
     const control_base *get_parent() const;
-    
+
     bool has_parent() const;
     const util::rectangle &get_bounds() const;
     void set_bounds(const util::rectangle &);
