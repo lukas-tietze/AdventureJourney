@@ -228,15 +228,19 @@ void terminal::canvas::buffer_color(const util::color &c, bool fg)
 {
 }
 
-void terminal::canvas::read_buffered_color(bool)
+void terminal::canvas::read_buffered_color(bool fgs)
 {
 }
 
 void terminal::canvas::buffer_data()
 {
+    if (this->color_changed)
+    {
+    }
 }
 
 void terminal::canvas::flush()
 {
+    this->buffer_data();
     this->view->flush();
 }
