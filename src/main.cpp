@@ -39,7 +39,7 @@ int loop(terminal::terminal_view *v)
     for (int i = 0; i < 5; i++)
     {
         c.set_active_color_pair(colors_schemes[i]);
-        c.draw_string(util::point(10, 16 + i), "Color scheme" + i);
+        c.draw_string(util::point(10, 16 + i), util::format("Color scheme %i", i));
     }
 
     c.flush();
@@ -55,10 +55,10 @@ int run()
         v->set_input_mode(terminal::input_mode::BREAK);
 
         colors_schemes[0] = v->add_color_pair(util::colors::DarkGoldenrod1, util::colors::DarkSalmon);
-        colors_schemes[1] = v->add_color_pair(util::colors::Firebrick3, util::colors::Goldenrod4);
-        colors_schemes[2] = v->add_color_pair(util::colors::Gray39, util::colors::Grey12);
-        colors_schemes[3] = v->add_color_pair(util::colors::LightBlue2, util::colors::Grey75);
-        colors_schemes[4] = v->add_color_pair(util::colors::LightSeaGreen, util::colors::MediumOrchid3);
+        // colors_schemes[1] = v->add_color_pair(util::colors::Firebrick3, util::colors::Goldenrod4);
+        // colors_schemes[2] = v->add_color_pair(util::colors::Gray39, util::colors::Grey12);
+        // colors_schemes[3] = v->add_color_pair(util::colors::LightBlue2, util::colors::Grey75);
+        // colors_schemes[4] = v->add_color_pair(util::colors::LightSeaGreen, util::colors::MediumOrchid3);
 
         int key;
 
@@ -79,10 +79,10 @@ int run()
     {
         std::printf("Error occurred!: %s", e.what());
     }
-    // catch (...)
-    // {
-    //     std::printf("Unknown Error occurred!");
-    // }
+    catch (...)
+    {
+        std::printf("Unknown Error occurred!");
+    }
 
     terminal::terminal_view::delete_instance();
 }

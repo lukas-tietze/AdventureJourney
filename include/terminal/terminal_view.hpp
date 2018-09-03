@@ -48,23 +48,23 @@ class terminal_view
     void attribute_on(terminal::output_attribute);
     void attribute_off(terminal::output_attribute);
 
-    void set_active_color_pair(short);
-    void set_background_color(short);
+    void set_active_color_pair(int);
+    void set_background_color(int);
 
-    short get_max_colors() const;
-    short get_used_colors() const;
-    short get_max_color_pairs() const;
-    short get_used_color_pairs() const;
+    int get_max_colors() const;
+    int get_used_colors() const;
+    int get_max_color_pairs() const;
+    int get_used_color_pairs() const;
     bool can_change_colors() const;
 
-    const util::color &get_color(short) const;
-    short add_color(const util::color &);
-    void set_color(short, const util::color &);
-    short find(const util::color &);
-    short add_color_pair(const util::color &fg, const util::color &bg);
-    short add_color_pair(short, short);
-    void set_color_pair(short, short, short);
-    short find_color_pair(short, short);
+    const util::color &get_color(int) const;
+    int add_color(const util::color &);
+    void set_color(int, const util::color &);
+    int find(const util::color &);
+    int add_color_pair(const util::color &fg, const util::color &bg);
+    int add_color_pair(int, int);
+    void set_color_pair(int, int, int);
+    int find_color_pair(int, int);
 
     bool can_add_colors() const;
     bool can_add_color_pairs() const;
@@ -88,13 +88,13 @@ class terminal_view
     bool live_mode;
 
     util::color *colors;
-    short max_colors;
-    short used_colors;
+    int max_colors;
+    int used_colors;
     color_pair *color_pairs;
-    short active_color_pair;
-    short active_background_color_pair;
-    short max_color_pairs;
-    short used_color_pairs;
+    int active_color_pair;
+    int active_background_color_pair;
+    int max_color_pairs;
+    int used_color_pairs;
 
     terminal_view();
     terminal_view(int width, int height);

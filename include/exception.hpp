@@ -36,6 +36,14 @@ class index_out_of_range_exception : public util::exception
     index_out_of_range_exception(int index, int max, const std::string &custom_msg);
 };
 
+class overflow_exception : public util::exception
+{
+  public:
+    overflow_exception();
+    overflow_exception(int max);
+    overflow_exception(int max, const std::string &custom_msg);
+};
+
 class missing_key_exception : public  util::exception
 {
   public:

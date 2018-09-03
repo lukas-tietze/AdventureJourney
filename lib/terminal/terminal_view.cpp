@@ -4,6 +4,7 @@
 #include "exception.hpp"
 #include "terminal.hpp"
 #include "data/math.hpp"
+#include "data/string.hpp"
 
 terminal::terminal_view *terminal::terminal_view::instance = nullptr;
 
@@ -33,9 +34,9 @@ terminal::terminal_view::terminal_view(int width, int height) : width(width),
     this->used_color_pairs = 1;
     this->color_pairs = new color_pair[this->max_color_pairs];
 
-    this->set_color_pair(0, COLOR_WHITE, COLOR_BLACK);
-    this->set_background_color(COLOR_BLACK);
-    this->set_active_color_pair(0);
+    this->set_color_pair(1, COLOR_WHITE, COLOR_BLACK);
+    // this->set_background_color(COLOR_BLACK);
+    this->set_active_color_pair(1);
 
     this->window = newwin(this->height, this->width, 0, 0);
     keypad(this->window, true);
@@ -44,6 +45,9 @@ terminal::terminal_view::terminal_view(int width, int height) : width(width),
 
 terminal::terminal_view::~terminal_view()
 {
+    delete[] this->colors;
+    delete[] this->color_pairs;
+
     wrefresh(this->window);
     delwin(this->window);
     refresh();
@@ -210,32 +214,32 @@ void terminal::terminal_view::maximise()
     this->flush();
 }
 
-void terminal::terminal_view::set_active_color_pair(short id)
+void terminal::terminal_view::set_active_color_pair(int id)
 {
     wcolor_set(this->window, id + 1, nullptr);
 }
 
-void terminal::terminal_view::set_background_color(short id)
+void terminal::terminal_view::set_background_color(int id)
 {
-    wbkgdset(this->window, id + 1);
+    wbkgdset(this->window, id);
 }
 
-short terminal::terminal_view::get_max_colors() const
+int terminal::terminal_view::get_max_colors() const
 {
     return this->max_colors;
 }
 
-short terminal::terminal_view::get_used_colors() const
+int terminal::terminal_view::get_used_colors() const
 {
     return this->used_colors;
 }
 
-short terminal::terminal_view::get_max_color_pairs() const
+int terminal::terminal_view::get_max_color_pairs() const
 {
     return this->max_color_pairs;
 }
 
-short terminal::terminal_view::get_used_color_pairs() const
+int terminal::terminal_view::get_used_color_pairs() const
 {
     return this->used_color_pairs;
 }
@@ -245,7 +249,7 @@ bool terminal::terminal_view::can_change_colors() const
     return can_change_color();
 }
 
-const util::color &terminal::terminal_view::get_color(short id) const
+const util::color &terminal::terminal_view::get_color(int id) const
 {
     if (id < 0 || id >= this->max_colors)
         throw util::index_out_of_range_exception(id, this->max_colors);
@@ -253,16 +257,17 @@ const util::color &terminal::terminal_view::get_color(short id) const
     return this->colors[id];
 }
 
-short terminal::terminal_view::add_color(const util::color &c)
+int terminal::terminal_view::add_color(const util::color &c)
 {
     if (this->used_colors >= this->max_colors)
-        throw util::index_out_of_range_exception();
+        throw util::overflow_exception(this->max_colors,
+                                       util::format("Can't add new color. %i/%i used", this->used_colors, this->max_colors));
 
     this->set_color(this->used_colors, c);
     this->used_colors++;
 }
 
-void terminal::terminal_view::set_color(short index, const util::color &color)
+void terminal::terminal_view::set_color(int index, const util::color &color)
 {
     if (index < 0 || index >= this->max_colors)
         throw util::index_out_of_range_exception(index, this->max_colors);
@@ -270,12 +275,12 @@ void terminal::terminal_view::set_color(short index, const util::color &color)
     this->colors[index] = color;
 
     init_color(index + 1,
-               (short)(color.red_percentage() * 1000),
-               (short)(color.green_percentage() * 1000),
-               (short)(color.blue_percentage() * 1000));
+               (int)(color.red_percentage() * 1000),
+               (int)(color.green_percentage() * 1000),
+               (int)(color.blue_percentage() * 1000));
 }
 
-short terminal::terminal_view::find(const util::color &c)
+int terminal::terminal_view::find(const util::color &c)
 {
     for (int i = 0; i < this->used_colors; i++)
     {
@@ -286,10 +291,11 @@ short terminal::terminal_view::find(const util::color &c)
     return -1;
 }
 
-short terminal::terminal_view::add_color_pair(const util::color &fg, const util::color &bg)
+int terminal::terminal_view::add_color_pair(const util::color &fg, const util::color &bg)
 {
-    if (this->used_colors + 2 > this->max_colors)
-        throw util::index_out_of_range_exception();
+    if ((this->used_colors + 2) > this->max_colors)
+        throw util::overflow_exception(this->max_colors,
+                                       util::format("Failed to add new colors for new color pair. %i/%i used.", this->used_colors, this->max_colors));
 
     int fgId = this->add_color(fg);
     int bgId = this->add_color(bg);
@@ -297,25 +303,26 @@ short terminal::terminal_view::add_color_pair(const util::color &fg, const util:
     return this->add_color_pair(fg, bg);
 }
 
-short terminal::terminal_view::add_color_pair(short id1, short id2)
+int terminal::terminal_view::add_color_pair(int id1, int id2)
 {
     if (this->used_color_pairs >= this->max_color_pairs)
-        throw util::index_out_of_range_exception();
+        throw util::overflow_exception(this->max_color_pairs,
+                                       util::format("Failed to add new color pair. %i/%i used.", this->used_colors, this->max_colors));
 
     this->used_color_pairs++;
     init_pair(this->used_color_pairs, id1, id2);
     return this->used_color_pairs;
 }
 
-void terminal::terminal_view::set_color_pair(short index, short id1, short id2)
+void terminal::terminal_view::set_color_pair(int index, int id1, int id2)
 {
     if (index < 0 || index >= this->max_color_pairs)
-        throw util::index_out_of_range_exception();
+        throw util::index_out_of_range_exception(index, this->max_color_pairs);
 
     init_pair(index + 1, id1, id2);
 }
 
-short terminal::terminal_view::find_color_pair(short id1, short id2)
+int terminal::terminal_view::find_color_pair(int id1, int id2)
 {
     for (int i = 0; i < this->used_color_pairs; i++)
     {
