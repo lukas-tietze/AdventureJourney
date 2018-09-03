@@ -4,15 +4,7 @@
 terminal::canvas::canvas(terminal_view *view) : view(view),
                                                 size(view->get_size()),
                                                 clipped_area(0, 0, this->size),
-                                                origin(0, 0),
-                                                fg_color(COLOR_WHITE),
-                                                real_fg_color(util::color_white),
-                                                bg_color(COLOR_BLACK),
-                                                real_bg_color(util::color_black),
-                                                color_changed(false),
-                                                active_attributes(terminal::output_attribute::None),
-                                                active_attributes_changed(false),
-                                                multiple_colors_supported(can_change_color())
+                                                origin(0, 0)
 {
     this->view->set_live_mode(false);
 }
@@ -20,15 +12,7 @@ terminal::canvas::canvas(terminal_view *view) : view(view),
 terminal::canvas::canvas(const canvas &copy) : view(copy.view),
                                                size(copy.size),
                                                clipped_area(copy.clipped_area),
-                                               origin(copy.origin),
-                                               fg_color(copy.fg_color),
-                                               real_fg_color(copy.real_fg_color),
-                                               bg_color(copy.bg_color),
-                                               real_bg_color(copy.real_bg_color),
-                                               color_changed(copy.color_changed),
-                                               active_attributes(copy.active_attributes),
-                                               active_attributes_changed(copy.active_attributes_changed),
-                                               multiple_colors_supported(copy.multiple_colors_supported)
+                                               origin(copy.origin)
 {
 }
 
@@ -133,21 +117,6 @@ const util::rectangle &terminal::canvas::get_clipped_area() const
     return this->clipped_area;
 }
 
-const util::color &terminal::canvas::get_active_foreground_color() const
-{
-    return this->real_fg_color;
-}
-
-const util::color &terminal::canvas::get_active_background_color() const
-{
-    return this->real_bg_color;
-}
-
-terminal::output_attribute terminal::canvas::get_active_attributes() const
-{
-    return this->active_attributes;
-}
-
 void terminal::canvas::set_origin(const util::point &p)
 {
     this->origin = p;
@@ -170,20 +139,27 @@ void terminal::canvas::disable_clip()
 
 void terminal::canvas::enable_attribute(terminal::output_attribute a)
 {
-    // this->active_attributes = (terminal::output_attribute)((int)this->active_attributes | (int)a);
-    util::enable_flag(this->active_attributes, a);
-    this->active_attributes_changed = true;
+    this->view->attribute_on(a);
 }
 
 void terminal::canvas::disable_attribute(terminal::output_attribute a)
 {
-    // this->active_attributes = (terminal::output_attribute)((int)this->active_attributes & (~(int)a));
-    util::disable_flag(this->active_attributes, a);
-    this->active_attributes_changed = true;
+    this->view->attribute_off(a);
 }
 
 void terminal::canvas::set_foreground_color(const util::color &c)
 {
+    //     int colorIndex = this->view->find(c);
+    //     int pairIndex;
+
+    //     if (colorIndex == -1 && this->view->can_add_colors() && this->view->can_add_color_pairs())
+    //     {
+    //         colorIndex = this->view->add_color(c);
+    //         pairIndex = this->view->add_color_pair(colorIndex, this->view->get_active_color_pair().item_2())
+    //     }
+
+    //     if(pairIndex != -1)
+    //     this->view->set_active_color_pair(pairIndex);
 }
 
 void terminal::canvas::set_background_color(const util::color &c)
@@ -192,20 +168,63 @@ void terminal::canvas::set_background_color(const util::color &c)
 
 void terminal::canvas::set_foreground_color(int c)
 {
-    this->fg_color = c;
 }
 
 void terminal::canvas::set_background_color(int c)
 {
-    this->bg_color = c;
+}
+
+void terminal::canvas::set_active_color_pair(short index)
+{
+    this->view->set_active_color_pair(index);
 }
 
 void terminal::canvas::reset_foreground_color()
 {
-    this->set_foreground_color(util::color_white);
+    this->set_foreground_color(util::colors::BasicWhite);
 }
 
 void terminal::canvas::reset_background_color()
 {
-    this->set_background_color(util::color_black);
+    this->set_background_color(util::colors::BasicBlack);
+}
+
+terminal::terminal_view *terminal::canvas::get_view() const
+{
+    return this->view;
+}
+
+short terminal::canvas::add_color(const util::color &c)
+{
+    this->view->add_color(c);
+}
+
+void terminal::canvas::set_color(short index, const util::color &c)
+{
+    this->view->set_color(index, c);
+}
+
+short terminal::canvas::add_color_pair(const util::color &fg, const util::color &bg)
+{
+    this->view->add_color_pair(fg, bg);
+}
+
+short terminal::canvas::add_color_pair(short fg, short bg)
+{
+    this->view->add_color_pair(fg, bg);
+}
+
+void terminal::canvas::set_color_pair(short index, short fg, short bg)
+{
+    this->view->set_color_pair(index, fg, bg);
+}
+
+short terminal::canvas::find_color_pair(short id1, short id2)
+{
+    return this->view->find_color_pair(id1, id2);
+}
+
+void terminal::canvas::flush()
+{
+    this->view->flush();
 }

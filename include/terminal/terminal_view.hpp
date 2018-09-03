@@ -60,10 +60,17 @@ class terminal_view
     const util::color &get_color(short) const;
     short add_color(const util::color &);
     void set_color(short, const util::color &);
-    short find_closest_match(const util::color &);
+    short find(const util::color &);
     short add_color_pair(const util::color &fg, const util::color &bg);
     short add_color_pair(short, short);
     void set_color_pair(short, short, short);
+    short find_color_pair(short, short);
+
+    bool can_add_colors() const;
+    bool can_add_color_pairs() const;
+
+    const color_pair &get_active_color_pair() const;
+    const color_pair &get_active_background() const;
 
   protected:
     void on_terminal_property_changed();
@@ -84,6 +91,8 @@ class terminal_view
     short max_colors;
     short used_colors;
     color_pair *color_pairs;
+    short active_color_pair;
+    short active_background_color_pair;
     short max_color_pairs;
     short used_color_pairs;
 

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <curses.h>
+#include <iostream>
 
 namespace terminal
 {
@@ -10,6 +11,8 @@ enum class input_mode
     BREAK,
     LINE,
 };
+
+std::ostream &operator<<(std::ostream &, const input_mode &);
 
 enum class resize_mode
 {
@@ -21,6 +24,8 @@ enum class resize_mode
     Vertical = North | South,
     All = North | South | West | East,
 };
+
+std::ostream &operator<<(std::ostream &, const resize_mode &);
 
 enum class output_attribute
 {
@@ -37,6 +42,8 @@ enum class output_attribute
     All = None | Standout | Underline | Reverse | Blink | Dimmed | Bold | Protect | Invisible | AlternatCharset,
 };
 
+std::ostream &operator<<(std::ostream &, const output_attribute &);
+
 enum class default_colors
 {
     Black = COLOR_BLACK,
@@ -48,4 +55,7 @@ enum class default_colors
     Cyan = COLOR_CYAN,
     White = COLOR_WHITE,
 };
+
+std::ostream &operator<<(std::ostream &, const default_colors &);
+
 } // namespace terminal

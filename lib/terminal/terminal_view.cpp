@@ -20,14 +20,14 @@ terminal::terminal_view::terminal_view(int width, int height) : width(width),
     this->used_colors = 8;
     this->colors = new util::color[this->max_colors];
 
-    this->set_color(COLOR_BLACK, util::color_black);
-    this->set_color(COLOR_BLUE, util::color_blue);
-    this->set_color(COLOR_CYAN, util::color_cyan);
-    this->set_color(COLOR_GREEN, util::color_green);
-    this->set_color(COLOR_MAGENTA, util::color_magenta);
-    this->set_color(COLOR_RED, util::color_red);
-    this->set_color(COLOR_WHITE, util::color_white);
-    this->set_color(COLOR_YELLOW, util::color_yellow);
+    this->set_color(COLOR_BLACK, util::colors::BasicBlack);
+    this->set_color(COLOR_BLUE, util::colors::BasicBlue);
+    this->set_color(COLOR_CYAN, util::colors::BasicCyan);
+    this->set_color(COLOR_GREEN, util::colors::BasicGreen);
+    this->set_color(COLOR_MAGENTA, util::colors::BasicMagenta);
+    this->set_color(COLOR_RED, util::colors::BasicRed);
+    this->set_color(COLOR_WHITE, util::colors::BasicWhite);
+    this->set_color(COLOR_YELLOW, util::colors::BasicYellow);
 
     this->max_color_pairs = COLOR_PAIRS - 1;
     this->used_color_pairs = 1;
@@ -275,7 +275,7 @@ void terminal::terminal_view::set_color(short index, const util::color &color)
                (short)(color.blue_percentage() * 1000));
 }
 
-short terminal::terminal_view::find_closest_match(const util::color &c)
+short terminal::terminal_view::find(const util::color &c)
 {
     for (int i = 0; i < this->used_colors; i++)
     {
@@ -303,7 +303,7 @@ short terminal::terminal_view::add_color_pair(short id1, short id2)
         throw util::index_out_of_range_exception();
 
     this->used_color_pairs++;
-    init_pair(this->used_color_pairs, id1 + 1, id2 + 1);
+    init_pair(this->used_color_pairs, id1, id2);
     return this->used_color_pairs;
 }
 
@@ -312,5 +312,38 @@ void terminal::terminal_view::set_color_pair(short index, short id1, short id2)
     if (index < 0 || index >= this->max_color_pairs)
         throw util::index_out_of_range_exception();
 
-    init_pair(index + 1, id1 + 1, id2 + 1);
+    init_pair(index + 1, id1, id2);
+}
+
+short terminal::terminal_view::find_color_pair(short id1, short id2)
+{
+    for (int i = 0; i < this->used_color_pairs; i++)
+    {
+        const auto &pair = this->color_pairs[i];
+
+        if (pair.item_1() == id1 && pair.item_2() == id2)
+            return i;
+    }
+
+    return -1;
+}
+
+bool terminal::terminal_view::can_add_colors() const
+{
+    return this->used_colors < this->max_colors;
+}
+
+bool terminal::terminal_view::can_add_color_pairs() const
+{
+    return this->used_color_pairs < this->max_color_pairs;
+}
+
+void terminal::terminal_view::attribute_on(terminal::output_attribute a)
+{
+    wattr_on(this->window, static_cast<int>(a), nullptr);
+}
+
+void terminal::terminal_view::attribute_off(terminal::output_attribute a)
+{
+    wattr_off(this->window, static_cast<int>(a), nullptr);
 }
