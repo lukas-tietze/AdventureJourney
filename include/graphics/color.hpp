@@ -24,16 +24,29 @@ class color
     color(int r, int g, int b, int a = 255);
     color(float r, float g, float b, float a = 1.0f);
     color(int color);
-    int alpha();
-    int red();
-    int green();
-    int blue();
-    int value();
+    int alpha() const;
+    int red() const;
+    int green() const;
+    int blue() const;
+    float alpha_percentage() const;
+    float red_percentage() const;
+    float green_percentage() const;
+    float blue_percentage() const;
+    int value() const;
+
+    friend bool util::operator==(const util::color &, const util::color &);
+    friend bool util::operator!=(const util::color &, const util::color &);
 }; /*color*/
 
-const util::color color_red = color(1, 0, 0);
-const util::color color_green = color(0, 1, 0);
-const util::color color_blue = color(0, 0, 1);
-const util::color color_black = color(0, 0, 0);
-const util::color color_white = color(1, 1, 1);
+bool operator==(const util::color &, const util::color &);
+bool operator!=(const util::color &, const util::color &);
+
+const util::color color_black = color(0.0f, 0.0f, 0.0f);
+const util::color color_red = color(1.0f, 0.0f, 0.0f);
+const util::color color_green = color(0.0f, 1.0f, 0.0f);
+const util::color color_blue = color(0.0f, 0.0f, 1.0f);
+const util::color color_cyan = color(0.0f, 1.0f, 1.0f);
+const util::color color_magenta = color(1.0f, 0.0f, 1.0f);
+const util::color color_yellow = color(1.0f, 1.0f, 0.0f);
+const util::color color_white = color(1.0f, 1.0f, 1.0f);
 } // namespace util

@@ -3,6 +3,9 @@
 
 #include "exception.hpp"
 #include "terminal.hpp"
+#include "data/math.hpp"
+
+terminal::terminal_view *terminal::terminal_view::instance = nullptr;
 
 terminal::terminal_view::terminal_view() : terminal_view(LINES, COLS)
 {
@@ -13,16 +16,27 @@ terminal::terminal_view::terminal_view() : terminal_view(LINES, COLS)
 terminal::terminal_view::terminal_view(int width, int height) : width(width),
                                                                 height(height)
 {
-    this->max_color_pairs = COLOR_PAIRS;
-    this->used_color_pairs = 0;
-    this->color_pairs = new color_pair[this->max_color_pairs];
-
     this->max_colors = COLORS;
     this->used_colors = 8;
     this->colors = new util::color[this->max_colors];
 
     this->set_color(COLOR_BLACK, util::color_black);
-    //...
+    this->set_color(COLOR_BLUE, util::color_blue);
+    this->set_color(COLOR_CYAN, util::color_cyan);
+    this->set_color(COLOR_GREEN, util::color_green);
+    this->set_color(COLOR_MAGENTA, util::color_magenta);
+    this->set_color(COLOR_RED, util::color_red);
+    this->set_color(COLOR_WHITE, util::color_white);
+    this->set_color(COLOR_YELLOW, util::color_yellow);
+
+    this->set_background_color(COLOR_BLACK);
+
+    this->max_color_pairs = COLOR_PAIRS;
+    this->used_color_pairs = 1;
+    this->color_pairs = new color_pair[this->max_color_pairs];
+
+    this->set_color_pair(0, COLOR_WHITE, COLOR_BLACK);
+    this->set_active_color_pair(0);
 
     this->window = newwin(this->width, this->height, 0, 0);
     keypad(this->window, true);
@@ -241,16 +255,42 @@ short terminal::terminal_view::add_color(const util::color &c)
         throw util::index_out_of_range_exception();
 }
 
-void terminal::terminal_view::set_color(const util::color &)
+void terminal::terminal_view::set_color(short index, const util::color &color)
 {
+    if (index < 0 || index >= this->max_colors)
+        throw util::index_out_of_range_exception(index, this->max_colors);
+
+    this->colors[index] = color;
+
+    init_color(index,
+               (short)(color.red_percentage() * 1000),
+               (short)(color.green_percentage() * 1000),
+               (short)(color.blue_percentage() * 1000));
 }
 
-short terminal::terminal_view::find_closest_match(const util::color &)
+short terminal::terminal_view::find_closest_match(const util::color &c)
 {
+    for (int i = 0; i < this->used_colors; i++)
+    {
+        if (this->colors[i] == c)
+            return i;
+    }
+
+    return -1;
 }
 
 short terminal::terminal_view::add_color_pair(const util::color &fg, const util::color &bg)
 {
+    if (this->used_colors + 2 > this->max_colors)
+        throw util::index_out_of_range_exception();
+
+    if (this->used_color_pairs >= this->max_color_pairs)
+        throw util::index_out_of_range_exception();
+
+    int fgId = this->add_color(fg);
+    int bgId = this->add_color(bg);
+
+    return this->add_color_pair(fg, bg);
 }
 
 short terminal::terminal_view::add_color_pair(short, short)

@@ -6,18 +6,18 @@
 
 int run()
 {
-    terminal::terminal_view v = terminal::terminal_view();
+    terminal::terminal_view *v = terminal::terminal_view::get_instance();
 
-    v.set_echo(false);
-    v.set_input_mode(terminal::input_mode::BREAK);
+    v->set_echo(false);
+    v->set_input_mode(terminal::input_mode::BREAK);
 
     int key;
 
     do
     {
-        v.maximise();
+        v->maximise();
 
-        terminal::canvas c(&v);
+        terminal::canvas c(v);
         c.clear();
         c.draw_string(util::point(10, 3), "current terminal size is: " + util::to_string(c.get_size()));
         c.draw_string(util::point(10, 4), "number of supported colors:" + util::to_string(c.get_supported_colors()));
@@ -26,7 +26,7 @@ int run()
         c.draw_box(util::rectangle(0, 0, 4, 4), '-', '|', '+');
         c.flush();
 
-        key = v.read_key();
+        key = v->read_key();
     } while (key != 'q');
 }
 

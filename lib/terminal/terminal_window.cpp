@@ -1,11 +1,10 @@
 #include "terminal.hpp"
 
 terminal::terminal_window::terminal_window() : controls(10),
-                                               focused_control_index(-1),
-                                               view()
+                                               focused_control_index(-1)
 {
-    view.set_echo(false);
-    view.set_input_mode(terminal::input_mode::BREAK);
+    // view.set_echo(false);
+    // view.set_input_mode(terminal::input_mode::BREAK);
 }
 
 terminal::terminal_window::~terminal_window()

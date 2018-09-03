@@ -12,7 +12,6 @@ class terminal_window
   private:
     std::vector<terminal::control_base *> controls;
     int focused_control_index;
-    terminal_view view;
 
   public:
     terminal_window();
