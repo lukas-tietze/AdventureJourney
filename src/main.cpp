@@ -71,11 +71,11 @@ int run()
             key = v->read_key();
         } while (key != 'q');
     }
-    catch (const util::exception &e)
+    catch (util::exception &e)
     {
         std::printf("Error occurred!: %s", e.get_message().c_str());
     }
-    catch (const std::exception &e)
+    catch (std::exception &e)
     {
         std::printf("Error occurred!: %s", e.what());
     }
