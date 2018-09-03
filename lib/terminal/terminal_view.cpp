@@ -293,14 +293,14 @@ int terminal::terminal_view::find(const util::color &c)
 
 int terminal::terminal_view::add_color_pair(const util::color &fg, const util::color &bg)
 {
-    if ((this->used_colors + 2) > this->max_colors)
+    if ((this->used_colors + 2) >= this->max_colors)
         throw util::overflow_exception(this->max_colors,
                                        util::format("Failed to add new colors for new color pair. %i/%i used.", this->used_colors, this->max_colors));
 
     int fgId = this->add_color(fg);
     int bgId = this->add_color(bg);
 
-    return this->add_color_pair(fg, bg);
+    return this->add_color_pair(fgId, bgId);
 }
 
 int terminal::terminal_view::add_color_pair(int id1, int id2)

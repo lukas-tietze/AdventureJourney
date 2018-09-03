@@ -53,12 +53,11 @@ int run()
     {
         v->set_echo(false);
         v->set_input_mode(terminal::input_mode::BREAK);
-
         colors_schemes[0] = v->add_color_pair(util::colors::DarkGoldenrod1, util::colors::DarkSalmon);
-        // colors_schemes[1] = v->add_color_pair(util::colors::Firebrick3, util::colors::Goldenrod4);
-        // colors_schemes[2] = v->add_color_pair(util::colors::Gray39, util::colors::Grey12);
-        // colors_schemes[3] = v->add_color_pair(util::colors::LightBlue2, util::colors::Grey75);
-        // colors_schemes[4] = v->add_color_pair(util::colors::LightSeaGreen, util::colors::MediumOrchid3);
+        colors_schemes[1] = v->add_color_pair(util::colors::Firebrick3, util::colors::Goldenrod4);
+        colors_schemes[2] = v->add_color_pair(util::colors::Gray39, util::colors::Grey12);
+        colors_schemes[3] = v->add_color_pair(util::colors::LightBlue2, util::colors::Grey75);
+        colors_schemes[4] = v->add_color_pair(util::colors::LightSeaGreen, util::colors::MediumOrchid3);
 
         int key;
 
