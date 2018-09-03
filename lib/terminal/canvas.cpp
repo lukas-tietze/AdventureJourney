@@ -148,16 +148,6 @@ terminal::output_attribute terminal::canvas::get_active_attributes() const
     return this->active_attributes;
 }
 
-int terminal::canvas::get_supported_colors() const
-{
-    return COLORS;
-}
-
-int terminal::canvas::get_supported_color_pairs() const
-{
-    return COLOR_PAIRS;
-}
-
 void terminal::canvas::set_origin(const util::point &p)
 {
     this->origin = p;
@@ -194,53 +184,28 @@ void terminal::canvas::disable_attribute(terminal::output_attribute a)
 
 void terminal::canvas::set_foreground_color(const util::color &c)
 {
-    this->buffer_color(c, true);
 }
 
 void terminal::canvas::set_background_color(const util::color &c)
 {
-    this->buffer_color(c, false);
 }
 
 void terminal::canvas::set_foreground_color(int c)
 {
     this->fg_color = c;
-    this->read_buffered_color(true);
 }
 
 void terminal::canvas::set_background_color(int c)
 {
     this->bg_color = c;
-    this->read_buffered_color(false);
 }
 
-void terminal::canvas::reset_foreground_color(const util::color &c)
+void terminal::canvas::reset_foreground_color()
 {
     this->set_foreground_color(util::color_white);
 }
 
-void terminal::canvas::reset_background_color(const util::color &c)
+void terminal::canvas::reset_background_color()
 {
     this->set_background_color(util::color_black);
-}
-
-void terminal::canvas::buffer_color(const util::color &c, bool fg)
-{
-}
-
-void terminal::canvas::read_buffered_color(bool fgs)
-{
-}
-
-void terminal::canvas::buffer_data()
-{
-    if (this->color_changed)
-    {
-    }
-}
-
-void terminal::canvas::flush()
-{
-    this->buffer_data();
-    this->view->flush();
 }

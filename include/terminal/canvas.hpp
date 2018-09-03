@@ -26,10 +26,6 @@ class canvas
 
     bool multiple_colors_supported;
 
-    void buffer_color(const util::color &, bool);
-    void read_buffered_color(bool);
-    void buffer_data();
-
   public:
     canvas(terminal_view *);
     canvas(const canvas &);
@@ -49,8 +45,6 @@ class canvas
     const util::color &get_active_foreground_color() const;
     const util::color &get_active_background_color() const;
     terminal::output_attribute get_active_attributes() const;
-    int get_supported_colors() const;
-    int get_supported_color_pairs() const;
 
     void set_origin(const util::point &);
     void clip_area(const util::dimension &);
@@ -62,8 +56,8 @@ class canvas
     void set_background_color(const util::color &);
     void set_foreground_color(int);
     void set_background_color(int);
-    void reset_foreground_color(const util::color &);
-    void reset_background_color(const util::color &);
+    void reset_foreground_color();
+    void reset_background_color();
 
     void flush();
 };

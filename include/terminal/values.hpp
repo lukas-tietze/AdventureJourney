@@ -29,11 +29,12 @@ enum class output_attribute
     Underline = A_UNDERLINE,
     Reverse = A_REVERSE,
     Blink = A_BLINK,
-    Dim = A_DIM,
+    Dimmed = A_DIM,
     Bold = A_BOLD,
     Protect = A_PROTECT,
-    Invis = A_INVIS,
-    Altcharset = A_ALTCHARSET,
+    Invisible = A_INVIS,
+    AlternatCharset = A_ALTCHARSET,
+    All = None | Standout | Underline | Reverse | Blink | Dimmed | Bold | Protect | Invisible | AlternatCharset,
 };
 
 enum class default_colors

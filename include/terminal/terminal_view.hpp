@@ -43,6 +43,11 @@ class terminal_view
     void maximise();
     void set_live_mode(bool);
 
+    void set_attribute(terminal::output_attribute, bool);
+    void reset_attribtues();
+    void attribute_on(terminal::output_attribute);
+    void attribute_off(terminal::output_attribute);
+
     void set_active_color_pair(short);
     void set_background_color(short);
 
@@ -50,6 +55,7 @@ class terminal_view
     short get_used_colors() const;
     short get_max_color_pairs() const;
     short get_used_color_pairs() const;
+    bool can_change_colors() const;
 
     const util::color &get_color(short) const;
     short add_color(const util::color &);
@@ -58,7 +64,7 @@ class terminal_view
     short add_color_pair(const util::color &fg, const util::color &bg);
     short add_color_pair(short, short);
     void set_color_pair(short, short, short);
-    
+
   protected:
     void on_terminal_property_changed();
 
