@@ -28,7 +28,7 @@ class exception : public std::exception
     int get_error_code() const;
 };
 
-class index_out_of_range_exception : util::exception
+class index_out_of_range_exception : public util::exception
 {
   public:
     index_out_of_range_exception();
@@ -36,7 +36,7 @@ class index_out_of_range_exception : util::exception
     index_out_of_range_exception(int index, int max, const std::string &custom_msg);
 };
 
-class missing_key_exception : util::exception
+class missing_key_exception : public  util::exception
 {
   public:
     missing_key_exception();
@@ -44,7 +44,7 @@ class missing_key_exception : util::exception
     missing_key_exception(const std::string &key, const std::string &custom_msg);
 };
 
-class file_not_found_exception : util::exception
+class file_not_found_exception : public  util::exception
 {
   public:
     file_not_found_exception();
@@ -52,7 +52,7 @@ class file_not_found_exception : util::exception
     file_not_found_exception(const std::string &path, const std::string &custom_msg);
 };
 
-class invalid_case_exception : util::exception
+class invalid_case_exception : public  util::exception
 {
   public:
     invalid_case_exception();

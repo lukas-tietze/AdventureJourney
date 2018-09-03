@@ -71,18 +71,18 @@ int run()
             key = v->read_key();
         } while (key != 'q');
     }
-    catch (util::exception &e)
+    catch (const util::exception &e)
     {
         std::printf("Error occurred!: %s", e.get_message().c_str());
     }
-    catch (std::exception &e)
+    catch (const std::exception &e)
     {
         std::printf("Error occurred!: %s", e.what());
     }
-    catch (...)
-    {
-        std::printf("Unknown Error occurred!");
-    }
+    // catch (...)
+    // {
+    //     std::printf("Unknown Error occurred!");
+    // }
 
     terminal::terminal_view::delete_instance();
 }
