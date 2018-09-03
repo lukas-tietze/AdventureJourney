@@ -7,7 +7,7 @@
 
 terminal::terminal_view *terminal::terminal_view::instance = nullptr;
 
-terminal::terminal_view::terminal_view() : terminal_view(LINES, COLS)
+terminal::terminal_view::terminal_view() : terminal_view(COLS, LINES)
 {
     this->maximise();
     this->flush();
@@ -38,7 +38,7 @@ terminal::terminal_view::terminal_view(int width, int height) : width(width),
     this->set_color_pair(0, COLOR_WHITE, COLOR_BLACK);
     this->set_active_color_pair(0);
 
-    this->window = newwin(this->width, this->height, 0, 0);
+    this->window = newwin(this->height, this->width, 0, 0);
     keypad(this->window, true);
     this->flush();
 }
