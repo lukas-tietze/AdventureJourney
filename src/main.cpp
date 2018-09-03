@@ -3,6 +3,7 @@
 
 #include "terminal.hpp"
 #include "data/string.hpp"
+#include "exception.hpp"
 
 short colors_schemes[5];
 
@@ -38,7 +39,7 @@ int loop(terminal::terminal_view *v)
     for (int i = 0; i < 5; i++)
     {
         c.set_active_color_pair(colors_schemes[i]);
-        c.draw_string(util::point(), "Color scheme" + i);
+        c.draw_string(util::point(10, 16 + i), "Color scheme" + i);
     }
 
     c.flush();
@@ -48,25 +49,42 @@ int run()
 {
     terminal::terminal_view *v = terminal::terminal_view::get_instance();
 
-    v->set_echo(false);
-    v->set_input_mode(terminal::input_mode::BREAK);
-
-    colors_schemes[0] = v->add_color_pair(util::colors::DarkGoldenrod1, util::colors::DarkSalmon);
-    colors_schemes[1] = v->add_color_pair(util::colors::Firebrick3, util::colors::Goldenrod4);
-    colors_schemes[2] = v->add_color_pair(util::colors::Gray39, util::colors::Grey12);
-    colors_schemes[3] = v->add_color_pair(util::colors::LightBlue2, util::colors::Grey75);
-    colors_schemes[4] = v->add_color_pair(util::colors::LightSeaGreen, util::colors::MediumOrchid3);
-
-    int key;
-
-    do
+    try
     {
-        v->maximise();
+        v->set_echo(false);
+        v->set_input_mode(terminal::input_mode::BREAK);
 
-        loop(v);
+        colors_schemes[0] = v->add_color_pair(util::colors::DarkGoldenrod1, util::colors::DarkSalmon);
+        colors_schemes[1] = v->add_color_pair(util::colors::Firebrick3, util::colors::Goldenrod4);
+        colors_schemes[2] = v->add_color_pair(util::colors::Gray39, util::colors::Grey12);
+        colors_schemes[3] = v->add_color_pair(util::colors::LightBlue2, util::colors::Grey75);
+        colors_schemes[4] = v->add_color_pair(util::colors::LightSeaGreen, util::colors::MediumOrchid3);
 
-        key = v->read_key();
-    } while (key != 'q');
+        int key;
+
+        do
+        {
+            v->maximise();
+
+            loop(v);
+
+            key = v->read_key();
+        } while (key != 'q');
+    }
+    catch (const util::exception &e)
+    {
+        std::printf("Error occurred!: %s", e.get_message().c_str());
+    }
+    catch (const std::exception &e)
+    {
+        std::printf("Error occurred!: %s", e.what());
+    }
+    catch (...)
+    {
+        std::printf("Unknown Error occurred!");
+    }
+
+    terminal::terminal_view::delete_instance();
 }
 
 int main(int argc, char **argv)
