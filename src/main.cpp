@@ -4,8 +4,20 @@
 #include "terminal.hpp"
 #include "data/string.hpp"
 #include "exception.hpp"
+#include "data/rand.hpp"
 
 short colors_schemes[5];
+bool running = true;
+
+void quit()
+{
+    if (running)
+    {
+        terminal::terminal_view::delete_instance();
+        endwin();
+        running = false;
+    }
+}
 
 void print_attribute(int line, terminal::output_attribute a, terminal::canvas &c)
 {
@@ -43,8 +55,13 @@ int loop(terminal::terminal_view *v)
     for (int i = 0; i < 5; i++)
     {
         c.set_active_color_pair(colors_schemes[i]);
-        c.draw_string(util::point(10, 16 + i), util::format("Color scheme %i", i));
+        c.draw_string(util::point(10, 16 + i), util::format("Color scheme %i (id=%i)", i, colors_schemes[i]));
     }
+
+    c.draw_string(util::point(10, 21), util::format("red is (%i, %i, %i)",
+                                                    util::colors::BasicRed.red(),
+                                                    util::colors::BasicRed.green(),
+                                                    util::colors::BasicRed.blue()));
 
     c.flush();
 }
@@ -58,17 +75,11 @@ int run()
         v->set_echo(false);
         v->set_input_mode(terminal::input_mode::BREAK);
 
-        // colors_schemes[0] = v->add_color_pair(util::colors::DarkGoldenrod1, util::colors::DarkSalmon);
-        // colors_schemes[1] = v->add_color_pair(util::colors::Firebrick3, util::colors::Goldenrod4);
-        // colors_schemes[2] = v->add_color_pair(util::colors::Gray39, util::colors::Grey12);
-        // colors_schemes[3] = v->add_color_pair(util::colors::LightBlue2, util::colors::Grey75);
-        // colors_schemes[4] = v->add_color_pair(util::colors::LightSeaGreen, util::colors::MediumOrchid3);
-
-        colors_schemes[0] = v->add_color_pair(COLOR_BLACK, COLOR_RED);
-        colors_schemes[1] = v->add_color_pair(COLOR_BLUE, COLOR_YELLOW);
-        colors_schemes[2] = v->add_color_pair(COLOR_RED, COLOR_GREEN);
-        colors_schemes[3] = v->add_color_pair(COLOR_YELLOW, COLOR_MAGENTA);
-        colors_schemes[4] = v->add_color_pair(COLOR_WHITE, COLOR_CYAN);
+        colors_schemes[0] = v->add_color_pair(util::colors::DarkGoldenrod1, util::colors::DarkSalmon);
+        colors_schemes[1] = v->add_color_pair(util::colors::Firebrick3, util::colors::Goldenrod4);
+        colors_schemes[2] = v->add_color_pair(util::colors::Gray39, util::colors::Grey12);
+        colors_schemes[3] = v->add_color_pair(util::colors::LightBlue2, util::colors::Grey75);
+        colors_schemes[4] = v->add_color_pair(util::colors::LightSeaGreen, util::colors::MediumOrchid3);
 
         int key;
 
@@ -79,22 +90,36 @@ int run()
             loop(v);
 
             key = v->read_key();
+
+            if (key == 'c')
+            {
+                int buf = colors_schemes[0];
+
+                for (int i = 0; i < 4; i++)
+                {
+                    colors_schemes[i] = colors_schemes[i + 1];
+                }
+
+                colors_schemes[5] = buf;
+            }
+
         } while (key != 'q');
     }
     catch (const util::exception &e)
     {
-        std::printf("Error occurred!: %s", e.get_message().c_str());
+        quit();
+        std::printf("Error occurred!: %s\n", e.get_message().c_str());
     }
     catch (const std::exception &e)
     {
-        std::printf("Error occurred!: %s", e.what());
+        quit();
+        std::printf("Error occurred!: %s\n", e.what());
     }
     catch (...)
     {
-        std::printf("Unknown Error occurred!");
+        quit();
+        std::printf("Unknown Error occurred!\n");
     }
-
-    terminal::terminal_view::delete_instance();
 }
 
 int main(int argc, char **argv)
@@ -102,7 +127,6 @@ int main(int argc, char **argv)
     initscr();
     start_color();
     run();
-    endwin();
-
+    quit();
     return 0;
 }

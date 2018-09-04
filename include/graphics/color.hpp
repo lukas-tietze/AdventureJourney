@@ -7,23 +7,23 @@ namespace util
 class color
 {
   private:
-    int data;
-    static constexpr int A_MASK = 0xff000000;
-    static constexpr int A_SHIFT = 24;
-    static constexpr int R_MASK = 0x00ff0000;
-    static constexpr int R_SHIFT = 16;
-    static constexpr int G_MASK = 0x0000ff00;
-    static constexpr int G_SHIFT = 8;
-    static constexpr int B_MASK = 0x000000ff;
-    static constexpr int B_SHIFT = 0;
-    static constexpr int LOW_BYTE_MASK = 0x000000ff;
+    uint data;
+    static constexpr uint A_MASK = 0xff000000;
+    static constexpr uint A_SHIFT = 24;
+    static constexpr uint R_MASK = 0x00ff0000;
+    static constexpr uint R_SHIFT = 16;
+    static constexpr uint G_MASK = 0x0000ff00;
+    static constexpr uint G_SHIFT = 8;
+    static constexpr uint B_MASK = 0x000000ff;
+    static constexpr uint B_SHIFT = 0;
+    static constexpr uint LOW_BYTE_MASK = 0x000000ff;
 
   public:
     color();
     color(const color &copy);
     color(int r, int g, int b, int a = 255);
     color(float r, float g, float b, float a = 255);
-    color(int color);
+    color(uint color);
     int alpha() const;
     int red() const;
     int green() const;
@@ -32,7 +32,7 @@ class color
     float red_percentage() const;
     float green_percentage() const;
     float blue_percentage() const;
-    int value() const;
+    uint value() const;
 
     friend bool util::operator==(const util::color &, const util::color &);
     friend bool util::operator!=(const util::color &, const util::color &);

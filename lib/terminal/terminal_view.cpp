@@ -32,12 +32,12 @@ terminal::terminal_view::terminal_view(int width, int height) : width(width),
     this->set_color(COLOR_YELLOW, util::colors::BasicYellow);
 
     this->max_color_pairs = COLOR_PAIRS - 1;
-    this->used_color_pairs = 1;
+    this->used_color_pairs = 0;
     this->color_pairs = new color_pair[this->max_color_pairs];
 
-    this->set_color_pair(1, COLOR_WHITE, COLOR_BLACK);
-    // this->set_background_color(COLOR_BLACK);
-    this->set_active_color_pair(1);
+    auto defaultColors = this->add_color_pair(COLOR_WHITE, COLOR_BLACK);
+    this->set_active_color_pair(defaultColors);
+    this->set_background_color_pair(defaultColors);
 
     this->window = newwin(this->height, this->width, 0, 0);
     keypad(this->window, true);
@@ -254,8 +254,11 @@ int terminal::terminal_view::add_color(const util::color &c)
         throw util::overflow_exception(this->max_colors,
                                        util::format("Can't add new color. %i/%i used", this->used_colors, this->max_colors));
 
-    this->set_color(this->used_colors, c);
-    this->used_colors++;
+    int id = this->used_colors++;
+
+    this->set_color(id, c);
+
+    return id;
 }
 
 void terminal::terminal_view::set_color(int index, const util::color &color)
@@ -265,7 +268,7 @@ void terminal::terminal_view::set_color(int index, const util::color &color)
 
     this->colors[index] = color;
 
-    init_color(index + 1,
+    init_color(index,
                (int)(color.red_percentage() * 1000),
                (int)(color.green_percentage() * 1000),
                (int)(color.blue_percentage() * 1000));
@@ -288,10 +291,7 @@ int terminal::terminal_view::add_color_pair(const util::color &fg, const util::c
         throw util::overflow_exception(this->max_colors,
                                        util::format("Failed to add new colors for new color pair. %i/%i used.", this->used_colors, this->max_colors));
 
-    int fgId = this->add_color(fg);
-    int bgId = this->add_color(bg);
-
-    return this->add_color_pair(fgId, bgId);
+    return this->add_color_pair(this->add_color(fg), this->add_color(bg));
 }
 
 int terminal::terminal_view::add_color_pair(int id1, int id2)

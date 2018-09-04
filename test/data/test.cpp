@@ -1,42 +1,53 @@
 #include "test.hpp"
 
-assert::assert_exception::assert_exception(const std::string &msg) : std::runtime_error("Assert Failed: " + msg)
+namespace
+{
+std::string make_msg(const std::string &msg, const std::string &customMsg)
+{
+    if (customMsg.empty())
+        return util::format("Assert Failed: %s", msg.c_str());
+    else
+        return util::format("Assert Failed: %s [%s]", msg.c_str(), customMsg.c_str());
+}
+} // namespace
+
+assert::assert_exception::assert_exception(const std::string &msg, const std::string &customMsg) : util::exception(make_msg(msg, customMsg))
 {
 }
 
-void assert::is_null(const void *ptr)
+void assert::is_null(const void *ptr, const std::string &msg)
 {
     if (ptr != nullptr)
     {
-        throw assert::assert_exception("Pointer is not null!");
+        throw assert::assert_exception("Pointer is not null!", msg);
     }
 }
 
-void assert::is_not_null(const void *ptr)
+void assert::is_not_null(const void *ptr, const std::string &msg)
 {
     if (ptr == nullptr)
     {
-        throw assert::assert_exception("Pointer is null!");
+        throw assert::assert_exception("Pointer is null!", msg);
     }
 }
 
-void assert::fail()
+void assert::fail(const std::string &msg)
 {
-    throw assert_exception("Assert failed!");
+    throw assert_exception("Assert failed!", msg);
 }
 
-void assert::is_true(bool x)
+void assert::is_true(bool x, const std::string &msg)
 {
     if (!x)
     {
-        throw assert_exception("Value is not true!");
+        throw assert_exception("Value is not true!", msg);
     }
 }
 
-void assert::is_false(bool x)
+void assert::is_false(bool x, const std::string &msg)
 {
     if (x)
     {
-        throw assert_exception("Value is not false!");
+        throw assert_exception("Value is not false!", msg);
     }
 }
