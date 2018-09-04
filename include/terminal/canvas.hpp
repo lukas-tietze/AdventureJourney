@@ -18,6 +18,19 @@ struct pattern_item final
     terminal::output_attribute custom_attributes;
 };
 
+class pattern_iterator final
+{
+  private:
+    pattern_iterator();
+    pattern_iterator(const pattern_iterator &);
+
+  public:
+    const pattern_item &operator*() const;
+    pattern_iterator operator++() const;
+    bool operator==(const pattern_iterator &) const;
+    bool operator!=(const pattern_iterator &) const;
+};
+
 class pattern final
 {
   private:
@@ -48,19 +61,6 @@ class pattern final
 
     pattern_iterator begin() const;
     pattern_iterator end() const;
-};
-
-class pattern_iterator final
-{
-  private:
-    pattern_iterator();
-    pattern_iterator(const pattern_iterator &);
-
-  public:
-    const pattern_item &operator*() const;
-    pattern_iterator operator++() const;
-    bool operator==(const pattern_iterator &) const;
-    bool operator!=(const pattern_iterator &) const;
 };
 
 class canvas

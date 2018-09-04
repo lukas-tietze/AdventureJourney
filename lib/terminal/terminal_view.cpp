@@ -5,6 +5,7 @@
 #include "terminal.hpp"
 #include "data/math.hpp"
 #include "data/string.hpp"
+#include "data/helper.hpp"
 
 terminal::terminal_view *terminal::terminal_view::instance = nullptr;
 
@@ -214,16 +215,6 @@ void terminal::terminal_view::maximise()
     this->flush();
 }
 
-void terminal::terminal_view::set_active_color_pair(int id)
-{
-    wcolor_set(this->window, id, nullptr);
-}
-
-void terminal::terminal_view::set_background_color(int id)
-{
-    wbkgdset(this->window, id);
-}
-
 int terminal::terminal_view::get_max_colors() const
 {
     return this->max_colors;
@@ -307,10 +298,22 @@ int terminal::terminal_view::add_color_pair(int id1, int id2)
 {
     if (this->used_color_pairs >= this->max_color_pairs)
         throw util::overflow_exception(this->max_color_pairs,
-                                       util::format("Failed to add new color pair. %i/%i used.", this->used_colors, this->max_colors));
+                                       util::format("Failed to add new color pair. %i/%i pairs used.", this->used_color_pairs, this->max_color_pairs));
 
+    if (id1 < 0 || id1 >= this->used_colors)
+        throw util::index_out_of_range_exception(id1,
+                                                 this->used_colors,
+                                                 util::format("Failed to add new color pair. %i/%i colors used.", this->used_colors, this->max_colors));
+
+    if (id2 < 0 || id2 >= this->used_colors)
+        throw util::index_out_of_range_exception(id2,
+                                                 this->used_colors,
+                                                 util::format("Failed to add new color pair. %i/%i colors used.", this->used_colors, this->max_colors));
+
+    this->color_pairs[this->used_color_pairs] = util::make_tupel(id1, id2);
     this->used_color_pairs++;
     init_pair(this->used_color_pairs, id1, id2);
+
     return this->used_color_pairs;
 }
 
@@ -347,10 +350,56 @@ bool terminal::terminal_view::can_add_color_pairs() const
 
 void terminal::terminal_view::attribute_on(terminal::output_attribute a)
 {
-    wattr_on(this->window, static_cast<int>(a), nullptr);
+    util::enable_flag(this->active_attributes, a);
+    wattron(this->window, static_cast<int>(a));
 }
 
 void terminal::terminal_view::attribute_off(terminal::output_attribute a)
 {
-    wattr_off(this->window, static_cast<int>(a), nullptr);
+    util::disable_flag(this->active_attributes, a);
+    wattroff(this->window, static_cast<int>(a));
+}
+
+void terminal::terminal_view::set_active_attributes(terminal::output_attribute a)
+{
+    this->active_attributes = a;
+    wattrset(this->window, static_cast<int>(a));
+}
+
+terminal::output_attribute terminal::terminal_view::get_active_attributes() const
+{
+    return this->active_attributes;
+}
+
+void terminal::terminal_view::set_active_color_pair(int id)
+{
+    if (id < 1 || id > this->used_color_pairs)
+        throw util::index_out_of_range_exception(id, this->used_color_pairs);
+
+    this->active_color_pair = id;
+    wcolor_set(this->window, id, nullptr);
+}
+
+void terminal::terminal_view::set_background_color_pair(int id)
+{
+    if (id < 1 || id > this->used_color_pairs)
+        throw util::index_out_of_range_exception(id, this->used_color_pairs);
+
+    this->active_background_color_pair = id;
+    wbkgd(this->window, id);
+}
+
+int terminal::terminal_view::get_active_color_pair() const
+{
+    return this->active_color_pair;
+}
+
+int terminal::terminal_view::get_active_background() const
+{
+    return this->active_background_color_pair;
+}
+
+const terminal::terminal_view::color_pair &terminal::terminal_view::get_content(int id) const
+{
+    return this->color_pairs[id - 1];
 }

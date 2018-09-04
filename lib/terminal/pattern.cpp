@@ -125,7 +125,6 @@ terminal::pattern &terminal::pattern::push(char c, const util::color &color, ter
 terminal::pattern &terminal::pattern::push(char c, int count, const util::color &color, terminal::output_attribute a)
 {
     pattern_item newItem;
-    pattern_item newItem;
     newItem.symbol = c;
     newItem.length = count;
     newItem.use_custom_attributes = true;

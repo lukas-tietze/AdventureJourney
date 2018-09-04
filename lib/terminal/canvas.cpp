@@ -29,6 +29,14 @@ terminal::canvas &terminal::canvas::draw_vertical_line(const util::point &p, int
     return *this;
 }
 
+terminal::canvas &terminal::canvas::draw_vertical_line(const util::point &p, int length, char c, int color)
+{
+    auto activeColor = this->view->get_active_color_pair();
+    this->view->set_active_color_pair(color);
+    this->draw_vertical_line(p, length, c);
+    this->view->set_active_color_pair(activeColor);
+}
+
 terminal::canvas &terminal::canvas::draw_horizontal_line(const util::point &p, int length, char c)
 {
     auto start = this->clipped_area.fit(p);
@@ -40,6 +48,14 @@ terminal::canvas &terminal::canvas::draw_horizontal_line(const util::point &p, i
     }
 
     return *this;
+}
+
+terminal::canvas &terminal::canvas::draw_horizontal_line(const util::point &p, int length, char c, int color)
+{
+    auto activeColor = this->view->get_active_color_pair();
+    this->view->set_active_color_pair(color);
+    this->draw_horizontal_line(p, length, c);
+    this->view->set_active_color_pair(activeColor);
 }
 
 terminal::canvas &terminal::canvas::draw_box(const util::rectangle &r, char horizontal, char vertical, char cornor)
@@ -65,6 +81,26 @@ terminal::canvas &terminal::canvas::draw_box(const util::rectangle &r, char hori
     this->view->print(cornor, brc.get_x(), brc.get_y());
 
     return *this;
+}
+
+terminal::canvas &terminal::canvas::draw_box(const util::rectangle &r, char c, int color)
+{
+    auto activeColor = this->view->get_active_color_pair();
+    this->view->set_active_color_pair(color);
+    this->draw_box(r, c);
+    this->view->set_active_color_pair(activeColor);
+}
+
+terminal::canvas &terminal::canvas::draw_box(const util::rectangle &r, char horizontal, char vertical, char cornor, int color)
+{
+    auto activeColor = this->view->get_active_color_pair();
+    this->view->set_active_color_pair(color);
+    this->draw_box(r, horizontal, vertical, cornor);
+    this->view->set_active_color_pair(activeColor);
+}
+
+terminal::canvas &terminal::canvas::draw_box(const util::rectangle &, char horizontal, int hColor, char vertical, int vColor, char cornor, int cColor)
+{
 }
 
 terminal::canvas &terminal::canvas::draw_box(const util::rectangle &r, char c)
@@ -100,6 +136,34 @@ terminal::canvas &terminal::canvas::draw_string(const util::point &p, const std:
     this->view->print(s, p.get_x(), p.get_y());
 
     return *this;
+}
+
+terminal::canvas &terminal::canvas::draw_string(const util::point &p, const std::string &s, int color)
+{
+    auto activeColor = this->view->get_active_color_pair();
+    this->view->set_active_color_pair(color);
+    this->draw_string(p, s);
+    this->view->set_active_color_pair(activeColor);
+}
+
+terminal::canvas &terminal::canvas::draw_string(const util::point &p, const std::string &s, terminal::output_attribute attributes)
+{
+    auto activeAttributes = this->view->get_active_attributes();
+    this->view->set_active_attributes(attributes);
+    this->draw_string(p, s);
+    this->view->set_active_attributes(activeAttributes);
+}
+
+terminal::canvas &terminal::canvas::draw_string(const util::point &p, const std::string &s, int color, terminal::output_attribute attributes)
+{
+    
+    auto activeAttributes = this->view->get_active_attributes();
+    auto activeColor = this->view->get_active_color_pair();
+    this->view->set_active_attributes(attributes);
+    this->view->set_active_color_pair(color);
+    this->draw_string(p, s);
+    this->view->set_active_attributes(activeAttributes);
+    this->view->set_active_color_pair(activeColor);
 }
 
 const util::dimension &terminal::canvas::get_size() const
