@@ -216,7 +216,7 @@ void terminal::terminal_view::maximise()
 
 void terminal::terminal_view::set_active_color_pair(int id)
 {
-    wcolor_set(this->window, id + 1, nullptr);
+    wcolor_set(this->window, id, nullptr);
 }
 
 void terminal::terminal_view::set_background_color(int id)

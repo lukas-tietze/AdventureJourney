@@ -22,8 +22,12 @@ int loop(terminal::terminal_view *v)
     c.draw_box(util::rectangle(0, 0, 4, 4), '-', '|', '+');
 
     c.draw_string(util::point(10, 3), "current terminal size is: " + util::to_string(c.get_size()));
-    c.draw_string(util::point(10, 4), "number of supported colors:" + util::to_string(v->get_max_colors()));
-    c.draw_string(util::point(10, 5), "number of supported color pairs:" + util::to_string(v->get_max_color_pairs()));
+    c.draw_string(util::point(10, 4), util::format("number of supported colors: %i (%i used)",
+                                                   v->get_max_colors(),
+                                                   v->get_used_colors()));
+    c.draw_string(util::point(10, 5), util::format("number of supported color pairs: %i (%i used)",
+                                                   v->get_max_color_pairs(),
+                                                   v->get_used_color_pairs()));
 
     print_attribute(6, terminal::output_attribute::None, c);
     print_attribute(7, terminal::output_attribute::Standout, c);
@@ -53,6 +57,7 @@ int run()
     {
         v->set_echo(false);
         v->set_input_mode(terminal::input_mode::BREAK);
+
         colors_schemes[0] = v->add_color_pair(util::colors::DarkGoldenrod1, util::colors::DarkSalmon);
         colors_schemes[1] = v->add_color_pair(util::colors::Firebrick3, util::colors::Goldenrod4);
         colors_schemes[2] = v->add_color_pair(util::colors::Gray39, util::colors::Grey12);
