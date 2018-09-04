@@ -23,9 +23,9 @@ int test::color::test_basic_color_values()
     assert::are_equal(255, util::colors::BasicBlue.blue(), "BasicBlue->blue");
     assert::are_equal(255, util::colors::BasicBlue.alpha(), "BasicBlue->alpha");
 
-    assert::are_equal(0, util::colors::BasicYellow.red(), "BasicYellow->red");
+    assert::are_equal(255, util::colors::BasicYellow.red(), "BasicYellow->red");
     assert::are_equal(255, util::colors::BasicYellow.green(), "BasicYellow->green");
-    assert::are_equal(255, util::colors::BasicYellow.blue(), "BasicYellow->blue");
+    assert::are_equal(0, util::colors::BasicYellow.blue(), "BasicYellow->blue");
     assert::are_equal(255, util::colors::BasicYellow.alpha(), "BasicYellow->alpha");
 
     assert::are_equal(255, util::colors::BasicMagenta.red(), "BasicMagenta->red");
