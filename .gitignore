@@ -39,7 +39,3 @@ build/
 
 # Errors
 *.stackdump
-
-# Libraries (for now)
-glm/
-glfw/
