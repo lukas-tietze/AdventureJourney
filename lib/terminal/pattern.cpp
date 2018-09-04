@@ -10,9 +10,17 @@ terminal::pattern::pattern(const pattern &copy) : items(copy.items),
 {
 }
 
+terminal::pattern &terminal::pattern::push(const pattern_item &newItem)
+{
+    this->items.push_back(newItem);
+
+    return *this;
+    this->total_length += newItem.length;
+}
+
 terminal::pattern &terminal::pattern::push(char c)
 {
-    item newItem;
+    pattern_item newItem;
     newItem.symbol = c;
     newItem.length = 1;
     newItem.use_custom_attributes = false;
@@ -20,11 +28,13 @@ terminal::pattern &terminal::pattern::push(char c)
 
     this->total_length += 1;
     this->items.push_back(newItem);
+
+    return *this;
 }
 
 terminal::pattern &terminal::pattern::push(char c, int count)
 {
-    item newItem;
+    pattern_item newItem;
     newItem.symbol = c;
     newItem.length = count;
     newItem.use_custom_attributes = false;
@@ -32,11 +42,13 @@ terminal::pattern &terminal::pattern::push(char c, int count)
 
     this->total_length += count;
     this->items.push_back(newItem);
+
+    return *this;
 }
 
 terminal::pattern &terminal::pattern::push(char c, const util::color &color)
 {
-    item newItem;
+    pattern_item newItem;
     newItem.symbol = c;
     newItem.length = 1;
     newItem.use_custom_attributes = false;
@@ -45,11 +57,13 @@ terminal::pattern &terminal::pattern::push(char c, const util::color &color)
 
     this->total_length += 1;
     this->items.push_back(newItem);
+
+    return *this;
 }
 
 terminal::pattern &terminal::pattern::push(char c, int count, const util::color &color)
 {
-    item newItem;
+    pattern_item newItem;
     newItem.symbol = c;
     newItem.length = count;
     newItem.use_custom_attributes = false;
@@ -58,11 +72,13 @@ terminal::pattern &terminal::pattern::push(char c, int count, const util::color 
 
     this->total_length += count;
     this->items.push_back(newItem);
+
+    return *this;
 }
 
 terminal::pattern &terminal::pattern::push(char c, terminal::output_attribute a)
 {
-    item newItem;
+    pattern_item newItem;
     newItem.symbol = c;
     newItem.length = 1;
     newItem.use_custom_attributes = true;
@@ -71,11 +87,13 @@ terminal::pattern &terminal::pattern::push(char c, terminal::output_attribute a)
 
     this->total_length += 1;
     this->items.push_back(newItem);
+
+    return *this;
 }
 
 terminal::pattern &terminal::pattern::push(char c, int count, terminal::output_attribute a)
 {
-    item newItem;
+    pattern_item newItem;
     newItem.symbol = c;
     newItem.length = count;
     newItem.use_custom_attributes = true;
@@ -84,11 +102,13 @@ terminal::pattern &terminal::pattern::push(char c, int count, terminal::output_a
 
     this->total_length += count;
     this->items.push_back(newItem);
+
+    return *this;
 }
 
 terminal::pattern &terminal::pattern::push(char c, const util::color &color, terminal::output_attribute a)
 {
-    item newItem;
+    pattern_item newItem;
     newItem.symbol = c;
     newItem.length = 1;
     newItem.use_custom_attributes = true;
@@ -98,12 +118,14 @@ terminal::pattern &terminal::pattern::push(char c, const util::color &color, ter
 
     this->total_length += 1;
     this->items.push_back(newItem);
+
+    return *this;
 }
 
 terminal::pattern &terminal::pattern::push(char c, int count, const util::color &color, terminal::output_attribute a)
 {
-    item newItem;
-    item newItem;
+    pattern_item newItem;
+    pattern_item newItem;
     newItem.symbol = c;
     newItem.length = count;
     newItem.use_custom_attributes = true;
@@ -113,6 +135,8 @@ terminal::pattern &terminal::pattern::push(char c, int count, const util::color 
 
     this->total_length += count;
     this->items.push_back(newItem);
+
+    return *this;
 }
 
 void terminal::pattern::pop()

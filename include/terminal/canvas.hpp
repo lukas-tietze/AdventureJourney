@@ -8,38 +8,59 @@
 
 namespace terminal
 {
-class pattern
+struct pattern_item final
+{
+    int length;
+    char symbol;
+    bool use_custom_color;
+    util::color custom_color;
+    bool use_custom_attributes;
+    terminal::output_attribute custom_attributes;
+};
+
+class pattern final
 {
   private:
-    struct item
-    {
-        char symbol;
-        int length;
-        bool use_custom_color;
-        util::color custom_color;
-        bool use_custom_attributes;
-        terminal::output_attribute custom_attributes;
-    };
-
-    std::vector<item> items;
+    std::vector<pattern_item> items;
     uint total_length;
 
   public:
     pattern();
     pattern(const pattern &);
 
+    pattern &push(const pattern_item &);
     pattern &push(char c);
     pattern &push(char c, int count);
-    pattern &push(char c, const util::color &);
-    pattern &push(char c, int count, const util::color &);
     pattern &push(char c, terminal::output_attribute);
     pattern &push(char c, int count, terminal::output_attribute);
+    pattern &push(char c, const util::color &);
+    pattern &push(char c, int count, const util::color &);
     pattern &push(char c, const util::color &, terminal::output_attribute);
     pattern &push(char c, int count, const util::color &, terminal::output_attribute);
+    pattern &push_ec(char c, int color);
+    pattern &push_ec(char c, int count, int color);
+    pattern &push_ec(char c, int, terminal::output_attribute);
+    pattern &push_ec(char c, int count, int color, terminal::output_attribute);
 
     void pop();
     uint get_total_length();
     uint get_item_count();
+
+    pattern_iterator begin() const;
+    pattern_iterator end() const;
+};
+
+class pattern_iterator final
+{
+  private:
+    pattern_iterator();
+    pattern_iterator(const pattern_iterator &);
+
+  public:
+    const pattern_item &operator*() const;
+    pattern_iterator operator++() const;
+    bool operator==(const pattern_iterator &) const;
+    bool operator!=(const pattern_iterator &) const;
 };
 
 class canvas
@@ -55,15 +76,26 @@ class canvas
     canvas(const canvas &);
 
     terminal::canvas &draw_vertical_line(const util::point &, int length, char c);
-    terminal::canvas &draw_vertical_line(const util::point &, int length, char c, const util::color &);
+    terminal::canvas &draw_vertical_line(const util::point &, int length, char c, int color);
 
     terminal::canvas &draw_horizontal_line(const util::point &, int y, char c);
+    terminal::canvas &draw_horizontal_line(const util::point &, int y, char c, int color);
+
     terminal::canvas &draw_box(const util::rectangle &, char horizontal, char vertical, char cornor);
+    terminal::canvas &draw_box(const util::rectangle &, char horizontal, char vertical, char cornor, int color);
+    terminal::canvas &draw_box(const util::rectangle &, char horizontal, int hColor, char vertical, int vColor, char cornor, int cColor);
+
     terminal::canvas &draw_box(const util::rectangle &, char c);
+    terminal::canvas &draw_box(const util::rectangle &, char c, int color);
+
+    terminal::canvas &draw_string(const util::point &, const std::string &);
+    terminal::canvas &draw_string(const util::point &, const std::string &, int color);
+    terminal::canvas &draw_string(const util::point &, const std::string &, terminal::output_attribute attributes);
+    terminal::canvas &draw_string(const util::point &, const std::string &, int color, terminal::output_attribute attributes);
+
     terminal::canvas &fill(const util::rectangle &, char c);
     terminal::canvas &clear(char c);
     terminal::canvas &clear();
-    terminal::canvas &draw_string(const util::point &, const std::string &);
 
     const util::dimension &get_size() const;
     const util::point &get_origin() const;
