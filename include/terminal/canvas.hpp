@@ -1,12 +1,47 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 #include "terminal_view.hpp"
 #include "graphics/color.hpp"
 
 namespace terminal
 {
+class pattern
+{
+  private:
+    struct item
+    {
+        char symbol;
+        int length;
+        bool use_custom_color;
+        util::color custom_color;
+        bool use_custom_attributes;
+        terminal::output_attribute custom_attributes;
+    };
+
+    std::vector<item> items;
+    uint total_length;
+
+  public:
+    pattern();
+    pattern(const pattern &);
+
+    pattern &push(char c);
+    pattern &push(char c, int count);
+    pattern &push(char c, const util::color &);
+    pattern &push(char c, int count, const util::color &);
+    pattern &push(char c, terminal::output_attribute);
+    pattern &push(char c, int count, terminal::output_attribute);
+    pattern &push(char c, const util::color &, terminal::output_attribute);
+    pattern &push(char c, int count, const util::color &, terminal::output_attribute);
+
+    void pop();
+    uint get_total_length();
+    uint get_item_count();
+};
+
 class canvas
 {
   private:
@@ -20,6 +55,8 @@ class canvas
     canvas(const canvas &);
 
     terminal::canvas &draw_vertical_line(const util::point &, int length, char c);
+    terminal::canvas &draw_vertical_line(const util::point &, int length, char c, const util::color &);
+
     terminal::canvas &draw_horizontal_line(const util::point &, int y, char c);
     terminal::canvas &draw_box(const util::rectangle &, char horizontal, char vertical, char cornor);
     terminal::canvas &draw_box(const util::rectangle &, char c);
