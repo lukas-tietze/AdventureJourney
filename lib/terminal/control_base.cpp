@@ -3,7 +3,8 @@
 terminal::control_base::control_base() : bounds(0, 0, 0, 0),
                                          parent(nullptr),
                                          z_index(0),
-                                         has_focus(false)
+                                         has_focus(false),
+                                         visible(true)
 {
 }
 
@@ -59,6 +60,16 @@ const std::string &terminal::control_base::get_text() const
 void terminal::control_base::set_text(const std::string &text)
 {
     this->text = text;
+}
+
+bool terminal::control_base::is_visible() const
+{
+    return this->visible;
+}
+
+void terminal::control_base::set_visibility(bool visible)
+{
+    this->visible = visible;
 }
 
 void terminal::control_base::handle_focus_aquired()

@@ -2,12 +2,12 @@
 
 #include <vector>
 
-#include "control_base.hpp"
-#include "terminal_view.hpp"
+#include "terminal/controls/control_base.hpp"
+#include "terminal/terminal_view.hpp"
 
 namespace terminal
 {
-class terminal_window
+class terminal_window : public control_base
 {
   private:
     std::vector<terminal::control_base *> controls;

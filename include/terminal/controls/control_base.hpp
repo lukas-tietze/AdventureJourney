@@ -1,6 +1,6 @@
 #pragma once
 
-#include "canvas.hpp"
+#include "terminal/canvas.hpp"
 #include "geometry.hpp"
 
 namespace terminal
@@ -27,6 +27,7 @@ class control_base
     int z_index;
     bool has_focus;
     std::string text;
+    bool visible;
 
   public:
     control_base();
@@ -43,6 +44,8 @@ class control_base
     std::string &get_text();
     const std::string &get_text() const;
     void set_text(const std::string &);
+    bool is_visible() const;
+    void set_visibility(bool visible);
 
     virtual void handle_focus_aquired();
     virtual void handle_focus_lost();

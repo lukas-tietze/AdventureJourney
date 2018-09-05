@@ -19,13 +19,6 @@ void quit()
     }
 }
 
-void print_attribute(int line, terminal::output_attribute a, terminal::canvas &c)
-{
-    c.enable_attribute(a);
-    c.draw_string(util::point(10, line), util::to_string(a));
-    c.disable_attribute(a);
-}
-
 int loop(terminal::terminal_view *v)
 {
     terminal::canvas c(v);
@@ -41,27 +34,21 @@ int loop(terminal::terminal_view *v)
                                                    v->get_max_color_pairs(),
                                                    v->get_used_color_pairs()));
 
-    print_attribute(6, terminal::output_attribute::None, c);
-    print_attribute(7, terminal::output_attribute::Standout, c);
-    print_attribute(8, terminal::output_attribute::Underline, c);
-    print_attribute(9, terminal::output_attribute::Reverse, c);
-    print_attribute(10, terminal::output_attribute::Blink, c);
-    print_attribute(11, terminal::output_attribute::Dimmed, c);
-    print_attribute(12, terminal::output_attribute::Bold, c);
-    print_attribute(13, terminal::output_attribute::Protect, c);
-    print_attribute(14, terminal::output_attribute::Invisible, c);
-    print_attribute(15, terminal::output_attribute::AlternatCharset, c);
+    c.draw_string(util::point(10, 6), util::to_string(terminal::output_attribute::None), terminal::output_attribute::None);
+    c.draw_string(util::point(10, 7), util::to_string(terminal::output_attribute::Standout), terminal::output_attribute::Standout);
+    c.draw_string(util::point(10, 8), util::to_string(terminal::output_attribute::Underline), terminal::output_attribute::Underline);
+    c.draw_string(util::point(10, 9), util::to_string(terminal::output_attribute::Reverse), terminal::output_attribute::Reverse);
+    c.draw_string(util::point(10, 10), util::to_string(terminal::output_attribute::Blink), terminal::output_attribute::Blink);
+    c.draw_string(util::point(10, 11), util::to_string(terminal::output_attribute::Dimmed), terminal::output_attribute::Dimmed);
+    c.draw_string(util::point(10, 12), util::to_string(terminal::output_attribute::Bold), terminal::output_attribute::Bold);
+    c.draw_string(util::point(10, 13), util::to_string(terminal::output_attribute::Protect), terminal::output_attribute::Protect);
+    c.draw_string(util::point(10, 14), util::to_string(terminal::output_attribute::Invisible), terminal::output_attribute::Invisible);
+    c.draw_string(util::point(10, 15), util::to_string(terminal::output_attribute::AlternatCharset), terminal::output_attribute::AlternatCharset);
 
     for (int i = 0; i < 5; i++)
     {
-        c.set_active_color_pair(colors_schemes[i]);
-        c.draw_string(util::point(10, 16 + i), util::format("Color scheme %i (id=%i)", i, colors_schemes[i]));
+        c.draw_string(util::point(10, 16 + i), util::format("Color scheme %i (id=%i)", i, colors_schemes[i]), colors_schemes[i]);
     }
-
-    c.draw_string(util::point(10, 21), util::format("red is (%i, %i, %i)",
-                                                    util::colors::BasicRed.red(),
-                                                    util::colors::BasicRed.green(),
-                                                    util::colors::BasicRed.blue()));
 
     c.flush();
 }
@@ -100,7 +87,7 @@ int run()
                     colors_schemes[i] = colors_schemes[i + 1];
                 }
 
-                colors_schemes[5] = buf;
+                colors_schemes[4] = buf;
             }
 
         } while (key != 'q');
