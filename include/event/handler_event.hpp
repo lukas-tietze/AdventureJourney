@@ -48,9 +48,14 @@ struct member_handler
     T *obj;
     void (T::*f)(TArgs &);
 
-    void operator()(TArgs &args)
+    void operator()(TArgs &args) const
     {
         (obj->*f)(args);
+    }
+
+    bool operator==(const member_handler &other)
+    {
+        return this->obj == other.obj && this->f == other.f;
     }
 };
 
@@ -60,7 +65,7 @@ member_handler<T, TArgs> make_member_handler(T *obj, void (T::*f)(TArgs &))
     return member_handler<T, TArgs>{obj, f};
 }
 
-template<class T, class TArgs>
+template <class T, class TArgs>
 class member_event : public handler_event<member_handler<T, TArgs>, TArgs>
 {
 };

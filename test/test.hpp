@@ -83,7 +83,9 @@ namespace event_test
 {
 int test_function_events();
 int test_listener_events();
-}; // namespace event_test
+int test_handler_events();
+int test_member_handler_events();
+} // namespace event_test
 } // namespace test
 
 namespace assert

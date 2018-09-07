@@ -1,9 +1,12 @@
 #include "event.hpp"
 #include "test.hpp"
 
-#define RES_X 10
-#define RES_Y 100
-#define RES_Z 1000
+namespace
+{
+constexpr int RES_X = 10;
+constexpr int RES_Y = 100;
+constexpr int RES_Z = 1000;
+} // namespace
 
 struct event_args
 {
