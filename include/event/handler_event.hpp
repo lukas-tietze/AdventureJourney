@@ -41,4 +41,27 @@ class handler_event
         return this->handler.size();
     }
 };
+
+template <class T, class TArgs>
+struct member_handler
+{
+    T *obj;
+    void (T::*f)(TArgs &);
+
+    void operator()(TArgs &args)
+    {
+        (obj->*f)(args);
+    }
+};
+
+template <class T, class TArgs>
+member_handler<T, TArgs> make_member_handler(T *obj, void (T::*f)(TArgs &))
+{
+    return member_handler<T, TArgs>{obj, f};
+}
+
+template<class T, class TArgs>
+class member_event : public handler_event<member_handler<T, TArgs>, TArgs>
+{
+};
 } // namespace util
