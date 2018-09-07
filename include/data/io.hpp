@@ -23,7 +23,7 @@ int printr(const T &obj)
 {
     std::stringstream stream;
 
-    stream << obj << std::endl;
+    stream << obj;
 
     return std::printf("%s", stream.str().c_str());
 }

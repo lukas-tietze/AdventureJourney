@@ -64,65 +64,46 @@ class function_event
   public:
     typedef void (*event_function)(T &);
 
-    struct event_handler
-    {
-        void *target;
-        event_function function;
-    };
-
-    void operator+=(event_function function)
-    {
-        (*this) += {nullptr, function};
-    }
-
-    void operator-=(event_function function)
-    {
-        (*this) -= {nullptr, function};
-    }
-
-    void operator+=(const event_handler &handler);
-    void operator-=(const event_handler &data);
+    void operator+=(event_function function);
+    void operator-=(event_function function);
     void operator()(T &args) const;
 
     uint size() const;
 
   private:
-    std::vector<event_handler> listeners;
+    std::vector<event_function> handler;
 };
 
 template <class T>
-void function_event<T>::operator+=(const event_handler &handler)
+void function_event<T>::operator+=(util::function_event<T>::event_function handler)
 {
-    if (std::find(this->listeners.begin(), this->listeners.end(), handler) != this->listener.end())
-        this->targets.push_back(handler);
+    if (std::find(this->handler.begin(), this->handler.end(), handler) == this->handler.end())
+        this->handler.push_back(handler);
 }
 
 template <class T>
-void function_event<T>::operator-=(const event_handler &handler)
+void function_event<T>::operator-=(util::function_event<T>::event_function handler)
 {
-    auto pos = std::find(this->listeners.begin(), this->listeners.end(), handler);
+    auto pos = std::find(this->handler.begin(), this->handler.end(), handler);
 
-    if (pos != this->targets.end())
-        this->targets.erase(pos);
+    if (pos != this->handler.end())
+        this->handler.erase(pos);
 }
 
 template <class T>
 void function_event<T>::operator()(T &args) const
 {
     // TODO: Fixen!
-    for (const auto &item : this->targets)
+    for (const auto &item : this->handler)
     {
-        if (item.target != nullptr)
-            (item.target->*item.function)(args);
-        else
-            (*item.function)(args);
+        (*item)(args);
     }
 }
 
 template <class T>
 uint function_event<T>::size() const
 {
-    return this->listeners.size();
+    return this->handler.size();
 }
 
 enum class signal
