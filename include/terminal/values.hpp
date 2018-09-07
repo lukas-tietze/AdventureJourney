@@ -58,4 +58,30 @@ enum class default_colors
 
 std::ostream &operator<<(std::ostream &, const default_colors &);
 
+enum class mouse_action
+{
+    Button1Pressed = BUTTON1_PRESSED,
+    Button1Released = BUTTON1_RELEASED,
+    Button1Clicked = BUTTON1_CLICKED,
+    Button1DoubleClicked = BUTTON1_DOUBLE_CLICKED,
+    Button1TripleClicked = BUTTON1_TRIPLE_CLICKED,
+    Button2Pressed = BUTTON2_PRESSED,
+    Button2Released = BUTTON2_RELEASED,
+    Button2Clicked = BUTTON2_CLICKED,
+    Button2DoubleClicked = BUTTON2_DOUBLE_CLICKED,
+    Button2TripleClicked = BUTTON2_TRIPLE_CLICKED,
+    Button3Pressed = BUTTON3_PRESSED,
+    Button3Released = BUTTON3_RELEASED,
+    Button3Clicked = BUTTON3_CLICKED,
+    Button3DoubleClicked = BUTTON3_DOUBLE_CLICKED,
+    Button3TripleClicked = BUTTON3_TRIPLE_CLICKED,
+    Button4Pressed = BUTTON4_PRESSED,
+    Button4Released = BUTTON4_RELEASED,
+    Button4Clicked = BUTTON4_CLICKED,
+    Button4DoubleClicked = BUTTON4_DOUBLE_CLICKED,
+    Button4TripleClicked = BUTTON4_TRIPLE_CLICKED,
+    ButtonShift = BUTTON_SHIFT,
+    ButtonCtrl = BUTTON_CTRL,
+    ButtonAlt = BUTTON_ALT,
+};
 } // namespace terminal

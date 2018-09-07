@@ -1,5 +1,15 @@
 #include "terminal.hpp"
 
+int terminal::control_base::z_index_sorter::operator()(const control_base &a, const control_base &b)
+{
+    return a.z_index - b.z_index;
+}
+
+int terminal::control_base::tab_index_sorter::operator()(const control_base &a, const control_base &b)
+{
+    return a.tab_index - b.tab_index;
+}
+
 terminal::control_base::control_base() : bounds(0, 0, 0, 0),
                                          parent(nullptr),
                                          z_index(0),
@@ -72,6 +82,16 @@ void terminal::control_base::set_visibility(bool visible)
     this->visible = visible;
 }
 
+int terminal::control_base::get_tab_index() const
+{
+    return this->tab_index;
+}
+
+void terminal::control_base::set_tab_index(int tabIndex)
+{
+    this->tab_index = tabIndex;
+}
+
 void terminal::control_base::handle_focus_aquired()
 {
 }
@@ -93,5 +113,13 @@ void terminal::control_base::handle_add_to_control(control_base *)
 }
 
 void terminal::control_base::render(const util::rectangle &, terminal::canvas &)
+{
+}
+
+void terminal::control_base::handle_tab_index_changed(int oldTabIndex)
+{
+}
+
+void terminal::control_base::handle_z_index_changed(int oldZIndex)
 {
 }

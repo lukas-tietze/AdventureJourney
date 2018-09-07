@@ -2,6 +2,7 @@
 
 #include <vector>
 
+#include "terminal/controls/container_base.hpp"
 #include "terminal/controls/control_base.hpp"
 #include "terminal/terminal_view.hpp"
 
@@ -11,7 +12,11 @@ class terminal_window : public control_base
 {
   private:
     std::vector<terminal::control_base *> controls;
+    std::vector<terminal::control_base *> controls_by_tab_index;
     int focused_control_index;
+    bool loop;
+
+    void render();
 
   public:
     terminal_window();
@@ -20,6 +25,7 @@ class terminal_window : public control_base
     control_base *add_control(control_base *);
 
     void start();
+    void quit();
 
     control_base *get_focused_control() const;
 };

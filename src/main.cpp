@@ -7,6 +7,7 @@
 #include "data/rand.hpp"
 
 short colors_schemes[5];
+int mx, my, ms, mxw, myw;
 bool running = true;
 
 void quit()
@@ -50,10 +51,23 @@ int loop(terminal::terminal_view *v)
         c.draw_string(util::point(10, 16 + i), util::format("Color scheme %i (id=%i)", i, colors_schemes[i]), colors_schemes[i]);
     }
 
+    c.draw_string(util::point(c.get_size().get_width() - 11, 5), util::format("MX: %i", mx));
+    c.draw_string(util::point(c.get_size().get_width() - 11, 6), util::format("MY: %i", my));
+    c.draw_string(util::point(c.get_size().get_width() - 11, 7), util::format("MXW: %i", mxw));
+    c.draw_string(util::point(c.get_size().get_width() - 11, 8), util::format("MYW: %i", myw));
+    c.draw_string(util::point(c.get_size().get_width() - 11, 9), util::format("MS: %i", ms));
+
     c.flush();
 }
 
-int run()
+int run_component_test()
+{
+    terminal::terminal_view *v = terminal::terminal_view::get_instance();
+
+    terminal::terminal_window w;
+}
+
+int run_function_test()
 {
     terminal::terminal_view *v = terminal::terminal_view::get_instance();
 
@@ -78,7 +92,7 @@ int run()
 
             key = v->read_key();
 
-            if (key == 'c')
+            if (key == '\t')
             {
                 int buf = colors_schemes[0];
 
@@ -89,8 +103,23 @@ int run()
 
                 colors_schemes[4] = buf;
             }
+            else if (key == 'c')
+            {
+                run_component_test();
+            }
+            else if (key == KEY_MOUSE)
+            {
+                MEVENT mouseEvent;
+                if (getmouse(&mouseEvent) == OK)
+                {
+                    mx = mxw = mouseEvent.x;
+                    my = myw = mouseEvent.y;
+                    ms = mouseEvent.bstate;
+                    mouse_trafo(&mxw, &myw, false);
+                }
+            }
 
-        } while (key != 'q');
+        } while (running && key != 'q');
     }
     catch (const util::exception &e)
     {
@@ -113,7 +142,10 @@ int main(int argc, char **argv)
 {
     initscr();
     start_color();
-    run();
+    mousemask(ALL_MOUSE_EVENTS, nullptr);
+    run_function_test();
+    run_component_test();
     quit();
+
     return 0;
 }
