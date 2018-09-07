@@ -89,13 +89,13 @@ template <class T>
 void function_event<T>::operator()(T &args) const
 {
     // TODO: Fixen!
-    // for (const auto &item : this->targets)
-    // {
-    //     if (item.target != nullptr)
-    //         (item.target->*item.function)(args);
-    //     else
-    //         (*item.function)(args);
-    // }
+    for (const auto &item : this->targets)
+    {
+        if (item.target != nullptr)
+            (item.target->*item.function)(args);
+        else
+            (*item.function)(args);
+    }
 }
 
 enum class signal

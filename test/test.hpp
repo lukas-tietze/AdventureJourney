@@ -70,15 +70,20 @@ std::ostream &operator<<(std::ostream &, const test_run &testRun);
 
 typedef std::vector<test_run> test_collection;
 
-namespace json
+namespace json_test
 {
 int test_simple_tokenizing();
 int test_complex_tokenizing();
-} // namespace json
-namespace color
+} // namespace json_test
+namespace color_test
 {
 int test_basic_color_values();
 }
+namespace event_test
+{
+int test_function_events();
+int test_listener_events();
+}; // namespace event_test
 } // namespace test
 
 namespace assert

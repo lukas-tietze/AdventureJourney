@@ -3,7 +3,7 @@
 #include "test.hpp"
 #include "data/json.hpp"
 
-int test::json::test_simple_tokenizing()
+int test::json_test::test_simple_tokenizing()
 {
     std::string text;
     ::json::tokenizer t;
