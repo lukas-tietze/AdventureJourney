@@ -13,6 +13,8 @@ int main(int argc, char **argv)
     tests.push_back(test::test_run(new test::simple_test("basic color definitions", &test::color_test::test_basic_color_values)));
     tests.push_back(test::test_run(new test::simple_test("function event test", &test::event_test::test_function_events)));
     tests.push_back(test::test_run(new test::simple_test("listener event test", &test::event_test::test_listener_events)));
+    tests.push_back(test::test_run(new test::simple_test("handler event test", &test::event_test::test_handler_events)));
+    tests.push_back(test::test_run(new test::simple_test("member handler event test", &test::event_test::test_member_handler_events)));
 
     for (auto &testRun : tests)
     {
