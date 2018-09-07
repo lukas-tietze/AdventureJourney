@@ -10,22 +10,22 @@ void handle_signal(int what)
     switch (what)
     {
     case SIGABRT:
-        args.signal = util::signal::SigAbrt;
+        args.signal = util::signal::Abort;
         break;
     case SIGFPE:
-        args.signal = util::signal::SigFpe;
+        args.signal = util::signal::FloatingPointException;
         break;
     case SIGILL:
-        args.signal = util::signal::SigIll;
+        args.signal = util::signal::IllegalInstruction;
         break;
     case SIGINT:
-        args.signal = util::signal::SigInt;
+        args.signal = util::signal::Interrupt;
         break;
     case SIGSEGV:
-        args.signal = util::signal::SigSegv;
+        args.signal = util::signal::SegmentationViolation;
         break;
     case SIGTERM:
-        args.signal = util::signal::SigTerm;
+        args.signal = util::signal::Terminate;
         break;
     default:
         args.signal = util::signal::Unknown;

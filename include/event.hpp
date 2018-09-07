@@ -2,6 +2,9 @@
 
 #include <vector>
 #include <csignal>
+#include <algorithm>
+
+#include "defs.hpp"
 
 namespace util
 {
@@ -9,7 +12,7 @@ template <class T>
 class i_event_listener
 {
   public:
-    virtual void handle_event() = 0;
+    virtual void handle_event(T &args) = 0;
 };
 
 template <class T>
@@ -19,24 +22,39 @@ class listener_event
     std::vector<i_event_listener<T> *> listeners;
 
   public:
-    listener_event();
+    listener_event() : listeners()
+    {
+    }
 
     void operator+=(i_event_listener<T> *listener)
     {
-        if (this.listeners.find(listener) == std::vector<i_event_listener<T>>::npos)
+        if (std::find(this->listeners.begin(), this->listeners.end(), listener) == this->listeners.end())
         {
-            this.listeners.push_back(listener);
+            this->listeners.push_back(listener);
         }
     }
 
-    void operator-=(i_event_listener<T> listener)
+    void operator-=(i_event_listener<T> *listener)
     {
-        auto pos = this.listeners.find(listener);
+        auto pos = std::find(this->listeners.begin(), this->listeners.end(), listener);
 
-        if (pos != std::vector<i_event_listener<T>>::npos)
+        if (pos != this->listeners.end())
         {
-            this.listeners.remove(pos);
+            this->listeners.erase(pos);
         }
+    }
+
+    void operator()(T &args)
+    {
+        for (const auto &listener : this->listeners)
+        {
+            listener->handle_event(args);
+        }
+    }
+
+    uint size() const
+    {
+        return this->listeners.size();
     }
 };
 
@@ -54,34 +72,37 @@ class function_event
 
     void operator+=(event_function function)
     {
-        *this += {nullptr, function};
+        (*this) += {nullptr, function};
     }
 
     void operator-=(event_function function)
     {
-        *this -= {nullptr, function};
+        (*this) -= {nullptr, function};
     }
 
     void operator+=(const event_handler &handler);
     void operator-=(const event_handler &data);
     void operator()(T &args) const;
 
+    uint size() const;
+
   private:
-    std::vector<event_handler> targets;
+    std::vector<event_handler> listeners;
 };
 
 template <class T>
 void function_event<T>::operator+=(const event_handler &handler)
 {
-    this->targets.push_back(handler);
+    if (std::find(this->listeners.begin(), this->listeners.end(), handler) != this->listener.end())
+        this->targets.push_back(handler);
 }
 
 template <class T>
 void function_event<T>::operator-=(const event_handler &handler)
 {
-    auto pos = this->targets.find(handler);
+    auto pos = std::find(this->listeners.begin(), this->listeners.end(), handler);
 
-    if (pos != this->targets.npos)
+    if (pos != this->targets.end())
         this->targets.erase(pos);
 }
 
@@ -98,15 +119,21 @@ void function_event<T>::operator()(T &args) const
     }
 }
 
+template <class T>
+uint function_event<T>::size() const
+{
+    return this->listeners.size();
+}
+
 enum class signal
 {
-    SigAbrt,
-    SigFpe,
-    SigIll,
-    SigInt,
-    SigSegv,
-    SigTerm,
-    Unknown,
+    Abort = SIGABRT,
+    FloatingPointException = SIGFPE,
+    IllegalInstruction = SIGILL,
+    Interrupt = SIGINT,
+    SegmentationViolation = SIGSEGV,
+    Terminate = SIGTERM,
+    Unknown = 0,
 };
 
 struct signal_event_args
