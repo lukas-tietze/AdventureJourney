@@ -1,7 +1,8 @@
 #include <csignal>
 
 #include "event.hpp"
-
+namespace
+{
 void handle_signal(int what)
 {
     util::signal_event_args args;
@@ -31,10 +32,11 @@ void handle_signal(int what)
         args.signal = util::signal::Unknown;
         break;
     }
-
-    // TODO: Fixen
-    // util::on_signal(args);
 }
+
+// TODO: Fixen
+// util::on_signal(args);
+} // namespace
 
 util::signal_event::signal_event()
 {

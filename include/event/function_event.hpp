@@ -7,15 +7,15 @@
 
 namespace util
 {
-template <class T>
+template <class TArgs>
 class function_event
 {
   public:
-    typedef void (*event_function)(T &);
+    typedef void (*event_function)(TArgs &);
 
     void operator+=(event_function function);
     void operator-=(event_function function);
-    void operator()(T &args) const;
+    void operator()(TArgs &args) const;
 
     uint size() const;
 
@@ -23,15 +23,15 @@ class function_event
     std::vector<event_function> handler;
 };
 
-template <class T>
-void function_event<T>::operator+=(util::function_event<T>::event_function handler)
+template <class TArgs>
+void function_event<TArgs>::operator+=(util::function_event<TArgs>::event_function handler)
 {
     if (std::find(this->handler.begin(), this->handler.end(), handler) == this->handler.end())
         this->handler.push_back(handler);
 }
 
-template <class T>
-void function_event<T>::operator-=(util::function_event<T>::event_function handler)
+template <class TArgs>
+void function_event<TArgs>::operator-=(util::function_event<TArgs>::event_function handler)
 {
     auto pos = std::find(this->handler.begin(), this->handler.end(), handler);
 
@@ -39,8 +39,8 @@ void function_event<T>::operator-=(util::function_event<T>::event_function handl
         this->handler.erase(pos);
 }
 
-template <class T>
-void function_event<T>::operator()(T &args) const
+template <class TArgs>
+void function_event<TArgs>::operator()(TArgs &args) const
 {
     for (const auto &item : this->handler)
     {
@@ -48,8 +48,8 @@ void function_event<T>::operator()(T &args) const
     }
 }
 
-template <class T>
-uint function_event<T>::size() const
+template <class TArgs>
+uint function_event<TArgs>::size() const
 {
     return this->handler.size();
 }

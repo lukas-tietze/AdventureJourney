@@ -2,6 +2,8 @@
 
 #include <csignal>
 
+#include "event/function_event.hpp"
+
 namespace util
 {
 enum class signal
