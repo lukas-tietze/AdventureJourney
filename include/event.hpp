@@ -93,7 +93,6 @@ void function_event<T>::operator-=(util::function_event<T>::event_function handl
 template <class T>
 void function_event<T>::operator()(T &args) const
 {
-    // TODO: Fixen!
     for (const auto &item : this->handler)
     {
         (*item)(args);
