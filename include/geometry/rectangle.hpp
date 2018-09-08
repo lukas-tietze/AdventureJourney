@@ -111,7 +111,15 @@ class basic_rectangle
         return basic_rectangle<T>(p, this->dimension);
     }
 
-    basic_point<T> fit(const util::basic_point<T> &p)
+    bool contains(const util::basic_point<T> &p) const
+    {
+        return this->get_min_x() <= p.get_x() &&
+               this->get_max_x() >= p.get_x() &&
+               this->get_min_y() <= p.get_y() &&
+               this->get_max_x() >= p.get_y();
+    }
+
+    basic_point<T> fit(const util::basic_point<T> &p) const
     {
         return basic_point<T>(util::crop(p.get_x(), this->get_min_x(), this->get_max_x()),
                               util::crop(p.get_y(), this->get_min_y(), this->get_max_y()));

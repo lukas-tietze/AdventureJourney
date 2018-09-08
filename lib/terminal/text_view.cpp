@@ -29,10 +29,10 @@ void terminal::text_view::handle_mouse(mouse_input &)
 {
 }
 
-void terminal::text_view::handle_add_to_control(control_base *)
+void terminal::text_view::handle_add_to_control(container_base *)
 {
 }
 
-void terminal::text_view::render(const util::rectangle &, canvas &)
+void terminal::text_view::render(canvas &)
 {
 }

@@ -108,11 +108,11 @@ void terminal::control_base::handle_mouse(mouse_input &)
 {
 }
 
-void terminal::control_base::handle_add_to_control(control_base *)
+void terminal::control_base::handle_add_to_control(container_base *)
 {
 }
 
-void terminal::control_base::render(const util::rectangle &, terminal::canvas &)
+void terminal::control_base::render(terminal::canvas &)
 {
 }
 

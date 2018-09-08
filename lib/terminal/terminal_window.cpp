@@ -35,6 +35,13 @@ terminal::control_base *terminal::terminal_window::add_control(terminal::control
     return control;
 }
 
+void terminal::terminal_window::switch_focus(int next)
+{
+    this->controls[this->focused_control_index]->handle_focus_lost();
+    this->focused_control_index = next;
+    this->controls[this->focused_control_index]->handle_focus_aquired();
+}
+
 void terminal::terminal_window::start()
 {
     auto view = terminal_view::get_instance();
@@ -48,14 +55,12 @@ void terminal::terminal_window::start()
             auto nextControl = (this->focused_control_index + 1) % this->controls.size();
 
             if (nextControl != this->focused_control_index)
-            {
-                this->controls[this->focused_control_index]->handle_focus_lost();
-                this->focused_control_index = nextControl;
-                this->controls[this->focused_control_index]->handle_focus_aquired();
-            }
+                this->switch_focus(nextControl);
         }
         else if (this->focused_control_index >= 0)
         {
+            auto focusedControl = this->controls[this->focused_control_index];
+
             if (key == KEY_MOUSE)
             {
                 MEVENT mouseEvent;
@@ -67,7 +72,26 @@ void terminal::terminal_window::start()
                     input.handled = false;
                     input.action = mouseEvent.bstate;
 
-                    this->controls[this->focused_control_index]->handle_mouse(input);
+                    auto location = util::point(input.cx, input.cy);
+
+                    if (focusedControl->get_bounds().contains(location))
+                    {
+                        this->controls[this->focused_control_index]->handle_mouse(input);
+                    }
+                    else
+                    {
+                        for (int i = 0; i < this->controls.size(); i++)
+                        {
+                            auto control = this->controls[i];
+
+                            if (control->get_bounds().contains(location))
+                            {
+                                this->switch_focus(i);
+                                control->handle_mouse(input);
+                                break;
+                            }
+                        }
+                    }
                 }
             }
             else
@@ -76,7 +100,7 @@ void terminal::terminal_window::start()
                 input.handled = false;
                 input.key = key;
 
-                this->controls[this->focused_control_index]->handle_key(input);
+                focusedControl->handle_key(input);
             }
         }
 
@@ -99,7 +123,7 @@ void terminal::terminal_window::render()
     {
         canvas.clip_area(bounds.intersect((*i)->get_bounds()));
 
-        (*i)->render(bounds, canvas);
+        (*i)->render(canvas);
     }
 }
 

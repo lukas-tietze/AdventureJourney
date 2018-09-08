@@ -8,7 +8,7 @@
 
 namespace terminal
 {
-class terminal_window : public control_base
+class terminal_window : public container_base
 {
   private:
     std::vector<terminal::control_base *> controls;
@@ -17,6 +17,7 @@ class terminal_window : public control_base
     bool loop;
 
     void render();
+    void switch_focus(int);
 
   public:
     terminal_window();

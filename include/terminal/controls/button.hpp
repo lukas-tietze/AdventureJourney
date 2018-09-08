@@ -18,5 +18,7 @@ class button : public control_base
     virtual void handle_add_to_control(control_base *);
     virtual void handle_z_index_changed(int);
     virtual void handle_tab_index_changed(int);
+
+    virtual void render(canvas &);
 };
 } // namespace terminal

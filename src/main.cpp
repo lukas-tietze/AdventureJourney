@@ -65,6 +65,8 @@ int run_component_test()
     terminal::terminal_view *v = terminal::terminal_view::get_instance();
 
     terminal::terminal_window w;
+
+    
 }
 
 int run_function_test()
