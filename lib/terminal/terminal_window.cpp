@@ -2,7 +2,7 @@
 
 #include "terminal.hpp"
 
-terminal::terminal_window::terminal_window() : controls(10),
+terminal::terminal_window::terminal_window() : controls(),
                                                focused_control_index(-1),
                                                loop(true),
                                                escape_key(0),
@@ -54,7 +54,10 @@ void terminal::terminal_window::start(int escapeKey)
 
 void terminal::terminal_window::start()
 {
+
     auto view = terminal_view::get_instance();
+    
+    this->render();
 
     while (this->loop)
     {
@@ -67,7 +70,7 @@ void terminal::terminal_window::start()
             if (nextControl != this->focused_control_index)
                 this->switch_focus(nextControl);
         }
-        else if(this->has_escape_key && key == this->escape_key)
+        else if (this->has_escape_key && key == this->escape_key)
         {
             this->loop = false;
         }
@@ -84,7 +87,7 @@ void terminal::terminal_window::start()
                     input.cx = mouseEvent.x;
                     input.cy = mouseEvent.y;
                     input.handled = false;
-                    input.action = mouseEvent.bstate;
+                    input.action = static_cast<mouse_action>(mouseEvent.bstate);
 
                     auto location = util::point(input.cx, input.cy);
 

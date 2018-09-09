@@ -1,6 +1,7 @@
 #pragma once
 
 #include "control_base.hpp"
+#include "event.hpp"
 
 namespace terminal
 {
@@ -16,6 +17,8 @@ class checkbox : public terminal::control_base
   private:
     check_state state;
     bool threeway_mode;
+
+    void switch_check_state();
 
   public:
     checkbox();

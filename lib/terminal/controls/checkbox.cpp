@@ -44,10 +44,14 @@ void terminal::checkbox::handle_focus_lost()
 
 void terminal::checkbox::handle_key(key_input &input)
 {
+    if (input.key == ' ')
+        this->switch_check_state();
 }
 
 void terminal::checkbox::handle_mouse(mouse_input &input)
 {
+    if (input.action == mouse_action::Button1Clicked)
+        this->switch_check_state();
 }
 
 void terminal::checkbox::handle_add_to_control(container_base *control)
@@ -69,10 +73,37 @@ void terminal::checkbox::render(canvas &c)
 
     c.draw_box(this->get_bounds(), '-', '|', '+');
 
+    switch (this->state)
+    {
+    case check_state::Checked:
+        c.draw_string(util::point(bounds.get_min_x(), line), "X|");
+        break;
+    case check_state::Midway:
+        c.draw_string(util::point(bounds.get_min_x(), line), "O|");
+        break;
+    case check_state::Unchecked:
+        c.draw_string(util::point(bounds.get_min_x(), line), " |");
+        break;
+    }
+}
+
+void terminal::checkbox::switch_check_state()
+{
     if (this->threeway_mode)
     {
         switch (this->state)
         {
+        case check_state::Checked:
+        case check_state::Midway:
+            this->set_check_state(check_state::Unchecked);
+            break;
+        case check_state::Unchecked:
+            this->set_check_state(check_state::Checked);
+            break;
         }
+    }
+    else
+    {
+        this->set_checked(!this->is_checked());
     }
 }

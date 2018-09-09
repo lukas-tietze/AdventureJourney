@@ -75,7 +75,7 @@ int run_component_test()
     cb->set_checked(true);
     w.add_control(cb);
 
-    w.start();
+    w.start('q');
 }
 
 int run_function_test()

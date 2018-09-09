@@ -15,7 +15,7 @@ struct mouse_input
 {
     int cx;
     int cy;
-    int action;
+    mouse_action action;
     bool handled;
 };
 
