@@ -54,6 +54,25 @@ void terminal::checkbox::handle_add_to_control(container_base *control)
 {
 }
 
+void terminal::checkbox::handle_tab_index_changed(int old)
+{
+}
+
+void terminal::checkbox::handle_z_index_changed(int old)
+{
+}
+
 void terminal::checkbox::render(canvas &c)
 {
+    auto bounds = this->get_bounds();
+    auto line = (bounds.get_max_y() + bounds.get_min_y()) / 2;
+
+    c.draw_box(this->get_bounds(), '-', '|', '+');
+
+    if (this->threeway_mode)
+    {
+        switch (this->state)
+        {
+        }
+    }
 }

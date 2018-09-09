@@ -1,6 +1,7 @@
 #pragma once
 
 #include <csignal>
+#include <iostream>
 
 #include "event/function_event.hpp"
 
@@ -17,16 +18,19 @@ enum class signal
     Unknown = 0,
 };
 
+std::ostream &operator<<(std::ostream &, signal);
+
 struct signal_event_args
 {
     util::signal signal;
     int code;
 };
 
-class signal_event : public function_event<signal_event_args>
-{
-  public:
-    signal_event();
-    ~signal_event();
-};
+typedef function_event<signal_event_args> signal_event;
+
+void enable_signal_handling();
+
+void enable_signal_handling(signal);
+
+signal_event &get_std_signal_event();
 } // namespace util

@@ -4,7 +4,9 @@
 
 terminal::terminal_window::terminal_window() : controls(10),
                                                focused_control_index(-1),
-                                               loop(true)
+                                               loop(true),
+                                               escape_key(0),
+                                               has_escape_key(false)
 {
 }
 
@@ -42,6 +44,14 @@ void terminal::terminal_window::switch_focus(int next)
     this->controls[this->focused_control_index]->handle_focus_aquired();
 }
 
+void terminal::terminal_window::start(int escapeKey)
+{
+    this->escape_key = escapeKey;
+    this->has_escape_key = true;
+
+    this->start();
+}
+
 void terminal::terminal_window::start()
 {
     auto view = terminal_view::get_instance();
@@ -56,6 +66,10 @@ void terminal::terminal_window::start()
 
             if (nextControl != this->focused_control_index)
                 this->switch_focus(nextControl);
+        }
+        else if(this->has_escape_key && key == this->escape_key)
+        {
+            this->loop = false;
         }
         else if (this->focused_control_index >= 0)
         {
@@ -118,6 +132,8 @@ void terminal::terminal_window::render()
     auto view = terminal_view::get_instance();
     auto bounds = util::rectangle(0, 0, view->get_size());
     auto canvas = terminal::canvas(view);
+
+    canvas.clear();
 
     for (auto i = this->controls.begin(), end = this->controls.end(); i != end; i++)
     {

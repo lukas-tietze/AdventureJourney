@@ -5,6 +5,8 @@
 #include "data/string.hpp"
 #include "exception.hpp"
 #include "data/rand.hpp"
+#include "event.hpp"
+#include "data/string.hpp"
 
 short colors_schemes[5];
 int mx, my, ms, mxw, myw;
@@ -66,7 +68,14 @@ int run_component_test()
 
     terminal::terminal_window w;
 
-    
+    auto cb = new terminal::checkbox();
+    cb->set_bounds(util::rectangle(20, 20, 20, 3));
+    cb->set_visibility(true);
+    cb->set_threeway_mode_enabled(false);
+    cb->set_checked(true);
+    w.add_control(cb);
+
+    w.start();
 }
 
 int run_function_test()
@@ -140,13 +149,22 @@ int run_function_test()
     }
 }
 
+void handle_signal(util::signal_event_args &a)
+{
+    quit();
+    std::printf("Received signal: %s\n", util::to_string(a.signal).c_str());
+    std::quick_exit(-1);
+}
+
 int main(int argc, char **argv)
 {
+    util::enable_signal_handling();
+    util::get_std_signal_event() += handle_signal;
+
     initscr();
     start_color();
     mousemask(ALL_MOUSE_EVENTS, nullptr);
     run_function_test();
-    run_component_test();
     quit();
 
     return 0;
