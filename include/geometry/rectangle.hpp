@@ -137,14 +137,35 @@ class basic_rectangle
         T yb1 = other.location.get_y();
         T yb2 = other.location.get_y() + other.size.get_height();
 
-        T xi1 = std::max(xa1, xb1);
-        T xi2 = std::min(xa2, xb2);
-        T yi1 = std::min(ya1, yb1);
-        T yi2 = std::max(ya2, yb2);
+        T xi1 = std::max<T>(xa1, xb1);
+        T xi2 = std::min<T>(xa2, xb2);
+        T yi1 = std::min<T>(ya1, yb1);
+        T yi2 = std::max<T>(ya2, yb2);
 
-        return basic_rectangle(xi1, yi1, xi2 - xi1, yi2 - yi1);
+        return basic_rectangle<T>(xi1, yi1, xi2 - xi1, yi2 - yi1);
     }
+
+    bool operator==(const util::basic_rectangle<T> &other) const
+    {
+        return other.location == this->location && other.size == this->size;
+    }
+
+    bool operator!=(const util::basic_rectangle<T> &other) const
+    {
+        return other.location != this->location || other.size != this->size;
+    }
+
+    template<class Tx>
+    friend std::ostream &operator<<(std::ostream &, const util::basic_rectangle<Tx> &);
 }; /*basic_rectangle*/
+
+template <class T>
+std::ostream &operator<<(std::ostream &s, const util::basic_rectangle<T> &r)
+{
+    s << "(" << r.get_min_x() << ", " << r.get_min_y() << ") -> (" << r.get_width() << "X" << r.get_height() << ")";
+
+    return s;
+}
 
 typedef basic_rectangle<int> rectangle;
 typedef basic_rectangle<float> rectanglef;

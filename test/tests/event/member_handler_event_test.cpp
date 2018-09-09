@@ -27,7 +27,7 @@ struct event_handler
 
 int test::event_test::test_member_handler_events()
 {
-    util::member_event<event_handler, event_args> event;
+    util::member_event<event_args> event;
     event_handler handler = {1};
     auto member_handler = util::make_member_handler(&handler, &event_handler::handle_some_event);
     event_args args = {0, 0, 0};

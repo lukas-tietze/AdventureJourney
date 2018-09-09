@@ -86,6 +86,10 @@ int test_listener_events();
 int test_handler_events();
 int test_member_handler_events();
 } // namespace event_test
+namespace geometry_test
+{
+int test_rectangle();
+}
 } // namespace test
 
 namespace assert

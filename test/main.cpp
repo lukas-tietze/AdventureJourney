@@ -15,6 +15,7 @@ int main(int argc, char **argv)
     tests.push_back(test::test_run(new test::simple_test("listener event test", &test::event_test::test_listener_events)));
     tests.push_back(test::test_run(new test::simple_test("handler event test", &test::event_test::test_handler_events)));
     tests.push_back(test::test_run(new test::simple_test("member handler event test", &test::event_test::test_member_handler_events)));
+    tests.push_back(test::test_run(new test::simple_test("rectangle test", &test::geometry_test::test_rectangle)));
 
     for (auto &testRun : tests)
     {
