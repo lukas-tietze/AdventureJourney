@@ -92,6 +92,26 @@ void terminal::control_base::set_tab_index(int tabIndex)
     this->tab_index = tabIndex;
 }
 
+const util::dimension &terminal::control_base::get_min_size() const
+{
+    return this->minimum_size;
+}
+
+const util::dimension &terminal::control_base::get_max_size() const
+{
+    return this->maximum_size;
+}
+
+void terminal::control_base::set_min_size(const util::dimension &size)
+{
+    this->minimum_size = size;
+}
+
+void terminal::control_base::set_max_size(const util::dimension &size)
+{
+    this->maximum_size = size;
+}
+
 void terminal::control_base::handle_focus_aquired()
 {
 }

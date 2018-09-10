@@ -25,6 +25,8 @@ class control_base
 {
   private:
     util::rectangle bounds;
+    util::dimension minimum_size;
+    util::dimension maximum_size;
     control_base *parent;
     int z_index;
     bool has_focus;
@@ -61,6 +63,10 @@ class control_base
     void set_visibility(bool visible);
     int get_tab_index() const;
     void set_tab_index(int);
+    const util::dimension &get_min_size() const;
+    const util::dimension &get_max_size() const;
+    void set_min_size(const util::dimension &);
+    void set_max_size(const util::dimension &);
 
     virtual void handle_focus_aquired();
     virtual void handle_focus_lost();

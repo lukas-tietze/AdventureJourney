@@ -83,7 +83,7 @@ class basic_rectangle
 
     T get_area() const
     {
-        return this->dimension.get_area();
+        return this->size.get_area();
     }
 
     const util::basic_point<T> &get_location() const
@@ -125,22 +125,23 @@ class basic_rectangle
                               util::crop(p.get_y(), this->get_min_y(), this->get_max_y()));
     }
 
+    bool has_intersection(const basic_rectangle<T> &other) const
+    {
+        return this->get_min_x() < other.get_max_x() &&
+               this->get_max_x() > other.get_min_x() &&
+               this->get_min_y() < other.get_max_y() &&
+               this->get_max_y() > other.get_min_y();
+    }
+
     util::basic_rectangle<T> intersect(const basic_rectangle<T> &other) const
     {
-        T xa1 = this->location.get_x();
-        T xa2 = this->location.get_x() + this->size.get_width();
-        T ya1 = this->location.get_y();
-        T ya2 = this->location.get_y() + this->size.get_height();
+        if (!this->has_intersection(other))
+            return basic_rectangle(0, 0, 0, 0);
 
-        T xb1 = other.location.get_x();
-        T xb2 = other.location.get_x() + other.size.get_width();
-        T yb1 = other.location.get_y();
-        T yb2 = other.location.get_y() + other.size.get_height();
-
-        T xi1 = std::max<T>(xa1, xb1);
-        T xi2 = std::min<T>(xa2, xb2);
-        T yi1 = std::min<T>(ya1, yb1);
-        T yi2 = std::max<T>(ya2, yb2);
+        T xi1 = std::max<T>(this->get_min_x(), other.get_min_x());
+        T xi2 = std::min<T>(this->get_max_x(), other.get_max_x());
+        T yi1 = std::max<T>(this->get_min_y(), other.get_min_y());
+        T yi2 = std::min<T>(this->get_max_y(), other.get_max_y());
 
         return basic_rectangle<T>(xi1, yi1, xi2 - xi1, yi2 - yi1);
     }
@@ -155,7 +156,7 @@ class basic_rectangle
         return other.location != this->location || other.size != this->size;
     }
 
-    template<class Tx>
+    template <class Tx>
     friend std::ostream &operator<<(std::ostream &, const util::basic_rectangle<Tx> &);
 }; /*basic_rectangle*/
 
