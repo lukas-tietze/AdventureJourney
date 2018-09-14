@@ -1,5 +1,4 @@
-#ifndef TEST_HPP
-#define TEST_HPP
+#pragma once
 
 #include <string>
 #include <ctime>
@@ -9,6 +8,7 @@
 #include "data/string.hpp"
 #include "data/io.hpp"
 #include "datetime/datetime_conversions.hpp"
+#include "exception.hpp"
 
 namespace test
 {
@@ -70,74 +70,89 @@ std::ostream &operator<<(std::ostream &, const test_run &testRun);
 
 typedef std::vector<test_run> test_collection;
 
-namespace json
+namespace json_test
 {
 int test_simple_tokenizing();
 int test_complex_tokenizing();
-} // namespace json
+} // namespace json_test
+namespace color_test
+{
+int test_basic_color_values();
+}
+namespace event_test
+{
+int test_function_events();
+int test_listener_events();
+int test_handler_events();
+int test_member_handler_events();
+} // namespace event_test
+namespace geometry_test
+{
+int test_rectangle();
+}
 } // namespace test
 
 namespace assert
 {
-class assert_exception : public std::runtime_error
+class assert_exception : public util::exception
 {
   public:
-    assert_exception(const std::string &msg);
+    assert_exception(const std::string &msg, const std::string &customMsg);
 };
 
-void fail();
-void is_null(const void *);
-void is_not_null(const void *);
-void is_true(bool x);
-void is_false(bool x);
+void fail(const std::string &msg = "");
+void is_null(const void *, const std::string &msg = "");
+void is_not_null(const void *, const std::string &msg = "");
+void is_true(bool x, const std::string &msg = "");
+void is_false(bool x, const std::string &msg = "");
 
 template <class T>
-void are_equal(const T &x, const T &y)
+void are_equal(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x == y))
     {
-        throw assert_exception("Expected " + util::to_string(x) + ", got " + util::to_string(y) + "!");
+        throw assert_exception("Expected " + util::to_string(x) + ", got " + util::to_string(y) + "!", msg);
     }
 }
 
 template <class T>
-void are_not_equal(const T &x, const T &y)
+void are_not_equal(const T &x, const T &y, const std::string &msg = "")
 {
     if (x == y)
     {
-        throw assert_exception(util::to_string(x) + " does equal " + util::to_string(y) + "!");
+        throw assert_exception(util::to_string(x) + " does equal " + util::to_string(y) + "!", msg);
     }
 }
 
 template <class T>
-void is_greater(const T &x, const T &y)
+void is_greater(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x > y))
     {
-        throw assert_exception(util::to_string(x) + " is not greater than " + util::to_string(y) + "!");
+        throw assert_exception(util::to_string(x) + " is not greater than " + util::to_string(y) + "!", msg);
     }
 }
 
 template <class T>
-void is_equal_or_greater(const T &x, const T &y)
+void is_equal_or_greater(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x >= y))
     {
-        throw assert_exception(util::to_string(x) + "is not greater than or equal to " + util::to_string(y) + "!");
+        throw assert_exception(util::to_string(x) + "is not greater than or equal to " + util::to_string(y) + "!", msg);
     }
 }
 
 template <class T>
-void is_less(const T &x, const T &y)
+void is_less(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x < y))
     {
-        throw assert_exception(util::to_string(x) + "is not less than " + util::to_string(y) + "!");
+        throw assert_exception(util::to_string(x) + "is not less than " + util::to_string(y) + "!", msg);
     }
 }
 
 template <class T>
-void is_equal_or_less(const T &x, const T &y)
+void is_equal_or_less(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x <= y))
     {
@@ -146,13 +161,11 @@ void is_equal_or_less(const T &x, const T &y)
 }
 
 template <class T>
-void is(void *obj)
+void is(void *obj, const std::string &msg = "")
 {
     if (static_cast<T *>(obj) == nullptr)
     {
-        throw assert_exception(util::to_string(&obj) + "is not of type " + typeid(T).name());
+        throw assert_exception(util::to_string(&obj) + "is not of type " + typeid(T).name(), msg);
     }
 }
 } // namespace assert
-
-#endif /*TEST_HPP*/

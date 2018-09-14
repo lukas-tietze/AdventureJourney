@@ -1,5 +1,4 @@
-#ifndef RECTANGLE_HPP
-#define RECTANGLE_HPP
+#pragma once
 
 #include <cmath>
 #include <algorithm>
@@ -84,7 +83,7 @@ class basic_rectangle
 
     T get_area() const
     {
-        return this->dimension.get_area();
+        return this->size.get_area();
     }
 
     const util::basic_point<T> &get_location() const
@@ -112,35 +111,63 @@ class basic_rectangle
         return basic_rectangle<T>(p, this->dimension);
     }
 
-    basic_point<T> fit(const util::basic_point<T> &p)
+    bool contains(const util::basic_point<T> &p) const
+    {
+        return this->get_min_x() <= p.get_x() &&
+               this->get_max_x() >= p.get_x() &&
+               this->get_min_y() <= p.get_y() &&
+               this->get_max_x() >= p.get_y();
+    }
+
+    basic_point<T> fit(const util::basic_point<T> &p) const
     {
         return basic_point<T>(util::crop(p.get_x(), this->get_min_x(), this->get_max_x()),
                               util::crop(p.get_y(), this->get_min_y(), this->get_max_y()));
     }
 
+    bool has_intersection(const basic_rectangle<T> &other) const
+    {
+        return this->get_min_x() < other.get_max_x() &&
+               this->get_max_x() > other.get_min_x() &&
+               this->get_min_y() < other.get_max_y() &&
+               this->get_max_y() > other.get_min_y();
+    }
+
     util::basic_rectangle<T> intersect(const basic_rectangle<T> &other) const
     {
-        T xa1 = this->location.get_x();
-        T xa2 = this->location.get_x() + this->size.get_width();
-        T ya1 = this->location.get_y();
-        T ya2 = this->location.get_y() + this->size.get_height();
+        if (!this->has_intersection(other))
+            return basic_rectangle(0, 0, 0, 0);
 
-        T xb1 = other.location.get_x();
-        T xb2 = other.location.get_x() + other.size.get_width();
-        T yb1 = other.location.get_y();
-        T yb2 = other.location.get_y() + other.size.get_height();
+        T xi1 = std::max<T>(this->get_min_x(), other.get_min_x());
+        T xi2 = std::min<T>(this->get_max_x(), other.get_max_x());
+        T yi1 = std::max<T>(this->get_min_y(), other.get_min_y());
+        T yi2 = std::min<T>(this->get_max_y(), other.get_max_y());
 
-        T xi1 = std::max(xa1, xb1);
-        T xi2 = std::min(xa2, xb2);
-        T yi1 = std::min(ya1, yb1);
-        T yi2 = std::max(ya2, yb2);
-
-        return basic_rectangle(xi1, yi1, xi2 - xi1, yi2 - yi1);
+        return basic_rectangle<T>(xi1, yi1, xi2 - xi1, yi2 - yi1);
     }
+
+    bool operator==(const util::basic_rectangle<T> &other) const
+    {
+        return other.location == this->location && other.size == this->size;
+    }
+
+    bool operator!=(const util::basic_rectangle<T> &other) const
+    {
+        return other.location != this->location || other.size != this->size;
+    }
+
+    template <class Tx>
+    friend std::ostream &operator<<(std::ostream &, const util::basic_rectangle<Tx> &);
 }; /*basic_rectangle*/
+
+template <class T>
+std::ostream &operator<<(std::ostream &s, const util::basic_rectangle<T> &r)
+{
+    s << "(" << r.get_min_x() << ", " << r.get_min_y() << ") -> (" << r.get_width() << "X" << r.get_height() << ")";
+
+    return s;
+}
 
 typedef basic_rectangle<int> rectangle;
 typedef basic_rectangle<float> rectanglef;
 } // namespace util
-
-#endif /*RECTANGLE_HPP*/

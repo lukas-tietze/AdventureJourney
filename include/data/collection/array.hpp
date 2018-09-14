@@ -1,5 +1,4 @@
-#ifndef ARRAY_HPP
-#define ARRAY_HPP
+#pragma once
 
 namespace util
 {
@@ -62,5 +61,3 @@ class array
     }
 }; /*array*/
 } // namespace util
-
-#endif /*ARRAY_HPP*/

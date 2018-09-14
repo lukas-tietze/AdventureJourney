@@ -1,5 +1,4 @@
-#ifndef HELPER_HPP
-#define HELPER_HPP
+#pragma once
 
 namespace util
 {
@@ -27,5 +26,3 @@ T disable_flag(const T &flag, const T &disabled)
     return static_cast<T>(static_cast<int>(flag) & ~static_cast<int>(disabled));
 }
 } // namespace util
-
-#endif /*HELPER_HPP*/

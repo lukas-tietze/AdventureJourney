@@ -1,9 +1,7 @@
+#pragma once
 //------------------------------------------------------------------------------------------------------------
 // Header für verschiedene Zufallsgeneratoren.
 //------------------------------------------------------------------------------------------------------------
-
-#ifndef RAND_H
-#define RAND_H
 
 #include <random>
 
@@ -123,5 +121,3 @@ void seed_default_engine(size_t seed);
 // Gibt die gesetzte Standardengine zurück.
 custom_engine &default_engine();
 } // namespace util
-
-#endif /* RAND_H */

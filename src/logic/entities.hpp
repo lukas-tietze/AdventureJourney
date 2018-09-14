@@ -1,5 +1,4 @@
-#ifndef ENTITIES_HPP
-#define ENTITIES_HPP
+#pragma once
 
 #include <string>
 
@@ -23,5 +22,3 @@ class entity
     long attack;
     long armourPen;
 };
-
-#endif /*ENTITIES_HPP*/

@@ -1,5 +1,4 @@
-#ifndef DIMENSION_HPP
-#define DIMENSION_HPP
+#pragma once
 
 #include <iostream>
 
@@ -43,16 +42,25 @@ class basic_dimension
         return this->width * this->height;
     }
 
-    
+    bool operator==(const util::basic_dimension<T> &other) const
+    {
+        return this->width == other.width && this->height == other.height;
+    }
+
+    bool operator!=(const util::basic_dimension<T> &other) const
+    {
+        return this->width != other.width || this->height != other.height;
+    }
+
     template <class Tx>
     friend basic_dimension<Tx> operator*(const double &, const basic_dimension<Tx> &);
-    
+
     template <class Tx>
     friend basic_dimension<Tx> operator*(const basic_dimension<Tx> &, const double &);
-    
+
     template <class Tx>
     friend basic_dimension<Tx> operator/(const basic_dimension<Tx> &, const double &);
-    
+
     template <class Tx>
     friend std::ostream &operator<<(std::ostream &, const util::basic_dimension<Tx> &);
 }; /*basic_dimension*/
@@ -86,5 +94,3 @@ std::ostream &operator<<(std::ostream &s, const util::basic_dimension<T> &d)
 typedef basic_dimension<int> dimension;
 typedef basic_dimension<float> dimensionf;
 } // namespace util
-
-#endif /*DIMENSION_HPP*/

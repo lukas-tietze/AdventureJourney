@@ -1,5 +1,4 @@
-#ifndef NUMERIC_CONVERSIONS_HPP
-#define NUMERIC_CONVERSIONS_HPP
+#pragma once
 
 #include <string>
 #include <stdexcept>
@@ -21,5 +20,3 @@ T crop(const T &x, const T &min, const T &max)
         return x;
 }
 } // namespace util
-
-#endif /*NUMERIC_CONVERSIONS_HPP*/

@@ -1,6 +1,8 @@
 #include "exception.hpp"
 #include "data/string.hpp"
 
+namespace
+{
 std::string make_msg(const std::string &key)
 {
     return util::format("Key \"%s\" could not be found!", key.c_str());
@@ -10,6 +12,7 @@ std::string make_msg(const std::string &key, const std::string &msg)
 {
     return util::format("Key \"%s\" could not be found: \"%s\"", key.c_str(), msg.c_str());
 }
+} // namespace
 
 util::missing_key_exception::missing_key_exception() : util::exception()
 {

@@ -1,5 +1,4 @@
-#ifndef STRING_CONVERSIONS_HPP
-#define STRING_CONVERSIONS_HPP
+#pragma once
 
 #include <string>
 #include <vector>
@@ -64,5 +63,3 @@ bool parse_float(const std::string &text, NumT &target)
     return true;
 }
 } // namespace util
-
-#endif /*STRING_CONVERSIONS_HPP*/

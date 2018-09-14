@@ -1,5 +1,4 @@
-#ifndef POINT_HPP
-#define POINT_HPP
+#pragma once
 
 #include "data/math.hpp"
 
@@ -38,19 +37,35 @@ class basic_point
         return this->y;
     }
 
+    bool operator==(const util::basic_point<T> &other) const
+    {
+        return this->x == other.x && this->y == other.y;
+    }
+
+    bool operator!=(const util::basic_point<T> &other) const
+    {
+        return this->x != other.x || this->y != other.y;
+    }
+
     template <class Tx>
     friend basic_point<Tx> operator+(const basic_point<Tx> &, const basic_point<Tx> &);
+
     template <class Tx>
     friend basic_point<Tx> operator-(const basic_point<Tx> &, const basic_point<Tx> &);
+
     template <class Tx>
     friend basic_point<Tx> operator*(const basic_point<Tx> &, const double &);
+
     template <class Tx>
     friend basic_point<Tx> operator/(const basic_point<Tx> &, const double &);
+
     template <class Tx>
     friend basic_point<Tx> operator*(const double &, const basic_point<Tx> &);
+
     template <class Tx>
     friend std::ostream &operator<<(std::ostream &, const basic_point<Tx> &);
 };
+
 template <class T>
 basic_point<T> operator+(const basic_point<T> &p, const basic_point<T> &f)
 {
@@ -92,5 +107,3 @@ std::ostream &operator<<(std::ostream &s, const basic_point<T> &p)
 typedef basic_point<int> point;
 typedef basic_point<float> pointf;
 } // namespace util
-
-#endif /*POINT_HPP*/
