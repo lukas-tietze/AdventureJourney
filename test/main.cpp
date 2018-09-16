@@ -9,13 +9,17 @@ int main(int argc, char **argv)
 {
     test::test_collection tests;
 
-    tests.push_back(test::test_run(new test::simple_test("simple tokenizing", &test::json_test::test_simple_tokenizing)));
-    tests.push_back(test::test_run(new test::simple_test("basic color definitions", &test::color_test::test_basic_color_values)));
-    tests.push_back(test::test_run(new test::simple_test("function event test", &test::event_test::test_function_events)));
-    tests.push_back(test::test_run(new test::simple_test("listener event test", &test::event_test::test_listener_events)));
-    tests.push_back(test::test_run(new test::simple_test("handler event test", &test::event_test::test_handler_events)));
-    tests.push_back(test::test_run(new test::simple_test("member handler event test", &test::event_test::test_member_handler_events)));
-    tests.push_back(test::test_run(new test::simple_test("rectangle test", &test::geometry_test::test_rectangle)));
+    tests.push_back(test::test_run(new test::simple_test("read expanded", &test::json_test::expanded_read)));
+    tests.push_back(test::test_run(new test::simple_test("read compact", &test::json_test::compact_read)));
+    tests.push_back(test::test_run(new test::simple_test("write expanded", &test::json_test::expanded_write)));
+    tests.push_back(test::test_run(new test::simple_test("write compact", &test::json_test::compact_write)));
+    tests.push_back(test::test_run(new test::simple_test("write and read", &test::json_test::read_write)));
+    tests.push_back(test::test_run(new test::simple_test("basic color definitions", &test::color_test::basic_color_values)));
+    tests.push_back(test::test_run(new test::simple_test("function event test", &test::event_test::function_events)));
+    tests.push_back(test::test_run(new test::simple_test("listener event test", &test::event_test::listener_events)));
+    tests.push_back(test::test_run(new test::simple_test("handler event test", &test::event_test::handler_events)));
+    tests.push_back(test::test_run(new test::simple_test("member handler event test", &test::event_test::member_handler_events)));
+    tests.push_back(test::test_run(new test::simple_test("rectangle test", &test::geometry_test::rectangle)));
 
     for (auto &testRun : tests)
     {

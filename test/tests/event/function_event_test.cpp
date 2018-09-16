@@ -20,7 +20,7 @@ void event_function(event_args &args)
     args.z = RES_Z;
 }
 
-int test::event_test::test_function_events()
+int test::event_test::function_events()
 {
     util::function_event<event_args> event;
     event_args args = {0, 0, 0};

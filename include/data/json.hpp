@@ -267,6 +267,8 @@ class formatted_printer
     int indent_level;
     std::iostream *out;
     bool out_is_managed;
+    bool print_compact;
+
     bool value_written;
 
     formatted_printer &begin_indent();
@@ -304,6 +306,9 @@ class formatted_printer
     const std::string &get_indent_template() const;
     uint get_indent_length() const;
     const std::iostream *get_output() const;
+
+    void set_compact_style(bool);
+    bool is_compact_style() const;
 
     bool is_independent() const;
     std::string to_string() const;

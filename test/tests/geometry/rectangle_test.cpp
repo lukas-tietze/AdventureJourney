@@ -1,7 +1,7 @@
 #include "geometry.hpp"
 #include "test.hpp"
 
-int test::geometry_test::test_rectangle()
+int test::geometry_test::rectangle()
 {
     util::rectangle r(1, 2, 4, 5);
 

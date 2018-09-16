@@ -3,7 +3,7 @@
 #include "test.hpp"
 #include "data/json.hpp"
 
-int test::json_test::test_simple_tokenizing()
+int test::json_test::expanded_read()
 {
     std::string text;
     json::tokenizer t;
@@ -78,5 +78,25 @@ int test::json_test::test_simple_tokenizing()
     assert::is_true(vObject->has_child("prop3"));
     assert::are_equal(json::value_type::String, vObject->get("prop3")->get_type());
 
+    return 0;
+}
+
+int test::json_test::compact_read()
+{
+    return 0;
+}
+
+int test::json_test::expanded_write()
+{
+    return 0;
+}
+
+int test::json_test::compact_write()
+{
+    return 0;
+}
+
+int test::json_test::read_write()
+{
     return 0;
 }

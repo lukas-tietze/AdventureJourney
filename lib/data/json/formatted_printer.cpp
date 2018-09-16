@@ -86,8 +86,10 @@ json::formatted_printer &json::formatted_printer::begin_array()
 {
     this->next_property();
     this->begin_indent();
-    (*this->out) << '[' << std::endl
-                 << this->indent;
+    (*this->out) << '[';
+    if (!this->print_compact)
+        (*this->out) << std::endl;
+    (*this->out) << this->indent;
     this->value_written = false;
 
     return *this;
@@ -96,8 +98,9 @@ json::formatted_printer &json::formatted_printer::begin_array()
 json::formatted_printer &json::formatted_printer::end_array()
 {
     this->end_indent();
-    (*this->out) << std::endl
-                 << this->indent << ']';
+    if (!this->print_compact)
+        (*this->out) << std::endl;
+    (*this->out) << this->indent << ']';
     this->value_written = true;
 
     return *this;
@@ -107,7 +110,10 @@ json::formatted_printer &json::formatted_printer::begin_object()
 {
     this->next_property();
 
-    (*this->out) << '{' << std::endl;
+    (*this->out) << '{';
+
+    if (!this->print_compact)
+        (*this->out) << std::endl;
 
     this->begin_indent();
     this->value_written = false;
@@ -118,8 +124,9 @@ json::formatted_printer &json::formatted_printer::begin_object()
 json::formatted_printer &json::formatted_printer::end_object()
 {
     this->end_indent();
-    (*this->out) << std::endl
-                 << this->indent << '}';
+    if (!this->print_compact)
+        (*this->out) << std::endl;
+    (*this->out) << this->indent << '}';
     this->value_written = true;
 
     return *this;
@@ -128,7 +135,11 @@ json::formatted_printer &json::formatted_printer::end_object()
 json::formatted_printer &json::formatted_printer::print_property(const std::string &name)
 {
     this->next_property();
-    (*this->out) << this->indent << '"' << name << "\": ";
+    (*this->out) << this->indent << '"' << name << "\":";
+
+    if (!this->print_compact)
+        (*this->out) << ' ';
+
     this->value_written = false;
 
     return *this;
@@ -138,7 +149,10 @@ json::formatted_printer &json::formatted_printer::next_property()
 {
     if (this->value_written)
     {
-        (*this->out) << ',' << std::endl;
+        if (this->print_compact)
+            (*this->out) << ',' << std::endl;
+        else
+            (*this->out) << ',';
     }
 
     return *this;
@@ -249,4 +263,14 @@ const std::iostream *json::formatted_printer::get_output() const
 bool json::formatted_printer::is_independent() const
 {
     return this->out_is_managed;
+}
+
+void json::formatted_printer::set_compact_style(bool printCompact)
+{
+    this->print_compact = printCompact;
+}
+
+bool json::formatted_printer::is_compact_style() const
+{
+    return this->print_compact;
 }

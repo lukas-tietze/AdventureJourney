@@ -72,23 +72,26 @@ typedef std::vector<test_run> test_collection;
 
 namespace json_test
 {
-int test_simple_tokenizing();
-int test_complex_tokenizing();
+int expanded_read();
+int compact_read();
+int expanded_write();
+int compact_write();
+int read_write();
 } // namespace json_test
 namespace color_test
 {
-int test_basic_color_values();
+int basic_color_values();
 }
 namespace event_test
 {
-int test_function_events();
-int test_listener_events();
-int test_handler_events();
-int test_member_handler_events();
+int function_events();
+int listener_events();
+int handler_events();
+int member_handler_events();
 } // namespace event_test
 namespace geometry_test
 {
-int test_rectangle();
+int rectangle();
 }
 } // namespace test
 

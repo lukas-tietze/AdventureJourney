@@ -30,7 +30,7 @@ struct event_handler
     }
 };
 
-int test::event_test::test_handler_events()
+int test::event_test::handler_events()
 {
     util::handler_event<event_handler, event_args> event;
     event_handler handler = {1};

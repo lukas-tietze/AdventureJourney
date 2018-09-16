@@ -1,7 +1,7 @@
 #include "test.hpp"
 #include "graphics/color.hpp"
 
-int test::color_test::test_basic_color_values()
+int test::color_test::basic_color_values()
 {
     assert::are_equal(0, util::colors::BasicBlack.red(), "BasicBlack->red");
     assert::are_equal(0, util::colors::BasicBlack.green(), "BasicBlack->green");

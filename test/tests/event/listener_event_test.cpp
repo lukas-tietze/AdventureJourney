@@ -26,7 +26,7 @@ struct event_listener : public util::i_event_listener<event_args>
     }
 };
 
-int test::event_test::test_listener_events()
+int test::event_test::listener_events()
 {
     util::listener_event<event_args> event;
     event_args args = {0, 0, 0};
