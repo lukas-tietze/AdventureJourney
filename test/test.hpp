@@ -168,9 +168,9 @@ void is_equal_or_less(const T &x, const T &y, const std::string &msg = "")
 }
 
 template <class T>
-void is(void *obj, const std::string &msg = "")
+void is(const void *obj, const std::string &msg = "")
 {
-    if (static_cast<T *>(obj) == nullptr)
+    if (static_cast<const T *>(obj) == nullptr)
     {
         throw assert_exception(util::to_string(&obj) + "is not of type " + typeid(T).name(), msg);
     }

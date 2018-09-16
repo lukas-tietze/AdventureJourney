@@ -3,6 +3,7 @@
 #include <cstring>
 #include <stdexcept>
 
+#include "data/string.hpp"
 #include "data/json.hpp"
 
 json::tokenizer::tokenizer() : tokens(),
@@ -84,8 +85,7 @@ void json::tokenizer::read_next()
     }
     else
     {
-        ////TODO Exceptions
-        throw std::exception();
+        throw tokenizer_exception(*this, "Illegal character!");
     }
 }
 
@@ -128,7 +128,7 @@ void json::tokenizer::read_special()
     }
     else
     {
-        throw std::exception();
+        throw tokenizer_exception(*this, "Unexpected value!");
     }
 }
 
@@ -167,7 +167,7 @@ void json::tokenizer::read_number()
             else if (c >= '1' && c <= '9')
                 state = STATE_FIRST_DIGITS;
             else
-                throw std::exception();
+                throw tokenizer_exception(*this, "Illegal number format! Expected - or [0..9].");
             break;
         case STATE_MINUS:
             if (c == '0')
@@ -175,7 +175,7 @@ void json::tokenizer::read_number()
             else if (c >= '1' && c <= '9')
                 state = STATE_FIRST_DIGITS;
             else
-                throw std::exception();
+                throw tokenizer_exception(*this, "Illegal number format! Expected [0..9].");
             break;
         case STATE_FIRST_ZERO:
             if (c == '.')
@@ -185,7 +185,7 @@ void json::tokenizer::read_number()
             else if (this->is_valid_number_end(c))
                 state = STATE_END;
             else
-                throw std::exception();
+                throw tokenizer_exception(*this, "Illegal number format! Expected . or e or E or number end.");
             break;
         case STATE_FIRST_DIGITS:
             if (c == '.')
@@ -195,13 +195,13 @@ void json::tokenizer::read_number()
             else if (this->is_valid_number_end(c))
                 state = STATE_END;
             else if (c < '0' || c > '9')
-                throw std::exception();
+                throw tokenizer_exception(*this, "Illegal number format! Expected . or e or E or [0..9] or number end.");
             break;
         case STATE_SEPERATOR:
             if (c >= '0' && c <= '9')
                 state = STATE_LAST_DIGITS;
             else
-                throw std::exception();
+                throw tokenizer_exception(*this, "Illegal number format! Expected [0..9].");
             break;
         case STATE_LAST_DIGITS:
             if (c >= '0' && c <= '9')
@@ -211,7 +211,7 @@ void json::tokenizer::read_number()
             else if (this->is_valid_number_end(c))
                 state = STATE_END;
             else
-                throw std::exception();
+                throw tokenizer_exception(*this, "Illegal number format! Expected . or e or E or number end.");
             break;
         case STATE_EXPONENT_START:
             if (c == '+' || c == '-')
@@ -219,13 +219,13 @@ void json::tokenizer::read_number()
             else if (c >= '0' && c <= '9')
                 state = STATE_EXPONENT_DIGITS;
             else
-                throw std::exception();
+                throw tokenizer_exception(*this, "Illegal number format! Expected + or - or [0..9].");
             break;
         case STATE_EXPONENT_SIGN:
             if (c >= '0' && c <= '9')
                 state = STATE_EXPONENT_DIGITS;
             else
-                throw std::exception();
+                throw tokenizer_exception(*this, "Illegal number format! Expected [0..9].");
             break;
         case STATE_EXPONENT_DIGITS:
             if (c >= '0' && c <= '9')
@@ -233,12 +233,12 @@ void json::tokenizer::read_number()
             else if (this->is_valid_number_end(c))
                 state = STATE_END;
             else
-                throw std::exception();
+                throw tokenizer_exception(*this, "Illegal number format! Expected [0..9] or number end.");
             break;
         case STATE_END:
             break;
         default:
-            throw std::runtime_error("Illegal case!");
+            throw util::invalid_case_exception();
         }
 
         if (state != STATE_END)
@@ -268,7 +268,7 @@ void json::tokenizer::read_string()
         {
             if (!this->can_escape(c))
             {
-                throw std::exception();
+                throw tokenizer_exception(*this, "Invalid escape sequence!");
             }
 
             escaped = false;
@@ -311,4 +311,19 @@ const std::vector<json::token> &json::tokenizer::tokenize(const char *data, int 
     }
 
     return this->tokens;
+}
+
+int json::tokenizer::get_pos() const
+{
+    return this->pos;
+}
+
+const char *json::tokenizer::get_data() const
+{
+    return this->data;
+}
+
+int json::tokenizer::get_length() const
+{
+    return this->length;
 }

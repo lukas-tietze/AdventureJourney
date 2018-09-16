@@ -52,7 +52,7 @@ class node
     virtual bool operator!=(const node &other) const = 0;
 };
 
-class object_node final: public node 
+class object_node final : public node
 {
   private:
     std::vector<std::pair<std::string, node *>> children;
@@ -241,8 +241,20 @@ class tokenizer
     tokenizer();
     ~tokenizer();
 
+    int get_pos() const;
+    const char *get_data() const;
+    int get_length() const;
+
     const std::vector<token> &tokenize(const std::string &data);
     const std::vector<token> &tokenize(const char *data, int length);
+};
+
+class tokenizer_exception : public util::exception
+{
+  public:
+    tokenizer_exception();
+    tokenizer_exception(const tokenizer &);
+    tokenizer_exception(const tokenizer &, const std::string &message);
 };
 
 class parser_exception : public util::exception
