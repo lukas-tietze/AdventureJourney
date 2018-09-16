@@ -16,6 +16,10 @@ elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wswitch-default -Wswitch-enum")
 endif()
 
+enable_language(CXX)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
 file(GLOB_RECURSE SOURCES "src/**/*.cpp")
 file(GLOB_RECURSE TESTS "test/**/*.cpp")
 file(GLOB_RECURSE LIB "lib/**/*.cpp")
@@ -38,6 +42,7 @@ include_directories(src)
 add_executable(Test test/main.cpp ${TESTS})
 target_link_libraries(Test COMMON)
 target_link_libraries(Test ncurses)
+target_link_libraries(Test Threads::Threads)
 
 #--------------------------------------------------------
 # Runtime
@@ -51,3 +56,4 @@ include_directories(src)
 add_executable(Runtime src/main.cpp ${SORUCES})
 target_link_libraries(Runtime COMMON)
 target_link_libraries(Runtime ncurses)
+target_link_libraries(Test Threads::Threads)
