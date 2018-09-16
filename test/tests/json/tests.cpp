@@ -3,16 +3,17 @@
 #include "test.hpp"
 #include "data/json.hpp"
 
-int test::json_test::expanded_read()
+void parse_file(const std::string &name, json::node *&node)
 {
-    std::string text;
-    json::tokenizer t;
     json::parser p;
-    json::node *n;
+    std::string text;
 
-    assert::is_true(util::try_read_file("test/tests/json/simple_test.json", text));
-    p.parse(text, n);
+    assert::is_true(util::try_read_file("test/tests/json/" + name, text));
+    p.parse(text, node);
+}
 
+void verify_structure(json::node *n)
+{
     assert::is_not_null(n);
     assert::are_equal(json::value_type::Object, n->get_type());
     assert::is<json::object_node>(n);
@@ -77,22 +78,96 @@ int test::json_test::expanded_read()
     assert::are_equal(json::value_type::String, vObject->get("prop2")->get_type());
     assert::is_true(vObject->has_child("prop3"));
     assert::are_equal(json::value_type::String, vObject->get("prop3")->get_type());
+}
+
+json::node *create_test_node()
+{
+    auto n = new json::object_node();
+
+    n->put("number", 3.0);
+    n->put("string", "some string");
+    n->put("false", false);
+    n->put("true", true);
+    n->put_null("null");
+    
+    auto array = new json::array_node();
+    array->put(1.0);
+    array->put(true);
+    array->put(false);
+    array->put_null();
+
+    auto subObject = new json::object_node();
+    subObject->put_null("dummy");
+    
+    array->put(subObject);
+
+    auto subArray = new json::array_node();
+    subArray->put(1.0);
+    subArray->put(2.0);
+    subArray->put(3.0);
+
+    array->put(subArray);
+    n->put("array", array);
+    
+    subObject = new json::object_node();
+    subObject->put("prop1", 1.0);
+    subObject->put("prop2", "prop_two");
+    subObject->put("prop3", "prop_three");
+
+    n->put("object", subObject);
+
+    return n;
+}
+
+int test::json_test::expanded_read()
+{
+    json::node *n = nullptr;
+
+    parse_file("expanded.json", n);
+    verify_structure(n);
 
     return 0;
 }
 
 int test::json_test::compact_read()
 {
+    // json::node *n = nullptr;
+
+    // parse_file("compact.json", n);
+    // verify_structure(n);
+
     return 0;
 }
 
 int test::json_test::expanded_write()
 {
+    // json::node *n = create_test_node();
+    // json::formatted_printer p;
+    // std::string text;
+
+    // n->print_formatted(p);
+
+    // assert::is_true(util::try_read_file("test/tests/json/expanded.json", text));
+    // assert::is_not_null(n);
+    // assert::are_equal(text, p.to_string());
+
     return 0;
 }
 
 int test::json_test::compact_write()
 {
+    // json::node *n = create_test_node();
+    // json::formatted_printer p;
+    // std::string text;
+
+    // p.set_compact_style(true);
+
+    // n->print_formatted(p);
+
+    // assert::is_true(util::try_read_file("test/tests/json/compact.json", text));
+    // assert::is_not_null(n);
+    // assert::are_equal(text, p.to_string());
+
     return 0;
 }
 

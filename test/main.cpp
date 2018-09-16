@@ -22,8 +22,8 @@ bool show_only_failed;
 
 void run_test_thread(int start)
 {
-    int step = tests.size() % thread_count;
     int end = tests.size();
+    int step = end % thread_count;
 
     for (int i = start; i < end; i += step)
     {
