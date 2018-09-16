@@ -95,6 +95,7 @@ json::node *create_test_node()
     array->put(true);
     array->put(false);
     array->put_null();
+    array->put("three");
 
     auto subObject = new json::object_node();
     subObject->put_null("dummy");
@@ -141,37 +142,44 @@ int test::json_test::compact_read()
 
 int test::json_test::expanded_write()
 {
-    // json::node *n = create_test_node();
-    // json::formatted_printer p;
-    // std::string text;
+    json::node *n = create_test_node();
+    json::formatted_printer p;
+    std::string text;
 
-    // n->print_formatted(p);
+    n->print_formatted(p);
 
-    // assert::is_true(util::try_read_file("test/tests/json/expanded.json", text));
-    // assert::is_not_null(n);
-    // assert::are_equal(text, p.to_string());
+    assert::is_true(util::try_read_file("test/tests/json/expanded.json", text));
+    assert::is_not_null(n);
+    assert::are_equal(text, p.to_string());
 
     return 0;
 }
 
 int test::json_test::compact_write()
 {
-    // json::node *n = create_test_node();
-    // json::formatted_printer p;
-    // std::string text;
+    json::node *n = create_test_node();
+    json::formatted_printer p;
+    std::string text;
 
-    // p.set_compact_style(true);
+    p.set_compact_style(true);
 
-    // n->print_formatted(p);
+    n->print_formatted(p);
 
-    // assert::is_true(util::try_read_file("test/tests/json/compact.json", text));
-    // assert::is_not_null(n);
-    // assert::are_equal(text, p.to_string());
+    assert::is_true(util::try_read_file("test/tests/json/compact.json", text));
+    assert::is_not_null(n);
+    assert::are_equal(text, p.to_string());
 
     return 0;
 }
 
 int test::json_test::read_write()
 {
+    return 0;
+}
+
+int test::json_test::integrity()
+{
+    verify_structure(create_test_node());
+
     return 0;
 }

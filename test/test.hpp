@@ -77,6 +77,7 @@ int compact_read();
 int expanded_write();
 int compact_write();
 int read_write();
+int integrity();
 } // namespace json_test
 namespace color_test
 {

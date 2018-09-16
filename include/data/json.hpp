@@ -52,7 +52,9 @@ class node
 class object_node : public node
 {
   private:
-    std::unordered_map<std::string, node *> children;
+    // std::unordered_map<std::string, node *> children;
+    std::vector<std::pair<std::string, node *>> children;
+    std::unordered_map<std::string, int> quick_access;
 
   public:
     object_node();
@@ -61,8 +63,9 @@ class object_node : public node
     value_type get_type() const;
 
     void put(const std::string &, const std::string &);
+    void put(const std::string &, const char *);
     void put(const std::string &, double);
-    
+    void put(const std::string &, int);
     void put(const std::string &, bool);
     void put(const std::string &, json::node *);
     void put_null(const std::string &);
@@ -73,8 +76,11 @@ class object_node : public node
     const json::node *get(const std::string &name) const;
     bool try_get(const std::string &name, json::node *&) const;
 
-    typedef std::unordered_map<std::string, json::node *>::const_iterator const_child_iterator;
-    typedef std::unordered_map<std::string, json::node *>::iterator child_iterator;
+    // typedef std::unordered_map<std::string, json::node *>::const_iterator const_child_iterator;
+    // typedef std::unordered_map<std::string, json::node *>::iterator child_iterator;
+
+    typedef std::vector<std::pair<std::string, node *>>::iterator child_iterator;
+    typedef std::vector<std::pair<std::string, node *>>::const_iterator const_child_iterator;
 
     child_iterator begin();
     const_child_iterator begin() const;
@@ -98,12 +104,16 @@ class array_node : public node
     value_type get_type() const;
 
     void put(const std::string &);
+    void put(const char *);
     void put(double);
+    void put(int);
     void put(bool);
     void put(json::node *);
     void put_null();
     void insert(uint at, const std::string &);
+    void insert(uint at, const char *);
     void insert(uint at, double);
+    void insert(uint at, int);
     void insert(uint at, bool);
     void insert(uint at, json::node *);
     void insert_null(uint at);
@@ -136,9 +146,11 @@ class primitive_node : public node
     void clear_values();
 
   public:
-    primitive_node(const std::string &value);
-    primitive_node(bool value);
-    primitive_node(double value);
+    primitive_node(const std::string &);
+    primitive_node(const char *);
+    primitive_node(bool);
+    primitive_node(double);
+    primitive_node(int);
     primitive_node();
     ~primitive_node();
 

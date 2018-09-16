@@ -23,7 +23,17 @@ void json::object_node::put(const std::string &name, const std::string &value)
     this->put(name, new json::primitive_node(value));
 }
 
+void json::object_node::put(const std::string &name, const char *value)
+{
+    this->put(name, new json::primitive_node(value));
+}
+
 void json::object_node::put(const std::string &name, double value)
+{
+    this->put(name, new json::primitive_node(value));
+}
+
+void json::object_node::put(const std::string &name, int value)
 {
     this->put(name, new json::primitive_node(value));
 }
@@ -35,7 +45,8 @@ void json::object_node::put(const std::string &name, bool value)
 
 void json::object_node::put(const std::string &name, json::node *value)
 {
-    this->children.insert({name, value});
+    this->quick_access.insert(std::make_pair(name, this->children.size()));
+    this->children.push_back(std::make_pair(name, value));
 }
 
 void json::object_node::put_null(const std::string &name)
@@ -45,7 +56,7 @@ void json::object_node::put_null(const std::string &name)
 
 bool json::object_node::has_child(const std::string &name) const
 {
-    return this->children.find(name) != this->children.end();
+    return this->quick_access.find(name) != this->quick_access.end();
 }
 
 int json::object_node::get_child_count() const
@@ -55,32 +66,32 @@ int json::object_node::get_child_count() const
 
 json::node *json::object_node::get(const std::string &name)
 {
-    auto it = this->children.find(name);
+    auto it = this->quick_access.find(name);
 
-    if (it == this->children.end())
+    if (it == this->quick_access.end())
         throw util::missing_key_exception();
 
-    return it->second;
+    return this->children[it->second].second;
 }
 
 const json::node *json::object_node::get(const std::string &name) const
 {
-    auto it = this->children.find(name);
+    auto it = this->quick_access.find(name);
 
-    if (it == this->children.end())
+    if (it == this->quick_access.end())
         throw util::missing_key_exception();
 
-    return it->second;
+    return this->children[it->second].second;
 }
 
 bool json::object_node::try_get(const std::string &name, json::node *&buf) const
 {
-    auto it = this->children.find(name);
+    auto it = this->quick_access.find(name);
 
-    if (it == this->children.end())
+    if (it == this->quick_access.end())
         return false;
 
-    buf = it->second;
+    buf = this->children[it->second].second;
 
     return true;
 }

@@ -7,10 +7,24 @@ json::primitive_node::primitive_node(const std::string &value) : node(),
 {
 }
 
+json::primitive_node::primitive_node(const char *value) : node(),
+                                                          string_value(value),
+                                                          numeric_value(0),
+                                                          type(json::value_type::String)
+{
+}
+
 json::primitive_node::primitive_node(double value) : node(),
                                                      string_value(""),
                                                      numeric_value(value),
                                                      type(json::value_type::Number)
+{
+}
+
+json::primitive_node::primitive_node(int value) : node(),
+                                                  string_value(""),
+                                                  numeric_value(value),
+                                                  type(json::value_type::Number)
 {
 }
 

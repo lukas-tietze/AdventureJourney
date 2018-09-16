@@ -23,7 +23,17 @@ void json::array_node::put(const std::string &value)
     this->put(new json::primitive_node(value));
 }
 
+void json::array_node::put(const char *value)
+{
+    this->put(new json::primitive_node(value));
+}
+
 void json::array_node::put(double value)
+{
+    this->put(new json::primitive_node(value));
+}
+
+void json::array_node::put(int value)
 {
     this->put(new json::primitive_node(value));
 }
@@ -48,7 +58,17 @@ void json::array_node::insert(uint at, const std::string &value)
     this->insert(at, new json::primitive_node(value));
 }
 
+void json::array_node::insert(uint at, const char *value)
+{
+    this->insert(at, new json::primitive_node(value));
+}
+
 void json::array_node::insert(uint at, double value)
+{
+    this->insert(at, new json::primitive_node(value));
+}
+
+void json::array_node::insert(uint at, int value)
 {
     this->insert(at, new json::primitive_node(value));
 }
