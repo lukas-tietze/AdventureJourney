@@ -1,4 +1,6 @@
 #include "data/json.hpp"
+#include "exception.hpp"
+#include "data/string.hpp"
 
 json::primitive_node::primitive_node(const std::string &value) : node(),
                                                                  string_value(value),
@@ -174,4 +176,39 @@ json::formatted_printer &json::primitive_node::print_formatted(json::formatted_p
     }
 
     return p;
+}
+
+bool json::primitive_node::operator==(const json::node &other) const
+{
+    if (auto primitiveNode = dynamic_cast<const json::primitive_node *>(&other))
+    {
+        if (this->type == primitiveNode->type)
+        {
+            switch (this->type)
+            {
+            case json::value_type::String:
+                return this->string_value == primitiveNode->string_value;
+            case json::value_type::Number:
+                return this->numeric_value == primitiveNode->numeric_value;
+            case json::value_type::True:
+            case json::value_type::False:
+            case json::value_type::Null:
+                return true;
+            case json::value_type::Object:
+            case json::value_type::Array:
+                throw util::invalid_case_exception(util::to_string(this->type), "Illegal state");
+            default:
+                throw util::invalid_case_exception(util::to_string(this->type), "Unknown case");
+            }
+        }
+
+        return false;
+    }
+
+    return false;
+}
+
+bool json::primitive_node::operator!=(const json::node &other) const
+{
+    return !((*this) == other);
 }

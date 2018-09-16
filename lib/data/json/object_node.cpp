@@ -160,3 +160,32 @@ json::object_node::const_child_iterator json::object_node::end() const
 {
     return this->children.end();
 }
+
+bool json::object_node::operator==(const json::node &other) const
+{
+    if (auto objectNode = dynamic_cast<const json::object_node *>(&other))
+    {
+        if (this->children.size() == objectNode->children.size())
+        {
+            for (uint i = 0, end = this->children.size(); i < end; i++)
+            {
+                if (this->children[i].first != objectNode->children[i].first ||
+                    this->children[i].second != objectNode->children[i].second)
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    return false;
+}
+
+bool json::object_node::operator!=(const json::node &other) const
+{
+    return !((*this) == other);
+}

@@ -47,12 +47,14 @@ class node
 
     virtual std::ostream &operator<<(std::ostream &stream) const;
     virtual json::formatted_printer &print_formatted(json::formatted_printer &) const = 0;
+
+    virtual bool operator==(const node &other) const = 0;
+    virtual bool operator!=(const node &other) const = 0;
 };
 
-class object_node : public node
+class object_node final: public node 
 {
   private:
-    // std::unordered_map<std::string, node *> children;
     std::vector<std::pair<std::string, node *>> children;
     std::unordered_map<std::string, int> quick_access;
 
@@ -76,9 +78,6 @@ class object_node : public node
     const json::node *get(const std::string &name) const;
     bool try_get(const std::string &name, json::node *&) const;
 
-    // typedef std::unordered_map<std::string, json::node *>::const_iterator const_child_iterator;
-    // typedef std::unordered_map<std::string, json::node *>::iterator child_iterator;
-
     typedef std::vector<std::pair<std::string, node *>>::iterator child_iterator;
     typedef std::vector<std::pair<std::string, node *>>::const_iterator const_child_iterator;
 
@@ -88,11 +87,14 @@ class object_node : public node
     child_iterator end();
     const_child_iterator end() const;
 
-    virtual std::ostream &operator<<(std::ostream &stream) const;
-    virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
+    std::ostream &operator<<(std::ostream &stream) const;
+    json::formatted_printer &print_formatted(json::formatted_printer &) const;
+
+    bool operator==(const node &other) const;
+    bool operator!=(const node &other) const;
 };
 
-class array_node : public node
+class array_node final : public node
 {
   private:
     std::vector<node *> children;
@@ -118,7 +120,7 @@ class array_node : public node
     void insert(uint at, json::node *);
     void insert_null(uint at);
 
-    int get_child_count();
+    int get_child_count() const;
     json::node *get(uint index);
     const json::node *get(uint index) const;
     bool try_get(uint index, json::node *&) const;
@@ -132,11 +134,14 @@ class array_node : public node
     child_iterator end();
     const_child_iterator end() const;
 
-    virtual std::ostream &operator<<(std::ostream &stream) const;
-    virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
+    std::ostream &operator<<(std::ostream &stream) const;
+    json::formatted_printer &print_formatted(json::formatted_printer &) const;
+
+    bool operator==(const node &other) const;
+    bool operator!=(const node &other) const;
 };
 
-class primitive_node : public node
+class primitive_node final : public node
 {
   private:
     std::string string_value;
@@ -166,8 +171,11 @@ class primitive_node : public node
     void set_value(double doubleValue);
     void set_value_null();
 
-    virtual std::ostream &operator<<(std::ostream &stream) const;
-    virtual json::formatted_printer &print_formatted(json::formatted_printer &) const;
+    std::ostream &operator<<(std::ostream &stream) const;
+    json::formatted_printer &print_formatted(json::formatted_printer &) const;
+
+    bool operator==(const node &other) const;
+    bool operator!=(const node &other) const;
 };
 
 class value_exception : public util::exception

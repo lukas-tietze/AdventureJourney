@@ -94,7 +94,7 @@ void json::array_node::insert_null(uint at)
     this->insert(at, new json::primitive_node());
 }
 
-int json::array_node::get_child_count()
+int json::array_node::get_child_count() const
 {
     return this->children.size();
 }
@@ -185,4 +185,32 @@ json::array_node::child_iterator json::array_node::end()
 json::array_node::const_child_iterator json::array_node::end() const
 {
     return this->children.end();
+}
+
+bool json::array_node::operator==(const json::node &other) const
+{
+    if(auto arrayNode = dynamic_cast<const json::array_node *>(&other))
+    {
+        if(this->children.size() == arrayNode->children.size())
+        {
+            for(uint i = 0, end = this->children.size(); i < end; i++)
+            {
+                if(this->children[i] != arrayNode->children[i])
+                {
+                    return false;
+                }
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    return false;
+}
+
+bool json::array_node::operator!=(const json::node &other) const
+{
+    return !((*this) == other);
 }
