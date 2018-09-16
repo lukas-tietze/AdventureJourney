@@ -16,6 +16,8 @@ bool break_after_first_failure = false;
 uint thread_count = 1;
 long timeout = -1;
 std::vector<std::thread> test_threads;
+bool quiet;
+bool show_only_failed;
 } // namespace
 
 void run_test_thread(int start)
@@ -28,7 +30,11 @@ void run_test_thread(int start)
         auto test = tests[i];
 
         test.execute();
-        util::printr(test);
+
+        if (!test.is_good() || !show_only_failed)
+        {
+            util::printr(test);
+        }
     }
 }
 
@@ -57,6 +63,20 @@ int main(int argc, char **argv)
             case 'b':
                 break_after_first_failure = true;
                 break;
+            case 'f':
+                show_only_failed = true;
+                break;
+            case 'q':
+                quiet = true;
+                break;
+            case 'h':
+                std::printf("-p    run with recommended number of threads\n");
+                std::printf("-p[x] run with x threads\n");
+                std::printf("-t[x] timeout after x milli seconds\n");
+                std::printf("-b    break after first failed test\n");
+                std::printf("-q    ");
+                std::printf("-h    show help\n");
+                return 0;
             }
         }
     }
@@ -72,6 +92,18 @@ int main(int argc, char **argv)
     tests.push_back(test::test_run(new test::simple_test("handler event test", &test::event_test::handler_events)));
     tests.push_back(test::test_run(new test::simple_test("member handler event test", &test::event_test::member_handler_events)));
     tests.push_back(test::test_run(new test::simple_test("rectangle test", &test::geometry_test::rectangle)));
+
+    if (!quiet)
+    {
+        std::printf("|-------------------------------------\n");
+        std::printf("|timeout:             %s\n", timeout >= 0 ? std::to_string(timeout).c_str() : "-");
+        std::printf("|tests:               %zu\n", tests.size());
+        std::printf("|threads:             %u\n", thread_count);
+        std::printf("|quiet:               %s\n", quiet ? "true" : "false");
+        std::printf("|break after failure: %s\n", break_after_first_failure ? "true" : "false");
+        std::printf("|show only failed:    %s\n", show_only_failed ? "true" : "false");
+        std::printf("|-------------------------------------\n\n");
+    }
 
     if (thread_count == 1)
     {
