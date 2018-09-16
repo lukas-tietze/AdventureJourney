@@ -172,14 +172,21 @@ int test::json_test::compact_write()
     return 0;
 }
 
-int test::json_test::read_write()
-{
-    return 0;
-}
-
 int test::json_test::integrity()
 {
     verify_structure(create_test_node());
 
+    return 0;
+}
+
+int test::json_test::write_read()
+{
+    auto n = create_test_node();
+
+    return 0;
+}
+
+int test::json_test::read_write()
+{
     return 0;
 }

@@ -72,12 +72,15 @@ typedef std::vector<test_run> test_collection;
 
 namespace json_test
 {
+int integrity();
 int expanded_read();
 int compact_read();
 int expanded_write();
 int compact_write();
 int read_write();
-int integrity();
+int write_read();
+int string_escaping();
+int number_parsing();
 } // namespace json_test
 namespace color_test
 {
