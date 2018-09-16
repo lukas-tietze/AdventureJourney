@@ -131,10 +131,10 @@ int test::json_test::expanded_read()
 
 int test::json_test::compact_read()
 {
-    // json::node *n = nullptr;
+    json::node *n = nullptr;
 
-    // parse_file("compact.json", n);
-    // verify_structure(n);
+    parse_file("compact.json", n);
+    verify_structure(n);
 
     return 0;
 }

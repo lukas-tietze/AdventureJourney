@@ -62,6 +62,7 @@ class object_node : public node
 
     void put(const std::string &, const std::string &);
     void put(const std::string &, double);
+    
     void put(const std::string &, bool);
     void put(const std::string &, json::node *);
     void put_null(const std::string &);
@@ -191,8 +192,6 @@ struct token
     token_type type;
     const char *data;
     int data_len;
-
-    friend std::ostream &operator<<(std::ostream &, const token &);
 };
 
 std::ostream &operator<<(std::ostream &, const json::token &);

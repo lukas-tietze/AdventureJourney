@@ -44,7 +44,8 @@ json::formatted_printer::formatted_printer(std::iostream *stream, const std::str
                                                                                                        indent_level(0),
                                                                                                        out(stream),
                                                                                                        out_is_managed(stream == nullptr),
-                                                                                                       value_written(false)
+                                                                                                       value_written(false),
+                                                                                                       print_compact(false)
 {
     if (this->out == nullptr)
     {
@@ -149,10 +150,9 @@ json::formatted_printer &json::formatted_printer::next_property()
 {
     if (this->value_written)
     {
-        if (this->print_compact)
-            (*this->out) << ',' << std::endl;
-        else
-            (*this->out) << ',';
+        (*this->out) << ',';
+        if (!this->print_compact)
+            (*this->out) << std::endl;
     }
 
     return *this;
