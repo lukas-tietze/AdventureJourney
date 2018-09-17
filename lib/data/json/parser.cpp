@@ -225,7 +225,7 @@ std::string json::parser::read_string()
                 break;
             }
             default:
-                throw parser_exception("illegal escape sequence!");
+                throw parser_exception("illegal escape sequence '" + std::to_string(c) + "'!");
             }
         }
         else if (c == '\\')

@@ -4,6 +4,7 @@
 #include <stdexcept>
 
 #include "data/string.hpp"
+#include "data/math.hpp"
 #include "data/json.hpp"
 
 json::tokenizer::tokenizer() : tokens(),
@@ -268,7 +269,14 @@ void json::tokenizer::read_string()
         {
             if (!this->can_escape(c))
             {
-                throw tokenizer_exception(*this, "Invalid escape sequence!");
+                if (!util::is_hex_char(c) ||
+                    this->pos + 3 >= this->length ||
+                    !util::is_hex_char(this->data[this->pos + 1]) ||
+                    !util::is_hex_char(this->data[this->pos + 2]) ||
+                    !util::is_hex_char(this->data[this->pos + 3]))
+                {
+                    throw tokenizer_exception(*this, "Invalid escape sequence!");
+                }
             }
 
             escaped = false;
