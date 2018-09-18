@@ -70,10 +70,10 @@ float util::color::blue_percentage() const
 
 bool util::operator==(const util::color &c1, const util::color &c2)
 {
-    return c1.data == c2.data;
+    return c1.value() == c2.value();
 }
 
 bool util::operator!=(const util::color &c1, const util::color &c2)
 {
-    return c1.data == c2.data;
+    return c1.value() != c2.value();
 }

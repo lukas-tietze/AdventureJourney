@@ -33,9 +33,6 @@ class color
     float green_percentage() const;
     float blue_percentage() const;
     uint value() const;
-
-    friend bool util::operator==(const util::color &, const util::color &);
-    friend bool util::operator!=(const util::color &, const util::color &);
 }; /*color*/
 
 bool operator==(const util::color &, const util::color &);
