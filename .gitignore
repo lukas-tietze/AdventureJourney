@@ -39,3 +39,7 @@ build/
 
 # Errors
 *.stackdump
+
+# Latex
+doc/*
+!doc/*.tex
