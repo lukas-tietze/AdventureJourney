@@ -43,3 +43,4 @@ build/
 # Latex
 doc/*
 !doc/*.tex
+!doc/Makefile
