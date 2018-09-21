@@ -88,6 +88,80 @@ bool json::primitive_node::get_value_as_bool() const
         throw json::value_exception();
 }
 
+bool json::primitive_node::try_get_value_as_string(std::string &s) const
+{
+    if (this->get_type() == json::value_type::String)
+    {
+        s.assign(this->string_value);
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool json::primitive_node::try_get_value_as_number(double &d) const
+{
+    if (this->get_type() == json::value_type::Number)
+    {
+        d = this->numeric_value;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool json::primitive_node::try_get_value_as_bool(bool &b) const
+{
+    if (this->get_type() == json::value_type::True)
+    {
+        b = true;
+        return true;
+    }
+    else if (this->get_type() == json::value_type::False)
+    {
+        b = false;
+        return true;
+    }
+    else
+    {
+        return false;
+    }
+}
+
+bool json::primitive_node::try_get_value_as_string_or_default(std::string &target, const std::string &defaultValue) const
+{
+    auto res = this->try_get_value_as_string(target);
+
+    if (!res)
+        target = defaultValue;
+
+    return res;
+}
+
+bool json::primitive_node::try_get_value_as_number_or_default(double &target, double defaultValue) const
+{
+    auto res = this->try_get_value_as_number(target);
+
+    if (!res)
+        target = defaultValue;
+
+    return res;
+}
+
+bool json::primitive_node::try_get_value_as_bool_or_default(bool &target, bool defaultValue) const
+{
+    auto res = this->try_get_value_as_bool(target);
+
+    if (!res)
+        target = defaultValue;
+
+    return res;
+}
+
 void json::primitive_node::set_value(bool value)
 {
     this->clear_values();

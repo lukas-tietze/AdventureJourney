@@ -166,6 +166,14 @@ class primitive_node final : public node
     bool get_value_as_bool() const;
     bool is_value_null() const;
 
+    bool try_get_value_as_string(std::string &) const;
+    bool try_get_value_as_number(double &) const;
+    bool try_get_value_as_bool(bool &) const;
+
+    bool try_get_value_as_string_or_default(std::string &, const std::string &defaultValue = "") const;
+    bool try_get_value_as_number_or_default(double &, double defaultValue = 0) const;
+    bool try_get_value_as_bool_or_default(bool &, bool defaultValue = false) const;
+
     void set_value(bool value);
     void set_value(const std::string &stringValue);
     void set_value(double doubleValue);

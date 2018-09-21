@@ -74,7 +74,8 @@
         "xtree": "cpp",
         "csignal": "cpp",
         "random": "cpp",
-        "iomanip": "cpp"
+        "iomanip": "cpp",
+        "unordered_set": "cpp"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled"
 }
