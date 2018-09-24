@@ -6,7 +6,7 @@ TCFLAGS := -output-format=pdf -interaction=nonstopmode -file-line-error
 
 all: core.pdf 
 
-core.pdf: core.tex Makefile
+core.pdf: core.tex commands.tex Makefile
 	@echo -e "\033[1;33m Latex first run \033[0m"
 	-$(TC) $(TCFLAGS) $<
 
