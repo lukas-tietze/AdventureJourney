@@ -1,7 +1,9 @@
 \documentclass[11pt, a4paper]{article}
 %
 \usepackage[utf8]{inputenc}
-%
+\usepackage{tcolorbox}
+\usepackage{graphicx}
+
 \title{Entwicklungsdokument}
 \author{Someone}
 %
@@ -28,8 +30,6 @@ In diesem Abschnitt werden grundlegende Mechaniken beschrieben, die das Spiel au
 %
 \subsection{Allgemeines Gameplay}
 Das Spiel ist rundenbasiert.
-%
-\subsubsection{}
 %
 \subsection{Planeten}
 Planeten verfügen über die folgenden Gesichtspunkte:
@@ -193,4 +193,132 @@ Die Fläche die auf einem Planeten zum Anbau von Lebensmitteln zur Verfügung st
 %
 \paragraph{superschwere Isotope}
 %
+\subsubsection{Bevölkerung}
+Die Bevölkerung eines Planeten stellt neben den natürlichen Rohstoffen die zweitwichtigste Ressource einer Welt 
+dar. Bevölkerung wird benötigt um Industrie zu betreiben, den Planeten auszubauen und zu bewirtschaften.
+Die Bevölkerung eines Planeten lässt sich zu Soldaten ausbilden um ihre Heimat und das Imperium als solches
+zu verteidigen und zu vergrößern. Natürlich muss eine Bevölkerung nicht rein menschlich sein. Auf ein und 
+demselben Planeten können Menschen und andere Lebensformen in Harmonie leben und sich gegenseitig bereichern.
+Jedoch trifft dies nicht immer zu. Manche außerirdische Lebensformen sind schlicht zu verschieden voneinander
+um friedlich beieinander zu leben. Manche Lebensformen sind durch andauernden Krieg hartherzig geworden und
+misstrauisch gegenüber Fremden geworden.\\
+Der Zustand der Bevölkerung wird durch die folgenden Aspekte ausgemacht:
+\begin{itemize}
+    \item Bevölkerungswachstum
+    \item Arbeit
+    \item Rekrutierung
+    \item Unruhe
+    \item Rebellion
+\end{itemize}
+%
+\paragraph{Bevölkerungswachstum}
+Durch die Investition in die Entwicklung "Wachstum" werden Bereiche des öffentlichen Lebens gefördert, die 
+ein Wachstum der Bevölkerung fördern. Bessere Medizin, mehr Nahrung, Bildung, Arbeitsplätze und allgemein 
+gesteigerter Wohlstand sind Faktoren die zu einer Vermehrung der Bevölkerung führen.
+Schlechte Lebensbedingungen, Nahrungsmittelknappheit, Seuchen, Umweltverschmutzung oder Krieg können die 
+Bevölkerung eines Planeten dezimieren.
+%
+\paragraph{Arbeit}
+Die Bevölkerung eines Planeten ist entscheidend für die Arbeitskraft des Planeten. Je größer die Bevölkerung,
+desto mehr Kapazitäten stehen zur Verfügung um Maschinen zu bedienen, Rohstoffe zu verarbeiten, Pflanzen 
+anzubauen und andere Arbeiten zu verrichten. Ohne eine ausreichend große Bevölkerung kommt die Produktion
+eines Planeten zum Erliegen.
+%
+\paragraph{Rekrutierung}
+Die Bevölkerung eines Planeten stellt nicht nur Arbeitskräfte, sondern auch Soldaten und militärisches
+Personal. Um eine schlagkräftige Armee aufzustellen wird nicht nur Material benötigt, sondern auch eine große 
+Bevölkerung. 
+%
+\paragraph{Unruhe}
+Wenn sich die Zustände auf einem Planeten verschlechtern, sei es durch Luftverschmutzung, Überbevölkerung,
+Krankheiten, Krieg ode Rebellion auf anderen Welten, kann die Stimmung der Bevölkerung bedrückt werden.
+Eine unzufriedene Bevölkerung neigt zur Unruhe und zu Protesten. Ist die Bevölkerung unruhig ist sie anfälliger
+für das wirken von Kultisten, von feindlichen Infiltratoren und Rebellen. Unruhe verringert die Produktion 
+eines Planeten leicht.\\
+Manche Unruhen legen sich von selbst, wenn die Bevölkerung sich an ihre Lebensbedingungen gewöhnt, andere 
+entladen sich in gewaltsamen Protesten und können schließlich zur offenen Rebellion führen.
+%
+\paragraph{Rebellion}
+Ist die Bevölkerung eines Planeten über längere Zeit unruhig, so kann es zu einer Rebellion kommen. Rebellion
+beginnt mit gewaltsamen Protesten und Aufständen. Wenn diese nicht schnell und hart niedergeschlagen werden,
+versinkt der Planet schnell im Bürgerkrieg. Je nachdem ob Rebellen oder Loyalisten (sofern noch loyale Kräfte
+vorhanden sind) diesen Krieg gewinnen, fällt der Planet wieder dem Imperium zu oder sagt sich von diesem los.\\
+Während einer aktiven Rebellion ist die Produktion eines Planeten stark reduziert. Während einer Rebellion kann
+der Planet nicht kontrolliert werden und die Infrastruktur des Planeten wird beschädigt.\\
+%
+\subsection{Militär}
+Ein weiterer Hauptaspekt des Spiels ist das Militär. Das Militär, das einem Spieler zur Verfügung steht 
+gliedert sich in Garnisonen und Armeen. Weiterhin zählen auch Verteidigungsanlagen zum Militär.
+Garnisonen und Armeen bestehen jeweils aus einer Raumflotte und/oder Bodentruppen. Prinzipiell kann jeder
+Planet Truppen ausheben. Jedoch wird die Verfügbarkeit bestimmter fortgeschrittener Truppen durch benötigte 
+Ressourcen und Technologien eingeschränkt.
+%
+\subsubsection{Rekrutierung}
+Rekrutierung stellt den ersten Schritt zum Aufbau einer Streitmacht dar. Vom einfachen Fußsolaten, über 
+Panzerbatallione, bis hin zu mächtigen Raumschiffen benötigt jede militärische Einheit Personal und Rohstoffe.
+Meist werden zusätzlich noch bestimmte Technologien benötigt um eine Einheiten auszubilden. Prizipiell können 
+alle Truppentypen auf jedem Planeten ausgehoben werden. Dafür müssen folgende Vorraussetzungen erfüllt sein:
+\begin{itemize}
+    \item der Planet verfügt über alle erforderlichen Technologien
+    \item der Planet verfügt über ausreichend wissenschaftliche Entwicklung um die Technologie(n) anzuwenden
+    \item es stehen ausreichend Ressourcen zur Verfügung
+    \item die Bevölkerung ist ausreichend groß um Rekruten anzuwerben
+\end{itemize}
+%
+Sowohl Qualität als auch Quantität der rekrutierten Einheiten hängen stark von der militärischen Entwicklung
+eines Planeten ab. Da Rekrutierung immer Teile der normalen Bevölkerung in Soldaten und militärisches Personal
+umwandelt, kann Rekrutierung auch gezielt genutzt werden um das Bevölkerungswachstum eines Planeten zu
+kontrollieren. Hat ein Planet beispielsweise einen Bevölkerungsüberschuss können dadruch Unruhen entstehen.
+Indem Millionen einfacher Bürger zwangsrekrutiert werden, lässt sich die Bevölkerung entscheidend reduzieren
+und gleichzeitig die Garnison aufbessern, falls es zu einer Rebellion kommt.
+%
+\subsubsection{Garnison}
+Jeder Planet verfügt über ein stehendes Heer, das meist aus einfacher Infanterie besteht und von gepanzerten 
+Einheiten unterstüzt wird. Diese Garnison ist fähig Rebellionen nieder zu schlagen und den Planeten gegen 
+Piraten und Plünderer zu halten, kann aber einer groß angelegten Invasion eines Gegners meist wenig 
+entgegensetzen. Durch eine militärische Entwicklung wird die Größe und Qualität der Garnison eines Planeten
+verbessert.
+%
+\subsubsection{Verteidigungsanlagen}
+Neben einer Garnison verfügen die meisten Planeten über stationäre Verteidigungsanlagen. Eine 
+Verteidigungsanlage kann beinahe jede vorstellbare Form annehmen. Von primitiven Minenfelder auf der 
+Oberfläche über Bunker, Luftabwehrgeschütze, Anti-Orbital-Raketen bis hin zu Kampfstationen im Orbit.
+Durch eine militärische Entwicklung erhält der Planet mehr und bessere Verteidigungsanlagen. 
+Orbitale Verteidigungsanlagen stellen die erste Linie der Verteidigung eines Planeten dar. Jeder Gegner muss
+sie entweder komplett zerstören, entern oder mit schnellen Schiffen durchbrechen.
+%
+\subsubsection{Bodentruppen}
+Bodentruppen sind die einfachen (oder fortschittlichen) bewaffneten Männer und Frauen des Imperiums.
+Die Unterschiede in der Qualität von Bodentruppen ist gewaltig. Von einfachen Soldaten mit einem massenweise
+produzierten Gewehr, die kaum gepanzert zu Tausenden in die Schlacht ziehen, bis hin zu schwer bewaffneten,
+Elitekriegern in mechanisierten Rüstungen ist alles möglich. Einige Soldaten werden in massiven Wellen gegen
+den Feind geworfen und überwältigen den Gegner durch schiere Zahlen. Ander Einheiten von höherer Qualität
+können einen Krieg schon in kleinen Zahlen gewinnen. Entweder weil sie aus dem Untergrund zuschlagen, den 
+Feind infiltrieren, Versorgungswege abschneiden, Fabriken sabotieren, Unruhe in der Bevölkerung stiften oder
+gegnerische Anführer eliminieren. Oder sie kämpferische Fähigkeiten ohne Gleichen haben und leicht hundert 
+normale Soldaten bezwingen können.\\
+Bodentruppen stellen in all ihrer Vielfalt das Grundgerüst aller Streitkräfte dar. Jeder Planet kann 
+mindestens eine Art dieser Basistruppen ohne besondere Anforderungen ausbilden.
+%
+\subsubsection{Fahrzeuge}
+Fahrzeuge fassen alle mechanisierten Militäreinheiten zusammen. Dabei kann es sich um schnelle Motoräder zur
+Aufklärung, schwere Kampfpanzer, Bomber, oder auch fliegende Truppentransporter handeln. Fahrzeuge benötigen 
+wesentlich mehr Ressourcen als vergleichbare Bodentruppen. Fahrzeuge können entweder direkt als Kampffahrzeuge
+genutzt werden oder als Transporter, um Bodentruppen die Schlacht zu transportieren oder Verwundete zu 
+evakuieren. Oft ist es sinnvoll wertvolle Eliteeinheiten in Transportern unterzubringen um sicherzustellen, 
+dass sie die Frontlinien erreichen.\\
+In vielen Schlachten sind Flugzeuge von außerordentlicheer Bedeutung, da die Lufthohheit der erste Schritt zum 
+Sieg ist. Fahrzeuge können, wie Bodentruppen, Teil einer Armee oder einer Garnison sein. Sie können auch in 
+serselben Art auf Raumschiffen transportiert werden.
+%
+\subsubsection{Raumschiffe}
+Raumschiffe stellen die wichtigsten Einheiten im Spiel dar. Raumschiffe werden primär benötigt um Bodentruppen
+und Fahrzeuge auf gegnerische Planeten zu transportieren um eine Invasion zu starten. Unabhängig davon sind
+viele Raumschiffe auch auf den Kampf gegen feindliche Raumschiffe oder orbitale Verteidigungsanlagen 
+ausgelegt.
+%
+\section{Dummy}
+\begin{tcolorbox}[width=\textwidth,colback={green},title={With rounded corners},colbacktitle=yellow,coltitle=blue]    
+    abcdg
+ \end{tcolorbox}  
 \end{document}
