@@ -2,4 +2,16 @@
 \usepackage{tcolorbox}
 \usepackage{graphicx}
 
-\newenvironment {myEnv} {\begin{tcolorbox}[width=\textwidth,colback={green}]} {\end{tcolorbox}}
+\newtcolorbox{detailbox}
+{
+    colback=red!5!white,
+    colframe=red!50!white
+}
+
+\newtcolorbox{detailboxwt}[1]
+{
+    colback=red!5!white,
+    colframe=red!50!white,
+    fonttitle=\bfseries,
+    title=#1
+}
