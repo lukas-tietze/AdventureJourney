@@ -1,39 +1,38 @@
 \documentclass[11pt, a4paper]{article}
-
+%
 \usepackage[utf8]{inputenc}
-
+%
 \title{Entwicklungsdokument}
 \author{Someone}
-
+%
 \begin{document}
-    
+ %   
 \maketitle
-
+%
 \clearpage
-
+%
 \tableofcontents
-
+%
 \clearpage
-
+%
 \section{Einführung}
-
+%
 \section{Hintergrund}
 Das Ziel des Projekts ist das Entwickeln einer kleinen Api mit allgemeinen Aufgaben als Programmierübung.
-
+%
 \section{Grundidee}
 Das Spiel dreht sich um die Besiedlung einer Galaxie.
-
+%
 \section{Mechaniken}
 In diesem Abschnitt werden grundlegende Mechaniken beschrieben, die das Spiel ausmachen.
-
+%
 \subsection{Allgemeines Gameplay}
 Das Spiel ist rundenbasiert.
-
+%
 \subsubsection{}
-
+%
 \subsection{Planeten}
 Planeten verfügen über die folgenden Gesichtspunkte:
-
 \begin{itemize}
     \item Entwicklung - ein Maß für den Ausbau des Planeten
     \item Einrichtungen - spezielle Gebäude die den Planeten nachhaltig verändern
@@ -42,7 +41,7 @@ Planeten verfügen über die folgenden Gesichtspunkte:
     \item Produktion - die verschiedenen Ressourcen, die ein Planet erzeugt, exportiert oder importiert
     \item Verkehr - die Anbindung an interstellare Schiffsrouten
 \end{itemize}
-
+%
 \subsubsection{Entwicklung}
 Entwicklung beschreibt die einerseits die Ausbaustufe des Planeten, andererseits die pro Runde erzeugte 
 Fähigkeit zum weiteren Ausbau. In jeder Runde steht ein bestimmtes Maß an Entwicklung zur Verfügung. 
@@ -55,13 +54,14 @@ Entwicklung kann auf verschiedene Bereiche verteilt werden. Diese sind:
     \item Militär
     \item Bauprojekte für Einrichtungen
 \end{itemize}
+%
 Somit kann der Planet in beliebige Richtungen entwickelt werden.
-
+%
 \paragraph{Wachstum}
 Wachstum führt zu einer Verbesserung der allgemeinen Infrastruktur, des Gesundheitwesens, der kulturellen und sozialen
 Einrichtungen des Planeten. Es führt außerdem zum Aufbau neuer Städte und Siedlungen auf dem Planeten und zu einem
 Anwachsen der Bevölkerung. Wachstum steht für die Zivile Entwicklung eines Planeten.
-
+%
 \paragraph{Wissenschaft}
 Wissenschaft führt dazu, dass Ressourcen des Planeten und der Bevölkerung in den wissenschaftlichen Fortschritt
 investiert werden. Damit können neue Technologien entwickelt oder entdeckt werden. Wissenschaft kann auch dazu 
@@ -72,23 +72,22 @@ Pflanzen, durch das Entwickeln besserer Metalle für das Militär oder die Mögl
 Industrielle Entwicklung ermöglicht den Abbau von seltenen und neuen Ressourcen. Es erhöht die Produktion von
 Ressourcen und das Potenzial industrielle Produkte zu erzeugen. Eine unkontrolliert wachsende Industrie kann
 jedoch das Klima des Planeten negativ beeinflussen.
-
+%
 \paragraph{Militär}
 Der Ausbau des Militärs ermöglicht die Produktion von besseren Armeeineinheiten und erlaubt die Rekrutierung
 von mehr Einheiten. Außerdem wird die Verteidigung des Planeten verbessert. Von der Einlagerung von 
 Notfallreserven und der Errichtung von Bunkern bis zur Konstruktion von orbitalen Verteidigungsanlagen.
 Weiterhin wird die Anzahl der stationierten Streitkräfte und Raumschiffe erhöht.
-
+%
 \paragraph{Einrichtungen}
 Besondere Einrichtungen benötigen besonders schwerwiegenden Einsatz von Arbeitskraft und Ressourcen.
 Für einige besondere Gebäude muss explizit Entwicklung eingesetzt werden. Diese Gebäude verändern das Gesicht
 eines Planeten langfristig und unumkehrbar. Sie gewähren große Boni auf spezifische Aspekte des Planeten.
-
+%
 \subsubsection{Einrichtungen}
 Einrichtungen sind spezielle Gebäude, die einen Planten langfristig und schwerwiegend verändern.
 Jeder Planet kann aufgrund ihrer Größe und Bedeutung nur eine einzige Einrichtung unterhalten.
 Es existieren die folgenden Einrichtungen:
-
 \begin{itemize}
     \item Orbitaler Ring
     \item Weltuntergangsgerät (Doomsday-Device)
@@ -98,12 +97,12 @@ Es existieren die folgenden Einrichtungen:
     \item Weltenfestung
     \item Heimatwelt für legendäres Regiment
 \end{itemize}
-
+%
 \paragraph{Orbitaler Ring}
 Ein künstlicher Ring aus Metall wird um den Planeten errichtet. Türme, die vom Boden bis in den niedrigen
 Orbit reichen versorgen riesige Werften und Kampfstationen mit Material. Der Ring wird in geringem Umfang auch
 für Handel genutzt, dient Primär jedoch dem Schiffsbau und der Verteidigung.
-
+%
 \paragraph{Weltuntergangsgerät (Doomsday-Device)}
 Ein Gerät mit der Kraft ein ganzes Sonnensystem auszuradieren. Durch uralte Technologie wird ein Planet in die
 Sonne des Systems gelenkt und verursacht dort massive gravitische Störungen, die nach kurzer Zeit dazu führen,
@@ -111,32 +110,87 @@ dass das gesamte Sternensystem von einer Supernova vernichtet wird. Eine Einrich
 und nur sehr zurückhaltend genutzt wird. Doch dem Feind ein wichtiges System zu überlassen kann mehr Schaden
 verursachen als das gesamte Sternensystem mit seiner gesamten Bevölkerung und allen seinen Ressourcen zu 
 vernichten.
-
+%
 \paragraph{Orbitale Handelsstation}
 Eine ähnliche Einrichtung wie der Orbitale Ring, nur auf Handel ausgelegt. Die Station macht den Planeten
 zu einem Handelszentrum ohne Gleichen in seiner Umgebung. Durch die Technologie der Orbitaltürme können 
 Tausende Tonnen von Waren und Personal viel effizienter zwischen Orbit und Oberfläche transportiert werden
 als mit traditionellen Methoden wie Frachtern.
-
+%
 \paragraph{Große Bibliothek}
 Eine Sammlung des Wissens der gesamten Rasse. Die große Bibliothek verwandelt den Planeten in einen Ort des 
 Wissens und der Forschung. Er trägt dazu bei das gesammelte Wissen einer ganzen Rasse zu speichern, zu schützen 
 und zu vermehren.
-
+%
 \paragraph{Hydroponische Gärten}
 Der Planet verwandelt sich in einen einzigen, riesigen Garten in dem Früchte aller Art wachsen und gedeihen.
 Der Planet wird damit gleichermaßen zu einem Erholungs- und Urlaubsort, sowie zu einer Produktionsstätte für 
 erlesene Nahrungsmittel. Dadurch lässt sich der Handel eines Planeten verbessern.
-
+%
 \paragraph{Weltenfestung}
 Der Planet wird in eine Festung verwandelt. Gebirge werden zu riesigen Bunkerkomplexen, Wälder werden abgeholzt 
 und durch Grabensysteme ersetzt, ganze Landstriche werden vermint. Der Planet wird zur fast uneinnehmbaren 
 Festung. Um etwas - oder jemanden - zu bewachen oder zu beschützen.
-
+%
 \paragraph{Heimatwelt für legendäres Regiment}
 Wenn die Truppen eines Planeten eine bestimmte Reputation erreicht haben, gelangt meist auch ihre Heimatwelt
 zu gewissem Ruhm. Der Planet, der Krieger mit legendärem Mut, beispielloser Opferbereitschaft oder ungekannter
 Grausamkeit hervorbringt wird gleichsam mit Mythen und Legenden versehen. Durch einen Fokus auf die 
 militärische Tradition einer Welt wird die Qualität der hier ausgebildeten Truppen deutlich erhöht.
-
+%
+\subsubsection{Verbesserungen für Sternensystem}
+Sternensysteme profitieren von allen Gebäuden und Ausbaustufen der Planeten, die darin enthalten sind.
+Außerdem lassen sind in Sternensystemen einzigartige Verbesserungen errichten. 
+Verbesserungen für Sternensysteme sind
+\begin{enumerate}
+    \item Sternenschmiede
+    \item Weltenschiff
+\end{enumerate}
+%
+\paragraph{Sternenschmiede}
+Unter Ausnutzung der gewaltigen Kräfte des Sterns im Zentrum eines Sternensystems lassen sich extrem seltene
+Metalle gewinnen und formen. Eine Sternenschmiede verringert die Lebenszeit eines Sternes und entzieht den 
+umliegenden Planeten lebenswichtiges Licht ihres Sterns
+%
+\subsubsection{Rohstoffe}
+Rohstoffe stellen die natürlichen Ressourcen eines Planeten dar. Sie werden für die Produktion von Gütern, 
+den Ausbau des Planeten und den Export benötigt. Jeder Planet besitzt grundlegende Rohstoffe, fortgeschrittene
+Rohstoffe und manchmal seltene Rohstoffe. Grundlegende Rohstoffe lassen sich auch mit einfachen Mitteln
+nutzen, während für fortgeschrittene Rohstoffe ein bestimmtes Level an industrieller Entwicklung nötig ist.
+Für den Abbau seltener Rohstoffe sind zusätzlich noch bestimmte Technologien erforderlich.
+\\
+Einfache Rohstoffe sind 
+\begin{enumerate}
+    \item Anbaufläche
+    \item einfache Metalle
+    \item einfaches Baumaterial
+\end{enumerate}
+%
+Fortgeschrittene Rohstoffe sind
+\begin{enumerate}
+    \item fortgeschrittene Metalle
+    \item fortgeschrittene Baustoffe
+\end{enumerate}
+%
+Seltene Rohstoffe sind
+\begin{enumerate}
+    \item seltene Metalle
+    \item superschwere Isotope
+\end{enumerate}
+%
+\paragraph{Anbaufläche}
+Die Fläche die auf einem Planeten zum Anbau von Lebensmitteln zur Verfügung steht.
+%
+\paragraph{einfache Metalle}
+%
+\paragraph{einfaches Baumaterial}
+%
+\paragraph{fortgeschrittene Metalle}
+%
+\paragraph{Fortgeschrittene Baustoffe}
+%
+\paragraph{seltene Metalle}
+%
+\paragraph{superschwere Isotope}
+%
 \end{document}
