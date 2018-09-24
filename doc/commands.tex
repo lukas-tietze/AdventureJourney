@@ -2,16 +2,48 @@
 \usepackage{tcolorbox}
 \usepackage{graphicx}
 
-\newtcolorbox{detailbox}
+\newtcolorbox{detailframe}
 {
     colback=red!5!white,
     colframe=red!50!white
 }
 
-\newtcolorbox{detailboxwt}[1]
+\newtcolorbox{detailmultibox}[1]
 {
     colback=red!5!white,
     colframe=red!50!white,
+    fonttitle=\bfseries,
+    title=#1,
+    left=5mm,
+    right=2mm,
+    bottom=0mm,
+    top=0mm
+}
+
+\newtcolorbox{detailbox}[1]
+{
+    colback=red!5!white,
+    colframe=red!50!white,
+    fonttitle=\bfseries,
+    title=#1
+}
+
+\newtcolorbox{unitmultibox}[1]
+{
+    colback=green!5!white,
+    colframe=green!75!black,
+    fonttitle=\bfseries,
+    title=#1,
+    left=5mm,
+    right=2mm,
+    bottom=0mm,
+    top=0mm
+}
+
+\newtcolorbox{unitbox}[1]
+{
+    colback=green!5!white,
+    colframe=green!75!black,
     fonttitle=\bfseries,
     title=#1
 }
