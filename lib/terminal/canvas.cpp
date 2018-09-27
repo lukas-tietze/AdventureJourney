@@ -99,8 +99,34 @@ terminal::canvas &terminal::canvas::draw_box(const util::rectangle &r, char hori
     this->view->set_active_color_pair(activeColor);
 }
 
-terminal::canvas &terminal::canvas::draw_box(const util::rectangle &, char horizontal, int hColor, char vertical, int vColor, char cornor, int cColor)
+terminal::canvas &terminal::canvas::draw_box(const util::rectangle &r, char horizontal, int hColor, char vertical, int vColor, char cornor, int cColor)
 {
+    auto activeColor = this->view->get_active_color_pair();
+    auto tlc = this->clipped_area.fit(util::point(r.get_min_x(), r.get_min_y()));
+    auto brc = this->clipped_area.fit(util::point(r.get_max_x() - 1, r.get_max_y() - 1));
+
+    this->view->set_active_color_pair(hColor);
+    for (int x = tlc.get_x() + 1; x < brc.get_x(); x++)
+    {
+        this->view->print(horizontal, x, tlc.get_y());
+        this->view->print(horizontal, x, brc.get_y());
+    }
+
+    this->view->set_active_color_pair(vColor);
+    for (int y = tlc.get_y() + 1; y < brc.get_y(); y++)
+    {
+        this->view->print(vertical, tlc.get_x(), y);
+        this->view->print(vertical, brc.get_x(), y);
+    }
+    this->view->set_active_color_pair(cColor);
+    this->view->print(cornor, tlc.get_x(), tlc.get_y());
+    this->view->print(cornor, brc.get_x(), tlc.get_y());
+    this->view->print(cornor, tlc.get_x(), brc.get_y());
+    this->view->print(cornor, brc.get_x(), brc.get_y());
+
+    this->view->set_active_color_pair(activeColor);
+
+    return *this;
 }
 
 terminal::canvas &terminal::canvas::draw_box(const util::rectangle &r, char c)
@@ -156,7 +182,7 @@ terminal::canvas &terminal::canvas::draw_string(const util::point &p, const std:
 
 terminal::canvas &terminal::canvas::draw_string(const util::point &p, const std::string &s, int color, terminal::output_attribute attributes)
 {
-    
+
     auto activeAttributes = this->view->get_active_attributes();
     auto activeColor = this->view->get_active_color_pair();
     this->view->set_active_attributes(attributes);

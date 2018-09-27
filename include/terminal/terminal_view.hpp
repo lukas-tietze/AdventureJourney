@@ -73,6 +73,8 @@ class terminal_view
 
     bool can_add_colors() const;
     bool can_add_color_pairs() const;
+    
+    int create_style(terminal::output_attribute attributes, int color_pair);
 
   protected:
     void on_terminal_property_changed();

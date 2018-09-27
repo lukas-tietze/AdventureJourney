@@ -22,7 +22,7 @@ void quit()
     }
 }
 
-int loop(terminal::terminal_view *v)
+void loop(terminal::terminal_view *v)
 {
     terminal::canvas c(v);
     c.clear();
@@ -62,7 +62,7 @@ int loop(terminal::terminal_view *v)
     c.flush();
 }
 
-int run_component_test()
+void run_component_test()
 {
     terminal::terminal_view *v = terminal::terminal_view::get_instance();
 
@@ -78,7 +78,7 @@ int run_component_test()
     w.start('q');
 }
 
-int run_function_test()
+void run_function_test()
 {
     terminal::terminal_view *v = terminal::terminal_view::get_instance();
 
@@ -156,7 +156,7 @@ void handle_signal(util::signal_event_args &a)
     std::quick_exit(-1);
 }
 
-int main(int argc, char **argv)
+int main()
 {
     util::enable_signal_handling();
     util::get_std_signal_event() += handle_signal;

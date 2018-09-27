@@ -18,7 +18,7 @@ terminal::terminal_view::terminal_view() : terminal_view(COLS, LINES)
 terminal::terminal_view::terminal_view(int width, int height) : width(width),
                                                                 height(height)
 {
-    this->max_colors = COLORS - 1;
+    this->max_colors = COLORS;
     this->used_colors = 8;
     this->colors = new util::color[this->max_colors];
 
@@ -402,4 +402,9 @@ int terminal::terminal_view::get_active_background() const
 const terminal::terminal_view::color_pair &terminal::terminal_view::get_content(int id) const
 {
     return this->color_pairs[id - 1];
+}
+
+int terminal::terminal_view::create_style(terminal::output_attribute attribs, int color_pair)
+{
+    return static_cast<int>(attribs) | COLOR_PAIR(color_pair); 
 }

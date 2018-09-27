@@ -33,6 +33,7 @@ class control_base
     int tab_index;
     std::string text;
     bool visible;
+    int text_style;
 
   public:
     control_base();
