@@ -1,5 +1,7 @@
 #pragma once
 
+#include "data/math.hpp"
+
 #include <iostream>
 
 namespace util
@@ -40,6 +42,13 @@ class basic_dimension
     T get_area() const
     {
         return this->width * this->height;
+    }
+
+    util::basic_dimension<T> crop(const util::basic_dimension<T> &min, const util::basic_dimension<T> &max) const
+    {
+        return util::basic_dimension<T>(
+            util::crop(this->width, min.width, max.width),
+            util::crop(this->height, min.height, max.height));
     }
 
     bool operator==(const util::basic_dimension<T> &other) const

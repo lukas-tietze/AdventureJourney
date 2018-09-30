@@ -37,6 +37,13 @@ class basic_point
         return this->y;
     }
 
+    util::basic_point<T> crop(const util::basic_point<T> &min, const util::basic_point<T> &max) const
+    {
+        return util::basic_point<T>(
+            util::crop(this->x, min.x, max.x),
+            util::crop(this->y, min.y, max.y));
+    }
+
     bool operator==(const util::basic_point<T> &other) const
     {
         return this->x == other.x && this->y == other.y;

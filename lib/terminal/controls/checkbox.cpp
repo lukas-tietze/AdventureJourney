@@ -76,13 +76,13 @@ void terminal::checkbox::render(canvas &c)
     switch (this->state)
     {
     case check_state::Checked:
-        c.draw_string(util::point(bounds.get_min_x(), line), "X|");
+        c.draw_string(util::point(bounds.get_min_x(), line), "|X|");
         break;
     case check_state::Midway:
-        c.draw_string(util::point(bounds.get_min_x(), line), "O|");
+        c.draw_string(util::point(bounds.get_min_x(), line), "|O|");
         break;
     case check_state::Unchecked:
-        c.draw_string(util::point(bounds.get_min_x(), line), " |");
+        c.draw_string(util::point(bounds.get_min_x(), line), "| |");
         break;
     }
 }
