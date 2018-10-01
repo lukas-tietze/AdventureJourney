@@ -6,7 +6,8 @@
                 "${workspaceFolder}/",
                 "${workspaceFolder}/src/",
                 "${workspaceFolder}/test/",
-                "${workspaceFolder}/include/"
+                "${workspaceFolder}/include/",
+                "~/vulkan/1.1.82.1/x86_64/include/"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

@@ -70,6 +70,10 @@ std::ostream &operator<<(std::ostream &, const test_run &testRun);
 
 typedef std::vector<test_run> test_collection;
 
+namespace availability_test
+{
+int test_all();
+} // namespace availability_test
 namespace json_test
 {
 int integrity();
