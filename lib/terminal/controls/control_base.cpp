@@ -14,7 +14,9 @@ terminal::control_base::control_base() : bounds(0, 0, 0, 0),
                                          parent(nullptr),
                                          z_index(0),
                                          has_focus(false),
-                                         visible(true)
+                                         visible(true),
+                                         minimum_size(0, 0),
+                                         maximum_size(std::numeric_limits<int>::max(), std::numeric_limits<int>::max())
 {
 }
 
@@ -44,7 +46,24 @@ const util::rectangle &terminal::control_base::get_bounds() const
 
 void terminal::control_base::set_bounds(const util::rectangle &bounds)
 {
+    if (this->bounds == bounds)
+        return;
+
+    if (bounds.get_size().get_width() < this->minimum_size.get_width() ||
+        bounds.get_size().get_height() < this->minimum_size.get_height() ||
+        bounds.get_size().get_width() > this->maximum_size.get_width() ||
+        bounds.get_size().get_height() > this->maximum_size.get_height())
+        this->set_bounds_core(util::rectangle(bounds.get_location(), bounds.get_size().crop(this->minimum_size, this->maximum_size)));
+    else
+        this->set_bounds_core(bounds);
+}
+
+void terminal::control_base::set_bounds_core(const util::rectangle &bounds)
+{
+    auto oldBounds = this->bounds;
     this->bounds = bounds;
+
+    this->handle_bounds_changed(oldBounds);
 }
 
 void terminal::control_base::set_z_index(int zIndex)
@@ -105,6 +124,14 @@ const util::dimension &terminal::control_base::get_max_size() const
 void terminal::control_base::set_min_size(const util::dimension &size)
 {
     this->minimum_size = size;
+
+    if (this->bounds.get_size().get_height() < this->minimum_size.get_height() ||
+        this->bounds.get_size().get_width() < this->minimum_size.get_width())
+    {
+        this->set_bounds_core(util::rectangle(
+            this->bounds.get_location(),
+            this->bounds.get_size().crop(this->minimum_size, this->maximum_size)));
+    }
 }
 
 void terminal::control_base::set_max_size(const util::dimension &size)
@@ -132,14 +159,14 @@ void terminal::control_base::handle_add_to_control(container_base *)
 {
 }
 
-void terminal::control_base::render(terminal::canvas &)
-{
-}
-
 void terminal::control_base::handle_tab_index_changed(int oldTabIndex)
 {
 }
 
 void terminal::control_base::handle_z_index_changed(int oldZIndex)
+{
+}
+
+void terminal::control_base::handle_size_changed(util::dimension)
 {
 }

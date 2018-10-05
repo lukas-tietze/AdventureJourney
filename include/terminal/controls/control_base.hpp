@@ -35,6 +35,8 @@ class control_base
     bool visible;
     int text_style;
 
+    void set_bounds_core(const util::rectangle &);
+
   public:
     control_base();
     virtual ~control_base();
@@ -51,7 +53,6 @@ class control_base
 
     control_base *get_parent();
     const control_base *get_parent() const;
-
     bool has_parent() const;
     const util::rectangle &get_bounds() const;
     void set_bounds(const util::rectangle &);
@@ -76,7 +77,8 @@ class control_base
     virtual void handle_add_to_control(container_base *);
     virtual void handle_z_index_changed(int);
     virtual void handle_tab_index_changed(int);
+    virtual void handle_bounds_changed(const util::rectangle &);
 
-    virtual void render(canvas &);
+    virtual void render(canvas &) = 0;
 };
 } // namespace terminal

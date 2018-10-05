@@ -11,3 +11,4 @@
 #include "terminal/controls/checkbox.hpp"
 #include "terminal/controls/table.hpp"
 #include "terminal/controls/textbox.hpp"
+#include "terminal/controls/button.hpp"

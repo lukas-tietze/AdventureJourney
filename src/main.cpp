@@ -69,11 +69,25 @@ void run_component_test()
     terminal::terminal_window w;
 
     auto cb = new terminal::checkbox();
-    cb->set_bounds(util::rectangle(20, 20, 20, 3));
-    cb->set_visibility(true);
+    cb->set_bounds(util::rectangle(5, 5, 20, 3));
     cb->set_threeway_mode_enabled(false);
     cb->set_checked(true);
+
+    auto bt = new terminal::button("Press Me!");
+    bt->set_bounds(util::rectangle(5, 10, 20, 3));
+
+    auto tv = new terminal::text_view(
+        "Here we see some large Text displayed, larger than a single line in a textview. So it should be "\ 
+        "visible how the text gets wrapped and line are broken.");
+    tv->set_bounds(util::rectangle(30, 5, 40, 40));
+
+    auto tb = new terminal::textbox("Enter text here!");
+    tb->set_bounds(util::rectangle(5, 15, 20, 3));
+
     w.add_control(cb);
+    w.add_control(bt);
+    w.add_control(tb);
+    w.add_control(tv);
 
     w.start('q');
 }

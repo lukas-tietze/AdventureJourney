@@ -34,14 +34,6 @@ bool terminal::checkbox::is_threeeway_mode_enabled() const
     return this->threeway_mode;
 }
 
-void terminal::checkbox::handle_focus_aquired()
-{
-}
-
-void terminal::checkbox::handle_focus_lost()
-{
-}
-
 void terminal::checkbox::handle_key(key_input &input)
 {
     if (input.key == ' ')
@@ -52,18 +44,6 @@ void terminal::checkbox::handle_mouse(mouse_input &input)
 {
     if (input.action == mouse_action::Button1Clicked)
         this->switch_check_state();
-}
-
-void terminal::checkbox::handle_add_to_control(container_base *control)
-{
-}
-
-void terminal::checkbox::handle_tab_index_changed(int old)
-{
-}
-
-void terminal::checkbox::handle_z_index_changed(int old)
-{
 }
 
 void terminal::checkbox::render(canvas &c)
