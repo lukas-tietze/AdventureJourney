@@ -78,6 +78,7 @@ class control_base
     virtual void handle_z_index_changed(int);
     virtual void handle_tab_index_changed(int);
     virtual void handle_bounds_changed(const util::rectangle &);
+    virtual void handle_text_changed(const std::string &);
 
     virtual void render(canvas &) = 0;
 };

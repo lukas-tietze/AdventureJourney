@@ -21,6 +21,7 @@ class text_view : public control_base
     virtual void handle_key(key_input &);
     virtual void handle_mouse(mouse_input &);
     virtual void handle_bounds_changed(const util::rectangle &);
+    virtual void handle_text_changed(const std::string &);
 
     virtual void render(canvas &);
 };

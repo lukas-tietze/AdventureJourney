@@ -167,6 +167,10 @@ void terminal::control_base::handle_z_index_changed(int oldZIndex)
 {
 }
 
-void terminal::control_base::handle_size_changed(util::dimension)
+void terminal::control_base::handle_bounds_changed(const util::rectangle &)
+{
+}
+
+void terminal::control_base::handle_text_changed(const std::string &)
 {
 }
