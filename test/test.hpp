@@ -135,7 +135,7 @@ void are_equal(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x == y))
     {
-        throw assert_exception("Expected " + util::to_string(x) + ", got " + util::to_string(y) + "!", msg);
+        throw assert_exception("Expected <" + util::to_string(x) + ">, got <" + util::to_string(y) + ">!", msg);
     }
 }
 
@@ -144,7 +144,7 @@ void are_not_equal(const T &x, const T &y, const std::string &msg = "")
 {
     if (x == y)
     {
-        throw assert_exception(util::to_string(x) + " does equal " + util::to_string(y) + "!", msg);
+        throw assert_exception("<" + util::to_string(x) + "> does equal <" + util::to_string(y) + ">!", msg);
     }
 }
 
@@ -153,7 +153,7 @@ void is_greater(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x > y))
     {
-        throw assert_exception(util::to_string(x) + " is not greater than " + util::to_string(y) + "!", msg);
+        throw assert_exception("<" + util::to_string(x) + "> is not greater than <" + util::to_string(y) + ">!", msg);
     }
 }
 
@@ -162,7 +162,7 @@ void is_equal_or_greater(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x >= y))
     {
-        throw assert_exception(util::to_string(x) + "is not greater than or equal to " + util::to_string(y) + "!", msg);
+        throw assert_exception("<" + util::to_string(x) + "> is not greater than or equal to <" + util::to_string(y) + ">!", msg);
     }
 }
 
@@ -171,7 +171,7 @@ void is_less(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x < y))
     {
-        throw assert_exception(util::to_string(x) + "is not less than " + util::to_string(y) + "!", msg);
+        throw assert_exception("<" + util::to_string(x) + "> is not less than <" + util::to_string(y) + ">!", msg);
     }
 }
 
@@ -180,7 +180,7 @@ void is_equal_or_less(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x <= y))
     {
-        throw assert_exception(util::to_string(x) + "is not less than or equal to " + util::to_string(y) + "!");
+        throw assert_exception("<" + util::to_string(x) + "> is not less than or equal to <" + util::to_string(y) + ">!", msg);
     }
 }
 
@@ -189,7 +189,7 @@ void is(const void *obj, const std::string &msg = "")
 {
     if (static_cast<const T *>(obj) == nullptr)
     {
-        throw assert_exception(util::to_string(&obj) + "is not of type " + typeid(T).name(), msg);
+        throw assert_exception("<" + util::to_string(&obj) + "> is not of type <" + typeid(T).name() + ">!", msg);
     }
 }
 } // namespace assert
