@@ -96,6 +96,16 @@ int main(int argc, char **argv)
     tests.push_back(test::test_run(new test::simple_test("handler event test", &test::event_test::handler_events)));
     tests.push_back(test::test_run(new test::simple_test("member handler event test", &test::event_test::member_handler_events)));
     tests.push_back(test::test_run(new test::simple_test("rectangle test", &test::geometry_test::rectangle)));
+    tests.push_back(test::test_run(new test::simple_test("format", &test::string_test::format)));
+    tests.push_back(test::test_run(new test::simple_test("to upper", &test::string_test::to_upper)));
+    tests.push_back(test::test_run(new test::simple_test("to lower", &test::string_test::to_lower)));
+    tests.push_back(test::test_run(new test::simple_test("split with space", &test::string_test::split_space)));
+    tests.push_back(test::test_run(new test::simple_test("split with custom char", &test::string_test::split_custom_char)));
+    tests.push_back(test::test_run(new test::simple_test("split with multiple chars", &test::string_test::split_multiple_chars)));
+    tests.push_back(test::test_run(new test::simple_test("split with function", &test::string_test::split_function)));
+    tests.push_back(test::test_run(new test::simple_test("strip", &test::string_test::strip)));
+    tests.push_back(test::test_run(new test::simple_test("strip front", &test::string_test::strip_front)));
+    tests.push_back(test::test_run(new test::simple_test("strip back", &test::string_test::strip_back)));
 
     if (!quiet)
     {

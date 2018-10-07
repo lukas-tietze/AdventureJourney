@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include "test.hpp"
 
 namespace

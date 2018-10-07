@@ -26,7 +26,7 @@ std::string util::format(const std::string &format, ...)
     return res;
 }
 
-void util::to_lower(std::string &nameBuf)
+void util::to_lower_inplace(std::string &nameBuf)
 {
     std::transform(nameBuf.begin(), nameBuf.end(), nameBuf.begin(), [](char c) -> char { return std::tolower(c); });
 }
@@ -35,12 +35,12 @@ std::string util::to_lower(const std::string &nameBuf)
 {
     std::string buf(nameBuf);
 
-    to_lower(buf);
+    to_lower_inplace(buf);
 
     return buf;
 }
 
-void util::to_upper(std::string &nameBuf)
+void util::to_upper_inplace(std::string &nameBuf)
 {
     std::transform(nameBuf.begin(), nameBuf.end(), nameBuf.begin(), [](char c) -> char { return std::toupper(c); });
 }
@@ -49,22 +49,26 @@ std::string util::to_upper(const std::string &nameBuf)
 {
     std::string buf(nameBuf);
 
-    util::to_upper(buf);
+    util::to_upper_inplace(buf);
 
     return buf;
 }
 
-std::vector<std::string> util::split(const std::string &str)
+std::vector<std::string> util::split(const std::string &str, char seperator, bool removeEmtpyEntries)
 {
     std::vector<std::string> res;
     size_t i = 0;
-    size_t next = str.find(',', i);
+    size_t next = str.find(seperator, i);
 
     while (next != std::string::npos)
     {
-        res.push_back(str.substr(i, next - i));
+        if (!removeEmtpyEntries || next - i > 0)
+        {
+            res.push_back(str.substr(i, next - i));
+        }
+
         i = next + 1;
-        next = str.find(',', i);
+        next = str.find(seperator, i);
     }
 
     if (i != str.length())
@@ -73,6 +77,74 @@ std::vector<std::string> util::split(const std::string &str)
     }
 
     return res;
+}
+
+std::vector<std::string> util::split(const std::string &str, const std::string &chars, bool removeEmtpyEntries)
+{
+    std::vector<std::string> res;
+    size_t i = 0;
+    size_t next = str.find_first_of(chars, i);
+
+    while (next != std::string::npos)
+    {
+        if (!removeEmtpyEntries || next - i > 0)
+        {
+            res.push_back(str.substr(i, next - i));
+        }
+
+        i = next + 1;
+        next = str.find_first_of(chars, i);
+    }
+
+    if (i != str.length())
+    {
+        res.push_back(str.substr(i));
+    }
+
+    return res;
+}
+
+namespace
+{
+size_t find(const std::string &str, bool (*func)(char), size_t start)
+{
+    auto i = start;
+
+    while (i < str.length() && !func(str[i]))
+        i++;
+
+    return i;
+}
+} // namespace
+
+std::vector<std::string> util::split(const std::string &str, bool (*func)(char), bool removeEmtpyEntries)
+{
+    std::vector<std::string> res;
+    size_t i = 0;
+    size_t next = find(str, func, 0);
+
+    while (next != std::string::npos)
+    {
+        if (!removeEmtpyEntries || next - i > 0)
+        {
+            res.push_back(str.substr(i, next - i));
+        }
+
+        i = next + 1;
+        next = find(str, func, i);
+    }
+
+    if (i != str.length())
+    {
+        res.push_back(str.substr(i));
+    }
+
+    return res;
+}
+
+std::vector<std::string> util::split(const std::string &str, bool removeEmtpyEntries)
+{
+    return util::split(str, ' ', removeEmtpyEntries);
 }
 
 std::string util::strip(const std::string &str)
@@ -122,53 +194,4 @@ std::string util::strip_back(const std::string &str)
         end--;
 
     return str.substr(0, end);
-}
-
-void util::strip(std::string &str)
-{
-    if (str.empty())
-    {
-        return;
-    }
-
-    size_t start = 0;
-    size_t end = str.length() - 1;
-
-    while (start < str.length() && std::isspace(str[start]))
-        start++;
-
-    while (end >= 0 && std::isspace(str[end]))
-        end--;
-
-    str.assign(str.substr(start, end));
-}
-
-void util::strip_front(std::string &str)
-{
-    if (str.empty())
-    {
-        return;
-    }
-
-    size_t start = 0;
-
-    while (start < str.length() && std::isspace(str[start]))
-        start++;
-
-    str.assign(str.substr(start));
-}
-
-void util::strip_back(std::string &str)
-{
-    if (str.empty())
-    {
-        return;
-    }
-
-    size_t end = str.length() - 1;
-
-    while (end >= 0 && std::isspace(str[end]))
-        end--;
-
-    str.assign(str.substr(0, end));
 }

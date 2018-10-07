@@ -101,6 +101,19 @@ namespace geometry_test
 {
 int rectangle();
 }
+namespace string_test
+{
+int format();
+int to_upper();
+int to_lower();
+int split_space();
+int split_custom_char();
+int split_multiple_chars();
+int split_function();
+int strip();
+int strip_front();
+int strip_back();
+} // namespace string_test
 } // namespace test
 
 namespace assert
