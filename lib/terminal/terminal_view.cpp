@@ -310,7 +310,7 @@ int terminal::terminal_view::add_color_pair(int id1, int id2)
                                                  this->used_colors,
                                                  util::format("Failed to add new color pair. %i/%i colors used.", this->used_colors, this->max_colors));
 
-    this->color_pairs[this->used_color_pairs] = util::make_tuple(id1, id2);
+    this->color_pairs[this->used_color_pairs] = std::make_tuple(id1, id2);
     this->used_color_pairs++;
     init_pair(this->used_color_pairs, id1, id2);
 
@@ -331,7 +331,7 @@ int terminal::terminal_view::find_color_pair(int id1, int id2)
     {
         const auto &pair = this->color_pairs[i];
 
-        if (pair.item_1() == id1 && pair.item_2() == id2)
+        if (std::get<0>(pair) == id1 && std::get<1>(pair) == id2)
             return i;
     }
 

@@ -110,6 +110,15 @@ int strip();
 int strip_front();
 int strip_back();
 } // namespace string_test
+namespace data_test
+{
+namespace collection_test
+{
+int test_array();
+int test_collect_rope();
+int test_cache();
+} // namespace collection_test
+} // namespace data_test
 } // namespace test
 
 namespace assert

@@ -106,6 +106,9 @@ int main(int argc, char **argv)
     tests.push_back(test::test_run(new test::simple_test("strip", &test::string_test::strip)));
     tests.push_back(test::test_run(new test::simple_test("strip front", &test::string_test::strip_front)));
     tests.push_back(test::test_run(new test::simple_test("strip back", &test::string_test::strip_back)));
+    tests.push_back(test::test_run(new test::simple_test("collect rope", &test::data_test::collection_test::test_collect_rope)));
+    tests.push_back(test::test_run(new test::simple_test("array", &test::data_test::collection_test::test_array)));
+    tests.push_back(test::test_run(new test::simple_test("cache", &test::data_test::collection_test::test_cache)));
 
     if (!quiet)
     {
