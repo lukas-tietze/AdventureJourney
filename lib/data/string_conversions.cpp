@@ -163,7 +163,7 @@ std::string util::strip(const std::string &str)
     while (end >= 0 && std::isspace(str[end]))
         end--;
 
-    return str.substr(start, end);
+    return str.substr(start, end - start + 1);
 }
 
 std::string util::strip_front(const std::string &str)
