@@ -2,8 +2,8 @@
 
 #include <curses.h>
 #include <string>
+#include <tuple>
 
-#include "data/collection/tuple.hpp"
 #include "util.hpp"
 #include "values.hpp"
 #include "geometry.hpp"
@@ -14,7 +14,7 @@ namespace terminal
 class terminal_view
 {
   public:
-    typedef util::tuple2<int, int> color_pair;
+    typedef std::tuple<int, int> color_pair;
 
     ~terminal_view();
 
