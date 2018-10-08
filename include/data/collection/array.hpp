@@ -1,63 +1,70 @@
 #pragma once
 
+#include <memory>
+
+#include "exception.hpp"
+
 namespace util
 {
-template <class T>
+template <class T, class TAlloc = std::allocator<T>>
 class array
 {
   private:
     T *data;
     int size;
+    TAlloc allocator;
 
   public:
-    array(int length)
+    array(int size)
     {
-        this.size = size;
-        this.data = new T[this.size];
+        this->size = size;
+        this->data = this->allocator.allocate(this->size);
     }
 
     ~array()
     {
-        delete[] this.data;
+        this->allocator.deallocate(this->data, this->size);
+    }
+
+    T &first()
+    {
+        return this->data[0];
     }
 
     const T &first() const
     {
-        return this.data[0];
+        return this->data[0];
+    }
+
+    T &last()
+    {
+        return this->data[this->size - 1];
     }
 
     const T &last() const
     {
-        return this.data[this.size - 1];
+        return this->data[this->size - 1];
     }
 
-    int length()
+    size_t length() const
     {
-        return this.size;
+        return this->size;
     }
 
     const T &operator[](int index) const
     {
-        if (index >= 0 && index < this.size)
-        {
-            return this.data[index];
-        }
-        else
-        {
-            throw std::exception();
-        }
+        if (index < 0 || index >= this->size)
+            throw util::index_out_of_range_exception();
+
+        return this->data[index];
     }
 
     T &operator[](int index)
     {
-        if (index >= 0 && index < this.size)
-        {
-            return this.data[index];
-        }
-        else
-        {
-            throw std::exception();
-        }
+        if (index < 0 || index >= this->size)
+            throw util::index_out_of_range_exception();
+
+        return this->data[index];
     }
 }; /*array*/
 } // namespace util

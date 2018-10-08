@@ -1,5 +1,7 @@
 #pragma once
 
+#include <unordered_map>
+
 namespace util
 {
 enum class cache_policy
