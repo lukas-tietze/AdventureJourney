@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <tuple>
+#include <iterator>
 
 namespace util
 {
@@ -19,6 +20,7 @@ class collect_rope
     rope_element *start;
     rope_element *last;
     size_t total_count;
+    size_t part_count;
 
     std::allocator<T> item_allocator;
     std::allocator<rope_element> element_allocator;
@@ -27,11 +29,27 @@ class collect_rope
     void release_resources();
 
   public:
-    class iterator : public std::iterator<std::forward_iterator_tag, T>
+    class iterator
     {
       private:
         rope_element *element;
         size_t pos;
+
+        void advance()
+        {
+            if (this->element == nullptr)
+            {
+
+                return;
+            }
+            this->pos++;
+
+            if (this->pos == this->element->count)
+            {
+                this->element = this->element->next;
+                this->pos = 0;
+            }
+        }
 
       public:
         iterator(const iterator &copy) : element(copy.element),
@@ -56,42 +74,20 @@ class collect_rope
             return copy++;
         }
 
-        iterator &operator++()
+        ////x++;
+        iterator operator++()
         {
-            if (this->element == nullptr)
-            {
-                return *this;
-            }
+            auto res = iterator(*this);
 
-            if (this->pos < this->element->count)
-            {
-                this->pos++;
-            }
-            else
-            {
-                this->element = this->element->next;
-                this->pos = 0;
-            }
+            this->advance();
 
-            return *this;
+            return res;
         }
 
+        ////++x;
         iterator &operator++(int)
         {
-            if (this->element == nullptr)
-            {
-                return *this;
-            }
-
-            if (this->pos < this->element->count)
-            {
-                this->pos++;
-            }
-            else
-            {
-                this->element = this->element->next;
-                this->pos = 0;
-            }
+            this->advance();
 
             return *this;
         }
@@ -107,15 +103,21 @@ class collect_rope
             return !(*this == other);
         }
 
-        reference operator*() const
+        T &operator*()
         {
-            return this->element.data[this->pos];
+            return this->element->data[this->pos];
+        }
+
+        const T &operator*() const
+        {
+            return this->element->data[this->pos];
         }
     };
 
     collect_rope() : start(nullptr),
                      last(nullptr),
                      total_count(0),
+                     part_count(0),
                      item_allocator(),
                      element_allocator()
     {
@@ -134,6 +136,7 @@ class collect_rope
         std::swap(this->start, other.start);
         std::swap(this->last, other.last);
         std::swap(this->total_count, other.total_count);
+        std::swap(this->part_count, other.part_count);
     }
 
     void copy_from(const collect_rope<T, PartCapacity> &other)
@@ -169,7 +172,7 @@ class collect_rope
     {
         this->total_count++;
 
-        if (this->last == nullptr && this->last->count == PartCapacity)
+        if (this->last == nullptr || this->last->count == PartCapacity)
         {
             this->append_rope();
         }
@@ -181,6 +184,16 @@ class collect_rope
     size_t size() const
     {
         return this->total_count;
+    }
+
+    size_t parts() const
+    {
+        return this->part_count;
+    }
+
+    size_t part_size() const
+    {
+        return PartCapacity;
     }
 
     // Copy assignment -> Do deep copy
@@ -243,13 +256,15 @@ void collect_rope<T, PartCapacity>::append_rope()
         this->last->next = nextElement;
         this->last = nextElement;
     }
+
+    this->part_count++;
 }
 
 template <class T, int PartCapacity>
 void collect_rope<T, PartCapacity>::release_resources()
 {
     auto current = this->start;
-    auto next = nullptr;
+    auto next = current;
 
     while (current != nullptr)
     {
@@ -269,6 +284,7 @@ void collect_rope<T, PartCapacity>::release_resources()
     this->start = nullptr;
     this->last = nullptr;
     this->total_count = 0;
+    this->part_count = 0;
 }
 
 } // namespace util

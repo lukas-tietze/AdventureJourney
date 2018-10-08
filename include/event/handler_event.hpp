@@ -47,6 +47,10 @@ template <class TArgs>
 class member_handler_base
 {
   public:
+    virtual ~member_handler_base()
+    {
+    }
+    
     virtual void operator()(TArgs &args) const = 0;
     virtual bool operator==(const member_handler_base &other) const = 0;
 };
