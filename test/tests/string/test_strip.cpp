@@ -3,10 +3,10 @@
 
 int test::string_test::strip()
 {
-    assert::are_equal(std::string("abc"), util::strip(" abc"));
-    assert::are_equal(std::string("abc"), util::strip(" abc "));
-    assert::are_equal(std::string("abc"), util::strip("   abc    "));
-    assert::are_equal(std::string("abc"), util::strip(" \t\nabc\n\n   \t"));
+    assert::are_equal(std::string("abc"), util::strip(" abc"), CPL_LOCATION);
+    assert::are_equal(std::string("abc"), util::strip(" abc "), CPL_LOCATION);
+    assert::are_equal(std::string("abc"), util::strip("   abc    "), CPL_LOCATION);
+    assert::are_equal(std::string("abc"), util::strip(" \t\nabc\n\n   \t"), CPL_LOCATION);
 
     return 0;
 }

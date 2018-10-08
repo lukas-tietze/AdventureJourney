@@ -193,5 +193,5 @@ std::string util::strip_back(const std::string &str)
     while (end >= 0 && std::isspace(str[end]))
         end--;
 
-    return str.substr(0, end);
+    return str.substr(0, end + 1);
 }
