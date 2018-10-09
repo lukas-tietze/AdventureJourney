@@ -21,29 +21,35 @@ const double parse_number(const std::string &s)
     return node->get_value_as_number();
 }
 
+namespace
+{
+    void test_dummy()
+    {
+        parse_number("4.0E2");
+    }
+}
+
 int test::json_test::number_parsing()
 {
-    assert::are_equal(1.0, parse_number("1.0"));
-    assert::are_equal(1.0, parse_number("1"));
-    assert::are_equal(0.5, parse_number(".5"));
-    assert::are_equal(0.5, parse_number("0.5"));
-    assert::are_equal(3.5, parse_number("3.5"));
+    test_dummy();
 
-    assert::are_equal(-1.0, parse_number("-1.0"));
-    assert::are_equal(-1.0, parse_number("-1"));
-    assert::are_equal(-0.5, parse_number("-.5"));
-    assert::are_equal(-0.5, parse_number("-0.5"));
-    assert::are_equal(-3.5, parse_number("-3.5"));
+    assert::are_equal(1.0, parse_number("1.0"), CPL_LOCATION);
+    assert::are_equal(1.0, parse_number("1"), CPL_LOCATION);
+    assert::are_equal(0.5, parse_number("0.5"), CPL_LOCATION);
+    assert::are_equal(3.5, parse_number("3.5"), CPL_LOCATION);
 
-    assert::are_equal(400.0, parse_number("4e2"));
-    assert::are_equal(400.0, parse_number("4.0e2"));
-    assert::are_equal(40.0, parse_number("0.4e2"));
-    assert::are_equal(40.0, parse_number(".4e2"));
+    assert::are_equal(-1.0, parse_number("-1.0"), CPL_LOCATION);
+    assert::are_equal(-1.0, parse_number("-1"), CPL_LOCATION);
+    assert::are_equal(-0.5, parse_number("-0.5"), CPL_LOCATION);
+    assert::are_equal(-3.5, parse_number("-3.5"), CPL_LOCATION);
 
-    assert::are_equal(400.0, parse_number("4E2"));
-    assert::are_equal(400.0, parse_number("4.0E2"));
-    assert::are_equal(40.0, parse_number("0.4E2"));
-    assert::are_equal(40.0, parse_number(".4E2"));
+    assert::are_equal(400.0, parse_number("4e2"), CPL_LOCATION);
+    assert::are_equal(400.0, parse_number("4.0e2"), CPL_LOCATION);
+    assert::are_equal(40.0, parse_number("0.4e2"), CPL_LOCATION);
+
+    assert::are_equal(400.0, parse_number("4E2"), CPL_LOCATION);
+    assert::are_equal(400.0, parse_number("4.0E2"), CPL_LOCATION);
+    assert::are_equal(40.0, parse_number("0.4E2"), CPL_LOCATION);
 
     return 0;
 }

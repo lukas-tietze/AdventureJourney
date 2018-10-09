@@ -122,11 +122,19 @@ int main(int argc, char **argv)
         std::printf("|-------------------------------------\n\n");
     }
 
+
+    auto start = std::clock();
+    auto good = 0;
+
     if (thread_count == 1)
     {
         for (auto &testRun : tests)
         {
             testRun.execute();
+
+            if (testRun.is_good())
+                good++;
+
             util::printr(testRun);
         }
     }
@@ -142,6 +150,16 @@ int main(int argc, char **argv)
             test_threads[i].join();
         }
     }
+
+    auto end = std::clock();
+    auto failed = tests.size() - good;
+
+    std::printf("\nFinished in %f\n%i good (%.2f%%)\n%i failed (%.2f%%)\n",
+                util::clock_to_ms(end - start),
+                good,
+                (double)good / (double)tests.size(),
+                failed,
+                (double)failed / (double)tests.size());
 
     return 0;
 }

@@ -18,17 +18,18 @@ json::parser::~parser()
 
 void json::parser::parse(const std::string &data, json::node *&target)
 {
+    std::allocator<char> allocator;
     auto len = data.length();
-    auto buf = new char[len];
+    auto buf = allocator.allocate(len);
 
-    std::memcpy(buf, data.data(), len);
+    std::memcpy(buf, data.c_str(), len * sizeof(char));
 
     json::tokenizer t;
     const auto &tokens = t.tokenize(buf, len);
 
     target = this->parse(tokens);
 
-    delete[] buf;
+    allocator.deallocate(buf, len);
 }
 
 json::node *json::parser::parse(const std::vector<token> &tokens)

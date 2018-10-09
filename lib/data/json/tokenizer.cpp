@@ -207,7 +207,7 @@ void json::tokenizer::read_number()
         case STATE_LAST_DIGITS:
             if (c >= '0' && c <= '9')
                 state = STATE_LAST_DIGITS;
-            else if (c == 'e' || state == 'E')
+            else if (c == 'e' || c == 'E')
                 state = STATE_EXPONENT_START;
             else if (this->is_valid_number_end(c))
                 state = STATE_END;
