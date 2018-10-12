@@ -3,46 +3,43 @@
 #include "data/collection/array.hpp"
 #include "test.hpp"
 
-template <long FROM, long TO>
-class Range
-{
-  public:
-    // member typedefs provided through inheriting from std::iterator
-    class iterator : public std::iterator<
-                         std::input_iterator_tag, // iterator_category
-                         long,                    // value_type
-                         long,                    // difference_type
-                         const long *,            // pointer
-                         long                     // reference
-                         >
-    {
-        long num = FROM;
-
-      public:
-        explicit iterator(long _num = 0) : num(_num) {}
-        iterator &operator++()
-        {
-            num = TO >= FROM ? num + 1 : num - 1;
-            return *this;
-        }
-        iterator operator++(int)
-        {
-            iterator retval = *this;
-            ++(*this);
-            return retval;
-        }
-        bool operator==(iterator other) const { return num == other.num; }
-        bool operator!=(iterator other) const { return !(*this == other); }
-        reference operator*() const { return num; }
-    };
-    iterator begin() { return iterator(FROM); }
-    iterator end() { return iterator(TO >= FROM ? TO + 1 : TO - 1); }
-};
-
 int test::data_test::collection_test::test_array()
 {
-    auto range = Range<15, 25>();
-    auto itr = std::find(range.begin(), range.end(), 18);
+    util::array<int> a(10);
+
+    assert::are_equal((size_t)10, a.length());
+
+    for(size_t i = 0; i < 10; i++)
+    {
+        a[i] = (int)i;
+    }
+
+    ////default iteration
+    for(size_t i = 0; i < 10; i++)
+    {
+        assert::are_equal((int)i, a[i]);
+    }
+
+    int i = 0;
+    for(const auto &x : a)
+    {
+        assert::are_equal(i, x);
+        i++;
+    }
+
+    i = 0;
+    for(auto pos = a.begin(), end = a.end(); pos != end; pos++)
+    {
+        assert::are_equal(i, *pos);
+        i++;
+    }
+
+    i = 0;
+    for(auto pos = a.begin(), end = a.end(); pos != end; ++pos)
+    {
+        assert::are_equal(i, *pos);
+        i++;
+    }
 
     return 0;
 }

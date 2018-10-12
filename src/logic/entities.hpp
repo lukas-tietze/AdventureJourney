@@ -2,6 +2,8 @@
 
 #include <string>
 
+namespace
+{
 class entity_class
 {
   private:
@@ -22,3 +24,4 @@ class entity
     long attack;
     long armourPen;
 };
+}
