@@ -44,32 +44,48 @@ void terminal::text_view::prepare_lines()
 
     const auto &text = this->get_text();
 
-    size_t lastSpace = 0;
-    size_t currentLineLength = 0;
-    size_t lastLineBreak = 0;
+    size_t last = 0;
+    size_t pos = 0;
+    size_t next = 0;
     size_t maxLineLength = this->get_bounds().get_width() - 2;
 
-    for (size_t i = 0, end = text.length(); i < end; i++)
+    while (pos < text.length())
     {
-        currentLineLength++;
+        next = text.length();
 
-        if (std::isspace(text[i]))
+        for (size_t i = pos; i < text.length(); i++)
         {
-            lastSpace = i;
+            if (std::isspace(text[i]))
+            {
+                next = i;
+                break;
+            }
+            else if (text[i] == '.' ||
+                     text[i] == ',' ||
+                     text[i] == '-' ||
+                     pos + i > maxLineLength)
+            {
+                next = i + 1;
+                break;
+            }
         }
 
-        if (currentLineLength >= maxLineLength)
+        pos = next + 1;
+        auto len = next - last;
+
+        if (len > maxLineLength)
         {
-            this->lines.push_back(util::strip(text.substr(lastLineBreak, i - lastLineBreak)));
-            lastLineBreak = lastSpace;
-            currentLineLength -= this->lines.back().length();
+            this->lines.push_back(util::strip(text.substr(last, len)));
+            last = next;
         }
     }
 }
 
 void terminal::text_view::render(terminal::canvas &c)
 {
-    if (this->get_bounds().get_height() > 2)
+    c.draw_box(this->get_bounds(), '-', '|', '+');
+
+    if (this->get_bounds().get_height() > 2 && !this->lines.empty())
     {
         int visibleLines = std::min(this->lines.size(), (size_t)(this->get_bounds().get_height() - 2));
 
@@ -78,6 +94,4 @@ void terminal::text_view::render(terminal::canvas &c)
             c.draw_string(this->get_bounds().get_location() + util::point(1, i + 1), this->lines[i]);
         }
     }
-
-    c.draw_box(this->get_bounds(), '-', '|', '+');
 }

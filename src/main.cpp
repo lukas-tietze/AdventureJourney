@@ -77,8 +77,10 @@ void run_component_test()
     bt->set_bounds(util::rectangle(5, 10, 20, 3));
 
     auto tv = new terminal::text_view(
-        "Here we see some large Text displayed, larger than a single line in a textview. So it should be "\ 
-        "visible how the text gets wrapped and line are broken.");
+        "Here we see some large Text displayed, larger than a single line in a textview. So it should be " \
+        "visible how the text gets wrapped and lines are broken. " \
+        "ffoofofofofofofoofofofofofofofofofofofofofofoofofofofofofofofofo" \
+        " ololo lol ol"  );
     tv->set_bounds(util::rectangle(30, 5, 40, 40));
 
     auto tb = new terminal::textbox("Enter text here!");

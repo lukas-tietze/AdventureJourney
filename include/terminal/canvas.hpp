@@ -18,19 +18,6 @@ struct pattern_item final
     terminal::output_attribute custom_attributes;
 };
 
-class pattern_iterator final
-{
-  private:
-    pattern_iterator();
-    pattern_iterator(const pattern_iterator &);
-
-  public:
-    const pattern_item &operator*() const;
-    pattern_iterator operator++() const;
-    bool operator==(const pattern_iterator &) const;
-    bool operator!=(const pattern_iterator &) const;
-};
-
 class pattern final
 {
   private:
@@ -40,6 +27,9 @@ class pattern final
   public:
     pattern();
     pattern(const pattern &);
+
+    typedef std::vector<pattern_item>::iterator iterator;
+    typedef std::vector<pattern_item>::const_iterator const_iterator;
 
     pattern &push(const pattern_item &);
     pattern &push(char c);
@@ -59,8 +49,10 @@ class pattern final
     uint get_total_length();
     uint get_item_count();
 
-    pattern_iterator begin() const;
-    pattern_iterator end() const;
+    const_iterator begin() const;
+    const_iterator end() const;
+    iterator begin();
+    iterator end();
 };
 
 class canvas
