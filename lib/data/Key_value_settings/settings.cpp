@@ -1,7 +1,21 @@
 #include "data/key_value_settings.hpp"
 
-util::setting::setting(const std::string &name, const std::string &value) : name(name),
-                                                                            value(value)
+util::setting::setting(const std::string &name, setting_type type, const std::string &value) : name(name),
+                                                                                               type(type),
+                                                                                               value(value)
+{
+}
+
+util::setting::setting(const std::string &name, double value) : name(name),
+                                                                type(setting_type::Number),
+                                                                parsed_value(value)
+{
+}
+
+util::setting::setting(const util::setting &copy) : name(copy.name),
+                                                    type(copy.type),
+                                                    value(copy.value),
+                                                    parsed_value(copy.parsed_value)
 {
 }
 

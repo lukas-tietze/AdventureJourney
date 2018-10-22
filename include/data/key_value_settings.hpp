@@ -23,7 +23,10 @@ class setting
     double parsed_value;
 
   public:
-    setting(const std::string &name, const std::string &value);
+    setting(const setting &);
+
+    setting(const std::string &, setting_type type, const std::string &);
+    setting(const std::string &, double);
 
     setting_type get_type() const;
     double get_value_as_double() const;
