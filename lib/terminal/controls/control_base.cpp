@@ -46,39 +46,51 @@ const util::rectangle &terminal::control_base::get_bounds() const
 
 void terminal::control_base::set_bounds(const util::rectangle &bounds)
 {
-    if (this->bounds == bounds)
-        return;
-
-    if (bounds.get_size().get_width() < this->minimum_size.get_width() ||
-        bounds.get_size().get_height() < this->minimum_size.get_height() ||
-        bounds.get_size().get_width() > this->maximum_size.get_width() ||
-        bounds.get_size().get_height() > this->maximum_size.get_height())
-        this->set_bounds_core(util::rectangle(bounds.get_location(), bounds.get_size().crop(this->minimum_size, this->maximum_size)));
-    else
+    if (this->bounds != bounds)
+    {
+        this->handle_bounds_changed();
         this->set_bounds_core(bounds);
+    }
 }
 
 void terminal::control_base::set_bounds_core(const util::rectangle &bounds)
 {
-    auto oldBounds = this->bounds;
-    this->bounds = bounds;
+    this->validate_bounds(this->bounds);
+}
 
-    this->handle_bounds_changed(oldBounds);
+bool terminal::control_base::validate_bounds(util::rectangle &alternative)
+{
+    if (bounds.get_size().get_width() < this->minimum_size.get_width() ||
+        bounds.get_size().get_height() < this->minimum_size.get_height() ||
+        bounds.get_size().get_width() > this->maximum_size.get_width() ||
+        bounds.get_size().get_height() > this->maximum_size.get_height())
+    {
+        alternative = util::rectangle(util::rectangle(bounds.get_location(), bounds.get_size().crop(this->minimum_size, this->maximum_size)));
+    }
 }
 
 void terminal::control_base::set_z_index(int zIndex)
 {
+    if (this->z_index != zIndex)
+    {
+        this->set_z_index_core(zIndex);
+        this->handle_z_index_changed();
+    }
+}
+
+void terminal::control_base::set_z_index_core(int zIndex)
+{
     this->z_index = zIndex;
+
+    if (this->parent != nullptr)
+    {
+        // this->parent->invalidate();
+    }
 }
 
 int terminal::control_base::get_z_index() const
 {
     return this->z_index;
-}
-
-std::string &terminal::control_base::get_text()
-{
-    return this->text;
 }
 
 const std::string &terminal::control_base::get_text() const
@@ -87,6 +99,15 @@ const std::string &terminal::control_base::get_text() const
 }
 
 void terminal::control_base::set_text(const std::string &text)
+{
+    if (this->text != text)
+    {
+        this->set_text_core(text);
+        this->handle_text_changed();
+    }
+}
+
+void terminal::control_base::set_text_core(const std::string &text)
 {
     this->text = text;
 }
@@ -159,18 +180,18 @@ void terminal::control_base::handle_add_to_control(container_base *)
 {
 }
 
-void terminal::control_base::handle_tab_index_changed(int oldTabIndex)
+void terminal::control_base::handle_tab_index_changed()
 {
 }
 
-void terminal::control_base::handle_z_index_changed(int oldZIndex)
+void terminal::control_base::handle_z_index_changed()
 {
 }
 
-void terminal::control_base::handle_bounds_changed(const util::rectangle &)
+void terminal::control_base::handle_bounds_changed()
 {
 }
 
-void terminal::control_base::handle_text_changed(const std::string &)
+void terminal::control_base::handle_text_changed()
 {
 }

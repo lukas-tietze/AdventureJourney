@@ -35,7 +35,16 @@ class control_base
     bool visible;
     int text_style;
 
+  protected:
     void set_bounds_core(const util::rectangle &);
+    void set_z_index_core(int);
+    void set_text_core(const std::string &);
+    void set_visibility_core(bool visible);
+    void set_tab_index_core(int);
+    void set_min_size_core(const util::dimension &);
+    void set_max_size_core(const util::dimension &);
+
+    bool validate_bounds(util::rectangle &);
 
   public:
     control_base();
@@ -58,7 +67,6 @@ class control_base
     void set_bounds(const util::rectangle &);
     void set_z_index(int);
     int get_z_index() const;
-    std::string &get_text();
     const std::string &get_text() const;
     void set_text(const std::string &);
     bool is_visible() const;
@@ -70,15 +78,16 @@ class control_base
     void set_min_size(const util::dimension &);
     void set_max_size(const util::dimension &);
 
+    virtual void handle_z_index_changed();
+    virtual void handle_tab_index_changed();
+    virtual void handle_bounds_changed();
+    virtual void handle_text_changed();
+
     virtual void handle_focus_aquired();
     virtual void handle_focus_lost();
     virtual void handle_key(key_input &);
     virtual void handle_mouse(mouse_input &);
     virtual void handle_add_to_control(container_base *);
-    virtual void handle_z_index_changed(int);
-    virtual void handle_tab_index_changed(int);
-    virtual void handle_bounds_changed(const util::rectangle &);
-    virtual void handle_text_changed(const std::string &);
 
     virtual void render(canvas &) = 0;
 };

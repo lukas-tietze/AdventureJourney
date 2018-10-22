@@ -34,8 +34,35 @@ void terminal::text_view::handle_text_changed(const std::string &oldText)
 {
     if (this->get_text() != oldText)
     {
+        this->prepare_text();
         this->prepare_lines();
     }
+}
+
+void terminal::text_view::prepare_text()
+{
+    auto tabCount = 0;
+    auto start = this->get_text().c_str();
+    auto end = start + this->get_text().length();
+
+    for (auto i = start; i != end; i++)
+        if (*i == '\t')
+            tabCount++;
+
+    if (tabCount == 0)
+        return;
+
+    std::string res;
+
+    res.reserve(this->get_text().length());
+
+    for (auto i = start; i != end; i++)
+        if (*i == '\t')
+            res.append("    ");
+        else
+            res.push_back(*i);
+
+    this->set_text(res);
 }
 
 void terminal::text_view::prepare_lines()
@@ -55,29 +82,28 @@ void terminal::text_view::prepare_lines()
 
         for (size_t i = pos; i < text.length(); i++)
         {
-            if (std::isspace(text[i]))
+            if (std::isspace(text[i]) ||
+                pos + i > maxLineLength)
             {
                 next = i;
                 break;
             }
-            else if (text[i] == '.' ||
-                     text[i] == ',' ||
-                     text[i] == '-' ||
-                     pos + i > maxLineLength)
-            {
-                next = i + 1;
-                break;
-            }
+            // else if (text[i] == '.' ||
+            //          text[i] == ',' ||
+            //          text[i] == '-')
+            // {
+            //     next = i + 1;
+            //     break;
+            // }
+        }
+
+        if (next - last > maxLineLength)
+        {
+            this->lines.push_back(util::strip(text.substr(last, pos - last)));
+            last = pos;
         }
 
         pos = next + 1;
-        auto len = next - last;
-
-        if (len > maxLineLength)
-        {
-            this->lines.push_back(util::strip(text.substr(last, len)));
-            last = next;
-        }
     }
 }
 

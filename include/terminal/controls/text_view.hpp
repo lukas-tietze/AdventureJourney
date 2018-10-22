@@ -12,6 +12,7 @@ class text_view : public control_base
   private:
     std::vector<std::string> lines;
     void prepare_lines();
+    void prepare_text();
 
   public:
     text_view();

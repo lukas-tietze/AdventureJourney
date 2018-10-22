@@ -48,6 +48,20 @@ target_link_libraries(Test Threads::Threads)
 # target_link_libraries(Test Vulkan_LIBRARIES)
 
 #--------------------------------------------------------
+# Playground
+#--------------------------------------------------------
+project (Playground)
+include_directories(include)
+include_directories(test)
+include_directories(src)
+include_directories(playground)
+
+add_executable(Playground playground/main.cpp ${TESTS})
+target_link_libraries(Playground COMMON)
+target_link_libraries(Playground ncurses)
+target_link_libraries(Playground Threads::Threads)
+
+#--------------------------------------------------------
 # Runtime
 #--------------------------------------------------------
 
