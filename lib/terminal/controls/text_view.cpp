@@ -62,7 +62,7 @@ void terminal::text_view::prepare_text()
         else
             res.push_back(*i);
 
-    this->set_text(res);
+    this->set_text_core(res);
 }
 
 void terminal::text_view::prepare_lines()
@@ -88,16 +88,9 @@ void terminal::text_view::prepare_lines()
                 next = i;
                 break;
             }
-            // else if (text[i] == '.' ||
-            //          text[i] == ',' ||
-            //          text[i] == '-')
-            // {
-            //     next = i + 1;
-            //     break;
-            // }
         }
 
-        if (next - last > maxLineLength)
+        if (next - last > maxLineLength || text[next] == '\n')
         {
             this->lines.push_back(util::strip(text.substr(last, pos - last)));
             last = pos;

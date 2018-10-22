@@ -32,5 +32,6 @@ class setting
     const std::string &get_name() const;
 };
 
-int read_settings(std::istream &in, std::unordered_map<std::string, setting> &);
+int read_settings(std::istream &in, std::unordered_map<std::string, std::string> &);
+int parse_settings(const std::unordered_map<std::string, std::string> &, std::unordered_map<std::string, setting> &);
 } // namespace util

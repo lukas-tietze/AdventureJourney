@@ -123,8 +123,8 @@ int main(int argc, char **argv)
     }
 
 
-    auto start = std::clock();
-    auto good = 0;
+    clock_t start = std::clock();
+    uint good = 0;
 
     if (thread_count == 1)
     {
@@ -151,10 +151,10 @@ int main(int argc, char **argv)
         }
     }
 
-    auto end = std::clock();
-    auto failed = tests.size() - good;
+    clock_t end = std::clock();
+    uint failed = tests.size() - good;
 
-    std::printf("\nFinished in %f\n%i good (%.2f%%)\n%i failed (%.2f%%)\n",
+    std::printf("\nFinished in %f\n%u good (%.2f%%)\n%u failed (%.2f%%)\n",
                 util::clock_to_ms(end - start),
                 good,
                 (double)good / (double)tests.size(),

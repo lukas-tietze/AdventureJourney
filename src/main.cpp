@@ -79,15 +79,15 @@ void run_component_test()
     auto tv = new terminal::text_view(
         "01 2\n"\
         "3 45\n"\
-        "");
-    tv->set_bounds(util::rectangle(30, 5, 6, 40));
+        "678 90");
+    tv->set_bounds(util::rectangle(5, 5, 40, 40));
 
     auto tb = new terminal::textbox("Enter text here!");
     tb->set_bounds(util::rectangle(5, 15, 20, 3));
 
-    w.add_control(cb);
-    w.add_control(bt);
-    w.add_control(tb);
+    // w.add_control(cb);
+    // w.add_control(bt);
+    // w.add_control(tb);
     w.add_control(tv);
 
     w.start('q');
