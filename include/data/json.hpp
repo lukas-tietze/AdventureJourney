@@ -30,14 +30,6 @@ std::ostream &operator<<(std::ostream &, const value_type &);
 
 class formatted_printer;
 
-class i_json_mappable
-{
-  public:
-    virtual ~i_json_mappable();
-
-    virtual void *map(const std::string &name, json::value_type type) = 0;
-};
-
 class node
 {
   public:
@@ -184,6 +176,15 @@ class primitive_node final : public node
 
     bool operator==(const node &other) const;
     bool operator!=(const node &other) const;
+};
+
+class i_json_serializable
+{
+  public:
+    virtual ~i_json_serializable();
+
+    virtual node *serialize() = 0;
+    virtual void deserialize(const node *) = 0;
 };
 
 class value_exception : public util::exception

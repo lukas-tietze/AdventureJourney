@@ -1,27 +1,5 @@
-#pragma once
-
-#include <string>
-
-namespace
-{
-class entity_class
-{
-  private:
-    std::string name;
-};
-
-class entity_subclass
-{
-  private:
-    std::string name;
-    std::string parentClassName;
-};
-
-class entity
-{
-  private:
-    long armor;
-    long attack;
-    long armourPen;
-};
-}
+#include "entities/entity_bases.hpp"
+#include "entities/resources.hpp"
+#include "entities/army.hpp"
+#include "entities/planet.hpp"
+#include "entities/units.hpp"

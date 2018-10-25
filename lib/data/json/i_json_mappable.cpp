@@ -1,5 +1,5 @@
 #include "data/json.hpp"
 
-json::i_json_mappable::~i_json_mappable()
+json::i_json_serializable::~i_json_serializable()
 {
 }
