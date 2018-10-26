@@ -1,7 +1,8 @@
 #pragma once
 
 #include "data/json.hpp"
-#include "entity_bases.hpp"
+#include "resources.hpp"
+#include "util/id_generator_base.hpp"
 
 namespace logic
 {
@@ -16,27 +17,19 @@ enum class unit_type
 class unit
 {
   private:
-    id_t class_id;
+    unit_class *type;
 
     long remaining_hit_points;
 };
 
-class carrier_unit : public unit
+class space_ship : public unit, public has_name_base
 {
   private:
 };
 
-class space_ship
+class unit_class :  public has_name_base, public id_generator_base<unit>, public json::i_json_serializable
 {
   private:
-    std::string name;
-};
-
-class unit_class : public entity_id_base<unit>, json::i_json_serializable
-{
-  private:
-    std::string name;
-
     long hit_points;
     long energy_defense;
     long energy_penetration;
@@ -45,5 +38,7 @@ class unit_class : public entity_id_base<unit>, json::i_json_serializable
     long physical_penetration;
     long physical_damage;
     long movement;
+
+    logic::resource_set upkeep;
 };
 } // namespace logic

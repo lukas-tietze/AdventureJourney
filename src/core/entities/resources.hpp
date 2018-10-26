@@ -3,20 +3,19 @@
 #include <string>
 
 #include "data/collection/array.hpp"
-#include "entity_bases.hpp"
+#include "util/id_generator_base.hpp"
 
 namespace logic
 {
-class resource : public entity_id_base<resource>
+class resource : public has_name_base, public id_generator_base<resource>
 {
   private:
-    std::string name;
 };
 
 class resource_set
 {
   private:
-    util::array<int> items;
+    util::array<long> items;
 
   public:
     long get_amount_of(id_t) const;
