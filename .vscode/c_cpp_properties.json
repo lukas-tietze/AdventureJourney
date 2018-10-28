@@ -4,10 +4,13 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/",
-                "${workspaceFolder}/src/",
-                "${workspaceFolder}/test/",
-                "${workspaceFolder}/include/",
-                "~/vulkan/1.1.82.1/x86_64/include/"
+                "${workspaceFolder}/common/include/",
+                "${workspaceFolder}/terminal_ui/include/",
+                "${workspaceFolder}/vulkan_gui/include",
+                "${workspaceFolder}/core/include",
+                "${workspaceFolder}/playground",
+                "${workspaceFolder}/glm/",
+                "${workspaceFolder}/glfw/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
