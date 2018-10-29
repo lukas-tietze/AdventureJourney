@@ -24,6 +24,8 @@ find_package(glfw3)
 find_package(glm)
 find_package(Boost REQUIRED)
 
+add_definitions(-DBOOST_STACKTRACE_USE_BACKTRACE)
+
 #Common
 file(GLOB_RECURSE COMMON_SRC "common/src/**/*.cpp")
 file(GLOB_RECURSE COMMON_TESTS "common/test/**/*.cpp")
@@ -58,9 +60,12 @@ project(CommonTests)
 
 include_directories(common/include)
 include_directories(common/test)
+include_directories(${Boost_INCLUDE_DIRS})
 
 add_executable(CommonTests common/test/main.cpp ${COMMON_TESTS})
 
+target_link_libraries(CommonTests ${Boost_LIBRARIES})
+target_link_libraries(CommonTests backtrace)
 target_link_libraries(CommonTests Common)
 target_link_libraries(CommonTests Threads::Threads)
 #--------------------------------------------------------

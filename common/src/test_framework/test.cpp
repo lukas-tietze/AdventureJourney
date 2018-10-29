@@ -1,15 +1,24 @@
 #include <cstring>
 
 #include "test.hpp"
+#include "data/string.hpp"
+// #include <boost/stacktrace.hpp>
 
 namespace
 {
 std::string make_msg(const std::string &msg, const std::string &customMsg)
 {
     if (customMsg.empty())
-        return util::format("Assert Failed: %s", msg.c_str());
+        return util::format("Assert Failed: %s\nAt %s",
+                            msg.c_str(),
+                            // util::to_string(boost::stacktrace::stacktrace()).c_str()
+                            "");
     else
-        return util::format("Assert Failed: %s [%s]", msg.c_str(), customMsg.c_str());
+        return util::format("Assert Failed: %s [%s]\nAt %s",
+                            msg.c_str(),
+                            customMsg.c_str(),
+                            // util::to_string(boost::stacktrace::stacktrace()).c_str()
+                            "");
 }
 } // namespace
 

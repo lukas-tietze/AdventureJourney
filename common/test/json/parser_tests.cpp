@@ -4,12 +4,17 @@
 #include "../test_list.hpp"
 #include "data/json.hpp"
 
+namespace
+{
+const std::string BaseDir = "common/test/json/";
+}
+
 void parse_file(const std::string &name, json::node *&node)
 {
     json::parser p;
     std::string text;
 
-    assert::is_true(util::try_read_file("common/test/json/" + name, text), "Failed to load file!");
+    assert::is_true(util::try_read_file(BaseDir + name, text), "Failed to load file!");
     p.parse(text, node);
 }
 
@@ -149,7 +154,7 @@ int test::json_test::expanded_write()
 
     n->print_formatted(p);
 
-    assert::is_true(util::try_read_file("test/tests/json/expanded.json", text));
+    assert::is_true(util::try_read_file(BaseDir + "expanded.json", text));
     assert::is_not_null(n);
     assert::are_equal(text, p.to_string());
 
@@ -166,7 +171,7 @@ int test::json_test::compact_write()
 
     n->print_formatted(p);
 
-    assert::is_true(util::try_read_file("test/tests/json/compact.json", text));
+    assert::is_true(util::try_read_file(BaseDir + "compact.json", text));
     assert::is_not_null(n);
     assert::are_equal(text, p.to_string());
 
