@@ -216,10 +216,16 @@ std::string json::parser::read_string()
 
                 auto digits = std::to_string(util::hex4ToNumber(token.data + i + 1));
 
-                for (const char &digit : digits)
+                char format[] =
                 {
-                    res.push_back(digit);
-                }
+                    '\\', 'u', token.data[i + 1], token.data[i + 2], token.data[i + 3], token.data[i + 4], '\0'
+                };
+
+                char buf[4];
+
+                int n = std::snprintf(buf, 4, format);
+
+                res.push_back(buf[0]);
 
                 i += 4;
 
