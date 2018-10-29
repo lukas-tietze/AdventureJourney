@@ -138,7 +138,7 @@ class array
 
     const T &operator[](int index) const
     {
-        if (index < 0 || index >= this->size)
+        if (index < 0 || (size_t)index >= this->size)
             throw util::index_out_of_range_exception();
 
         return this->data[index];
@@ -146,7 +146,7 @@ class array
 
     T &operator[](int index)
     {
-        if (index < 0 || index >= this->size)
+        if (index < 0 || (size_t)index >= this->size)
             throw util::index_out_of_range_exception();
 
         return this->data[index];

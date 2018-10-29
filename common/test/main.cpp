@@ -77,6 +77,8 @@ int main(int argc, char **argv)
                 std::printf("-q    ");
                 std::printf("-h    show help\n");
                 return 0;
+            default:
+                std::printf("Unknown argument %s\n", arg.c_str());
             }
         }
     }
@@ -121,7 +123,6 @@ int main(int argc, char **argv)
         std::printf("|show only failed:    %s\n", show_only_failed ? "true" : "false");
         std::printf("|-------------------------------------\n\n");
     }
-
 
     clock_t start = std::clock();
     uint good = 0;

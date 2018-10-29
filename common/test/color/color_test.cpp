@@ -42,4 +42,6 @@ int test::color_test::basic_color_values()
     assert::are_equal(255, util::colors::BasicWhite.green(), "BasicWhite->green");
     assert::are_equal(255, util::colors::BasicWhite.blue(), "BasicWhite->blue");
     assert::are_equal(255, util::colors::BasicWhite.alpha(), "BasicWhite->alpha");
+
+    return 0;
 }

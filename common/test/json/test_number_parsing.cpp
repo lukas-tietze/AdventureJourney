@@ -1,7 +1,7 @@
 #include "data/json.hpp"
 #include "test.hpp"
 
-const double parse_number(const std::string &s)
+double parse_number(const std::string &s)
 {
     std::string data = "{\"x\":" + s + "}";
     json::node *n;

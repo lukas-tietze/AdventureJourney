@@ -89,7 +89,7 @@ json::node *create_test_node()
     n->put("false", false);
     n->put("true", true);
     n->put_null("null");
-    
+
     auto array = new json::array_node();
     array->put(1.0);
     array->put(true);
@@ -99,7 +99,7 @@ json::node *create_test_node()
 
     auto subObject = new json::object_node();
     subObject->put_null("dummy");
-    
+
     array->put(subObject);
 
     auto subArray = new json::array_node();
@@ -109,7 +109,7 @@ json::node *create_test_node()
 
     array->put(subArray);
     n->put("array", array);
-    
+
     subObject = new json::object_node();
     subObject->put("prop1", 1.0);
     subObject->put("prop2", "prop_two");
@@ -181,12 +181,15 @@ int test::json_test::integrity()
 
 int test::json_test::write_read()
 {
-    auto n = create_test_node();
+    //TODO!
+    // auto n = create_test_node();
 
     return 0;
 }
 
 int test::json_test::read_write()
 {
+    //TODO!
+
     return 0;
 }
