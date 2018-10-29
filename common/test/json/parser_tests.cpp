@@ -9,7 +9,7 @@ void parse_file(const std::string &name, json::node *&node)
     json::parser p;
     std::string text;
 
-    assert::is_true(util::try_read_file("test/tests/json/" + name, text));
+    assert::is_true(util::try_read_file("common/test/json/" + name, text), "Failed to load file!");
     p.parse(text, node);
 }
 

@@ -22,6 +22,7 @@ Set(CURSES_NEED_NCURSES TRUE)
 find_package(Curses REQUIRED)
 find_package(glfw3)
 find_package(glm)
+find_package(Boost REQUIRED)
 
 #Common
 file(GLOB_RECURSE COMMON_SRC "common/src/**/*.cpp")
@@ -45,10 +46,12 @@ configure_file(common/include/config.in.hpp common/include/config.hpp)
 
 include_directories(common/include)
 include_directories(${CURSES_INCLUDE_DIRS})
+include_directories(${boost_INCLUDE_DIRS})
 
 add_library(Common STATIC ${COMMON_SRC})
 
 target_link_libraries(Common ${CURSES_LIBRARIES})
+target_link_libraries(Common ${Boost_LIBRARIES})
 
 #Tests dazu
 project(CommonTests)
@@ -60,7 +63,6 @@ add_executable(CommonTests common/test/main.cpp ${COMMON_TESTS})
 
 target_link_libraries(CommonTests Common)
 target_link_libraries(CommonTests Threads::Threads)
-
 #--------------------------------------------------------
 # Playground
 #--------------------------------------------------------
@@ -82,9 +84,11 @@ include_directories(common/include)
 include_directories(core/include)
 
 add_library(Core core/src/main.cpp ${CORE_SRC})
+target_link_libraries(Common ${Boost_LIBRARIES})
 
 target_link_libraries(Core Common)
 target_link_libraries(Core Threads::Threads)
+target_link_libraries(Core ${Boost_INCLUDE_DIRS})
 #Tests dazu
 project(CoreTests)
 
@@ -108,12 +112,14 @@ configure_file(terminal_ui/include/config.in.hpp terminal_ui/include/config.hpp)
 include_directories(common/include)
 include_directories(core/include)
 include_directories(${CURSES_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
 
 add_executable(TerminalUi terminal_ui/src/main.cpp ${TUI_SRC})
 
 target_link_libraries(TerminalUi Common)
 target_link_libraries(TerminalUi Core)
 target_link_libraries(TerminalUi Threads::Threads)
+target_link_libraries(TerminalUi ${Boost_LIBRARIES})
 target_link_libraries(TerminalUi ${CURSES_LIBRARIES})
 #Tests dazu
 project(TerminalUiTests)
@@ -141,6 +147,7 @@ if(glfw3_FOUND)
         include_directories(common/include)
         include_directories(core/include)
         include_directories(${VULKAN_INCLUDE_DIRS})
+        include_directories(${Boost_INCLUDE_DIRS})
         
         add_executable(VulkanGui terminal_ui/src/main.cpp ${GUI_SRC})
         
@@ -148,6 +155,7 @@ if(glfw3_FOUND)
         target_link_libraries(VulkanGui Core)
         target_link_libraries(VulkanGui Threads::Threads)
         target_link_libraries(VulkanGui ${VULKAN_LIBRARIES})
+        target_link_libraries(VulkanGui ${Boost_LIBRARIES})
         #Tests dazu
         project(VulkanGuiTests)
         
