@@ -1,6 +1,7 @@
 #include <cstdio>
 
 #include "test.hpp"
+#include "../test_list.hpp"
 #include "data/json.hpp"
 
 void parse_file(const std::string &name, json::node *&node)

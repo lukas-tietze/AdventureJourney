@@ -1,4 +1,5 @@
 #include "test.hpp"
+#include "../test_list.hpp"
 #include "graphics/color.hpp"
 
 int test::color_test::basic_color_values()

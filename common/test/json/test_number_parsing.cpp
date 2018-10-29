@@ -1,5 +1,6 @@
-#include "data/json.hpp"
 #include "test.hpp"
+#include "../test_list.hpp"
+#include "data/json.hpp"
 
 double parse_number(const std::string &s)
 {

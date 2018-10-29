@@ -1,6 +1,6 @@
-#include "data/json.hpp"
-
 #include "test.hpp"
+#include "../test_list.hpp"
+#include "data/json.hpp"
 
 const std::string parse_string(const std::string &s)
 {

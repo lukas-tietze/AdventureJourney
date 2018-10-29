@@ -1,5 +1,6 @@
-#include "geometry.hpp"
 #include "test.hpp"
+#include "../test_list.hpp"
+#include "geometry.hpp"
 
 int test::geometry_test::rectangle()
 {

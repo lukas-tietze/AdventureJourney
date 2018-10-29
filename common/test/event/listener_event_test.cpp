@@ -1,5 +1,6 @@
-#include "event.hpp"
 #include "test.hpp"
+#include "../test_list.hpp"
+#include "event.hpp"
 
 #define RES_X 10
 #define RES_Y 100

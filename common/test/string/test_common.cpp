@@ -1,4 +1,5 @@
 #include "test.hpp"
+#include "../test_list.hpp"
 #include "data/string.hpp"
 
 int test::string_test::format()

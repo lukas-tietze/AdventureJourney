@@ -1,7 +1,8 @@
 #include <algorithm>
 
-#include "data/collection/array.hpp"
 #include "test.hpp"
+#include "../../test_list.hpp"
+#include "data/collection/array.hpp"
 
 int test::data_test::collection_test::test_array()
 {
