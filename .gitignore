@@ -44,3 +44,6 @@ build/
 doc/*
 !doc/*.tex
 !doc/Makefile
+
+#config file for build
+build.cfg
