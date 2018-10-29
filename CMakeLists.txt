@@ -19,60 +19,131 @@ endif()
 enable_language(CXX)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
-# find_package(Vulkan REQUIRED)
+find_package(glfw3)
+find_package(glm)
 
-file(GLOB_RECURSE SOURCES "src/**/*.cpp")
-file(GLOB_RECURSE TESTS "test/**/*.cpp")
-file(GLOB_RECURSE LIB "lib/**/*.cpp")
+Set(CURSES_NEED_NCURSES TRUE)
+find_package(Curses REQUIRED)
+
+#Common
+file(GLOB_RECURSE COMMON_SRC "common/src/**/*.cpp")
+file(GLOB_RECURSE COMMON_TESTS "common/test/**/*.cpp")
+#Core
+file(GLOB_RECURSE CORE_SRC "core/src/**/*.cpp")
+file(GLOB_RECURSE CORE_TESTS "core/test/**/*.cpp")
+#Terminal
+file(GLOB_RECURSE TUI_SRC "terminal_ui/src/**/*.cpp")
+file(GLOB_RECURSE TUI_TESTS "terminal_ui/test/**/*.cpp")
+#Vulkan
+file(GLOB_RECURSE GUI_SRC "vulkan_gui/src/**/*.cpp")
+file(GLOB_RECURSE GUI_TESTS "vulkan_gui/test/**/*.cpp")
 
 #--------------------------------------------------------
-# Library
+# Library - enthält Utils und Wrapper, die in verschiedenen Projekten genutzt werden könnten.
 #--------------------------------------------------------
 project(Common)
-configure_file(include/config.in.hpp include/config.hpp)
-add_library(COMMON STATIC ${LIB})
+configure_file(common/include/config.in.hpp common/include/config.hpp)
+include_directories(common/include)
+include_directories(${CURSES_INCLUDE_DIRS})
+add_library(Common STATIC ${COMMON_SRC})
+target_link_libraries(Common ${CURSES_LIBRARIES})
 
-#--------------------------------------------------------
-# Test
-#--------------------------------------------------------
-project (Test)
-include_directories(include)
-include_directories(test)
-include_directories(src)
-# include_directories(Vulkan_INLCUDE_DIRS)
-
-add_executable(Test test/main.cpp ${TESTS})
-target_link_libraries(Test COMMON)
-target_link_libraries(Test ncurses)
-target_link_libraries(Test Threads::Threads)
-# target_link_libraries(Test Vulkan_LIBRARIES)
+#Tests dazu
+project(CommonTests)
+include_directories(common/include)
+include_directories(common/test)
+add_executable(CommonTests common/test/main.cpp ${COMMON_TESTS})
+target_link_libraries(CommonTests Common)
+target_link_libraries(CommonTests Threads::Threads)
 
 #--------------------------------------------------------
 # Playground
 #--------------------------------------------------------
 project (Playground)
-include_directories(include)
-include_directories(test)
-include_directories(src)
+include_directories(common/include)
 include_directories(playground)
 
-add_executable(Playground playground/main.cpp ${TESTS})
-target_link_libraries(Playground COMMON)
-target_link_libraries(Playground ncurses)
-target_link_libraries(Playground Threads::Threads)
+add_executable(Playground playground/main.cpp)
+target_link_libraries(Playground Common)
 
 #--------------------------------------------------------
-# Runtime
+# Core
 #--------------------------------------------------------
+project(Core)
 
-project(Runtime)
+include_directories(common/include)
+include_directories(core/include)
 
-include_directories(include)
-include_directories(src)
-# include_directories(Vulkan_INLCUDE_DIRS)
+add_library(Core core/src/main.cpp ${CORE_SRC})
+target_link_libraries(Core Common)
+target_link_libraries(Core Threads::Threads)
+#Tests dazu
+project(CoreTests)
 
-add_executable(Runtime src/main.cpp ${SORUCES})
-target_link_libraries(Runtime COMMON)
-target_link_libraries(Runtime ncurses)
-target_link_libraries(Runtime Threads::Threads)
-# target_link_libraries(Runtime Vulkan_LIBRARIES)
+include_directories(common/include)
+include_directories(core/include)
+include_directories(core/test)
+
+add_executable(CoreTests core/test/main.cpp ${CORE_TESTS})
+target_link_libraries(CoreTests Common)
+target_link_libraries(CoreTests Core)
+target_link_libraries(CoreTests Threads::Threads)
+
+#--------------------------------------------------------
+# Terminal UI - Stellt das Spiel in einer einfachen Form im Terminal dar
+#--------------------------------------------------------
+project(TerminalUi)
+include_directories(common/include)
+include_directories(core/include)
+include_directories(${CURSES_INCLUDE_DIRS})
+
+add_executable(TerminalUi terminal_ui/src/main.cpp ${TUI_SRC})
+target_link_libraries(TerminalUi Common)
+target_link_libraries(TerminalUi Core)
+target_link_libraries(TerminalUi Threads::Threads)
+target_link_libraries(TerminalUi ${CURSES_LIBRARIES})
+#Tests dazu
+project(TerminalUiTests)
+include_directories(common/include)
+include_directories(core/include)
+include_directories(core/test)
+include_directories(${CURSES_INCLUDE_DIRS})
+
+add_executable(TerminalUiTests terminal_ui/test/main.cpp ${TUI_TESTS})
+target_link_libraries(TerminalUiTests Common)
+target_link_libraries(TerminalUiTests Core)
+target_link_libraries(TerminalUiTests Threads::Threads)
+target_link_libraries(TerminalUiTests ${CURSES_LIBRARIES})
+#--------------------------------------------------------
+# Vulkan GUI - Grafische UI mittels Vulkan
+#--------------------------------------------------------
+if(glfw3_FOUND)
+    if(glm_FOUND)
+        project(VulkanGui)
+        include_directories(common/include)
+        include_directories(core/include)
+        include_directories(${VULKAN_INCLUDE_DIRS})
+        
+        add_executable(VulkanGui terminal_ui/src/main.cpp ${GUI_SRC})
+        target_link_libraries(VulkanGui Common)
+        target_link_libraries(VulkanGui Core)
+        target_link_libraries(VulkanGui Threads::Threads)
+        target_link_libraries(VulkanGui ${VULKAN_LIBRARIES})
+        #Tests dazu
+        project(VulkanGuiTests)
+        include_directories(common/include)
+        include_directories(core/include)
+        include_directories(core/test)
+        include_directories(${VULKAN_INCLUDE_DIRS})
+        
+        add_executable(VulkanGuiTests terminal_ui/test/main.cpp ${GUI_TESTS})
+        target_link_libraries(VulkanGuiTests Common)
+        target_link_libraries(VulkanGuiTests Core)
+        target_link_libraries(VulkanGuiTests Threads::Threads)
+        target_link_libraries(VulkanGuiTests ${VULKAN_LIBRARIES})
+    else()
+        message("Can't build GUI, glm is missing!")
+    endif()
+else()
+    message("Can't build GUI, glfw3 is missing!")
+endif()
