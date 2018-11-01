@@ -1,8 +1,9 @@
 #include <cstring>
-
-#include "test.hpp"
-#include "data/string.hpp"
+#include <string>
 #include <boost/stacktrace/stacktrace.hpp>
+
+#include "data/string.hpp"
+#include "test.hpp"
 
 namespace
 {

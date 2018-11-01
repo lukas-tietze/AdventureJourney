@@ -26,7 +26,11 @@ find_package(glfw3)
 find_package(glm)
 find_package(Boost REQUIRED)
 
-add_definitions(-DBOOST_STACKTRACE_USE_BACKTRACE)
+if(Boost_FOUND)
+message("Found Boost ${Boost_VERSION}")
+endif()
+
+add_definitions( -DCMAKE_EXE_LINKER_FLAGS=-ldl)
 
 #Common
 file(GLOB_RECURSE COMMON_SRC "common/src/**/*.cpp")
@@ -49,8 +53,8 @@ project(Common)
 configure_file(common/include/config.in.hpp common/include/config.hpp)
 
 include_directories(common/include)
+include_directories(${Boost_INCLUDE_DIRS})
 include_directories(${CURSES_INCLUDE_DIRS})
-include_directories(${boost_INCLUDE_DIRS})
 
 add_library(Common STATIC ${COMMON_SRC})
 
