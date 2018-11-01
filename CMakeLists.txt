@@ -3,7 +3,14 @@
 #--------------------------------------------------------
 cmake_minimum_required (VERSION 3.6.2)
 
-include(build.cfg OPTIONAl RESULT_VARIABLE CFG_FOUND)
+set(COMPILE_GUI on)
+set(COMPILE_TESTS on)
+set(COMPILE_PLAYGROUND on)
+set(COMPILE_TESTS on)
+set(COMPILE_TUI on)
+set(COMPILE_GUI on)
+
+include(build.cfg OPTIONAl)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -26,7 +33,22 @@ find_package(glfw3)
 find_package(glm)
 find_package(Boost REQUIRED)
 
-add_definitions(-DBOOST_STACKTRACE_USE_BACKTRACE)
+# add_definitions(-DBOOST_STACKTRACE_USE_BACKTRACE)
+
+include_directories(${CURSES_INCLUDE_DIRS})
+include_directories(${boost_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${CURSES_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${CURSES_INCLUDE_DIRS})
+include_directories(${VULKAN_INCLUDE_DIRS})
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${VULKAN_INCLUDE_DIRS})
+include_directories(common/include)
+include_directories(core/include)
+include_directories(playground)
+include_directories(terminal_ui/include)
+include_directories(vulkan_gui/include)
 
 #Common
 file(GLOB_RECURSE COMMON_SRC "common/src/**/*.cpp")
@@ -47,44 +69,23 @@ file(GLOB_RECURSE GUI_TESTS "vulkan_gui/test/**/*.cpp")
 project(Common)
 
 configure_file(common/include/config.in.hpp common/include/config.hpp)
-
-include_directories(common/include)
-include_directories(${CURSES_INCLUDE_DIRS})
-include_directories(${boost_INCLUDE_DIRS})
-
 add_library(Common STATIC ${COMMON_SRC})
-
-target_link_libraries(Common ${CURSES_LIBRARIES})
-target_link_libraries(Common ${Boost_LIBRARIES})
+target_link_libraries(Common ${CURSES_LIBRARIES} ${Boost_LIBRARIES})
 
 #Tests dazu
-if(NOT CFGFOUND OR COMPILE_TESTS)
+if(COMPILE_TESTS)
     project(CommonTests)
-
-    include_directories(common/include)
-    include_directories(common/test)
-    include_directories(${Boost_INCLUDE_DIRS})
-
     add_executable(CommonTests common/test/main.cpp ${COMMON_TESTS})
-
-    target_link_libraries(CommonTests ${Boost_LIBRARIES})
-    target_link_libraries(CommonTests backtrace)
-    target_link_libraries(CommonTests Common)
-    target_link_libraries(CommonTests Threads::Threads)
+    target_link_libraries(CommonTests ${Boost_LIBRARIES} Common Threads::Threads)
 else()
     message("Skipping CommonTests")
 endif()
 #--------------------------------------------------------
 # Playground
 #--------------------------------------------------------
-if(NOT CFGFOUND OR COMPILE_PLAYGROUND)
+if(COMPILE_PLAYGROUND)
     project (Playground)
-
-    include_directories(common/include)
-    include_directories(playground)
-
     add_executable(Playground playground/main.cpp)
-
     target_link_libraries(Playground Common)
 else()
     message("Skipping playground")
@@ -94,29 +95,13 @@ endif()
 # Core
 #--------------------------------------------------------
 project(Core)
-
-include_directories(common/include)
-include_directories(core/include)
-
 add_library(Core core/src/main.cpp ${CORE_SRC})
-target_link_libraries(Common ${Boost_LIBRARIES})
-
-target_link_libraries(Core Common)
-target_link_libraries(Core Threads::Threads)
-target_link_libraries(Core ${Boost_INCLUDE_DIRS})
+target_link_libraries(Core Common Threads::Threads ${Boost_LIBRARIES})
 #Tests dazu
-if(NOT CFGFOUND OR COMPILE_TESTS)
+if(COMPILE_TESTS)
     project(CoreTests)
-
-    include_directories(common/include)
-    include_directories(core/include)
-    include_directories(core/test)
-
     add_executable(CoreTests core/test/main.cpp ${CORE_TESTS})
-
-    target_link_libraries(CoreTests Common)
-    target_link_libraries(CoreTests Core)
-    target_link_libraries(CoreTests Threads::Threads)
+    target_link_libraries(CoreTests Common Core)
 else()
     message("Skipping CoreTests")
 endif()
@@ -124,76 +109,34 @@ endif()
 #--------------------------------------------------------
 # Terminal UI - Stellt das Spiel in einer einfachen Form im Terminal dar
 #--------------------------------------------------------
-if(NOT CFGFOUND OR COMPILE_TUI)
+if(COMPILE_TUI)
     project(TerminalUi)
-
     configure_file(terminal_ui/include/config.in.hpp terminal_ui/include/config.hpp)
-
-    include_directories(common/include)
-    include_directories(core/include)
-    include_directories(${CURSES_INCLUDE_DIRS})
-    include_directories(${Boost_INCLUDE_DIRS})
-
     add_executable(TerminalUi terminal_ui/src/main.cpp ${TUI_SRC})
-
-    target_link_libraries(TerminalUi Common)
-    target_link_libraries(TerminalUi Core)
-    target_link_libraries(TerminalUi Threads::Threads)
-    target_link_libraries(TerminalUi ${Boost_LIBRARIES})
-    target_link_libraries(TerminalUi ${CURSES_LIBRARIES})
+    target_link_libraries(TerminalUi Common Core ${Boost_LIBRARIES} ${CURSES_LIBRARIES})
+    
     #Tests dazu
     project(TerminalUiTests)
-
-    include_directories(common/include)
-    include_directories(core/include)
-    include_directories(core/test)
-    include_directories(${CURSES_INCLUDE_DIRS})
-
     add_executable(TerminalUiTests terminal_ui/test/main.cpp ${TUI_TESTS})
-
-    target_link_libraries(TerminalUiTests Common)
-    target_link_libraries(TerminalUiTests Core)
-    target_link_libraries(TerminalUiTests Threads::Threads)
-    target_link_libraries(TerminalUiTests ${CURSES_LIBRARIES})
+    target_link_libraries(TerminalUiTests Common Core Threads::Threads ${CURSES_LIBRARIES})
 else()
     message("Skipping TerminalUi")
 endif()
 #--------------------------------------------------------
 # Vulkan GUI - Grafische UI mittels Vulkan
 #--------------------------------------------------------
-if(NOT CFGFOUND OR COMPILE_GUI)
+if(COMPILE_GUI)
     if(glfw3_FOUND)
         if(glm_FOUND)
             project(VulkanGui)
-
             configure_file(terminal_ui/include/config.in.hpp terminal_ui/include/config.hpp)
-            
-            include_directories(common/include)
-            include_directories(core/include)
-            include_directories(${VULKAN_INCLUDE_DIRS})
-            include_directories(${Boost_INCLUDE_DIRS})
-            
             add_executable(VulkanGui terminal_ui/src/main.cpp ${GUI_SRC})
-            
-            target_link_libraries(VulkanGui Common)
-            target_link_libraries(VulkanGui Core)
-            target_link_libraries(VulkanGui Threads::Threads)
-            target_link_libraries(VulkanGui ${VULKAN_LIBRARIES})
-            target_link_libraries(VulkanGui ${Boost_LIBRARIES})
+            target_link_libraries(VulkanGui Common Core Threads::Threads ${VULKAN_LIBRARIES} ${Boost_LIBRARIES})
+
             #Tests dazu
             project(VulkanGuiTests)
-            
-            include_directories(common/include)
-            include_directories(core/include)
-            include_directories(core/test)
-            include_directories(${VULKAN_INCLUDE_DIRS})
-            
             add_executable(VulkanGuiTests terminal_ui/test/main.cpp ${GUI_TESTS})
-            
-            target_link_libraries(VulkanGuiTests Common)
-            target_link_libraries(VulkanGuiTests Core)
-            target_link_libraries(VulkanGuiTests Threads::Threads)
-            target_link_libraries(VulkanGuiTests ${VULKAN_LIBRARIES})
+            target_link_libraries(VulkanGuiTests Common Core ${VULKAN_LIBRARIES})
         else()
             message("Can't build GUI, glm is missing!")
         endif()
