@@ -1,7 +1,7 @@
 #--------------------------------------------------------
 # General
 #--------------------------------------------------------
-cmake_minimum_required (VERSION 3.6.2)
+cmake_minimum_required (VERSION 2.8)
 
 set(COMPILE_GUI on)
 set(COMPILE_TESTS on)
@@ -10,28 +10,41 @@ set(COMPILE_TESTS on)
 set(COMPILE_TUI on)
 set(COMPILE_GUI on)
 
-include(build.cfg OPTIONAl)
+include(compile.cfg OPTIONAl)
 
 set(CMAKE_CXX_STANDARD 11)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-message("Creating release build")
-option(DEBUG "Debug build" OFF)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+    message("Creating release build")
+    option(DEBUG "Debug build" OFF)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
 elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-message("Creating debug build")
-option(DEBUG "Debug build" ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wswitch-default -Wswitch-enum")
+    message("Creating debug build")
+    option(DEBUG "Debug build" ON)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wswitch-default -Wswitch-enum")
 endif()
 
 enable_language(CXX)
+
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
+
 Set(CURSES_NEED_NCURSES TRUE)
 find_package(Curses REQUIRED)
+
 find_package(glfw3)
+
 find_package(glm)
-find_package(Boost REQUIRED)
+
+#workaround https://gitlab.kitware.com/cmake/cmake/issues/17297
+set(_Boost_STACKTRACE_BASIC_HEADERS     "boost/stacktrace.hpp")
+set(_Boost_STACKTRACE_BACKTRACE_HEADERS "boost/stacktrace.hpp")
+set(_Boost_STACKTRACE_ADDR2LINE_HEADERS "boost/stacktrace.hpp")
+set(_Boost_STACKTRACE_NOOP_HEADERS      "boost/stacktrace.hpp")
+find_package(Boost 1.67.0 COMPONENTS stacktrace_basic stacktrace_backtrace stacktrace_addr2line stacktrace_noop)
+
+# find_package(Boost REQUIRED)
+
 
 # add_definitions(-DBOOST_STACKTRACE_USE_BACKTRACE)
 
@@ -43,6 +56,25 @@ include_directories(core/include)
 include_directories(playground)
 include_directories(terminal_ui/include)
 include_directories(vulkan_gui/include)
+
+message(STATUS "Boost_FOUND=" ${Boost_FOUND})
+message(STATUS "Boost_LIBRARY=" ${Boost_LIBRARY})
+message(STATUS "Boost_VERSION=" ${Boost_VERSION})
+message(STATUS "Boost_LIBRARIES=" ${Boost_LIBRARIES})
+message(STATUS "Boost_LIBRARY_DIRS=" ${Boost_LIBRARY_DIRS})
+message(STATUS "Boost_INCLUDE_DIRS=" ${Boost_INCLUDE_DIRS})
+
+if(glfw3_FOUND)
+    include_directories(${Glfw_INCLUDE_DIRS})
+else()
+    message("Could not find glfw3!")
+endif()
+
+if(glm_FOUND)
+    include_directories(${GLM_INCLUDE_DIRS})
+else()
+    message("Could not find glm!")
+endif()
 
 #Common
 file(GLOB_RECURSE COMMON_SRC "common/src/**/*.cpp")
@@ -125,12 +157,12 @@ if(COMPILE_GUI)
             project(VulkanGui)
             configure_file(terminal_ui/include/config.in.hpp terminal_ui/include/config.hpp)
             add_executable(VulkanGui terminal_ui/src/main.cpp ${GUI_SRC})
-            target_link_libraries(VulkanGui Common Core Threads::Threads ${VULKAN_LIBRARIES} ${Boost_LIBRARIES})
+            target_link_libraries(VulkanGui Common Core Threads::Threads ${VULKAN_LIBRARIES} ${Boost_LIBRARIES} glfw ${glm_LIBRARIES})
 
             #Tests dazu
             project(VulkanGuiTests)
             add_executable(VulkanGuiTests terminal_ui/test/main.cpp ${GUI_TESTS})
-            target_link_libraries(VulkanGuiTests Common Core ${VULKAN_LIBRARIES})
+            target_link_libraries(VulkanGuiTests Common Core ${VULKAN_LIBRARIES} glfw ${glm_LIBRARIES} Threads::Threads)
         else()
             message("Can't build GUI, glm is missing!")
         endif()

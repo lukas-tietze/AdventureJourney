@@ -46,4 +46,4 @@ doc/*
 !doc/Makefile
 
 #config file for build
-build.cfg
+compile.cfg
