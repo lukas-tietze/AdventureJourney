@@ -41,12 +41,7 @@ set(_Boost_STACKTRACE_BASIC_HEADERS     "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_BACKTRACE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_ADDR2LINE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_NOOP_HEADERS      "boost/stacktrace.hpp")
-find_package(Boost 1.67.0 COMPONENTS stacktrace_basic stacktrace_backtrace stacktrace_addr2line stacktrace_noop)
-
-# find_package(Boost REQUIRED)
-
-
-# add_definitions(-DBOOST_STACKTRACE_USE_BACKTRACE)
+find_package(Boost 1.65.0 COMPONENTS stacktrace_basic stacktrace_backtrace stacktrace_addr2line stacktrace_noop)
 
 include_directories(${CURSES_INCLUDE_DIRS})
 include_directories(${VULKAN_INCLUDE_DIRS})
