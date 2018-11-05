@@ -38,6 +38,12 @@ void test::test_run::execute()
         this->good = true;
         this->message.clear();
     }
+    catch (util::exception &e)
+    {
+        this->end = std::clock();
+        this->good = false;
+        this->message.assign(e.get_message() + "\n" + util::format_stacktrace(e.get_stacktrace(), 4, -1));
+    }
     catch (std::exception &e)
     {
         this->end = std::clock();

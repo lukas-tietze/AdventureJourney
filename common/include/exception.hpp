@@ -12,7 +12,7 @@ namespace error_codes
 const std::string &get_message(int error_code);
 }
 
-std::string print_stacktrace(const boost::stacktrace::stacktrace &trace, uint indent, uint maxLen);
+std::string format_stacktrace(const boost::stacktrace::stacktrace &trace, uint indent, uint maxLen, bool showAddress = false);
 
 class exception : public std::exception
 {

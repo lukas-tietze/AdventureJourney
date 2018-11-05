@@ -70,9 +70,9 @@ int test::run_tests(test::test_collection &tests, const test::test_config &confi
     std::printf("\nFinished in %f\n%u good (%.2f%%)\n%u failed (%.2f%%)\n",
                 util::clock_to_ms(end - start),
                 good,
-                (double)good / (double)tests.size(),
+                (double)good / (double)tests.size() * 100.0,
                 failed,
-                (double)failed / (double)tests.size());
+                (double)failed / (double)tests.size() * 100.0);
 
     return failed;
 }
