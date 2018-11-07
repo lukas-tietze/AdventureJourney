@@ -1,5 +1,8 @@
 #include <stdarg.h>
 #include <algorithm>
+#include <locale>
+#include <codecvt>
+#include <iomanip>
 
 #include "data/string.hpp"
 
@@ -194,4 +197,9 @@ std::string util::strip_back(const std::string &str)
         end--;
 
     return str.substr(0, end + 1);
+}
+
+std::string util::unicode_to_string(uint32_t codePoint)
+{
+    return std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>().to_bytes(codePoint);
 }

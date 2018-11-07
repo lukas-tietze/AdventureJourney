@@ -38,7 +38,7 @@ void test::test_run::execute()
         this->good = true;
         this->message.clear();
     }
-    catch (util::exception &e)
+    catch (const util::exception &e)
     {
         this->end = std::clock();
         this->good = false;
@@ -46,7 +46,6 @@ void test::test_run::execute()
     }
     catch (std::exception &e)
     {
-        this->end = std::clock();
         this->good = false;
         this->message.assign(e.what());
     }

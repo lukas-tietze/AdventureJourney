@@ -77,7 +77,10 @@
         "iomanip": "cpp",
         "unordered_set": "cpp",
         "bitset": "cpp",
-        "valarray": "cpp"
+        "valarray": "cpp",
+        "strstream": "cpp",
+        "complex": "cpp",
+        "codecvt": "cpp"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled",
     "python.promptToInstallJupyter": false

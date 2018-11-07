@@ -33,13 +33,11 @@ int test::json_test::string_escaping()
     assert::are_equal(std::string("a\nb"), parse_string("a\\nb"));
     assert::are_equal(std::string("a\rb"), parse_string("a\\rb"));
     assert::are_equal(std::string("a\tb"), parse_string("a\\tb"));
-    
-    assert::are_equal(std::string("a\u0000b"), parse_string("a\\u0000nb"));
-    assert::are_equal(std::string("a\u0030b"), parse_string("a\\u0030nb"));
-    assert::are_equal(std::string("a\u0ab3b"), parse_string("a\\u0ab3nb"));
-    assert::are_equal(std::string("a\u2e0cb"), parse_string("a\\u2e0cnb"));
-    assert::are_equal(std::string("a\u2300b"), parse_string("a\\u2300nb"));
-    assert::are_equal(std::string("a\u0ff0b"), parse_string("a\\u0ff0nb"));
+
+    assert::are_equal(std::string("a\u0ab3b"), parse_string("a\\u0ab3b"));
+    assert::are_equal(std::string("a\u2e0cb"), parse_string("a\\u2e0cb"));
+    assert::are_equal(std::string("a\u2300b"), parse_string("a\\u2300b"));
+    assert::are_equal(std::string("a\u0ff0b"), parse_string("a\\u0ff0b"));
 
     return 0;
 }

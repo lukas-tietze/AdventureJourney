@@ -5,9 +5,9 @@
 
 namespace util
 {
-int hex4ToNumber(const std::string &);
-int hex4ToNumber(const char *);
-int hexToNumber(char);
+uint32_t hex4ToNumber(const std::string &);
+uint32_t hex4ToNumber(const char *);
+uint8_t hexToNumber(char);
 bool is_hex_char(char);
 
 template <class T>

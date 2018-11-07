@@ -7,23 +7,25 @@ bool util::is_hex_char(char c)
     return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
 }
 
-int util::hex4ToNumber(const std::string &data)
+uint32_t util::hex4ToNumber(const std::string &data)
 {
-    return (hexToNumber(data[0]) << 24) &
-           (hexToNumber(data[1]) << 16) &
-           (hexToNumber(data[2]) << 8) &
+    if (data.length() >= 4)
+    {
+        return util::hex4ToNumber(data.c_str());
+    }
+
+    return (uint32_t)-1;
+}
+
+uint32_t util::hex4ToNumber(const char *data)
+{
+    return (hexToNumber(data[0]) << 12) |
+           (hexToNumber(data[1]) << 8) |
+           (hexToNumber(data[2]) << 4) |
            hexToNumber(data[3]);
 }
 
-int util::hex4ToNumber(const char *data)
-{
-    return (hexToNumber(data[0]) << 24) &
-           (hexToNumber(data[1]) << 16) &
-           (hexToNumber(data[2]) << 8) &
-           hexToNumber(data[3]);
-}
-
-int util::hexToNumber(char c)
+uint8_t util::hexToNumber(char c)
 {
     switch (c)
     {

@@ -7,6 +7,7 @@
 
 #include "data/json.hpp"
 #include "data/math.hpp"
+#include "data/string.hpp"
 
 json::parser::parser()
 {
@@ -69,7 +70,7 @@ json::node *json::parser::read_object()
     {
         auto name = this->read_string();
         this->read_token(token_type::ValueAssignment);
-        
+
         res->put(name, this->read_item());
 
         if (this->peek_type() == token_type::ObjectEnd)
@@ -214,18 +215,7 @@ std::string json::parser::read_string()
                     throw parser_exception();
                 }
 
-                auto digits = std::to_string(util::hex4ToNumber(token.data + i + 1));
-
-                char format[] =
-                {
-                    '\\', 'u', token.data[i + 1], token.data[i + 2], token.data[i + 3], token.data[i + 4], '\0'
-                };
-
-                char buf[4];
-
-                int n = std::snprintf(buf, 4, format);
-
-                res.push_back(buf[0]);
+                res.append(util::unicode_to_string(util::hex4ToNumber(token.data + i + 1)));
 
                 i += 4;
 

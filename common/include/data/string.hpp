@@ -19,6 +19,8 @@ std::string strip(const std::string &);
 std::string strip_front(const std::string &);
 std::string strip_back(const std::string &);
 
+std::string unicode_to_string(uint32_t);
+
 template <class T>
 std::string to_string(const T &arg)
 {
