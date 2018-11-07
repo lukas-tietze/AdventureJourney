@@ -120,4 +120,65 @@ void seed_default_engine(size_t seed);
 
 // Gibt die gesetzte Standardengine zurück.
 custom_engine &default_engine();
+
+template <class TDistribution, class TEngine>
+class random_provider
+{
+  private:
+    TDistribution distribution;
+    TEngine engine;
+
+  public:
+    typedef typename TDistribution::result_type result_t;
+    typedef typename TEngine::result_type seed_t;
+
+    random_provider() : distribution(),
+                        engine()
+
+    {
+    }
+
+    random_provider(seed_t seed) : random_provider()
+    {
+        this->engine.seed(seed);
+    }
+
+    random_provider(const random_provider<TDistribution, TEngine> &copy) : distribution(copy.distribution),
+                                                                           engine(copy.engine)
+    {
+    }
+
+    random_provider(const TDistribution &distribution, const TEngine &engine) : distribution(distribution),
+                                                                                engine(engine)
+    {
+    }
+
+    result_t next();
+};
+
+class random : public random_provider<std::uniform_real_distribution<double>, std::default_random_engine>
+{
+  public:
+    random();
+    random(const random &copy);
+    random(random::result_t);
+
+    template <class T = double>
+    T next(T min, T max)
+    {
+        return this->next() * (max - min) + min;
+    }
+
+    template <class T = double>
+    T next(T max)
+    {
+        return this->next(0, max);
+    }
+
+    template <class T = double>
+    T next()
+    {
+        return this->next(std::numeric_limits<T>::max());
+    }
+};
 } // namespace util

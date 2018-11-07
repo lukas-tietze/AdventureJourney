@@ -67,7 +67,7 @@ int test::run_tests(test::test_collection &tests, const test::test_config &confi
     clock_t end = std::clock();
     uint failed = tests.size() - good;
 
-    std::printf("\nFinished in %f\n%u good (%.2f%%)\n%u failed (%.2f%%)\n",
+    std::printf("\nFinished in %fms\n%u good (%.2f%%)\n%u failed (%.2f%%)\n",
                 util::clock_to_ms(end - start),
                 good,
                 (double)good / (double)tests.size() * 100.0,

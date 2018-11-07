@@ -4,7 +4,7 @@
 #include "terminal.hpp"
 #include "data/string.hpp"
 #include "exception.hpp"
-#include "data/rand.hpp"
+#include "data/random.hpp"
 #include "event.hpp"
 #include "data/string.hpp"
 

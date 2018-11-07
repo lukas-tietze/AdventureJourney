@@ -11,7 +11,7 @@ set(COMPILE_TUI on)
 set(COMPILE_GUI on)
 
 include(compile.cfg OPTIONAl)
-include(ExternalData)
+include(ExternalData) 
 
 set(CMAKE_CXX_STANDARD 11)
 

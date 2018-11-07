@@ -78,14 +78,25 @@ class planetary_body : public has_name_base, public id_generator_base<planetary_
   private:
     development_rate development_rate;
     development total_development;
+    planetary_body_type type;
 
   public:
     planetary_body();
+
+    const development_rate &get_development_rate() const;
+    const development &get_total_development() const;
+    planetary_body_type get_type() const;
 };
 
 class planetary_system : public has_name_base, public id_generator_base<planetary_system>
 {
   private:
     std::vector<planetary_body *> planets;
+
+    public:
+    planetary_system()
+    {
+
+    }
 };
 } // namespace logic
