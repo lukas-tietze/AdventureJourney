@@ -11,6 +11,7 @@ set(COMPILE_TUI on)
 set(COMPILE_GUI on)
 
 include(compile.cfg OPTIONAl)
+include(ExternalData)
 
 set(CMAKE_CXX_STANDARD 11)
 
@@ -52,12 +53,7 @@ include_directories(playground)
 include_directories(terminal_ui/include)
 include_directories(vulkan_gui/include)
 
-message(STATUS "Boost_FOUND=" ${Boost_FOUND})
-message(STATUS "Boost_LIBRARY=" ${Boost_LIBRARY})
 message(STATUS "Boost_VERSION=" ${Boost_VERSION})
-message(STATUS "Boost_LIBRARIES=" ${Boost_LIBRARIES})
-message(STATUS "Boost_LIBRARY_DIRS=" ${Boost_LIBRARY_DIRS})
-message(STATUS "Boost_INCLUDE_DIRS=" ${Boost_INCLUDE_DIRS})
 
 if(glfw3_FOUND)
     include_directories(${Glfw_INCLUDE_DIRS})
