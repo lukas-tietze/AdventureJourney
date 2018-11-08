@@ -94,9 +94,6 @@ class planetary_system : public has_name_base, public id_generator_base<planetar
     std::vector<planetary_body *> planets;
 
     public:
-    planetary_system()
-    {
-
-    }
+    planetary_system();
 };
 } // namespace logic
