@@ -25,9 +25,24 @@ class unit
 class space_ship : public unit, public has_name_base
 {
   private:
+    uint crew;
+    uint soldiers;
+    uint gunners;
+    uint mechanics;
+    uint staff;
 };
 
-class unit_class :  public has_name_base, public id_generator_base<unit>, public json::i_json_serializable
+class attachement_type
+{
+
+};
+
+class attachement
+{
+
+};
+
+class unit_class : public has_name_base, public id_generator_base<unit>, public json::i_json_serializable
 {
   private:
     long hit_points;

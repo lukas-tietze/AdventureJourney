@@ -26,8 +26,10 @@ class fleet : public has_name_base
   private:
     admiral *leader;
     std::vector<std::tuple<id_t, uint>> units;
+    std::vector<army *> attached_armies;
 
   public:
     fleet();
+
 };
 } // namespace logic
