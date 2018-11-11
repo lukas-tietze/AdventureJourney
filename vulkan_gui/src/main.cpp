@@ -52,6 +52,10 @@ VkQueue graphics_queue;
 VkQueue presentation_queue;
 VkSurfaceKHR surface;
 VkSwapchainKHR swapChain;
+std::vector<VkImage> swapChainImages;
+std::vector<VkImageView> swapChainImageViews;
+VkFormat swapChainImageFormat;
+VkExtent2D swapChainExtent;
 } // namespace
 
 void init_window()
@@ -561,6 +565,39 @@ void create_swap_chain()
 
     if (vkCreateSwapchainKHR(device, &info, nullptr, &swapChain) != VK_SUCCESS)
         throw util::exception("Failed to create Swapchain!");
+
+    vkGetSwapchainImagesKHR(device, swapChain, &imageCount, nullptr);
+    swapChainImages.resize(imageCount);
+    vkGetSwapchainImagesKHR(device, swapChain, &imageCount, swapChainImages.data());
+
+    swapChainImageFormat = format.format;
+    swapChainExtent = extent;
+}
+
+void create_image_views()
+{
+    swapChainImageViews.resize(swapChainImages.size());
+
+    for (size_t i = 0; i < swapChainImages.size(); i++)
+    {
+        VkImageViewCreateInfo info = {};
+        info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
+        info.image = swapChainImages[i];
+        info.viewType = VK_IMAGE_VIEW_TYPE_2D;
+        info.format = swapChainImageFormat;
+        info.components.r = VK_COMPONENT_SWIZZLE_IDENTITY;
+        info.components.g = VK_COMPONENT_SWIZZLE_IDENTITY;
+        info.components.b = VK_COMPONENT_SWIZZLE_IDENTITY;
+        info.components.a = VK_COMPONENT_SWIZZLE_IDENTITY;
+        info.subresourceRange.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
+        info.subresourceRange.baseMipLevel = 0;
+        info.subresourceRange.levelCount = 1;
+        info.subresourceRange.baseArrayLayer = 0;
+        info.subresourceRange.layerCount = 1;
+
+        if (vkCreateImageView(device, &info, nullptr, &swapChainImageViews[i]) != VK_SUCCESS)
+            throw util::exception("Failed to create image view!");
+    }
 }
 
 void init_vulkan()
@@ -575,21 +612,27 @@ void init_vulkan()
     create_logical_device();
     create_queues();
     create_swap_chain();
+    create_image_views();
 }
 
 void main_loop()
 {
-    // while (!glfwWindowShouldClose(window))
-    // {
-    //     glfwPollEvents();
+    while (!glfwWindowShouldClose(window))
+    {
+        glfwPollEvents();
 
-    //     // glfwSetWindowShouldClose(window, GLFW_TRUE);
-    // }
+        // glfwSetWindowShouldClose(window, GLFW_TRUE);
+    }
 }
 
 ////vllt. eher dispose
 void cleanup()
 {
+    for (const auto &imageView : swapChainImageViews)
+    {
+        vkDestroyImageView(device, imageView, nullptr);
+    }
+
     destroy_callback();
 
     vkDestroySwapchainKHR(device, swapChain, nullptr);
