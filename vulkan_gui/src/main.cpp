@@ -52,8 +52,6 @@ VkQueue graphics_queue;
 VkQueue presentation_queue;
 VkSurfaceKHR surface;
 VkSwapchainKHR swapChain;
-QueueFamilyIndices family_indices;
-SwapChainDetails chain_details;
 } // namespace
 
 void init_window()
@@ -242,6 +240,8 @@ VKAPI_ATTR VkBool32 VKAPI_CALL debug_callback(VkDebugUtilsMessageSeverityFlagBit
                                               void *pUserData)
 {
     std::printf("debug callback:%s\n", pCallbackData->pMessage);
+
+    return VK_TRUE;
 }
 
 void destroy_callback()
@@ -261,7 +261,9 @@ void init_callback()
     if (!enableCallback)
         return;
 
-    VkDebugUtilsMessengerCreateInfoEXT createInfo;
+    std::printf("Initiating callback.");
+
+    VkDebugUtilsMessengerCreateInfoEXT createInfo = {};
     createInfo.sType =
         VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT;
     createInfo.messageSeverity =
@@ -332,6 +334,8 @@ SwapChainDetails query_swap_chain_details(VkPhysicalDevice device)
 
     uint32_t formatCount;
     uint32_t presentModeCount;
+
+    vkGetPhysicalDeviceSurfaceCapabilitiesKHR(device, surface, &res.capabilities);
 
     vkGetPhysicalDeviceSurfaceFormatsKHR(device, surface, &formatCount, nullptr);
 
@@ -442,7 +446,6 @@ void pick_physical_device()
         if (!suitableDeviceFound && is_device_suitable(device))
         {
             physical_device = device;
-            family_indices = find_queue_families(physical_device);
             suitableDeviceFound = true;
         }
     }
@@ -455,15 +458,16 @@ void pick_physical_device()
 
 void create_logical_device()
 {
+    auto indices = find_queue_families(physical_device);
     float queuePriorities = 1.f;
 
     std::vector<VkDeviceQueueCreateInfo> queueCreateInfos;
 
-    for (int i : std::set<int>{family_indices.graphics, family_indices.presentation})
+    for (int i : std::set<int>{indices.graphics, indices.presentation})
     {
         VkDeviceQueueCreateInfo queueCreateInfo = {};
         queueCreateInfo.sType = VK_STRUCTURE_TYPE_DEVICE_QUEUE_CREATE_INFO;
-        queueCreateInfo.queueFamilyIndex = family_indices.graphics;
+        queueCreateInfo.queueFamilyIndex = indices.graphics;
         queueCreateInfo.queueCount = 1;
         queueCreateInfo.pQueuePriorities = &queuePriorities;
 
@@ -496,8 +500,10 @@ void create_logical_device()
 
 void create_queues()
 {
-    vkGetDeviceQueue(device, family_indices.graphics, 0, &graphics_queue);
-    vkGetDeviceQueue(device, family_indices.presentation, 0, &presentation_queue);
+    auto indices = find_queue_families(physical_device);
+
+    vkGetDeviceQueue(device, indices.graphics, 0, &graphics_queue);
+    vkGetDeviceQueue(device, indices.presentation, 0, &presentation_queue);
 }
 
 void create_surface()
@@ -512,6 +518,7 @@ void create_swap_chain()
     VkSurfaceFormatKHR format = chooseSwapSurfaceFormat(details.formats);
     VkPresentModeKHR presentMode = chooseSwapPresentMode(details.presentModes);
     VkExtent2D extent = chooseSwapExtent(details.capabilities);
+    auto indices = find_queue_families(physical_device);
 
     uint32_t imageCount = details.capabilities.minImageCount + 1;
 
@@ -531,9 +538,9 @@ void create_swap_chain()
     info.imageArrayLayers = 1;
     info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
 
-    uint32_t queueFamilyIndices[] = {family_indices.presentation, family_indices.graphics};
+    uint32_t queueFamilyIndices[] = {indices.presentation, indices.graphics};
 
-    if (family_indices.graphics != family_indices.presentation)
+    if (indices.graphics != indices.presentation)
     {
         info.imageSharingMode = VK_SHARING_MODE_CONCURRENT;
         info.queueFamilyIndexCount = 2;
@@ -552,8 +559,8 @@ void create_swap_chain()
     info.clipped = VK_TRUE;
     info.oldSwapchain = VK_NULL_HANDLE;
 
-    if (int x = vkCreateSwapchainKHR(device, &info, nullptr, &swapChain) != VK_SUCCESS)
-        throw util::exception("Failed to create Swapchain!" + std::to_string(x));
+    if (vkCreateSwapchainKHR(device, &info, nullptr, &swapChain) != VK_SUCCESS)
+        throw util::exception("Failed to create Swapchain!");
 }
 
 void init_vulkan()
@@ -572,12 +579,12 @@ void init_vulkan()
 
 void main_loop()
 {
-    while (!glfwWindowShouldClose(window))
-    {
-        glfwPollEvents();
+    // while (!glfwWindowShouldClose(window))
+    // {
+    //     glfwPollEvents();
 
-        // glfwSetWindowShouldClose(window, GLFW_TRUE);
-    }
+    //     // glfwSetWindowShouldClose(window, GLFW_TRUE);
+    // }
 }
 
 ////vllt. eher dispose
