@@ -54,6 +54,7 @@ include_directories(core/include)
 include_directories(playground)
 include_directories(terminal_ui/include)
 include_directories(vulkan_gui/include)
+include_directories(.)
 
 message(STATUS "Boost_VERSION=" ${Boost_VERSION})
 

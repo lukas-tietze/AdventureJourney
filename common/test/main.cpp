@@ -43,6 +43,10 @@ int main(int argc, char **argv)
     tests.push_back(test::test_run(new test::simple_test("collect rope", &test::data_test::collection_test::test_collect_rope)));
     tests.push_back(test::test_run(new test::simple_test("array", &test::data_test::collection_test::test_array)));
     tests.push_back(test::test_run(new test::simple_test("cache", &test::data_test::collection_test::test_cache)));
+    tests.push_back(test::test_run(new test::simple_test("hex4 to number", &test::math_test::test_hex4_to_number)));
+    tests.push_back(test::test_run(new test::simple_test("hex to number", &test::math_test::test_hex_to_number)));
+    tests.push_back(test::test_run(new test::simple_test("is hex char", &test::math_test::test_is_hex_char)));
+    tests.push_back(test::test_run(new test::simple_test("crop", &test::math_test::test_crop)));
 
     return test::run_tests(tests, test::test_config::init_from_args(argc, argv));
 }

@@ -40,6 +40,13 @@ int strip();
 int strip_front();
 int strip_back();
 } // namespace string_test
+namespace math_test
+{
+int test_hex4_to_number();
+int test_hex_to_number();
+int test_is_hex_char();
+int test_crop();
+} // namespace math_test
 namespace data_test
 {
 namespace collection_test

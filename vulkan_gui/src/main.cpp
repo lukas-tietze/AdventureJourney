@@ -552,8 +552,8 @@ void create_swap_chain()
     info.clipped = VK_TRUE;
     info.oldSwapchain = VK_NULL_HANDLE;
 
-    if (vkCreateSwapchainKHR(device, &info, nullptr, &swapChain) != VK_SUCCESS)
-        throw util::exception("Failed to create Swapchain!");
+    if (int x = vkCreateSwapchainKHR(device, &info, nullptr, &swapChain) != VK_SUCCESS)
+        throw util::exception("Failed to create Swapchain!" + std::to_string(x));
 }
 
 void init_vulkan()
