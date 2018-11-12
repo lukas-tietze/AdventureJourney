@@ -12,6 +12,7 @@
 #include <cstring>
 #include <set>
 #include <algorithm>
+#include <fstream>
 
 namespace
 {
@@ -600,6 +601,45 @@ void create_image_views()
     }
 }
 
+static std::vector<char> readShader(const std::string &fileName)
+{
+    std::ifstream f(fileName, std::ios::ate | std::ios::binary);
+
+    if (!f.is_open())
+        throw util::exception(util::format("Failed to read shader from \"%s\"!", fileName.c_str()));
+
+    size_t fileSize = static_cast<size_t>(f.tellg());
+    std::vector<char> buf(fileSize);
+    f.seekg(0);
+    f.read(buf.data(), fileSize);
+    f.close();
+
+    return buf;
+}
+
+VkShaderModule createShaderModule(const std::string &source)
+{
+    auto code = readShader(source);
+
+    VkShaderModuleCreateInfo info = {};
+    info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
+    info.codeSize = code.size();
+    info.pCode = code.data();
+
+    VkShaderModule res;
+
+    if (vkCreateShaderModule(device, &info, nullptr, &res) != VK_SUCCESS)
+        throw util::exception(util::format("Failed to create shader from \"%s\"!", source.c_str()));
+
+    return res;
+}
+
+void create_graphics_pipeline()
+{
+    auto vertex = createShaderModule("vert.spv");
+    auto fragment = createShaderModule("fragmet.spv");
+}
+
 void init_vulkan()
 {
     validate_vk_layers();
@@ -613,6 +653,7 @@ void init_vulkan()
     create_queues();
     create_swap_chain();
     create_image_views();
+    create_graphics_pipeline();
 }
 
 void main_loop()
