@@ -624,7 +624,7 @@ VkShaderModule createShaderModule(const std::string &source)
     VkShaderModuleCreateInfo info = {};
     info.sType = VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO;
     info.codeSize = code.size();
-    info.pCode = code.data();
+    info.pCode = reinterpret_cast<uint32_t *>(code.data());
 
     VkShaderModule res;
 
