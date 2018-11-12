@@ -640,7 +640,7 @@ VkShaderModule createShaderModule(const std::string &source)
 void create_graphics_pipeline()
 {
     auto vertexShader = createShaderModule("vert.spv");
-    auto fragmentShader = createShaderModule("fragmet.spv");
+    auto fragmentShader = createShaderModule("frag.spv");
 
     VkPipelineShaderStageCreateInfo vertShaderCreationInfo = {};
     vertShaderCreationInfo.sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO;
@@ -759,6 +759,7 @@ void create_graphics_pipeline()
     pipelineInfo.pColorBlendState = &colorBlending;
     pipelineInfo.pDynamicState = nullptr;
     pipelineInfo.renderPass = renderPass;
+    pipelineInfo.layout = pipelineLayout;
     pipelineInfo.subpass = 0;
     pipelineInfo.basePipelineHandle = VK_NULL_HANDLE;
     pipelineInfo.basePipelineIndex = -1;
