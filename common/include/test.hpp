@@ -12,58 +12,58 @@
 
 namespace test
 {
-typedef int (*test_function)();
+typedef int (*TestFunction)();
 
-class test_base
+class TestBase
 {
   private:
     std::string name;
 
   public:
-    test_base(const std::string &name);
-    virtual ~test_base();
+    TestBase(const std::string &name);
+    virtual ~TestBase();
 
-    const std::string &get_name() const;
+    const std::string &GetName() const;
 
-    virtual void init();
-    virtual void run() = 0;
-    virtual void dispose();
+    virtual void Init();
+    virtual void Run() = 0;
+    virtual void Dispose();
 };
 
-class simple_test : public test_base
+class SimpleTest : public TestBase
 {
   private:
-    test_function func;
+    TestFunction func;
 
   public:
-    simple_test(const std::string &name, test_function func);
+    SimpleTest(const std::string &name, TestFunction func);
 
-    void run();
+    void Run();
 };
 
-class test_run
+class TestRun
 {
   private:
-    test_base *test;
+    TestBase *test;
     std::string message;
     bool good;
     clock_t start;
     clock_t end;
 
   public:
-    test_run(test_base *test);
-    ~test_run();
+    TestRun(TestBase *test);
+    ~TestRun();
 
-    void execute();
+    void Execute();
 
-    double get_time_ms() const;
-    clock_t get_time() const;
-    bool is_good() const;
+    double GetTimeMs() const;
+    clock_t GetTime() const;
+    bool IsGood() const;
     bool is_started() const;
     bool is_finished() const;
     const std::string &get_message() const;
 
-    friend std::ostream &operator<<(std::ostream &, const test_run &testRun);
+    friend std::ostream &operator<<(std::ostream &, const TestRun &testRun);
 };
 
 class test_config
@@ -92,9 +92,9 @@ class test_config
     bool is_show_only_failed_enabled() const;
 };
 
-std::ostream &operator<<(std::ostream &, const test_run &testRun);
+std::ostream &operator<<(std::ostream &, const TestRun &testRun);
 
-typedef std::vector<test_run> test_collection;
+typedef std::vector<TestRun> test_collection;
 
 int run_tests(test_collection &, const test_config &);
 } // namespace test
