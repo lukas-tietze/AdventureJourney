@@ -3,87 +3,87 @@
 #include <string>
 #include <vector>
 
-#include "terminal_view.hpp"
-#include "graphics/color.hpp"
+#include "TerminalView.hpp"
+#include "graphics/Color.hpp"
 
 namespace terminal
 {
-struct pattern_item final
+struct PatternItem final
 {
     int length;
     char symbol;
-    bool use_custom_color;
-    util::color custom_color;
-    bool use_custom_attributes;
-    terminal::output_attribute custom_attributes;
+    bool useCustomColor;
+    util::Color customColor;
+    bool useCustomAttributes;
+    terminal::OutputAttribute customAttributes;
 };
 
-class pattern final
+class Pattern final
 {
   private:
-    std::vector<pattern_item> items;
-    uint total_length;
+    std::vector<PatternItem> items;
+    uint totalLength;
 
   public:
-    pattern();
-    pattern(const pattern &);
+    Pattern();
+    Pattern(const Pattern &);
 
-    typedef std::vector<pattern_item>::iterator iterator;
-    typedef std::vector<pattern_item>::const_iterator const_iterator;
+    typedef std::vector<PatternItem>::Iterator Iterator;
+    typedef std::vector<PatternItem>::ConstIterator ConstIterator;
 
-    pattern &push(const pattern_item &);
-    pattern &push(char c);
-    pattern &push(char c, int count);
-    pattern &push(char c, terminal::output_attribute);
-    pattern &push(char c, int count, terminal::output_attribute);
-    pattern &push(char c, const util::color &);
-    pattern &push(char c, int count, const util::color &);
-    pattern &push(char c, const util::color &, terminal::output_attribute);
-    pattern &push(char c, int count, const util::color &, terminal::output_attribute);
-    pattern &push_ec(char c, int color);
-    pattern &push_ec(char c, int count, int color);
-    pattern &push_ec(char c, int, terminal::output_attribute);
-    pattern &push_ec(char c, int count, int color, terminal::output_attribute);
+    Pattern &push(const PatternItem &);
+    Pattern &push(char c);
+    Pattern &push(char c, int count);
+    Pattern &push(char c, terminal::OutputAttribute);
+    Pattern &push(char c, int count, terminal::OutputAttribute);
+    Pattern &push(char c, const util::Color &);
+    Pattern &push(char c, int count, const util::Color &);
+    Pattern &push(char c, const util::Color &, terminal::OutputAttribute);
+    Pattern &push(char c, int count, const util::Color &, terminal::OutputAttribute);
+    Pattern &push_ec(char c, int Color);
+    Pattern &push_ec(char c, int count, int Color);
+    Pattern &push_ec(char c, int, terminal::OutputAttribute);
+    Pattern &push_ec(char c, int count, int Color, terminal::OutputAttribute);
 
     void pop();
-    uint get_total_length();
-    uint get_item_count();
+    uint getTotalLength();
+    uint getItemCount();
 
-    const_iterator begin() const;
-    const_iterator end() const;
-    iterator begin();
-    iterator end();
+    ConstIterator begin() const;
+    ConstIterator end() const;
+    Iterator begin();
+    Iterator end();
 };
 
 class canvas
 {
   private:
-    terminal_view *view;
+    TerminalView *view;
     util::dimension size;
     util::rectangle clipped_area;
     util::point origin;
 
   public:
-    canvas(terminal_view *);
+    canvas(TerminalView *);
     canvas(const canvas &);
 
     terminal::canvas &draw_vertical_line(const util::point &, int length, char c);
-    terminal::canvas &draw_vertical_line(const util::point &, int length, char c, int color);
+    terminal::canvas &draw_vertical_line(const util::point &, int length, char c, int Color);
 
     terminal::canvas &draw_horizontal_line(const util::point &, int y, char c);
-    terminal::canvas &draw_horizontal_line(const util::point &, int y, char c, int color);
+    terminal::canvas &draw_horizontal_line(const util::point &, int y, char c, int Color);
 
     terminal::canvas &draw_box(const util::rectangle &, char horizontal, char vertical, char cornor);
-    terminal::canvas &draw_box(const util::rectangle &, char horizontal, char vertical, char cornor, int color);
+    terminal::canvas &draw_box(const util::rectangle &, char horizontal, char vertical, char cornor, int Color);
     terminal::canvas &draw_box(const util::rectangle &, char horizontal, int hColor, char vertical, int vColor, char cornor, int cColor);
 
     terminal::canvas &draw_box(const util::rectangle &, char c);
-    terminal::canvas &draw_box(const util::rectangle &, char c, int color);
+    terminal::canvas &draw_box(const util::rectangle &, char c, int Color);
 
     terminal::canvas &draw_string(const util::point &, const std::string &);
-    terminal::canvas &draw_string(const util::point &, const std::string &, int color);
-    terminal::canvas &draw_string(const util::point &, const std::string &, terminal::output_attribute attributes);
-    terminal::canvas &draw_string(const util::point &, const std::string &, int color, terminal::output_attribute attributes);
+    terminal::canvas &draw_string(const util::point &, const std::string &, int Color);
+    terminal::canvas &draw_string(const util::point &, const std::string &, terminal::OutputAttribute attributes);
+    terminal::canvas &draw_string(const util::point &, const std::string &, int Color, terminal::OutputAttribute attributes);
 
     terminal::canvas &fill(const util::rectangle &, char c);
     terminal::canvas &clear(char c);
@@ -97,10 +97,10 @@ class canvas
     void clip_area(const util::dimension &);
     void clip_area(const util::rectangle &);
     void disable_clip();
-    void enable_attribute(terminal::output_attribute);
-    void disable_attribute(terminal::output_attribute);
-    void set_foreground_color(const util::color &);
-    void set_background_color(const util::color &);
+    void enable_attribute(terminal::OutputAttribute);
+    void disable_attribute(terminal::OutputAttribute);
+    void set_foreground_color(const util::Color &);
+    void set_background_color(const util::Color &);
     void set_foreground_color(int);
     void set_background_color(int);
     void set_active_color_pair(short);
@@ -109,11 +109,11 @@ class canvas
 
     void flush();
 
-    terminal_view *get_view() const;
+    TerminalView *get_view() const;
 
-    short add_color(const util::color &);
-    void set_color(short, const util::color &);
-    short add_color_pair(const util::color &fg, const util::color &bg);
+    short add_color(const util::Color &);
+    void set_color(short, const util::Color &);
+    short add_color_pair(const util::Color &fg, const util::Color &bg);
     short add_color_pair(short, short);
     void set_color_pair(short, short, short);
     short find_color_pair(short, short);

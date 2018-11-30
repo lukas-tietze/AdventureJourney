@@ -59,120 +59,120 @@ class TestRun
     double GetTimeMs() const;
     clock_t GetTime() const;
     bool IsGood() const;
-    bool is_started() const;
-    bool is_finished() const;
-    const std::string &get_message() const;
+    bool IsStarted() const;
+    bool IsFinished() const;
+    const std::string &GetMessage() const;
 
     friend std::ostream &operator<<(std::ostream &, const TestRun &testRun);
 };
 
-class test_config
+class TestConfig
 {
   private:
-    bool break_after_first_failure;
-    uint thread_count;
+    bool breakAfterFirstFailure;
+    uint threadCount;
     long timeout;
     bool quiet;
-    bool show_only_failed;
+    bool showOnlyFailed;
 
   public:
-    test_config();
-    test_config(bool break_after_first_failure,
-                uint thread_count,
+    TestConfig();
+    TestConfig(bool breakAfterFirstFailure,
+                uint threadCount,
                 long timeout,
                 bool quiet,
-                bool show_only_failed);
+                bool showOnlyFailed);
 
-    static test_config init_from_args(int, char **);
+    static TestConfig initFromArgs(int, char **);
 
-    bool is_break_after_first_failure_enabled() const;
-    uint get_thread_count() const;
-    long get_timeout() const;
-    bool is_quiet_enabled() const;
-    bool is_show_only_failed_enabled() const;
+    bool IsBreakAfterFirstFailureEnabled() const;
+    uint GetThreadCount() const;
+    long GetTimeout() const;
+    bool IsQuietEnabled() const;
+    bool IsShowOnlyFailedEnabled() const;
 };
 
 std::ostream &operator<<(std::ostream &, const TestRun &testRun);
 
-typedef std::vector<TestRun> test_collection;
+typedef std::vector<TestRun> TestCollection;
 
-int run_tests(test_collection &, const test_config &);
+int RunTests(TestCollection &, const TestConfig &);
 } // namespace test
 
 namespace assert
 {
-class assert_exception : public util::exception
+class AssertException : public util::Exception
 {
   public:
-    assert_exception(const std::string &msg, const std::string &customMsg);
+    AssertException(const std::string &msg, const std::string &customMsg);
 };
 
-void fail(const std::string &msg = "");
-void is_null(const void *, const std::string &msg = "");
-void is_not_null(const void *, const std::string &msg = "");
-void is_true(bool x, const std::string &msg = "");
-void is_false(bool x, const std::string &msg = "");
+void Fail(const std::string &msg = "");
+void IsNull(const void *, const std::string &msg = "");
+void IsNotNull(const void *, const std::string &msg = "");
+void IsTrue(bool x, const std::string &msg = "");
+void IsFalse(bool x, const std::string &msg = "");
 
 template <class T>
-void are_equal(const T &x, const T &y, const std::string &msg = "")
+void AreEqual(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x == y))
     {
-        throw assert_exception("Expected <" + util::to_string(x) + ">, got <" + util::to_string(y) + ">!", msg);
+        throw AssertException("Expected <" + util::ToString(x) + ">, got <" + util::ToString(y) + ">!", msg);
     }
 }
 
 template <class T>
-void are_not_equal(const T &x, const T &y, const std::string &msg = "")
+void AreNotEqual(const T &x, const T &y, const std::string &msg = "")
 {
     if (x == y)
     {
-        throw assert_exception("<" + util::to_string(x) + "> does equal <" + util::to_string(y) + ">!", msg);
+        throw AssertException("<" + util::ToString(x) + "> does equal <" + util::ToString(y) + ">!", msg);
     }
 }
 
 template <class T>
-void is_greater(const T &x, const T &y, const std::string &msg = "")
+void IsGreater(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x > y))
     {
-        throw assert_exception("<" + util::to_string(x) + "> is not greater than <" + util::to_string(y) + ">!", msg);
+        throw AssertException("<" + util::ToString(x) + "> is not greater than <" + util::ToString(y) + ">!", msg);
     }
 }
 
 template <class T>
-void is_equal_or_greater(const T &x, const T &y, const std::string &msg = "")
+void IsEqualOrGreater(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x >= y))
     {
-        throw assert_exception("<" + util::to_string(x) + "> is not greater than or equal to <" + util::to_string(y) + ">!", msg);
+        throw AssertException("<" + util::ToString(x) + "> is not greater than or equal to <" + util::ToString(y) + ">!", msg);
     }
 }
 
 template <class T>
-void is_less(const T &x, const T &y, const std::string &msg = "")
+void IsLess(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x < y))
     {
-        throw assert_exception("<" + util::to_string(x) + "> is not less than <" + util::to_string(y) + ">!", msg);
+        throw AssertException("<" + util::ToString(x) + "> is not less than <" + util::ToString(y) + ">!", msg);
     }
 }
 
 template <class T>
-void is_equal_or_less(const T &x, const T &y, const std::string &msg = "")
+void IsEqualOrLess(const T &x, const T &y, const std::string &msg = "")
 {
     if (!(x <= y))
     {
-        throw assert_exception("<" + util::to_string(x) + "> is not less than or equal to <" + util::to_string(y) + ">!", msg);
+        throw AssertException("<" + util::ToString(x) + "> is not less than or equal to <" + util::ToString(y) + ">!", msg);
     }
 }
 
 template <class T>
-void is(const void *obj, const std::string &msg = "")
+void Is(const void *obj, const std::string &msg = "")
 {
     if (static_cast<const T *>(obj) == nullptr)
     {
-        throw assert_exception("<" + util::to_string(&obj) + "> is not of type <" + typeid(T).name() + ">!", msg);
+        throw AssertException("<" + util::ToString(&obj) + "> is not of type <" + typeid(T).name() + ">!", msg);
     }
 }
 } // namespace assert

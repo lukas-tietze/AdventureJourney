@@ -5,16 +5,16 @@
 
 namespace terminal
 {
-enum class input_mode
+enum class InputMode
 {
     RAW,
     BREAK,
     LINE,
 };
 
-std::ostream &operator<<(std::ostream &, const input_mode &);
+std::ostream &operator<<(std::ostream &, const InputMode &);
 
-enum class resize_mode
+enum class ResizeMode
 {
     North = 1,
     South = 2,
@@ -25,9 +25,9 @@ enum class resize_mode
     All = North | South | West | East,
 };
 
-std::ostream &operator<<(std::ostream &, const resize_mode &);
+std::ostream &operator<<(std::ostream &, const ResizeMode &);
 
-enum class output_attribute
+enum class OutputAttribute
 {
     None = A_NORMAL,
     Standout = A_STANDOUT,
@@ -42,9 +42,9 @@ enum class output_attribute
     All = None | Standout | Underline | Reverse | Blink | Dimmed | Bold | Protect | Invisible | AlternatCharset,
 };
 
-std::ostream &operator<<(std::ostream &, const output_attribute &);
+std::ostream &operator<<(std::ostream &, const OutputAttribute &);
 
-enum class default_colors
+enum class DefaultColors
 {
     Black = COLOR_BLACK,
     Red = COLOR_RED,
@@ -56,9 +56,9 @@ enum class default_colors
     White = COLOR_WHITE,
 };
 
-std::ostream &operator<<(std::ostream &, const default_colors &);
+std::ostream &operator<<(std::ostream &, const DefaultColors &);
 
-enum class mouse_action
+enum class MouseAction
 {
     Button1Pressed = BUTTON1_PRESSED,
     Button1Released = BUTTON1_RELEASED,

@@ -2,15 +2,15 @@
 
 namespace gr
 {
-class texture
+class Texture
 {
 };
 
-class renderer
+class Renderer
 {
 };
 
-class render_object
+class RenderObject
 {
 };
 } // namespace gr

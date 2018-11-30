@@ -9,67 +9,67 @@ namespace util
 {
 namespace error_codes
 {
-const std::string &get_message(int error_code);
+const std::string &GetMessage(int errorCode);
 }
 
-std::string format_stacktrace(const boost::stacktrace::stacktrace &trace, uint indent, uint maxLen, bool showAddress = false);
+std::string FormatStacktrace(const boost::stacktrace::stacktrace &trace, uint indent, uint maxLen, bool showAddress = false);
 
-class exception : public std::exception
+class Exception : public std::exception
 {
   private:
-    int error_code;
+    int errorCode;
     std::string msg;
     boost::stacktrace::stacktrace trace;
 
   public:
-    exception();
-    exception(int);
-    exception(const std::string &);
-    exception(int, const std::string &);
+    Exception();
+    Exception(int);
+    Exception(const std::string &);
+    Exception(int, const std::string &);
 
     virtual const char *what() const throw();
-    virtual const std::string &get_message() const;
-    int get_error_code() const;
-    const boost::stacktrace::stacktrace &get_stacktrace() const;
+    virtual const std::string &GetMessage() const;
+    int GetErrorCode() const;
+    const boost::stacktrace::stacktrace &GetStacktrace() const;
 };
 
-class index_out_of_range_exception : public util::exception
+class IndexOutOfRangeException : public util::Exception
 {
   public:
-    index_out_of_range_exception();
-    index_out_of_range_exception(int index, int max);
-    index_out_of_range_exception(int index, int max, const std::string &custom_msg);
+    IndexOutOfRangeException();
+    IndexOutOfRangeException(int index, int max);
+    IndexOutOfRangeException(int index, int max, const std::string &customMsg);
 };
 
-class overflow_exception : public util::exception
+class OverflowException : public util::Exception
 {
   public:
-    overflow_exception();
-    overflow_exception(int max);
-    overflow_exception(int max, const std::string &custom_msg);
+    OverflowException();
+    OverflowException(int max);
+    OverflowException(int max, const std::string &customMsg);
 };
 
-class missing_key_exception : public util::exception
+class MissingKeyException : public util::Exception
 {
   public:
-    missing_key_exception();
-    missing_key_exception(const std::string &key);
-    missing_key_exception(const std::string &key, const std::string &custom_msg);
+    MissingKeyException();
+    MissingKeyException(const std::string &key);
+    MissingKeyException(const std::string &key, const std::string &customMsg);
 };
 
-class file_not_found_exception : public util::exception
+class FileNotFoundException : public util::Exception
 {
   public:
-    file_not_found_exception();
-    file_not_found_exception(const std::string &path);
-    file_not_found_exception(const std::string &path, const std::string &custom_msg);
+    FileNotFoundException();
+    FileNotFoundException(const std::string &path);
+    FileNotFoundException(const std::string &path, const std::string &customMsg);
 };
 
-class invalid_case_exception : public util::exception
+class InvalidCaseException : public util::Exception
 {
   public:
-    invalid_case_exception();
-    invalid_case_exception(const std::string &which);
-    invalid_case_exception(const std::string &which, const std::string &custom_msg);
+    InvalidCaseException();
+    InvalidCaseException(const std::string &which);
+    InvalidCaseException(const std::string &which, const std::string &customMsg);
 };
 } // namespace util

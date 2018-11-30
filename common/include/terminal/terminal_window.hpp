@@ -2,35 +2,35 @@
 
 #include <vector>
 
-#include "terminal/controls/container_base.hpp"
-#include "terminal/controls/control_base.hpp"
-#include "terminal/terminal_view.hpp"
+#include "terminal/controls/ContainerBase.hpp"
+#include "terminal/controls/ControlBase.hpp"
+#include "terminal/TerminalView.hpp"
 
 namespace terminal
 {
-class terminal_window : public container_base
+class TerminalWindow : public ContainerBase
 {
   private:
     std::vector<terminal::control_base *> controls;
-    std::vector<terminal::control_base *> controls_by_tab_index;
-    int focused_control_index;
+    std::vector<terminal::control_base *> controlsByTabIndex;
+    int focusedControlIndex;
     bool loop;
-    int escape_key;
-    bool has_escape_key;
+    int escapeKey;
+    bool hasEscapeKey;
 
     void render();
-    void switch_focus(int);
+    void switchFocus(int);
 
   public:
-    terminal_window();
-    ~terminal_window();
+    TerminalWindow();
+    ~TerminalWindow();
 
-    control_base *add_control(control_base *);
+    control_base *addControl(control_base *);
 
     void start(int);
     void start();
     void quit();
 
-    control_base *get_focused_control() const;
+    control_base *getFocusedControl() const;
 };
 } // namespace terminal

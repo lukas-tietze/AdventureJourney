@@ -7,102 +7,102 @@
 #include "util.hpp"
 #include "values.hpp"
 #include "geometry.hpp"
-#include "graphics/color.hpp"
+#include "graphics/Color.hpp"
 
 namespace terminal
 {
-class terminal_view
+class TerminalView
 {
   public:
-    typedef std::tuple<int, int> color_pair;
+    typedef std::tuple<int, int> ColorPair;
 
-    ~terminal_view();
+    ~TerminalView();
 
-    static terminal_view *get_instance();
-    static terminal_view *delete_instance();
+    static TerminalView *GetInstance();
+    static TerminalView *DeleteInstance();
 
-    void set_input_mode(terminal::input_mode mode);
-    void set_echo(bool echo);
+    void SetInputMode(terminal::inputMode mode);
+    void SetEcho(bool echo);
 
-    util::dimension get_size() const;
-    bool set_size(const util::dimension &);
+    util::dimension GetSize() const;
+    bool SetSize(const util::dimension &);
 
-    int read_key();
-    std::string read_line();
+    int ReadKey();
+    std::string ReadLine();
 
-    bool read_key(long timeOut, int &result);
-    bool read_line(long timeOut, std::string &result);
+    bool ReadKey(long timeOut, int &result);
+    bool ReadLine(long timeOut, std::string &result);
 
-    void print(const std::string &text);
-    void print(const std::string &text, int x, int y);
-    void print(char c);
-    void print(char c, int x, int y);
-    void clear(const util::rectangle &area);
-    void flush();
+    void Print(const std::string &text);
+    void Print(const std::string &text, int x, int y);
+    void Print(char c);
+    void Print(char c, int x, int y);
+    void Clear(const util::rectangle &area);
+    void Flush();
 
-    void maximise();
-    void set_live_mode(bool);
+    void Maximise();
+    void SetLiveMode(bool);
 
-    void set_attribute(terminal::output_attribute, bool);
-    void reset_attribtues();
-    void attribute_on(terminal::output_attribute);
-    void attribute_off(terminal::output_attribute);
-    void set_active_attributes(terminal::output_attribute);
-    output_attribute get_active_attributes() const;
+    void SetAttribute(terminal::OutputAttribute, bool);
+    void ResetAttribtues();
+    void AttributeOn(terminal::OutputAttribute);
+    void AttributeOff(terminal::OutputAttribute);
+    void SetActiveAttributes(terminal::OutputAttribute);
+    OutputAttribute GetActiveAttributes() const;
 
-    void set_active_color_pair(int);
-    void set_background_color_pair(int);
-    int get_active_color_pair() const;
-    int get_active_background() const;
-    const color_pair &get_content(int id) const;
-    const util::color &get_color(int id) const;
+    void SetActiveColorPair(int);
+    void SetBackgroundColorPair(int);
+    int GetActiveColorPair() const;
+    int GetActiveBackground() const;
+    const ColorPair &GetContent(int id) const;
+    const util::Color &GetColor(int id) const;
 
-    int get_max_colors() const;
-    int get_used_colors() const;
-    int get_max_color_pairs() const;
-    int get_used_color_pairs() const;
-    bool can_change_colors() const;
+    int GetMaxColors() const;
+    int GetUsedColors() const;
+    int GetMaxColorPairs() const;
+    int GetUsedColorPairs() const;
+    bool CanChangeColors() const;
 
-    int add_color(const util::color &);
-    void set_color(int, const util::color &);
-    int find(const util::color &);
-    int add_color_pair(const util::color &fg, const util::color &bg);
-    int add_color_pair(int, int);
-    void set_color_pair(int, int, int);
-    int find_color_pair(int, int);
+    int AddColor(const util::Color &);
+    void SetColor(int, const util::Color &);
+    int Find(const util::Color &);
+    int AddColorPair(const util::Color &fg, const util::Color &bg);
+    int AddColorPair(int, int);
+    void SetColorPair(int, int, int);
+    int FindColorPair(int, int);
 
-    bool can_add_colors() const;
-    bool can_add_color_pairs() const;
+    bool CanAddColors() const;
+    bool CanAddColorPairs() const;
     
-    int create_style(terminal::output_attribute attributes, int color_pair);
+    int CreateStyle(terminal::OutputAttribute attributes, int colorPair);
 
   protected:
-    void on_terminal_property_changed();
+    void OnTerminalPropertyChanged();
 
   private:
-    static terminal_view *instance;
+    static TerminalView *instance;
 
     WINDOW *window;
     int width;
     int height;
-    char input_buf[4096];
+    char inputBuf[4096];
 
-    terminal::input_mode input_mode;
-    bool echo_on;
-    bool live_mode;
+    InputMode inputMode;
+    bool echoOn;
+    bool liveMode;
 
-    util::color *colors;
-    int max_colors;
-    int used_colors;
-    color_pair *color_pairs;
-    int active_color_pair;
-    int active_background_color_pair;
-    int max_color_pairs;
-    int used_color_pairs;
+    util::Color *colors;
+    int maxColors;
+    int usedColors;
+    ColorPair *colorPairs;
+    int activeColorPair;
+    int activeBackgroundColorPair;
+    int maxColorPairs;
+    int usedColorPairs;
 
-    output_attribute active_attributes;
+    OutputAttribute activeAttributes;
 
-    terminal_view();
-    terminal_view(int width, int height);
+    TerminalView();
+    TerminalView(int width, int height);
 };
 } // namespace terminal
