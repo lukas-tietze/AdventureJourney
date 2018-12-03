@@ -5,90 +5,89 @@
 
 namespace terminal
 {
-struct key_input
+struct KeyInput
 {
     int key;
     bool handled;
 };
 
-struct mouse_input
+struct MouseInput
 {
     int cx;
     int cy;
-    mouse_action action;
+    MouseAction action;
     bool handled;
 };
 
-class container_base;
+class ContainerBase;
 
-class control_base
+class ControlBase
 {
   private:
-    util::rectangle bounds;
-    util::dimension minimum_size;
-    util::dimension maximum_size;
-    control_base *parent;
-    int z_index;
-    bool has_focus;
-    int tab_index;
+    util::Rectangle bounds;
+    util::Dimension minimum_size;
+    util::Dimension maximum_size;
+    ControlBase *parent;
+    int zIndex;
+    bool hasFocus;
+    int tabIndex;
     std::string text;
     bool visible;
-    int text_style;
+    int textStyle;
 
   protected:
-    void set_bounds_core(const util::rectangle &);
+    void set_bounds_core(const util::Rectangle &);
     void set_z_index_core(int);
     void set_text_core(const std::string &);
     void set_visibility_core(bool visible);
     void set_tab_index_core(int);
-    void set_min_size_core(const util::dimension &);
-    void set_max_size_core(const util::dimension &);
+    void set_min_size_core(const util::Dimension &);
+    void set_max_size_core(const util::Dimension &);
 
-    bool validate_bounds(util::rectangle &);
+    bool validate_bounds(util::Rectangle &);
 
   public:
-    control_base();
-    virtual ~control_base();
+    ControlBase();
+    virtual ~ControlBase();
 
-    struct z_index_sorter
+    struct ZIndexSorter
     {
-        int operator()(const control_base &, const control_base &);
+        int operator()(const ControlBase &, const ControlBase &);
     };
 
-    struct tab_index_sorter
+    struct TabIndexSorter
     {
-        int operator()(const control_base &, const control_base &);
+        int operator()(const ControlBase &, const ControlBase &);
     };
 
-    control_base *get_parent();
-    const control_base *get_parent() const;
-    bool has_parent() const;
-    const util::rectangle &get_bounds() const;
-    void set_bounds(const util::rectangle &);
-    void set_z_index(int);
-    int get_z_index() const;
-    const std::string &get_text() const;
-    void set_text(const std::string &);
-    bool is_visible() const;
-    void set_visibility(bool visible);
-    int get_tab_index() const;
-    void set_tab_index(int);
-    const util::dimension &get_min_size() const;
-    const util::dimension &get_max_size() const;
-    void set_min_size(const util::dimension &);
-    void set_max_size(const util::dimension &);
+    ControlBase *GetParent();
+    const ControlBase *GetParent() const;
+    bool HasParent() const;
+    const util::Rectangle &GetBounds() const;
+    void SetBounds(const util::Rectangle &);
+    void SetZIndex(int);
+    int GetZIndex() const;
+    const std::string &GetText() const;
+    void SetText(const std::string &);
+    bool IsVisible() const;
+    void SetVisibility(bool visible);
+    int GetTabIndex() const;
+    void SetTabIndex(int);
+    const util::Dimension &getMinSize() const;
+    const util::Dimension &getMaxSize() const;
+    void SetMinSize(const util::Dimension &);
+    void SetMaxSize(const util::Dimension &);
 
-    virtual void handle_z_index_changed();
-    virtual void handle_tab_index_changed();
-    virtual void handle_bounds_changed();
-    virtual void handle_text_changed();
+    virtual void HandleZIndexChanged();
+    virtual void HandleTabIndexChanged();
+    virtual void HandleBoundsChanged();
+    virtual void HandleTextChanged();
+    virtual void HandleFocusAquired();
+    virtual void HandleFocusLost();
+    virtual void HandleKey(KeyInput &);
+    virtual void HandleMouse(MouseInput &);
+    virtual void HandleAddToControl(ContainerBase *);
 
-    virtual void handle_focus_aquired();
-    virtual void handle_focus_lost();
-    virtual void handle_key(key_input &);
-    virtual void handle_mouse(mouse_input &);
-    virtual void handle_add_to_control(container_base *);
-
-    virtual void render(canvas &) = 0;
+    virtual void Render(canvas &) = 0;
 };
 } // namespace terminal

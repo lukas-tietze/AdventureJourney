@@ -4,16 +4,16 @@
 
 namespace terminal
 {
-class button : public control_base
+class Button : public ControlBase
 {
   public:
-    button();
-    button(const std::string &);
-    virtual ~button();
+    Button();
+    Button(const std::string &);
+    virtual ~Button();
 
-    virtual void handle_key(key_input &);
-    virtual void handle_mouse(mouse_input &);
+    virtual void handle_key(KeyInput &);
+    virtual void handle_mouse(MouseInput &);
 
-    virtual void render(canvas &);
+    virtual void render(Canvas &);
 };
 } // namespace terminal
