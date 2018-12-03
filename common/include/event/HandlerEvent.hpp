@@ -4,12 +4,12 @@
 #include <vector>
 #include <algorithm>
 
-#include "defs.hpp"
+#include "Defs.hpp"
 
 namespace util
 {
 template <class THandler, class TArgs>
-class handler_event
+class HandlerEvent
 {
   protected:
     std::list<THandler> handler;
@@ -37,43 +37,43 @@ class handler_event
         }
     }
 
-    uint size() const
+    uint Size() const
     {
         return this->handler.size();
     }
 };
 
 template <class TArgs>
-class member_handler_base
+class MemberHandlerBase
 {
   public:
-    virtual ~member_handler_base()
+    virtual ~MemberHandlerBase()
     {
     }
     
     virtual void operator()(TArgs &args) const = 0;
-    virtual bool operator==(const member_handler_base &other) const = 0;
+    virtual bool operator==(const MemberHandlerBase &other) const = 0;
 };
 
 template <class TArgs>
-class member_handler_wrapper
+class MemberHandlerWrapper
 {
   public:
-    member_handler_base<TArgs> *wrapped_item;
+    MemberHandlerBase<TArgs> *wrapped_item;
 
     void operator()(TArgs &args) const
     {
         (*this->wrapped_item)(args);
     }
 
-    bool operator==(const member_handler_wrapper &other)
+    bool operator==(const MemberHandlerWrapper &other)
     {
         return (*this->wrapped_item) == (*other.wrapped_item);
     }
 };
 
 template <class T, class TArgs>
-class member_handler : public member_handler_base<TArgs>
+class MemberHandler : public MemberHandlerBase<TArgs>
 {
   public:
     T *obj;
@@ -84,9 +84,9 @@ class member_handler : public member_handler_base<TArgs>
         (obj->*f)(args);
     }
 
-    bool operator==(const member_handler_base<TArgs> &other) const
+    bool operator==(const MemberHandlerBase<TArgs> &other) const
     {
-        if (const member_handler *m = dynamic_cast<const member_handler *>(&other))
+        if (const MemberHandler *m = dynamic_cast<const MemberHandler *>(&other))
             return this->obj == m->obj && this->f == m->f;
 
         return false;
@@ -94,23 +94,23 @@ class member_handler : public member_handler_base<TArgs>
 };
 
 template <class T, class TArgs>
-member_handler_wrapper<TArgs> make_member_handler(T *obj, void (T::*f)(TArgs &))
+MemberHandlerWrapper<TArgs> MakeMemberHandler(T *obj, void (T::*f)(TArgs &))
 {
-    auto handler = new member_handler<T, TArgs>();
+    auto handler = new MemberHandler<T, TArgs>();
     handler->obj = obj;
     handler->f = f;
 
-    member_handler_wrapper<TArgs> wrapper;
+    MemberHandlerWrapper<TArgs> wrapper;
     wrapper.wrapped_item = handler;
 
     return wrapper;
 }
 
 template <class TArgs>
-class member_event : public handler_event<member_handler_wrapper<TArgs>, TArgs>
+class MemberEvent : public HandlerEvent<MemberHandlerWrapper<TArgs>, TArgs>
 {
   public:
-    void operator-=(member_handler_wrapper<TArgs> &handler)
+    void operator-=(MemberHandlerWrapper<TArgs> &handler)
     {
         auto pos = std::find(this->handler.begin(), this->handler.end(), handler);
 
@@ -121,9 +121,9 @@ class member_event : public handler_event<member_handler_wrapper<TArgs>, TArgs>
         }
     }
 
-    void remove_all(void *obj)
+    void RemoveAll(void *obj)
     {
-        std::vector<member_handler_wrapper<TArgs>> toRemove;
+        std::vector<MemberHandlerWrapper<TArgs>> toRemove;
 
         for (const auto &item : this->handler())
         {

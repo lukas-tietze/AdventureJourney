@@ -3,35 +3,35 @@
 #include <vector>
 #include <algorithm>
 
-#include "defs.hpp"
+#include "Defs.hpp"
 
 namespace util
 {
 template <class TArgs>
-class function_event
+class FunctionEvent
 {
   public:
-    typedef void (*event_function)(TArgs &);
+    typedef void (*EventFunction)(TArgs &);
 
-    void operator+=(event_function function);
-    void operator-=(event_function function);
+    void operator+=(EventFunction function);
+    void operator-=(EventFunction function);
     void operator()(TArgs &args) const;
 
-    uint size() const;
+    uint Size() const;
 
   private:
-    std::vector<event_function> handler;
+    std::vector<EventFunction> handler;
 };
 
 template <class TArgs>
-void function_event<TArgs>::operator+=(util::function_event<TArgs>::event_function handler)
+void FunctionEvent<TArgs>::operator+=(util::FunctionEvent<TArgs>::EventFunction handler)
 {
     if (std::find(this->handler.begin(), this->handler.end(), handler) == this->handler.end())
         this->handler.push_back(handler);
 }
 
 template <class TArgs>
-void function_event<TArgs>::operator-=(util::function_event<TArgs>::event_function handler)
+void FunctionEvent<TArgs>::operator-=(util::FunctionEvent<TArgs>::EventFunction handler)
 {
     auto pos = std::find(this->handler.begin(), this->handler.end(), handler);
 
@@ -40,7 +40,7 @@ void function_event<TArgs>::operator-=(util::function_event<TArgs>::event_functi
 }
 
 template <class TArgs>
-void function_event<TArgs>::operator()(TArgs &args) const
+void FunctionEvent<TArgs>::operator()(TArgs &args) const
 {
     for (const auto &item : this->handler)
     {
@@ -49,7 +49,7 @@ void function_event<TArgs>::operator()(TArgs &args) const
 }
 
 template <class TArgs>
-uint function_event<TArgs>::size() const
+uint FunctionEvent<TArgs>::Size() const
 {
     return this->handler.size();
 }

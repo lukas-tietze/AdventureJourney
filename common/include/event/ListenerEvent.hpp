@@ -3,29 +3,29 @@
 #include <vector>
 #include <algorithm>
 
-#include "defs.hpp"
+#include "Defs.hpp"
 
 namespace util
 {
 template <class T>
-class i_event_listener
+class IEventListener
 {
   public:
-    virtual void handle_event(T &args) = 0;
+    virtual void HandleEvent(T &args) = 0;
 };
 
 template <class T>
-class listener_event
+class ListenerEvent
 {
   private:
-    std::vector<i_event_listener<T> *> listeners;
+    std::vector<IEventListener<T> *> listeners;
 
   public:
-    listener_event() : listeners()
+    ListenerEvent() : listeners()
     {
     }
 
-    void operator+=(i_event_listener<T> *listener)
+    void operator+=(IEventListener<T> *listener)
     {
         if (std::find(this->listeners.begin(), this->listeners.end(), listener) == this->listeners.end())
         {
@@ -33,7 +33,7 @@ class listener_event
         }
     }
 
-    void operator-=(i_event_listener<T> *listener)
+    void operator-=(IEventListener<T> *listener)
     {
         auto pos = std::find(this->listeners.begin(), this->listeners.end(), listener);
 
@@ -47,11 +47,11 @@ class listener_event
     {
         for (const auto &listener : this->listeners)
         {
-            listener->handle_event(args);
+            listener->HandleEvent(args);
         }
     }
 
-    uint size() const
+    uint Size() const
     {
         return this->listeners.size();
     }
