@@ -5,10 +5,10 @@
 #include <vector>
 #include <iostream>
 
-#include "data/string.hpp"
-#include "data/io.hpp"
-#include "datetime/datetime_conversions.hpp"
-#include "exception.hpp"
+#include "data/String.hpp"
+#include "data/Io.hpp"
+#include "datetime/Conversions.hpp"
+#include "Exception.hpp"
 
 namespace test
 {
@@ -83,7 +83,7 @@ class TestConfig
                 bool quiet,
                 bool showOnlyFailed);
 
-    static TestConfig initFromArgs(int, char **);
+    static TestConfig InitFromArgs(int, char **);
 
     bool IsBreakAfterFirstFailureEnabled() const;
     uint GetThreadCount() const;
