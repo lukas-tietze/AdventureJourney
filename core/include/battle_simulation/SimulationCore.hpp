@@ -2,7 +2,7 @@
 
 namespace logic
 {
-enum class invasion_strategy
+enum class InvasionStrategy
 {
     Wait,
     Bombardement,
@@ -10,7 +10,7 @@ enum class invasion_strategy
     EstablishBridgeHead
 };
 
-enum class space_battle_strategy
+enum class SpaceBattleStrategy
 {
     Retreat,
     OffensiveRetreat,
@@ -19,7 +19,7 @@ enum class space_battle_strategy
     Suicidal,
 };
 
-enum class land_battle_strategy
+enum class LandBattleStrategy
 {
     Retreat,
     LineBattle,
@@ -27,15 +27,15 @@ enum class land_battle_strategy
     Assault,
 };
 
-class simulation_parameters
+class SimulationParameters
 {
   private:
 };
 
-class simulation_core
+class SimulationCore
 {
   private:
   public:
-    void run();
+    void Run();
 };
 } // namespace logic

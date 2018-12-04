@@ -4,32 +4,32 @@
 #include <vector>
 #include <tuple>
 
-#include "util/has_name_base.hpp"
+#include "util/HasNameBase.hpp"
 
 namespace logic
 {
-class general;
-class admiral;
+class General;
+class Admiral;
 
-class army : public has_name_base
+class Army : public HasNameBase
 {
   private:
-    general *leader;
+    General *leader;
     std::vector<std::tuple<id_t, uint>> units;
 
   public:
-    army();
+    Army();
 };
 
-class fleet : public has_name_base
+class Fleet : public HasNameBase
 {
   private:
-    admiral *leader;
+    Admiral *leader;
     std::vector<std::tuple<id_t, uint>> units;
-    std::vector<army *> attached_armies;
+    std::vector<Army *> attachedArmies;
 
   public:
-    fleet();
+    Fleet();
 
 };
 } // namespace logic

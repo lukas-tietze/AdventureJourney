@@ -12,23 +12,23 @@ const auto VersionName = "Pre-Alpha";
 
 namespace
 {
-std::string version_string = "";
+std::string versionString = "";
 }
 
-const std::string &get_version()
+const std::string &GetVersion()
 {
-    if (version_string.length() == 0)
+    if (versionString.length() == 0)
     {
         auto count = 2+3+std::strlen(ProjectName) + std::strlen(VersionName) + 1;
         auto buf = new char[count];
 
         std::sprintf(buf, "%s v. %00i.%000i (%s)", ProjectName, MajorVersion, MinorVersion, VersionName);
 
-        version_string.assign(buf, count - 1);
+        versionString.assign(buf, count - 1);
 
         delete[] buf;
     }
 
-    return version_string;
+    return versionString;
 }
 } // namespace version
