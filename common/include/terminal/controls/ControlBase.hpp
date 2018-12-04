@@ -1,7 +1,7 @@
 #pragma once
 
-#include "terminal/canvas.hpp"
-#include "geometry.hpp"
+#include "terminal/Canvas.hpp"
+#include "Geometry.hpp"
 
 namespace terminal
 {
@@ -25,8 +25,8 @@ class ControlBase
 {
   private:
     util::Rectangle bounds;
-    util::Dimension minimum_size;
-    util::Dimension maximum_size;
+    util::Dimension minimumSize;
+    util::Dimension maximumSize;
     ControlBase *parent;
     int zIndex;
     bool hasFocus;
@@ -88,6 +88,6 @@ class ControlBase
     virtual void HandleMouse(MouseInput &);
     virtual void HandleAddToControl(ContainerBase *);
 
-    virtual void Render(canvas &) = 0;
+    virtual void Render(Canvas &) = 0;
 };
 } // namespace terminal

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "terminal/controls/control_base.hpp"
+#include "terminal/controls/ControlBase.hpp"
 
 namespace terminal
 {
@@ -11,9 +11,9 @@ class Button : public ControlBase
     Button(const std::string &);
     virtual ~Button();
 
-    virtual void handle_key(KeyInput &);
-    virtual void handle_mouse(MouseInput &);
+    virtual void HandleKey(KeyInput &);
+    virtual void HandleMouse(MouseInput &);
 
-    virtual void render(Canvas &);
+    virtual void Render(Canvas &);
 };
 } // namespace terminal

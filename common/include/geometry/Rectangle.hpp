@@ -3,8 +3,8 @@
 #include <cmath>
 #include <algorithm>
 
-#include "dimension.hpp"
-#include "point.hpp"
+#include "Dimension.hpp"
+#include "Point.hpp"
 
 namespace util
 {
@@ -168,6 +168,6 @@ std::ostream &operator<<(std::ostream &s, const util::basic_rectangle<T> &r)
     return s;
 }
 
-typedef basic_rectangle<int> rectangle;
-typedef basic_rectangle<float> rectanglef;
+typedef basic_rectangle<int> Rectangle;
+typedef basic_rectangle<float> RectangleF;
 } // namespace util

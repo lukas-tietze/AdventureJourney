@@ -1,6 +1,6 @@
 #pragma once
 
-#include "data/math.hpp"
+#include "data/Math.hpp"
 
 namespace util
 {
@@ -111,6 +111,6 @@ std::ostream &operator<<(std::ostream &s, const basic_point<T> &p)
     return s;
 }
 
-typedef basic_point<int> point;
-typedef basic_point<float> pointf;
+typedef basic_point<int> Point;
+typedef basic_point<float> PointF;
 } // namespace util

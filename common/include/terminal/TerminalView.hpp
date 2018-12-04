@@ -4,9 +4,9 @@
 #include <string>
 #include <tuple>
 
-#include "util.hpp"
-#include "values.hpp"
-#include "geometry.hpp"
+#include "Util.hpp"
+#include "Values.hpp"
+#include "Geometry.hpp"
 #include "graphics/Color.hpp"
 
 namespace terminal
@@ -21,11 +21,11 @@ class TerminalView
     static TerminalView *GetInstance();
     static TerminalView *DeleteInstance();
 
-    void SetInputMode(terminal::inputMode mode);
+    void SetInputMode(terminal::InputMode mode);
     void SetEcho(bool echo);
 
-    util::dimension GetSize() const;
-    bool SetSize(const util::dimension &);
+    util::Dimension GetSize() const;
+    bool SetSize(const util::Dimension &);
 
     int ReadKey();
     std::string ReadLine();

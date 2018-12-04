@@ -1,6 +1,6 @@
 #pragma once
 
-#include "data/math.hpp"
+#include "data/Math.hpp"
 
 #include <iostream>
 

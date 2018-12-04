@@ -1,5 +1,5 @@
 #pragma once
 
-#include "geometry/dimension.hpp"
-#include "geometry/point.hpp"
-#include "geometry/rectangle.hpp"
+#include "geometry/Dimension.hpp"
+#include "geometry/Point.hpp"
+#include "geometry/Rectangle.hpp"

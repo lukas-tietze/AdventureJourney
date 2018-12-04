@@ -11,26 +11,26 @@ namespace terminal
 class TerminalWindow : public ContainerBase
 {
   private:
-    std::vector<terminal::control_base *> controls;
-    std::vector<terminal::control_base *> controlsByTabIndex;
+    std::vector<terminal::ControlBase *> controls;
+    std::vector<terminal::ControlBase *> controlsByTabIndex;
     int focusedControlIndex;
     bool loop;
     int escapeKey;
     bool hasEscapeKey;
 
-    void render();
-    void switchFocus(int);
+    void Render();
+    void SwitchFocus(int);
 
   public:
     TerminalWindow();
     ~TerminalWindow();
 
-    control_base *addControl(control_base *);
+    ControlBase *AddControl(ControlBase *);
 
-    void start(int);
-    void start();
-    void quit();
+    void Start(int);
+    void Start();
+    void Quit();
 
-    control_base *getFocusedControl() const;
+    ControlBase *GetFocusedControl() const;
 };
 } // namespace terminal

@@ -7,9 +7,9 @@ namespace terminal
 {
 enum class InputMode
 {
-    RAW,
-    BREAK,
-    LINE,
+    Raw,
+    Break,
+    Line,
 };
 
 std::ostream &operator<<(std::ostream &, const InputMode &);
@@ -84,4 +84,6 @@ enum class MouseAction
     ButtonCtrl = BUTTON_CTRL,
     ButtonAlt = BUTTON_ALT,
 };
+
+std::ostream &operator<<(std::ostream &, const MouseAction &);
 } // namespace terminal
