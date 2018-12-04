@@ -8,27 +8,27 @@
 namespace util
 {
 // Stellt alle Zufallsgeneratoren dar, die in der Standardbibliothek definiert sind.
-enum class random_engine_type
+enum class RandomEngineType
 {
-    DEFAULT_RANDOM_ENGINE,
-    MINSTD_RAND,
-    MINSTD_RAND0,
-    MT19937,
-    MT19937_64,
-    RANLUX24_BASE,
-    RANLUX48_BASE,
-    RANLUX24,
-    RANLUX48,
-    KNUTH_B,
-    DEVICE,
+    DefaultRandomEngine,
+    MinstdRand,
+    MinstdRand0,
+    Mt19937,
+    Mt19937_64,
+    Ranlux23Base,
+    Ranlux43Base,
+    Ranlux24,
+    Ranlux48,
+    KnuthB,
+    Device,
 };
 
 // Eine Verallgemeinerung aller Zufallsgeneratoren.
-class custom_engine
+class CustomEngine
 {
   public:
     // Destruktor.
-    virtual ~custom_engine() {}
+    virtual ~CustomEngine() {}
 
     // Verwirft die nächsten z Zufallszahlen.
     virtual void discard(unsigned long long z) = 0;
@@ -48,25 +48,25 @@ class custom_engine
 
 // Eine Template-implementierung, die alle Zufallsgeneratoren der Standardengine darstellen kann.
 template <class TEngine>
-class custom_engine_imp : public custom_engine
+class CustomEngineImp : public CustomEngine
 {
   private:
-    TEngine m_engine;
+    TEngine engine;
 
   public:
     uint_fast64_t operator()()
     {
-        return m_engine();
+        return this->engine();
     }
 
     void discard(unsigned long long n)
     {
-        m_engine.discard(n);
+        this->engine.discard(n);
     }
 
     void seed(size_t seed)
     {
-        m_engine.seed(seed);
+        this->engine.seed(seed);
     }
 
     uint_fast64_t min()
@@ -82,23 +82,26 @@ class custom_engine_imp : public custom_engine
 
 // Eine Template-Spezialisierung, um die besondere Struktur von random_device abzubilden.
 template <>
-class custom_engine_imp<std::random_device> : public custom_engine
+class CustomEngineImp<std::random_device> : public CustomEngine
 {
   private:
-    std::random_device m_engine;
+    std::random_device engine;
 
   public:
     uint_fast64_t operator()()
     {
-        return m_engine();
+        return this->engine();
     }
 
     void discard(unsigned long long n)
     {
+        //Discard hat hier keinen Nutzen, da die Entropiequelle nicht-deterministisch ist
+        //Das verwerfen von Werten kann unter Umständen die Entropiequelle erschöpfen
     }
 
     void seed(size_t seed)
     {
+        //Entropie-quelle kann nicht geseedet werden.
     }
 
     uint_fast64_t min()
@@ -112,17 +115,8 @@ class custom_engine_imp<std::random_device> : public custom_engine
     }
 };
 
-// Legt eine Standard-Engine fest, die dann für alle Zufallszahlen genutzt wird.
-void set_default_engine(random_engine_type type);
-
-// Legt einen Startwert für die Standardengine fest.
-void seed_default_engine(size_t seed);
-
-// Gibt die gesetzte Standardengine zurück.
-custom_engine &default_engine();
-
 template <class TDistribution, class TEngine>
-class random_provider
+class RandomProvider
 {
   private:
     TDistribution distribution;
@@ -132,53 +126,55 @@ class random_provider
     typedef typename TDistribution::result_type result_t;
     typedef typename TEngine::result_type seed_t;
 
-    random_provider() : distribution(),
-                        engine()
+    RandomProvider() : distribution(),
+                       engine()
 
     {
     }
 
-    random_provider(seed_t seed) : random_provider()
+    RandomProvider(seed_t seed) : RandomProvider()
     {
         this->engine.seed(seed);
     }
 
-    random_provider(const random_provider<TDistribution, TEngine> &copy) : distribution(copy.distribution),
-                                                                           engine(copy.engine)
+    RandomProvider(const RandomProvider<TDistribution, TEngine> &copy) : distribution(copy.distribution),
+                                                                         engine(copy.engine)
     {
     }
 
-    random_provider(const TDistribution &distribution, const TEngine &engine) : distribution(distribution),
-                                                                                engine(engine)
+    RandomProvider(const TDistribution &distribution, const TEngine &engine) : distribution(distribution),
+                                                                               engine(engine)
     {
     }
 
-    result_t next();
+    result_t Next();
 };
 
-class random : public random_provider<std::uniform_real_distribution<double>, std::default_random_engine>
+class Random : public RandomProvider<std::uniform_real_distribution<double>, std::default_random_engine>
 {
   public:
-    random();
-    random(const random &copy);
-    random(random::result_t);
+    Random();
+    Random(const Random &copy);
+    Random(Random::result_t);
 
     template <class T = double>
-    T next(T min, T max)
+    T Next(T min, T max)
     {
-        return this->next() * (max - min) + min;
+        return static_cast<T>(this->RandomProvider::Next() * 
+                    (static_cast<Random::result_t>(max) - static_cast<Random::result_t>(min)) + 
+                    static_cast<Random::result_t>(min);
     }
 
     template <class T = double>
-    T next(T max)
+    T Next(T max)
     {
-        return this->next(0, max);
+        return this->Next(0, max);
     }
 
     template <class T = double>
-    T next()
+    T Next()
     {
-        return this->next(std::numeric_limits<T>::max());
+        return this->Next(0, std::numeric_limits<T>::max());
     }
 };
 } // namespace util

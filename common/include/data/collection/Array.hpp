@@ -2,19 +2,19 @@
 
 #include <memory>
 
-#include "exception.hpp"
+#include "Exception.hpp"
 
 namespace util
 {
 template <class T, class TAlloc = std::allocator<T>>
-class array
+class Array
 {
   private:
     T *data;
     size_t size;
     TAlloc allocator;
 
-    void release_resources()
+    void ReleaseResources()
     {
         if (this->data != nullptr)
         {
@@ -25,7 +25,7 @@ class array
     }
 
   public:
-    class iterator
+    class Iterator
     {
       private:
         T *data;
@@ -33,36 +33,36 @@ class array
         size_t count;
 
       public:
-        iterator(T *data, size_t pos, size_t count) : data(data),
+        Iterator(T *data, size_t pos, size_t count) : data(data),
                                                       pos(pos),
                                                       count(count)
         {
         }
 
-        iterator operator++()
+        Iterator operator++()
         {
-            auto res = iterator(*this);
+            auto res = Iterator(*this);
 
             this->pos++;
 
             return res;
         }
 
-        iterator &operator++(int)
+        Iterator &operator++(int)
         {
             this->pos++;
 
             return *this;
         }
 
-        bool operator==(const iterator &other) const
+        bool operator==(const Iterator &other) const
         {
             return this->data == other.data &&
                    this->pos == other.pos &&
                    this->count == other.count;
         }
 
-        bool operator!=(const iterator &other) const
+        bool operator!=(const Iterator &other) const
         {
             return this->data != other.data &&
                    this->pos != other.pos &&
@@ -90,48 +90,48 @@ class array
         }
     };
 
-    array(size_t size)
+    Array(size_t size)
     {
         this->size = size;
         this->data = this->allocator.allocate(this->size);
     }
 
-    array(const array<T> &copy)
+    Array(const Array<T> &copy)
     {
         this->copy_from(copy);
     }
 
-    array(array &&initializer)
+    Array(Array &&initializer)
     {
         this->swap(initializer);
     }
 
-    ~array()
+    ~Array()
     {
-        this->release_resources();
+        this->ReleaseResources();
     }
 
-    T &first()
-    {
-        return this->data[0];
-    }
-
-    const T &first() const
+    T &First()
     {
         return this->data[0];
     }
 
-    T &last()
+    const T &First() const
+    {
+        return this->data[0];
+    }
+
+    T &Last()
     {
         return this->data[this->size - 1];
     }
 
-    const T &last() const
+    const T &Last() const
     {
         return this->data[this->size - 1];
     }
 
-    size_t length() const
+    size_t Length() const
     {
         return this->size;
     }
@@ -152,25 +152,25 @@ class array
         return this->data[index];
     }
 
-    iterator begin()
+    Iterator begin()
     {
-        return iterator(this->data, 0, this->size);
+        return Iterator(this->data, 0, this->size);
     }
 
-    iterator end()
+    Iterator end()
     {
-        return iterator(this->data, this->size, this->size);
+        return Iterator(this->data, this->size, this->size);
     }
 
-    void swap(array<T> &other)
+    void Swap(Array<T> &other)
     {
         std::swap(this->data, other.data);
         std::swap(this->size, other.size);
     }
 
-    void copy_from(const array<T> &other)
+    void CopyFrom(const Array<T> &other)
     {
-        this->release_resources();
+        this->ReleaseResources();
         this->size = other.size();
         this->data = this->allocator.allocate(this->size);
 
@@ -180,15 +180,15 @@ class array
         }
     }
 
-    array &operator=(const array<T> &copy)
+    Array &operator=(const Array<T> &copy)
     {
-        this->copy_from(copy);
+        this->CopyFrom(copy);
     }
 
-    array &operator=(array<T> &&initializer)
+    Array &operator=(Array<T> &&initializer)
     {
-        this->release_resources();
-        this->swap(initializer);
+        this->ReleaseResources();
+        this->Swap(initializer);
     }
-}; /*array*/
+}; /*Array*/
 } // namespace util

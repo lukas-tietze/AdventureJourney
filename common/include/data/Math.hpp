@@ -5,13 +5,13 @@
 
 namespace util
 {
-uint32_t hex4ToNumber(const std::string &);
-uint32_t hex4ToNumber(const char *);
-uint8_t hexToNumber(char);
-bool is_hex_char(char);
+uint32_t Hex4ToNumber(const std::string &);
+uint32_t Hex4ToNumber(const char *);
+uint8_t HexToNumber(char);
+bool IsHexChar(char);
 
 template <class T>
-T crop(const T &x, const T &min, const T &max)
+T Crop(const T &x, const T &min, const T &max)
 {
     if (x < min)
         return min;
