@@ -40,8 +40,8 @@ class BasicPoint
     util::BasicPoint<T> Crop(const util::BasicPoint<T> &min, const util::BasicPoint<T> &max) const
     {
         return util::BasicPoint<T>(
-            util::crop(this->x, min.x, max.x),
-            util::crop(this->y, min.y, max.y));
+            util::Crop(this->x, min.x, max.x),
+            util::Crop(this->y, min.y, max.y));
     }
 
     bool operator==(const util::BasicPoint<T> &other) const

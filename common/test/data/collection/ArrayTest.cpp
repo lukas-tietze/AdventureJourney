@@ -1,14 +1,14 @@
 #include <algorithm>
 
-#include "test.hpp"
-#include "../../test_list.hpp"
-#include "data/collection/array.hpp"
+#include "Test.hpp"
+#include "common/test/TestList.hpp"
+#include "data/collection/Array.hpp"
 
-int test::data_test::collection_test::test_array()
+int test::dataTest::collectionTest::TestArray()
 {
-    util::array<int> a(10);
+    util::Array<int> a(10);
 
-    assert::are_equal((size_t)10, a.length());
+    assert::AreEqual((size_t)10, a.Length());
 
     for(size_t i = 0; i < 10; i++)
     {
@@ -18,27 +18,27 @@ int test::data_test::collection_test::test_array()
     ////default iteration
     for(size_t i = 0; i < 10; i++)
     {
-        assert::are_equal((int)i, a[i]);
+        assert::AreEqual((int)i, a[i]);
     }
 
     int i = 0;
     for(const auto &x : a)
     {
-        assert::are_equal(i, x);
+        assert::AreEqual(i, x);
         i++;
     }
 
     i = 0;
     for(auto pos = a.begin(), end = a.end(); pos != end; pos++)
     {
-        assert::are_equal(i, *pos);
+        assert::AreEqual(i, *pos);
         i++;
     }
 
     i = 0;
     for(auto pos = a.begin(), end = a.end(); pos != end; ++pos)
     {
-        assert::are_equal(i, *pos);
+        assert::AreEqual(i, *pos);
         i++;
     }
 

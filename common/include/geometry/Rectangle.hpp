@@ -135,7 +135,7 @@ class BasicRectangle
 
     util::BasicRectangle<T> Intersect(const BasicRectangle<T> &other) const
     {
-        if (!this->has_intersection(other))
+        if (!this->HasIntersection(other))
             return BasicRectangle(0, 0, 0, 0);
 
         T xi1 = std::max<T>(this->GetMinX(), other.GetMinX());

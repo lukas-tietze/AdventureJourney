@@ -1,9 +1,9 @@
 #define GLFW_INCLUDE_VULKAN
 #include <GLFW/glfw3.h>
 
-#include "exception.hpp"
-#include "data/string.hpp"
-#include "data/math.hpp"
+#include "Exception.hpp"
+#include "data/String.hpp"
+#include "data/Math.hpp"
 
 #include <stdexcept>
 #include <functional>
@@ -108,7 +108,7 @@ void validate_vk_layers()
 
         if (!found)
         {
-            throw util::exception(util::format("Could not find required layer \"%s\"!", requiredLayer));
+            throw util::Exception(util::Format("Could not find required layer \"%s\"!", requiredLayer));
         }
     }
 
@@ -198,7 +198,7 @@ void validate_vk_extensions()
 
         if (!found)
         {
-            throw util::exception(util::format("Could not find required extension \"%s\"!", requiredExtension));
+            throw util::Exception(util::Format("Could not find required extension \"%s\"!", requiredExtension));
         }
     }
 
@@ -238,7 +238,7 @@ void create_vk_instance()
 
     if (vkCreateInstance(&createInfo, nullptr, &instance) != VK_SUCCESS)
     {
-        throw util::exception("Failed to initialize Vulkan!");
+        throw util::Exception("Failed to initialize Vulkan!");
     }
 }
 
@@ -290,7 +290,7 @@ void init_callback()
     if (f != nullptr)
     {
         if (f(instance, &createInfo, nullptr, &callback) != VK_SUCCESS)
-            throw util::exception("Failed to init debug callback!");
+            throw util::Exception("Failed to init debug callback!");
     }
     else
     {
@@ -372,11 +372,11 @@ VkSurfaceFormatKHR chooseSwapSurfaceFormat(const std::vector<VkSurfaceFormatKHR>
         availableFormats[0].format == VK_FORMAT_UNDEFINED)
         return availableFormats[0];
 
-    for (const auto &format : availableFormats)
+    for (const auto &Format : availableFormats)
     {
-        if (format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR &&
-            format.format == VK_FORMAT_B8G8R8A8_UNORM)
-            return format;
+        if (Format.colorSpace == VK_COLOR_SPACE_SRGB_NONLINEAR_KHR &&
+            Format.format == VK_FORMAT_B8G8R8A8_UNORM)
+            return Format;
     }
 
     return availableFormats[0];
@@ -403,11 +403,11 @@ VkExtent2D chooseSwapExtent(const VkSurfaceCapabilitiesKHR &capabilities)
     {
         VkExtent2D res = {};
 
-        res.width = util::crop(windowWidth,
+        res.width = util::Crop(windowWidth,
                                capabilities.minImageExtent.width,
                                capabilities.maxImageExtent.width);
 
-        res.height = util::crop(windowHeight,
+        res.height = util::Crop(windowHeight,
                                 capabilities.minImageExtent.height,
                                 capabilities.maxImageExtent.height);
 
@@ -434,7 +434,7 @@ void pick_physical_device()
     vkEnumeratePhysicalDevices(instance, &deviceCount, nullptr);
 
     if (deviceCount == 0)
-        throw util::exception("Failed to find Devices that support Vulkan!");
+        throw util::Exception("Failed to find Devices that support Vulkan!");
 
     std::vector<VkPhysicalDevice> devices(deviceCount);
     vkEnumeratePhysicalDevices(instance, &deviceCount, devices.data());
@@ -460,7 +460,7 @@ void pick_physical_device()
 
     if (!suitableDeviceFound)
     {
-        throw util::exception("No suitable Device found!");
+        throw util::Exception("No suitable Device found!");
     }
 }
 
@@ -503,7 +503,7 @@ void create_logical_device()
     }
 
     if (vkCreateDevice(physical_device, &deviceCreateInfo, nullptr, &device) != VK_SUCCESS)
-        throw util::exception("Failed to create logical device!");
+        throw util::Exception("Failed to create logical device!");
 }
 
 void create_queues()
@@ -517,13 +517,13 @@ void create_queues()
 void create_surface()
 {
     if (glfwCreateWindowSurface(instance, window, nullptr, &surface) != VK_SUCCESS)
-        throw util::exception("Failed to create surface!");
+        throw util::Exception("Failed to create surface!");
 }
 
 void create_swap_chain()
 {
     SwapChainDetails details = query_swap_chain_details(physical_device);
-    VkSurfaceFormatKHR format = chooseSwapSurfaceFormat(details.formats);
+    VkSurfaceFormatKHR Format = chooseSwapSurfaceFormat(details.formats);
     VkPresentModeKHR presentMode = chooseSwapPresentMode(details.presentModes);
     VkExtent2D extent = chooseSwapExtent(details.capabilities);
     auto indices = find_queue_families(physical_device);
@@ -540,8 +540,8 @@ void create_swap_chain()
     info.sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
     info.surface = surface;
     info.minImageCount = imageCount;
-    info.imageFormat = format.format;
-    info.imageColorSpace = format.colorSpace;
+    info.imageFormat = Format.format;
+    info.imageColorSpace = Format.colorSpace;
     info.imageExtent = extent;
     info.imageArrayLayers = 1;
     info.imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT;
@@ -568,13 +568,13 @@ void create_swap_chain()
     info.oldSwapchain = VK_NULL_HANDLE;
 
     if (vkCreateSwapchainKHR(device, &info, nullptr, &swapChain) != VK_SUCCESS)
-        throw util::exception("Failed to create Swapchain!");
+        throw util::Exception("Failed to create Swapchain!");
 
     vkGetSwapchainImagesKHR(device, swapChain, &imageCount, nullptr);
     swapChainImages.resize(imageCount);
     vkGetSwapchainImagesKHR(device, swapChain, &imageCount, swapChainImages.data());
 
-    swapChainImageFormat = format.format;
+    swapChainImageFormat = Format.format;
     swapChainExtent = extent;
 }
 
@@ -600,7 +600,7 @@ void create_image_views()
         info.subresourceRange.layerCount = 1;
 
         if (vkCreateImageView(device, &info, nullptr, &swapChainImageViews[i]) != VK_SUCCESS)
-            throw util::exception("Failed to create image view!");
+            throw util::Exception("Failed to create image view!");
     }
 }
 
@@ -609,7 +609,7 @@ static std::vector<char> readShader(const std::string &fileName)
     std::ifstream f(fileName, std::ios::ate | std::ios::binary);
 
     if (!f.is_open())
-        throw util::exception(util::format("Failed to read shader from \"%s\"!", fileName.c_str()));
+        throw util::Exception(util::Format("Failed to read shader from \"%s\"!", fileName.c_str()));
 
     size_t fileSize = static_cast<size_t>(f.tellg());
     std::vector<char> buf(fileSize);
@@ -632,7 +632,7 @@ VkShaderModule createShaderModule(const std::string &source)
     VkShaderModule res;
 
     if (vkCreateShaderModule(device, &info, nullptr, &res) != VK_SUCCESS)
-        throw util::exception(util::format("Failed to create shader from \"%s\"!", source.c_str()));
+        throw util::Exception(util::Format("Failed to create shader from \"%s\"!", source.c_str()));
 
     return res;
 }
@@ -744,7 +744,7 @@ void create_graphics_pipeline()
     pipelineLayoutInfo.pPushConstantRanges = nullptr;
 
     if (vkCreatePipelineLayout(device, &pipelineLayoutInfo, nullptr, &pipelineLayout) != VK_SUCCESS)
-        throw util::exception("Failed to create pipline layout!");
+        throw util::Exception("Failed to create pipline layout!");
 
     VkGraphicsPipelineCreateInfo pipelineInfo = {};
     pipelineInfo.sType = VK_STRUCTURE_TYPE_GRAPHICS_PIPELINE_CREATE_INFO;
@@ -765,7 +765,7 @@ void create_graphics_pipeline()
     pipelineInfo.basePipelineIndex = -1;
 
     if (vkCreateGraphicsPipelines(device, VK_NULL_HANDLE, 1, &pipelineInfo, nullptr, &graphicsPipeline) != VK_SUCCESS)
-        throw util::exception("Failed to create graphics pipeline!");
+        throw util::Exception("Failed to create graphics pipeline!");
 
     vkDestroyShaderModule(device, vertexShader, nullptr);
     vkDestroyShaderModule(device, fragmentShader, nullptr);
@@ -800,7 +800,7 @@ void create_render_pass()
     renderPassInfo.pSubpasses = &subpass;
 
     if (vkCreateRenderPass(device, &renderPassInfo, nullptr, &renderPass) != VK_SUCCESS)
-        throw util::exception("Failed to create render pass!");
+        throw util::Exception("Failed to create render pass!");
 }
 
 void init_vulkan()
@@ -869,11 +869,11 @@ int main()
 
         return EXIT_FAILURE;
     }
-    catch (util::exception &e)
+    catch (util::Exception &e)
     {
         std::printf("Failure: %s\nAt:\n%s\n",
-                    e.get_message().c_str(),
-                    util::format_stacktrace(e.get_stacktrace(), 4, -1).c_str());
+                    e.GetMessage().c_str(),
+                    util::FormatStacktrace(e.GetStacktrace(), 4, -1).c_str());
 
         return EXIT_FAILURE;
     }

@@ -121,7 +121,7 @@ void terminal::TerminalWindow::Start()
             }
         }
 
-        this->render();
+        this->Render();
     }
 }
 

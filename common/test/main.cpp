@@ -5,48 +5,48 @@
 #include <thread>
 #include <map>
 
-#include "test.hpp"
 #include "config.hpp"
-#include "defs.hpp"
+#include "Test.hpp"
+#include "Defs.hpp"
 
-#include "test_list.hpp"
+#include "TestList.hpp"
 
 int main(int argc, char **argv)
 {
-    test::test_collection tests;
+    test::TestCollection tests;
 
-    tests.push_back(test::test_run(new test::simple_test("test integrity", &test::json_test::integrity)));
-    tests.push_back(test::test_run(new test::simple_test("read expanded", &test::json_test::expanded_read)));
-    tests.push_back(test::test_run(new test::simple_test("read compact", &test::json_test::compact_read)));
-    tests.push_back(test::test_run(new test::simple_test("write expanded", &test::json_test::expanded_write)));
-    tests.push_back(test::test_run(new test::simple_test("write compact", &test::json_test::compact_write)));
-    tests.push_back(test::test_run(new test::simple_test("read and write", &test::json_test::read_write)));
-    tests.push_back(test::test_run(new test::simple_test("write and read", &test::json_test::write_read)));
-    tests.push_back(test::test_run(new test::simple_test("string escaping", &test::json_test::string_escaping)));
-    tests.push_back(test::test_run(new test::simple_test("number parsing", &test::json_test::number_parsing)));
-    tests.push_back(test::test_run(new test::simple_test("basic color definitions", &test::color_test::basic_color_values)));
-    tests.push_back(test::test_run(new test::simple_test("function event test", &test::event_test::function_events)));
-    tests.push_back(test::test_run(new test::simple_test("listener event test", &test::event_test::listener_events)));
-    tests.push_back(test::test_run(new test::simple_test("handler event test", &test::event_test::handler_events)));
-    tests.push_back(test::test_run(new test::simple_test("member handler event test", &test::event_test::member_handler_events)));
-    tests.push_back(test::test_run(new test::simple_test("rectangle test", &test::geometry_test::rectangle)));
-    tests.push_back(test::test_run(new test::simple_test("format", &test::string_test::format)));
-    tests.push_back(test::test_run(new test::simple_test("to upper", &test::string_test::to_upper)));
-    tests.push_back(test::test_run(new test::simple_test("to lower", &test::string_test::to_lower)));
-    tests.push_back(test::test_run(new test::simple_test("split with space", &test::string_test::split_space)));
-    tests.push_back(test::test_run(new test::simple_test("split with custom char", &test::string_test::split_custom_char)));
-    tests.push_back(test::test_run(new test::simple_test("split with multiple chars", &test::string_test::split_multiple_chars)));
-    tests.push_back(test::test_run(new test::simple_test("split with function", &test::string_test::split_function)));
-    tests.push_back(test::test_run(new test::simple_test("strip", &test::string_test::strip)));
-    tests.push_back(test::test_run(new test::simple_test("strip front", &test::string_test::strip_front)));
-    tests.push_back(test::test_run(new test::simple_test("strip back", &test::string_test::strip_back)));
-    tests.push_back(test::test_run(new test::simple_test("collect rope", &test::data_test::collection_test::test_collect_rope)));
-    tests.push_back(test::test_run(new test::simple_test("array", &test::data_test::collection_test::test_array)));
-    tests.push_back(test::test_run(new test::simple_test("cache", &test::data_test::collection_test::test_cache)));
-    tests.push_back(test::test_run(new test::simple_test("hex4 to number", &test::math_test::test_hex4_to_number)));
-    tests.push_back(test::test_run(new test::simple_test("hex to number", &test::math_test::test_hex_to_number)));
-    tests.push_back(test::test_run(new test::simple_test("is hex char", &test::math_test::test_is_hex_char)));
-    tests.push_back(test::test_run(new test::simple_test("crop", &test::math_test::test_crop)));
+    tests.push_back(test::TestRun(new test::SimpleTest("test integrity", &test::jsonTest::Integrity)));
+    tests.push_back(test::TestRun(new test::SimpleTest("read expanded", &test::jsonTest::ExpandedRead)));
+    tests.push_back(test::TestRun(new test::SimpleTest("read compact", &test::jsonTest::CompactRead)));
+    tests.push_back(test::TestRun(new test::SimpleTest("write expanded", &test::jsonTest::ExpandedWrite)));
+    tests.push_back(test::TestRun(new test::SimpleTest("write compact", &test::jsonTest::CompactWrite)));
+    tests.push_back(test::TestRun(new test::SimpleTest("read and write", &test::jsonTest::ReadWrite)));
+    tests.push_back(test::TestRun(new test::SimpleTest("write and read", &test::jsonTest::WriteRead)));
+    tests.push_back(test::TestRun(new test::SimpleTest("string escaping", &test::jsonTest::StringEscaping)));
+    tests.push_back(test::TestRun(new test::SimpleTest("number parsing", &test::jsonTest::NumberParsing)));
+    tests.push_back(test::TestRun(new test::SimpleTest("basic color definitions", &test::colorTest::BasicColorValues)));
+    tests.push_back(test::TestRun(new test::SimpleTest("function event test", &test::eventTest::FunctionEvents)));
+    tests.push_back(test::TestRun(new test::SimpleTest("listener event test", &test::eventTest::ListenerEvents)));
+    tests.push_back(test::TestRun(new test::SimpleTest("handler event test", &test::eventTest::HandlerEvents)));
+    tests.push_back(test::TestRun(new test::SimpleTest("member handler event test", &test::eventTest::MemberHandlerEvents)));
+    tests.push_back(test::TestRun(new test::SimpleTest("rectangle test", &test::geometryTest::TestRectangle)));
+    tests.push_back(test::TestRun(new test::SimpleTest("format", &test::stringTest::Format)));
+    tests.push_back(test::TestRun(new test::SimpleTest("to upper", &test::stringTest::ToUpper)));
+    tests.push_back(test::TestRun(new test::SimpleTest("to lower", &test::stringTest::ToLower)));
+    tests.push_back(test::TestRun(new test::SimpleTest("split with space", &test::stringTest::SplitSpace)));
+    tests.push_back(test::TestRun(new test::SimpleTest("split with custom char", &test::stringTest::SplitCustomChar)));
+    tests.push_back(test::TestRun(new test::SimpleTest("split with multiple chars", &test::stringTest::SplitMultipleChars)));
+    tests.push_back(test::TestRun(new test::SimpleTest("split with function", &test::stringTest::SplitFunction)));
+    tests.push_back(test::TestRun(new test::SimpleTest("strip", &test::stringTest::Strip)));
+    tests.push_back(test::TestRun(new test::SimpleTest("strip front", &test::stringTest::StripFront)));
+    tests.push_back(test::TestRun(new test::SimpleTest("strip back", &test::stringTest::StripBack)));
+    tests.push_back(test::TestRun(new test::SimpleTest("collect rope", &test::dataTest::collectionTest::TestCollectRope)));
+    tests.push_back(test::TestRun(new test::SimpleTest("array", &test::dataTest::collectionTest::TestArray)));
+    tests.push_back(test::TestRun(new test::SimpleTest("cache", &test::dataTest::collectionTest::TestCache)));
+    tests.push_back(test::TestRun(new test::SimpleTest("hex4 to number", &test::mathTest::TestHex4ToNumber)));
+    tests.push_back(test::TestRun(new test::SimpleTest("hex to number", &test::mathTest::TestHexToNumber)));
+    tests.push_back(test::TestRun(new test::SimpleTest("is hex char", &test::mathTest::TestIsHexChar)));
+    tests.push_back(test::TestRun(new test::SimpleTest("crop", &test::mathTest::TestCrop)));
 
-    return test::run_tests(tests, test::test_config::init_from_args(argc, argv));
+    return test::RunTests(tests, test::TestConfig::InitFromArgs(argc, argv));
 }

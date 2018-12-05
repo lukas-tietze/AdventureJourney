@@ -75,12 +75,12 @@ void util::EnableSignalHandling(Signal s)
         break;
     case util::Signal::Unknown:
     default:
-        throw util::invalid_case_exception();
+        throw util::InvalidCaseException();
         break;
     }
 }
 
-util::SignalEvent &util::get_std_signal_event()
+util::SignalEvent &util::StdSignalEvent()
 {
     return stdSignalEvent;
 }
