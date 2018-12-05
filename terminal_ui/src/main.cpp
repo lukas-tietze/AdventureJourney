@@ -1,137 +1,137 @@
 #include <cstdio>
 #include <string>
 
-#include "terminal.hpp"
-#include "data/string.hpp"
-#include "exception.hpp"
-#include "data/random.hpp"
-#include "event.hpp"
-#include "data/string.hpp"
+#include "Terminal.hpp"
+#include "data/String.hpp"
+#include "Exception.hpp"
+#include "data/Random.hpp"
+#include "Event.hpp"
+#include "data/String.hpp"
 
-short colors_schemes[5];
+short ColorsSchemes[5];
 int mx, my, ms, mxw, myw;
 bool running = true;
 
-void quit()
+void Quit()
 {
     if (running)
     {
-        terminal::terminal_view::delete_instance();
+        terminal::TerminalView::DeleteInstance();
         endwin();
         running = false;
     }
 }
 
-void loop(terminal::terminal_view *v)
+void Loop(terminal::TerminalView *v)
 {
-    terminal::canvas c(v);
-    c.clear();
-    c.draw_box(util::rectangle(1, 1, c.get_size().get_width() - 2, c.get_size().get_height() - 2), '-', '|', '+');
-    c.draw_box(util::rectangle(0, 0, 4, 4), '-', '|', '+');
+    terminal::Canvas c(v);
+    c.Clear();
+    c.DrawBox(util::Rectangle(1, 1, c.GetSize().GetWidth() - 2, c.GetSize().GetHeight() - 2), '-', '|', '+');
+    c.DrawBox(util::Rectangle(0, 0, 4, 4), '-', '|', '+');
 
-    c.draw_string(util::point(10, 3), "current terminal size is: " + util::to_string(c.get_size()));
-    c.draw_string(util::point(10, 4), util::format("number of supported colors: %i (%i used)",
-                                                   v->get_max_colors(),
-                                                   v->get_used_colors()));
-    c.draw_string(util::point(10, 5), util::format("number of supported color pairs: %i (%i used)",
-                                                   v->get_max_color_pairs(),
-                                                   v->get_used_color_pairs()));
+    c.DrawString(util::Point(10, 3), "current terminal size is: " + util::ToString(c.GetSize()));
+    c.DrawString(util::Point(10, 4), util::Format("number of supported colors: %i (%i used)",
+                                                   v->GetMaxColors(),
+                                                   v->GetUsedColors()));
+    c.DrawString(util::Point(10, 5), util::Format("number of supported color pairs: %i (%i used)",
+                                                   v->GetMaxColorPairs(),
+                                                   v->GetUsedColorPairs()));
 
-    c.draw_string(util::point(10, 6), util::to_string(terminal::output_attribute::None), terminal::output_attribute::None);
-    c.draw_string(util::point(10, 7), util::to_string(terminal::output_attribute::Standout), terminal::output_attribute::Standout);
-    c.draw_string(util::point(10, 8), util::to_string(terminal::output_attribute::Underline), terminal::output_attribute::Underline);
-    c.draw_string(util::point(10, 9), util::to_string(terminal::output_attribute::Reverse), terminal::output_attribute::Reverse);
-    c.draw_string(util::point(10, 10), util::to_string(terminal::output_attribute::Blink), terminal::output_attribute::Blink);
-    c.draw_string(util::point(10, 11), util::to_string(terminal::output_attribute::Dimmed), terminal::output_attribute::Dimmed);
-    c.draw_string(util::point(10, 12), util::to_string(terminal::output_attribute::Bold), terminal::output_attribute::Bold);
-    c.draw_string(util::point(10, 13), util::to_string(terminal::output_attribute::Protect), terminal::output_attribute::Protect);
-    c.draw_string(util::point(10, 14), util::to_string(terminal::output_attribute::Invisible), terminal::output_attribute::Invisible);
-    c.draw_string(util::point(10, 15), util::to_string(terminal::output_attribute::AlternatCharset), terminal::output_attribute::AlternatCharset);
+    c.DrawString(util::Point(10, 6), util::ToString(terminal::OutputAttribute::None), terminal::OutputAttribute::None);
+    c.DrawString(util::Point(10, 7), util::ToString(terminal::OutputAttribute::Standout), terminal::OutputAttribute::Standout);
+    c.DrawString(util::Point(10, 8), util::ToString(terminal::OutputAttribute::Underline), terminal::OutputAttribute::Underline);
+    c.DrawString(util::Point(10, 9), util::ToString(terminal::OutputAttribute::Reverse), terminal::OutputAttribute::Reverse);
+    c.DrawString(util::Point(10, 10), util::ToString(terminal::OutputAttribute::Blink), terminal::OutputAttribute::Blink);
+    c.DrawString(util::Point(10, 11), util::ToString(terminal::OutputAttribute::Dimmed), terminal::OutputAttribute::Dimmed);
+    c.DrawString(util::Point(10, 12), util::ToString(terminal::OutputAttribute::Bold), terminal::OutputAttribute::Bold);
+    c.DrawString(util::Point(10, 13), util::ToString(terminal::OutputAttribute::Protect), terminal::OutputAttribute::Protect);
+    c.DrawString(util::Point(10, 14), util::ToString(terminal::OutputAttribute::Invisible), terminal::OutputAttribute::Invisible);
+    c.DrawString(util::Point(10, 15), util::ToString(terminal::OutputAttribute::AlternatCharset), terminal::OutputAttribute::AlternatCharset);
 
     for (int i = 0; i < 5; i++)
     {
-        c.draw_string(util::point(10, 16 + i), util::format("Color scheme %i (id=%i)", i, colors_schemes[i]), colors_schemes[i]);
+        c.DrawString(util::Point(10, 16 + i), util::Format("Color scheme %i (id=%i)", i, ColorsSchemes[i]), ColorsSchemes[i]);
     }
 
-    c.draw_string(util::point(c.get_size().get_width() - 11, 5), util::format("MX: %i", mx));
-    c.draw_string(util::point(c.get_size().get_width() - 11, 6), util::format("MY: %i", my));
-    c.draw_string(util::point(c.get_size().get_width() - 11, 7), util::format("MXW: %i", mxw));
-    c.draw_string(util::point(c.get_size().get_width() - 11, 8), util::format("MYW: %i", myw));
-    c.draw_string(util::point(c.get_size().get_width() - 11, 9), util::format("MS: %i", ms));
+    c.DrawString(util::Point(c.GetSize().GetWidth() - 11, 5), util::Format("MX: %i", mx));
+    c.DrawString(util::Point(c.GetSize().GetWidth() - 11, 6), util::Format("MY: %i", my));
+    c.DrawString(util::Point(c.GetSize().GetWidth() - 11, 7), util::Format("MXW: %i", mxw));
+    c.DrawString(util::Point(c.GetSize().GetWidth() - 11, 8), util::Format("MYW: %i", myw));
+    c.DrawString(util::Point(c.GetSize().GetWidth() - 11, 9), util::Format("MS: %i", ms));
 
-    c.flush();
+    c.Flush();
 }
 
-void run_component_test()
+void RunComponentTest()
 {
-    terminal::terminal_view *v = terminal::terminal_view::get_instance();
+    terminal::TerminalView *v = terminal::TerminalView::GetInstance();
 
-    terminal::terminal_window w;
+    terminal::TerminalWindow w;
 
-    auto cb = new terminal::checkbox();
-    cb->set_bounds(util::rectangle(5, 5, 20, 3));
-    cb->set_threeway_mode_enabled(false);
-    cb->set_checked(true);
+    auto cb = new terminal::Checkbox();
+    cb->SetBounds(util::Rectangle(5, 5, 20, 3));
+    cb->SetThreewayModeEnabled(false);
+    cb->SetChecked(true);
 
-    auto bt = new terminal::button("Press Me!");
-    bt->set_bounds(util::rectangle(5, 10, 20, 3));
+    auto bt = new terminal::Button("Press Me!");
+    bt->SetBounds(util::Rectangle(5, 10, 20, 3));
 
-    auto tv = new terminal::text_view(
+    auto tv = new terminal::TextView(
         "01 2\n"\
         "3 45\n"\
         "678 90");
-    tv->set_bounds(util::rectangle(5, 5, 40, 40));
+    tv->SetBounds(util::Rectangle(5, 5, 40, 40));
 
-    auto tb = new terminal::textbox("Enter text here!");
-    tb->set_bounds(util::rectangle(5, 15, 20, 3));
+    auto tb = new terminal::Textbox("Enter text here!");
+    tb->SetBounds(util::Rectangle(5, 15, 20, 3));
 
-    // w.add_control(cb);
-    // w.add_control(bt);
-    // w.add_control(tb);
-    w.add_control(tv);
+    // w.AddControl(cb);
+    // w.AddControl(bt);
+    // w.AddControl(tb);
+    w.AddControl(tv);
 
-    w.start('q');
+    w.Start('q');
 }
 
-void run_function_test()
+void RunFunctionTest()
 {
-    terminal::terminal_view *v = terminal::terminal_view::get_instance();
+    terminal::TerminalView *v = terminal::TerminalView::GetInstance();
 
     try
     {
-        v->set_echo(false);
-        v->set_input_mode(terminal::input_mode::BREAK);
+        v->SetEcho(false);
+        v->SetInputMode(terminal::InputMode::Break);
 
-        colors_schemes[0] = v->add_color_pair(util::colors::DarkGoldenrod1, util::colors::DarkSalmon);
-        colors_schemes[1] = v->add_color_pair(util::colors::Firebrick3, util::colors::Goldenrod4);
-        colors_schemes[2] = v->add_color_pair(util::colors::Gray39, util::colors::Grey12);
-        colors_schemes[3] = v->add_color_pair(util::colors::LightBlue2, util::colors::Grey75);
-        colors_schemes[4] = v->add_color_pair(util::colors::LightSeaGreen, util::colors::MediumOrchid3);
+        ColorsSchemes[0] = v->AddColorPair(util::colors::DarkGoldenrod1, util::colors::DarkSalmon);
+        ColorsSchemes[1] = v->AddColorPair(util::colors::Firebrick3, util::colors::Goldenrod4);
+        ColorsSchemes[2] = v->AddColorPair(util::colors::Gray39, util::colors::Grey12);
+        ColorsSchemes[3] = v->AddColorPair(util::colors::LightBlue2, util::colors::Grey75);
+        ColorsSchemes[4] = v->AddColorPair(util::colors::LightSeaGreen, util::colors::MediumOrchid3);
 
         int key;
 
         do
         {
-            v->maximise();
+            v->Maximise();
 
-            loop(v);
+            Loop(v);
 
-            key = v->read_key();
+            key = v->ReadKey();
 
             if (key == '\t')
             {
-                int buf = colors_schemes[0];
+                int buf = ColorsSchemes[0];
 
                 for (int i = 0; i < 4; i++)
                 {
-                    colors_schemes[i] = colors_schemes[i + 1];
+                    ColorsSchemes[i] = ColorsSchemes[i + 1];
                 }
 
-                colors_schemes[4] = buf;
+                ColorsSchemes[4] = buf;
             }
             else if (key == 'c')
             {
-                run_component_test();
+                RunComponentTest();
             }
             else if (key == KEY_MOUSE)
             {
@@ -147,40 +147,40 @@ void run_function_test()
 
         } while (running && key != 'q');
     }
-    catch (const util::exception &e)
+    catch (const util::Exception &e)
     {
-        quit();
-        std::printf("Error occurred!: %s\n", e.get_message().c_str());
+        Quit();
+        std::printf("Error occurred!: %s\n", e.GetMessage().c_str());
     }
     catch (const std::exception &e)
     {
-        quit();
+        Quit();
         std::printf("Error occurred!: %s\n", e.what());
     }
     catch (...)
     {
-        quit();
+        Quit();
         std::printf("Unknown Error occurred!\n");
     }
 }
 
-void handle_signal(util::signal_event_args &a)
+void HandleSignal(util::SignalEventArgs &a)
 {
-    quit();
-    std::printf("Received signal: %s\n", util::to_string(a.signal).c_str());
+    Quit();
+    std::printf("Received signal: %s\n", util::ToString(a.signal).c_str());
     std::quick_exit(-1);
 }
 
 int main()
 {
-    util::enable_signal_handling();
-    util::get_std_signal_event() += handle_signal;
+    util::EnableSignalHandling();
+    util::StdSignalEvent() += HandleSignal;
 
     initscr();
     start_color();
     mousemask(ALL_MOUSE_EVENTS, nullptr);
-    run_function_test();
-    quit();
+    RunFunctionTest();
+    Quit();
 
     return 0;
 }
