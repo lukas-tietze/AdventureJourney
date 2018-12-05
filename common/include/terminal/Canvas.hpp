@@ -60,7 +60,7 @@ class Canvas
   private:
     TerminalView *view;
     util::Dimension size;
-    util::Rectangle clipped_area;
+    util::Rectangle clippedArea;
     util::Point origin;
 
   public:

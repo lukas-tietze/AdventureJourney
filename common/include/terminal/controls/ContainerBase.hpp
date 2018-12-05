@@ -10,17 +10,17 @@ class ContainerBase : public ControlBase
     ContainerBase();
     virtual ~ContainerBase();
 
-    virtual void handle_child_z_index_changed(ControlBase *);
-    virtual void handle_child_tab_index_changed(ControlBase *);
+    virtual void HandleChildZIndexChanged(ControlBase *);
+    virtual void HandleChildTabIndexChanged(ControlBase *);
     
-    virtual void handle_focus_aquired();
-    virtual void handle_focus_lost();
-    virtual void handle_key(KeyInput &);
-    virtual void handle_mouse(MouseInput &);
-    virtual void handle_add_to_control(ContainerBase *);
-    virtual void handle_z_index_changed(int);
-    virtual void handle_tab_index_changed(int);
+    virtual void HandleFocusAquired();
+    virtual void HandleFocusLost();
+    virtual void HandleKey(KeyInput &);
+    virtual void HandleMouse(MouseInput &);
+    virtual void HandleAddToControl(ContainerBase *);
+    virtual void HandleZIndexChanged(int);
+    virtual void HandleTabIndexChanged(int);
 
-    virtual void render(Canvas &);
+    virtual void Render(Canvas &);
 };
 } // namespace terminal

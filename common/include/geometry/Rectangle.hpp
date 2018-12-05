@@ -9,165 +9,165 @@
 namespace util
 {
 template <class T>
-class basic_rectangle
+class BasicRectangle
 {
   private:
-    basic_point<T> location;
-    basic_dimension<T> size;
+    BasicPoint<T> location;
+    BasicDimension<T> size;
 
   public:
-    basic_rectangle(const util::basic_rectangle<T> &copy) : location(copy.location),
-                                                            size(copy.size)
+    BasicRectangle(const util::BasicRectangle<T> &copy) : location(copy.location),
+                                                          size(copy.size)
     {
     }
 
-    basic_rectangle(const util::basic_point<T> &location, const util::basic_dimension<T> &size) : location(location),
-                                                                                                  size(size)
+    BasicRectangle(const util::BasicPoint<T> &location, const util::BasicDimension<T> &size) : location(location),
+                                                                                               size(size)
     {
     }
 
-    basic_rectangle(const util::basic_point<T> &location, T width, T height) : location(location),
-                                                                               size(width, height)
+    BasicRectangle(const util::BasicPoint<T> &location, T width, T height) : location(location),
+                                                                             size(width, height)
     {
     }
 
-    basic_rectangle(T x, T y, const util::basic_dimension<T> &size) : location(x, y),
-                                                                      size(size)
+    BasicRectangle(T x, T y, const util::BasicDimension<T> &size) : location(x, y),
+                                                                    size(size)
     {
     }
 
-    basic_rectangle(T x, T y, T width, T height) : location(x, y),
-                                                   size(width, height)
+    BasicRectangle(T x, T y, T width, T height) : location(x, y),
+                                                  size(width, height)
     {
     }
 
-    T get_x() const
+    T GetX() const
     {
-        return this->location.get_x();
+        return this->location.GetX();
     }
 
-    T get_y() const
+    T GetY() const
     {
-        return this->location.get_y();
+        return this->location.GetY();
     }
 
-    T get_min_x() const
+    T GetMinX() const
     {
-        return this->location.get_x();
+        return this->location.GetX();
     }
 
-    T get_max_x() const
+    T GetMaxX() const
     {
-        return this->location.get_x() + this->size.get_width();
+        return this->location.GetX() + this->size.GetWidth();
     }
 
-    T get_min_y() const
+    T GetMinY() const
     {
-        return this->location.get_y();
+        return this->location.GetY();
     }
 
-    T get_max_y() const
+    T GetMaxY() const
     {
-        return this->location.get_y() + this->size.get_height();
+        return this->location.GetY() + this->size.GetHeight();
     }
 
-    T get_width() const
+    T GetWidth() const
     {
-        return this->size.get_width();
+        return this->size.GetWidth();
     }
 
-    T get_height() const
+    T GetHeight() const
     {
-        return this->size.get_height();
+        return this->size.GetHeight();
     }
 
     T get_area() const
     {
-        return this->size.get_area();
+        return this->size.GetArea();
     }
 
-    const util::basic_point<T> &get_location() const
+    const util::BasicPoint<T> &GetLocation() const
     {
         return this->location;
     }
 
-    const util::basic_dimension<T> &get_size() const
+    const util::BasicDimension<T> &GetSize() const
     {
         return this->size;
     }
 
-    util::basic_rectangle<T> resize(double factor) const
+    util::BasicRectangle<T> resize(double factor) const
     {
-        return basic_rectangle<T>(this->location, this->dimension * factor);
+        return BasicRectangle<T>(this->location, this->dimension * factor);
     }
 
-    util::basic_rectangle<T> resize(const util::basic_dimension<T> &d) const
+    util::BasicRectangle<T> Resize(const util::BasicDimension<T> &d) const
     {
-        return basic_rectangle<T>(this->location, d);
+        return BasicRectangle<T>(this->location, d);
     }
 
-    util::basic_rectangle<T> relocate(const util::basic_point<T> &p) const
+    util::BasicRectangle<T> Relocate(const util::BasicPoint<T> &p) const
     {
-        return basic_rectangle<T>(p, this->dimension);
+        return BasicRectangle<T>(p, this->dimension);
     }
 
-    bool contains(const util::basic_point<T> &p) const
+    bool Contains(const util::BasicPoint<T> &p) const
     {
-        return this->get_min_x() <= p.get_x() &&
-               this->get_max_x() >= p.get_x() &&
-               this->get_min_y() <= p.get_y() &&
-               this->get_max_x() >= p.get_y();
+        return this->GetMinX() <= p.GetX() &&
+               this->GetMaxX() >= p.GetX() &&
+               this->GetMinY() <= p.GetY() &&
+               this->GetMaxX() >= p.GetY();
     }
 
-    basic_point<T> fit(const util::basic_point<T> &p) const
+    BasicPoint<T> Fit(const util::BasicPoint<T> &p) const
     {
-        return basic_point<T>(util::crop(p.get_x(), this->get_min_x(), this->get_max_x()),
-                              util::crop(p.get_y(), this->get_min_y(), this->get_max_y()));
+        return BasicPoint<T>(util::Crop(p.GetX(), this->GetMinX(), this->GetMaxX()),
+                             util::Crop(p.GetY(), this->GetMinY(), this->GetMaxY()));
     }
 
-    bool has_intersection(const basic_rectangle<T> &other) const
+    bool HasIntersection(const BasicRectangle<T> &other) const
     {
-        return this->get_min_x() < other.get_max_x() &&
-               this->get_max_x() > other.get_min_x() &&
-               this->get_min_y() < other.get_max_y() &&
-               this->get_max_y() > other.get_min_y();
+        return this->GetMinX() < other.GetMaxX() &&
+               this->GetMaxX() > other.GetMinX() &&
+               this->GetMinY() < other.GetMaxY() &&
+               this->GetMaxY() > other.GetMinY();
     }
 
-    util::basic_rectangle<T> intersect(const basic_rectangle<T> &other) const
+    util::BasicRectangle<T> Intersect(const BasicRectangle<T> &other) const
     {
         if (!this->has_intersection(other))
-            return basic_rectangle(0, 0, 0, 0);
+            return BasicRectangle(0, 0, 0, 0);
 
-        T xi1 = std::max<T>(this->get_min_x(), other.get_min_x());
-        T xi2 = std::min<T>(this->get_max_x(), other.get_max_x());
-        T yi1 = std::max<T>(this->get_min_y(), other.get_min_y());
-        T yi2 = std::min<T>(this->get_max_y(), other.get_max_y());
+        T xi1 = std::max<T>(this->GetMinX(), other.GetMinX());
+        T xi2 = std::min<T>(this->GetMaxX(), other.GetMaxX());
+        T yi1 = std::max<T>(this->GetMinY(), other.GetMinY());
+        T yi2 = std::min<T>(this->GetMaxY(), other.GetMaxY());
 
-        return basic_rectangle<T>(xi1, yi1, xi2 - xi1, yi2 - yi1);
+        return BasicRectangle<T>(xi1, yi1, xi2 - xi1, yi2 - yi1);
     }
 
-    bool operator==(const util::basic_rectangle<T> &other) const
+    bool operator==(const util::BasicRectangle<T> &other) const
     {
         return other.location == this->location && other.size == this->size;
     }
 
-    bool operator!=(const util::basic_rectangle<T> &other) const
+    bool operator!=(const util::BasicRectangle<T> &other) const
     {
         return other.location != this->location || other.size != this->size;
     }
 
     template <class Tx>
-    friend std::ostream &operator<<(std::ostream &, const util::basic_rectangle<Tx> &);
-}; /*basic_rectangle*/
+    friend std::ostream &operator<<(std::ostream &, const util::BasicRectangle<Tx> &);
+}; /*BasicRectangle*/
 
 template <class T>
-std::ostream &operator<<(std::ostream &s, const util::basic_rectangle<T> &r)
+std::ostream &operator<<(std::ostream &s, const util::BasicRectangle<T> &r)
 {
-    s << "(" << r.get_min_x() << ", " << r.get_min_y() << ") -> (" << r.get_width() << "X" << r.get_height() << ")";
+    s << "(" << r.GetMinX() << ", " << r.GetMinY() << ") -> (" << r.GetWidth() << "X" << r.GetHeight() << ")";
 
     return s;
 }
 
-typedef basic_rectangle<int> Rectangle;
-typedef basic_rectangle<float> RectangleF;
+typedef BasicRectangle<int> Rectangle;
+typedef BasicRectangle<float> RectangleF;
 } // namespace util

@@ -37,7 +37,7 @@ class TerminalView
     void Print(const std::string &text, int x, int y);
     void Print(char c);
     void Print(char c, int x, int y);
-    void Clear(const util::rectangle &area);
+    void Clear(const util::Rectangle &area);
     void Flush();
 
     void Maximise();

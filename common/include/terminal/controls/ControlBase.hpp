@@ -36,15 +36,15 @@ class ControlBase
     int textStyle;
 
   protected:
-    void set_bounds_core(const util::Rectangle &);
-    void set_z_index_core(int);
-    void set_text_core(const std::string &);
-    void set_visibility_core(bool visible);
-    void set_tab_index_core(int);
-    void set_min_size_core(const util::Dimension &);
-    void set_max_size_core(const util::Dimension &);
+    void SetBoundsCore(const util::Rectangle &);
+    void SetZIndexCore(int);
+    void SetTextCore(const std::string &);
+    void SetVisibilityCore(bool visible);
+    void SetTabIndexCore(int);
+    void SetMinSizeCore(const util::Dimension &);
+    void SetMaxSizeCore(const util::Dimension &);
 
-    bool validate_bounds(util::Rectangle &);
+    bool ValidateBounds(util::Rectangle &);
 
   public:
     ControlBase();
@@ -73,8 +73,8 @@ class ControlBase
     void SetVisibility(bool visible);
     int GetTabIndex() const;
     void SetTabIndex(int);
-    const util::Dimension &getMinSize() const;
-    const util::Dimension &getMaxSize() const;
+    const util::Dimension &GetMinSize() const;
+    const util::Dimension &GetMaxSize() const;
     void SetMinSize(const util::Dimension &);
     void SetMaxSize(const util::Dimension &);
 

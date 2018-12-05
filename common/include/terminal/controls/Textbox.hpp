@@ -13,9 +13,9 @@ class Textbox : public ControlBase
     Textbox(const std::string &);
     virtual ~Textbox();
 
-    virtual void handle_key(KeyInput &);
-    virtual void handle_mouse(MouseInput &);
+    virtual void HandleKey(KeyInput &);
+    virtual void HandleMouse(MouseInput &);
 
-    virtual void render(Canvas &);
+    virtual void Render(Canvas &);
 };
 } // namespace terminal
