@@ -22,15 +22,15 @@ std::ostream &operator<<(std::ostream &, Signal);
 
 struct SignalEventArgs
 {
-    util::Signal Signal;
+    util::Signal signal;
     int code;
 };
 
-typedef FunctionEvent<SignalEventArgs> signal_event;
+typedef FunctionEvent<SignalEventArgs> SignalEvent;
 
 void EnableSignalHandling();
 
 void EnableSignalHandling(Signal);
 
-signal_event &StdSignalEvent();
+SignalEvent &StdSignalEvent();
 } // namespace util
