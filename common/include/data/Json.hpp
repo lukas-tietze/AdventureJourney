@@ -140,7 +140,7 @@ class PrimitiveNode final : public Node
     double numericValue;
     json::ValueType type;
 
-    void clear_values();
+    void ClearValues();
 
   public:
     PrimitiveNode(const std::string &);
@@ -162,9 +162,9 @@ class PrimitiveNode final : public Node
     bool TryGetValueAsNumber(double &) const;
     bool TryGetValueAsBool(bool &) const;
 
-    bool TryGetValueAsString_or_default(std::string &, const std::string &defaultValue = "") const;
-    bool TryGetValueAsNumber_or_default(double &, double defaultValue = 0) const;
-    bool TryGetValueAsBool_or_default(bool &, bool defaultValue = false) const;
+    bool TryGetValueAsStringOrDefault(std::string &, const std::string &defaultValue = "") const;
+    bool TryGetValueAsNumberOrDefault(double &, double defaultValue = 0) const;
+    bool TryGetValueAsBoolOrDefault(bool &, bool defaultValue = false) const;
 
     void SetValue(bool value);
     void SetValue(const std::string &stringValue);
@@ -220,7 +220,7 @@ struct Token
 {
     TokenType type;
     const char *data;
-    int data_len;
+    int dataLen;
 };
 
 std::ostream &operator<<(std::ostream &, const json::Token &);
@@ -303,18 +303,18 @@ class FormattedPrinter
 {
   private:
     std::string indent;
-    std::string indent_template;
-    int indent_level;
+    std::string indentTemplate;
+    int indentLevel;
     std::iostream *out;
-    bool out_is_managed;
-    bool print_compact;
+    bool outIsManaged;
+    bool printCompact;
 
-    bool value_written;
+    bool valueWritten;
 
-    FormattedPrinter &begin_indent();
-    FormattedPrinter &end_indent();
-    FormattedPrinter &next_property();
-    FormattedPrinter &indent_property();
+    FormattedPrinter &BeginIndent();
+    FormattedPrinter &EndIndent();
+    FormattedPrinter &NextProperty();
+    FormattedPrinter &IndentProperty();
 
   public:
     FormattedPrinter();
@@ -330,28 +330,28 @@ class FormattedPrinter
 
     ~FormattedPrinter();
 
-    FormattedPrinter &begin_array();
-    FormattedPrinter &end_array();
-    FormattedPrinter &begin_object();
-    FormattedPrinter &end_object();
-    FormattedPrinter &print_property(const std::string &names);
-    FormattedPrinter &print(const std::string &);
-    FormattedPrinter &print(double);
-    FormattedPrinter &print_false();
-    FormattedPrinter &print_true();
-    FormattedPrinter &print_null();
+    FormattedPrinter &BeginArray();
+    FormattedPrinter &EndArray();
+    FormattedPrinter &BeginObject();
+    FormattedPrinter &EndObject();
+    FormattedPrinter &PrintProperty(const std::string &names);
+    FormattedPrinter &Print(const std::string &);
+    FormattedPrinter &Print(double);
+    FormattedPrinter &PrintFalse();
+    FormattedPrinter &PrintTrue();
+    FormattedPrinter &PrintNull();
 
-    FormattedPrinter &print(json::Node *);
+    FormattedPrinter &Print(json::Node *);
 
-    const std::string &get_indent_template() const;
-    uint get_indent_length() const;
-    const std::iostream *get_output() const;
+    const std::string &GetIndentTemplate() const;
+    uint GetIndentLength() const;
+    const std::iostream *GetOutput() const;
 
-    void set_compact_style(bool);
-    bool is_compact_style() const;
+    void SetCompactStyle(bool);
+    bool IsCompactStyle() const;
 
-    bool is_independent() const;
-    std::string to_string() const;
+    bool IsIndependent() const;
+    std::string ToString() const;
     std::ostream &operator<<(std::ostream &) const;
 };
 } // namespace json

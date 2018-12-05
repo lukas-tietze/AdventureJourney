@@ -2,17 +2,17 @@
 #include <fstream>
 #include <streambuf>
 
-#include "data/io.hpp"
-#include "exception.hpp"
+#include "data/Io.hpp"
+#include "Exception.hpp"
 
-std::string util::read_file(const std::string &file)
+std::string util::ReadFile(const std::string &file)
 {
     std::ifstream t(file);
     std::string str;
 
     if (!t.good())
     {
-        throw util::file_not_found_exception(file);
+        throw util::FileNotFoundException(file);
     }
 
     t.seekg(0, std::ios::end);
@@ -27,7 +27,7 @@ std::string util::read_file(const std::string &file)
     return str;
 }
 
-bool util::try_read_file(const std::string &file, std::string &buf)
+bool util::TryReadFile(const std::string &file, std::string &buf)
 {
     try
     {
@@ -55,20 +55,20 @@ bool util::try_read_file(const std::string &file, std::string &buf)
     return true;
 }
 
-void util::write_file(const std::string &file, const std::string &data)
+void util::WriteFile(const std::string &file, const std::string &data)
 {
     std::ofstream t(file);
 
     if (!t.good())
     {
-        throw file_not_found_exception(file);
+        throw FileNotFoundException(file);
     }
 
     t << data;
     t.close();
 }
 
-bool util::try_write_file(const std::string &file, const std::string &data)
+bool util::TryWriteFile(const std::string &file, const std::string &data)
 {
     try
     {

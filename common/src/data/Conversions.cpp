@@ -1,31 +1,31 @@
-#include "data/math.hpp"
-#include "exception.hpp"
-#include "defs.hpp"
+#include "data/Math.hpp"
+#include "Exception.hpp"
+#include "Defs.hpp"
 
-bool util::is_hex_char(char c)
+bool util::IsHexChar(char c)
 {
     return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
 }
 
-uint32_t util::hex4ToNumber(const std::string &data)
+uint32_t util::Hex4ToNumber(const std::string &data)
 {
     if (data.length() >= 4)
     {
-        return util::hex4ToNumber(data.c_str());
+        return util::Hex4ToNumber(data.c_str());
     }
 
     return (uint32_t)-1;
 }
 
-uint32_t util::hex4ToNumber(const char *data)
+uint32_t util::Hex4ToNumber(const char *data)
 {
-    return (hexToNumber(data[0]) << 12) |
-           (hexToNumber(data[1]) << 8) |
-           (hexToNumber(data[2]) << 4) |
-           hexToNumber(data[3]);
+    return (HexToNumber(data[0]) << 12) |
+           (HexToNumber(data[1]) << 8) |
+           (HexToNumber(data[2]) << 4) |
+           HexToNumber(data[3]);
 }
 
-uint8_t util::hexToNumber(char c)
+uint8_t util::HexToNumber(char c)
 {
     switch (c)
     {
@@ -68,6 +68,6 @@ uint8_t util::hexToNumber(char c)
     case 'F':
         return 15;
     default:
-        throw std::runtime_error("illegal value for hexadecimal digit!");
+        throw util::InvalidCaseException("illegal value for hexadecimal digit!");
     }
 }

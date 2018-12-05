@@ -1,47 +1,47 @@
-#include "data/json.hpp"
+#include "data/Json.hpp"
 
-std::ostream &json::operator<<(std::ostream &stream, const json::token &token)
+std::ostream &json::operator<<(std::ostream &stream, const json::Token &token)
 {
-    stream << "[" << token.type << "] \"" << std::string(token.data, token.data_len) << "\"";
+    stream << "[" << token.type << "] \"" << std::string(token.data, token.dataLen) << "\"";
 
     return stream;
 }
 
-std::ostream &json::operator<<(std::ostream &stream, const json::token_type &tokenType)
+std::ostream &json::operator<<(std::ostream &stream, const json::TokenType &tokenType)
 {
     switch (tokenType)
     {
-    case json::token_type::String:
+    case json::TokenType::String:
         stream << "String";
         break;
-    case json::token_type::Number:
+    case json::TokenType::Number:
         stream << "Number";
         break;
-    case json::token_type::ArrayStart:
+    case json::TokenType::ArrayStart:
         stream << "ArrayStart";
         break;
-    case json::token_type::ArrayEnd:
+    case json::TokenType::ArrayEnd:
         stream << "ArrayEnd";
         break;
-    case json::token_type::ObjectStart:
+    case json::TokenType::ObjectStart:
         stream << "ObjectStart";
         break;
-    case json::token_type::ObjectEnd:
+    case json::TokenType::ObjectEnd:
         stream << "ObjectEnd";
         break;
-    case json::token_type::ValueAssignment:
+    case json::TokenType::ValueAssignment:
         stream << "ObjectAssignment";
         break;
-    case json::token_type::ValueSeperator:
+    case json::TokenType::ValueSeperator:
         stream << "ObjectSeperator";
         break;
-    case json::token_type::ValueTrue:
+    case json::TokenType::ValueTrue:
         stream << "ValueTrue";
         break;
-    case json::token_type::ValueFalse:
+    case json::TokenType::ValueFalse:
         stream << "ValueFalse";
         break;
-    case json::token_type::ValueNull:
+    case json::TokenType::ValueNull:
         stream << "ValueNull";
         break;
     default:
@@ -51,29 +51,29 @@ std::ostream &json::operator<<(std::ostream &stream, const json::token_type &tok
     return stream;
 }
 
-std::ostream &json::operator<<(std::ostream &stream, const value_type &value)
+std::ostream &json::operator<<(std::ostream &stream, const ValueType &value)
 {
     switch (value)
     {
-    case json::value_type::String:
+    case json::ValueType::String:
         stream << "String";
         break;
-    case json::value_type::Number:
+    case json::ValueType::Number:
         stream << "Number";
         break;
-    case json::value_type::Object:
+    case json::ValueType::Object:
         stream << "Object";
         break;
-    case json::value_type::Array:
+    case json::ValueType::Array:
         stream << "Array";
         break;
-    case json::value_type::True:
+    case json::ValueType::True:
         stream << "True";
         break;
-    case json::value_type::False:
+    case json::ValueType::False:
         stream << "False";
         break;
-    case json::value_type::Null:
+    case json::ValueType::Null:
         stream << "Null";
         break;
     default:

@@ -81,7 +81,8 @@
         "strstream": "cpp",
         "complex": "cpp",
         "codecvt": "cpp",
-        "typeindex": "cpp"
+        "typeindex": "cpp",
+        "*.ipp": "cpp"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled",
     "python.promptToInstallJupyter": false

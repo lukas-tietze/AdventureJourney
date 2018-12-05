@@ -4,9 +4,9 @@
 #include <codecvt>
 #include <iomanip>
 
-#include "data/string.hpp"
+#include "data/String.hpp"
 
-std::string util::format(const std::string &format, ...)
+std::string util::Format(const std::string &format, ...)
 {
     va_list va;
     va_start(va, format);
@@ -29,35 +29,35 @@ std::string util::format(const std::string &format, ...)
     return res;
 }
 
-void util::to_lower_inplace(std::string &nameBuf)
+void util::ToLowerInplace(std::string &nameBuf)
 {
     std::transform(nameBuf.begin(), nameBuf.end(), nameBuf.begin(), [](char c) -> char { return std::tolower(c); });
 }
 
-std::string util::to_lower(const std::string &nameBuf)
+std::string util::ToLower(const std::string &nameBuf)
 {
     std::string buf(nameBuf);
 
-    to_lower_inplace(buf);
+    ToLowerInplace(buf);
 
     return buf;
 }
 
-void util::to_upper_inplace(std::string &nameBuf)
+void util::ToUpperInplace(std::string &nameBuf)
 {
     std::transform(nameBuf.begin(), nameBuf.end(), nameBuf.begin(), [](char c) -> char { return std::toupper(c); });
 }
 
-std::string util::to_upper(const std::string &nameBuf)
+std::string util::ToUpper(const std::string &nameBuf)
 {
     std::string buf(nameBuf);
 
-    util::to_upper_inplace(buf);
+    util::ToUpperInplace(buf);
 
     return buf;
 }
 
-std::vector<std::string> util::split(const std::string &str, char seperator, bool removeEmtpyEntries)
+std::vector<std::string> util::Split(const std::string &str, char seperator, bool removeEmtpyEntries)
 {
     std::vector<std::string> res;
     size_t i = 0;
@@ -82,7 +82,7 @@ std::vector<std::string> util::split(const std::string &str, char seperator, boo
     return res;
 }
 
-std::vector<std::string> util::split(const std::string &str, const std::string &chars, bool removeEmtpyEntries)
+std::vector<std::string> util::Split(const std::string &str, const std::string &chars, bool removeEmtpyEntries)
 {
     std::vector<std::string> res;
     size_t i = 0;
@@ -120,7 +120,7 @@ size_t find(const std::string &str, bool (*func)(char), size_t start)
 }
 } // namespace
 
-std::vector<std::string> util::split(const std::string &str, bool (*func)(char), bool removeEmtpyEntries)
+std::vector<std::string> util::Split(const std::string &str, bool (*func)(char), bool removeEmtpyEntries)
 {
     std::vector<std::string> res;
     size_t i = 0;
@@ -145,12 +145,12 @@ std::vector<std::string> util::split(const std::string &str, bool (*func)(char),
     return res;
 }
 
-std::vector<std::string> util::split(const std::string &str, bool removeEmtpyEntries)
+std::vector<std::string> util::Split(const std::string &str, bool removeEmtpyEntries)
 {
-    return util::split(str, ' ', removeEmtpyEntries);
+    return util::Split(str, ' ', removeEmtpyEntries);
 }
 
-std::string util::strip(const std::string &str)
+std::string util::Strip(const std::string &str)
 {
     if (str.empty())
     {
@@ -169,7 +169,7 @@ std::string util::strip(const std::string &str)
     return str.substr(start, end - start + 1);
 }
 
-std::string util::strip_front(const std::string &str)
+std::string util::StripFront(const std::string &str)
 {
     if (str.empty())
     {
@@ -184,7 +184,7 @@ std::string util::strip_front(const std::string &str)
     return str.substr(start);
 }
 
-std::string util::strip_back(const std::string &str)
+std::string util::StripBack(const std::string &str)
 {
     if (str.empty())
     {
@@ -199,7 +199,7 @@ std::string util::strip_back(const std::string &str)
     return str.substr(0, end + 1);
 }
 
-std::string util::unicode_to_string(uint32_t codePoint)
+std::string util::UtfCodePointToNarrowString(uint32_t codePoint)
 {
     return std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>().to_bytes(codePoint);
 }
