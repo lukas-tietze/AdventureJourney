@@ -22,7 +22,7 @@ class TerminalView
     ~TerminalView();
 
     static TerminalView *GetInstance();
-    static TerminalView *DeleteInstance();
+    static void DeleteInstance();
 
     void SetInputMode(terminal::InputMode mode);
     void SetEcho(bool echo);
@@ -65,9 +65,7 @@ class TerminalView
     bool CanChangeColors() const;
 
     bool BufferColor(colorId_t, const util::Color &);
-    colorId_t FindColor(const util::Color &);
     bool BufferColorPair(colorPairId_t, colorId_t, colorId_t);
-    colorPairId_t FindColorPair(colorId_t, colorId_t);
 
     int CreateStyle(terminal::OutputAttribute attributes, int colorPair);
 

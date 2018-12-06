@@ -53,7 +53,7 @@ terminal::TerminalView *terminal::TerminalView::GetInstance()
     return TerminalView::instance;
 }
 
-terminal::TerminalView *terminal::TerminalView::DeleteInstance()
+void terminal::TerminalView::DeleteInstance()
 {
     delete TerminalView::instance;
     TerminalView::instance = nullptr;
@@ -114,10 +114,12 @@ std::string terminal::TerminalView::ReadLine()
 
 bool terminal::TerminalView::ReadKey(long timeOut, int &result)
 {
+    return false;
 }
 
 bool terminal::TerminalView::ReadLine(long timeOut, std::string &result)
 {
+    return false;
 }
 
 void terminal::TerminalView::Print(const std::string &text)
@@ -168,7 +170,7 @@ util::Dimension terminal::TerminalView::GetSize() const
 
 bool terminal::TerminalView::SetSize(const util::Dimension &dim)
 {
-    resizeterm(dim.GetHeight(), dim.GetWidth());
+    return resizeterm(dim.GetHeight(), dim.GetWidth()) == OK;
 }
 
 void terminal::TerminalView::SetLiveMode(bool live)
@@ -230,19 +232,10 @@ bool terminal::TerminalView::BufferColor(colorId_t index, const util::Color &Col
 {
     this->colors[index] = Color;
 
-    init_color(index,
+    return init_color(index,
                static_cast<int>(Color.RedPercentage() * 1000),
                static_cast<int>(Color.GreenPercentage() * 1000),
-               static_cast<int>(Color.BluePercentage() * 1000));
-}
-
-terminal::colorId_t terminal::TerminalView::FindColor(const util::Color &color)
-{
-    // auto res = std::find(this->colors.begin(), this->colors.end(), color);
-
-    // return res == this->colors.end() ? static_cast<colorId_t>(-1) : res.Index();
-
-    return this->colors.IndexOf(color);
+               static_cast<int>(Color.BluePercentage() * 1000)) == OK;
 }
 
 bool terminal::TerminalView::BufferColorPair(colorPairId_t index, colorId_t id1, colorId_t id2)
@@ -254,15 +247,6 @@ bool terminal::TerminalView::BufferColorPair(colorPairId_t index, colorId_t id1,
     init_pair(index + 1, id1, id2);
 
     return true;
-}
-
-terminal::colorPairId_t terminal::TerminalView::FindColorPair(colorId_t id1, colorId_t id2)
-{
-    // auto res = std::find(this->colorPairs.begin(), this->colorPairs.end(), std::make_tuple(id1, id2));
-
-    // return res == this->colorPairs.end() ? -1 : res.Index();
-
-    return this->colorPairs.IndexOf(std::make_tuple(id1, id2));
 }
 
 void terminal::TerminalView::AttributeOn(terminal::OutputAttribute a)

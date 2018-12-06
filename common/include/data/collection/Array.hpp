@@ -91,7 +91,7 @@ class Array
             return this->data + this->pos;
         }
 
-        const size_t Index() const
+        size_t Index() const
         {
             return this->pos;
         }

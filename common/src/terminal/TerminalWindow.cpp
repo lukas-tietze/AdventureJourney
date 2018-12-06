@@ -97,7 +97,7 @@ void terminal::TerminalWindow::Start()
                     }
                     else
                     {
-                        for (int i = 0; i < this->controls.size(); i++)
+                        for (size_t i = 0; i < this->controls.size(); i++)
                         {
                             auto control = this->controls[i];
 
