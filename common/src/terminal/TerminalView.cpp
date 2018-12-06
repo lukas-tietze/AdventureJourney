@@ -16,28 +16,22 @@ terminal::TerminalView::TerminalView() : TerminalView(COLS, LINES)
 }
 
 terminal::TerminalView::TerminalView(int width, int height) : width(width),
-                                                              height(height)
+                                                              height(height),
+                                                              colors(COLORS),
+                                                              colorPairs(COLOR_PAIRS)
 {
-    this->maxColors = COLORS;
-    this->usedColors = 8;
-    this->colors = new util::Color[this->maxColors];
+    this->BufferColor(COLOR_BLACK, util::colors::BasicBlack);
+    this->BufferColor(COLOR_BLUE, util::colors::BasicBlue);
+    this->BufferColor(COLOR_CYAN, util::colors::BasicCyan);
+    this->BufferColor(COLOR_GREEN, util::colors::BasicGreen);
+    this->BufferColor(COLOR_MAGENTA, util::colors::BasicMagenta);
+    this->BufferColor(COLOR_RED, util::colors::BasicRed);
+    this->BufferColor(COLOR_WHITE, util::colors::BasicWhite);
+    this->BufferColor(COLOR_YELLOW, util::colors::BasicYellow);
 
-    this->SetColor(COLOR_BLACK, util::colors::BasicBlack);
-    this->SetColor(COLOR_BLUE, util::colors::BasicBlue);
-    this->SetColor(COLOR_CYAN, util::colors::BasicCyan);
-    this->SetColor(COLOR_GREEN, util::colors::BasicGreen);
-    this->SetColor(COLOR_MAGENTA, util::colors::BasicMagenta);
-    this->SetColor(COLOR_RED, util::colors::BasicRed);
-    this->SetColor(COLOR_WHITE, util::colors::BasicWhite);
-    this->SetColor(COLOR_YELLOW, util::colors::BasicYellow);
-
-    this->maxColorPairs = COLOR_PAIRS - 1;
-    this->usedColorPairs = 0;
-    this->colorPairs = new ColorPair[this->maxColorPairs];
-
-    auto defaultColors = this->AddColorPair(COLOR_WHITE, COLOR_BLACK);
-    this->SetActiveColorPair(defaultColors);
-    this->SetBackgroundColorPair(defaultColors);
+    this->BufferColorPair(0, COLOR_WHITE, COLOR_BLACK);
+    this->SetActiveColorPair(0);
+    this->SetBackgroundColorPair(0);
 
     this->window = newwin(this->height, this->width, 0, 0);
     keypad(this->window, true);
@@ -46,9 +40,6 @@ terminal::TerminalView::TerminalView(int width, int height) : width(width),
 
 terminal::TerminalView::~TerminalView()
 {
-    delete[] this->colors;
-    delete[] this->colorPairs;
-
     wrefresh(this->window);
     delwin(this->window);
     refresh();
@@ -215,24 +206,14 @@ void terminal::TerminalView::Maximise()
     this->Flush();
 }
 
-int terminal::TerminalView::GetMaxColors() const
+size_t terminal::TerminalView::GetMaxColors() const
 {
-    return this->maxColors;
+    return this->colors.Length();
 }
 
-int terminal::TerminalView::GetUsedColors() const
+size_t terminal::TerminalView::GetMaxColorPairs() const
 {
-    return this->usedColors;
-}
-
-int terminal::TerminalView::GetMaxColorPairs() const
-{
-    return this->maxColorPairs;
-}
-
-int terminal::TerminalView::GetUsedColorPairs() const
-{
-    return this->usedColorPairs;
+    return this->colorPairs.Length();
 }
 
 bool terminal::TerminalView::CanChangeColors() const
@@ -240,112 +221,48 @@ bool terminal::TerminalView::CanChangeColors() const
     return can_change_color();
 }
 
-const util::Color &terminal::TerminalView::GetColor(int id) const
+const util::Color &terminal::TerminalView::GetColor(colorId_t id) const
 {
-    if (id < 0 || id >= this->maxColors)
-        throw util::IndexOutOfRangeException(id, this->maxColors);
-
     return this->colors[id];
 }
 
-int terminal::TerminalView::AddColor(const util::Color &c)
+bool terminal::TerminalView::BufferColor(colorId_t index, const util::Color &Color)
 {
-    if (this->usedColors >= this->maxColors)
-        throw util::OverflowException(this->maxColors,
-                                       util::Format("Can't add new color. %i/%i used", this->usedColors, this->maxColors));
-
-    int id = this->usedColors++;
-
-    this->SetColor(id, c);
-
-    return id;
-}
-
-void terminal::TerminalView::SetColor(int index, const util::Color &Color)
-{
-    if (index < 0 || index >= this->maxColors)
-        throw util::IndexOutOfRangeException(index, this->maxColors);
-
     this->colors[index] = Color;
 
     init_color(index,
-               (int)(Color.RedPercentage() * 1000),
-               (int)(Color.GreenPercentage() * 1000),
-               (int)(Color.BluePercentage() * 1000));
+               static_cast<int>(Color.RedPercentage() * 1000),
+               static_cast<int>(Color.GreenPercentage() * 1000),
+               static_cast<int>(Color.BluePercentage() * 1000));
 }
 
-int terminal::TerminalView::Find(const util::Color &c)
+terminal::colorId_t terminal::TerminalView::FindColor(const util::Color &color)
 {
-    for (int i = 0; i < this->usedColors; i++)
-    {
-        if (this->colors[i] == c)
-            return i;
-    }
+    // auto res = std::find(this->colors.begin(), this->colors.end(), color);
 
-    return -1;
+    // return res == this->colors.end() ? static_cast<colorId_t>(-1) : res.Index();
+
+    return this->colors.IndexOf(color);
 }
 
-int terminal::TerminalView::AddColorPair(const util::Color &fg, const util::Color &bg)
+bool terminal::TerminalView::BufferColorPair(colorPairId_t index, colorId_t id1, colorId_t id2)
 {
-    if ((this->usedColors + 2) >= this->maxColors)
-        throw util::OverflowException(this->maxColors,
-                                       util::Format("Failed to add new colors for new Color pair. %i/%i used.", this->usedColors, this->maxColors));
+    if (index >= this->colors.Length())
+        return false;
 
-    return this->AddColorPair(this->AddColor(fg), this->AddColor(bg));
-}
-
-int terminal::TerminalView::AddColorPair(int id1, int id2)
-{
-    if (this->usedColorPairs >= this->maxColorPairs)
-        throw util::OverflowException(this->maxColorPairs,
-                                       util::Format("Failed to add new Color pair. %i/%i pairs used.", this->usedColorPairs, this->maxColorPairs));
-
-    if (id1 < 0 || id1 >= this->usedColors)
-        throw util::IndexOutOfRangeException(id1,
-                                                 this->usedColors,
-                                                 util::Format("Failed to add new Color pair. %i/%i colors used.", this->usedColors, this->maxColors));
-
-    if (id2 < 0 || id2 >= this->usedColors)
-        throw util::IndexOutOfRangeException(id2,
-                                                 this->usedColors,
-                                                 util::Format("Failed to add new Color pair. %i/%i colors used.", this->usedColors, this->maxColors));
-
-    this->colorPairs[this->usedColorPairs] = std::make_tuple(id1, id2);
-    this->usedColorPairs++;
-    init_pair(this->usedColorPairs, id1, id2);
-
-    return this->usedColorPairs;
-}
-
-void terminal::TerminalView::SetColorPair(int index, int id1, int id2)
-{
-    if (index < 0 || index >= this->maxColorPairs)
-        throw util::IndexOutOfRangeException(index, this->maxColorPairs);
-
+    this->colorPairs[index] = std::make_tuple(id1, id2);
     init_pair(index + 1, id1, id2);
+
+    return true;
 }
 
-int terminal::TerminalView::FindColorPair(int id1, int id2)
+terminal::colorPairId_t terminal::TerminalView::FindColorPair(colorId_t id1, colorId_t id2)
 {
-    for (int i = 0; i < this->usedColorPairs; i++)
-    {
-        const auto &pair = this->colorPairs[i];
+    // auto res = std::find(this->colorPairs.begin(), this->colorPairs.end(), std::make_tuple(id1, id2));
 
-        if (std::get<0>(pair) == id1 && std::get<1>(pair) == id2)
-            return i;
-    }
+    // return res == this->colorPairs.end() ? -1 : res.Index();
 
-    return -1;
-}
-
-bool terminal::TerminalView::CanAddColors() const
-{
-    return this->usedColors < this->maxColors;
-}
-
-bool terminal::TerminalView::CanAddColorPairs() const
-{
-    return this->usedColorPairs < this->maxColorPairs;
+    return this->colorPairs.IndexOf(std::make_tuple(id1, id2));
 }
 
 void terminal::TerminalView::AttributeOn(terminal::OutputAttribute a)
@@ -371,35 +288,35 @@ terminal::OutputAttribute terminal::TerminalView::GetActiveAttributes() const
     return this->activeAttributes;
 }
 
-void terminal::TerminalView::SetActiveColorPair(int id)
+void terminal::TerminalView::SetActiveColorPair(colorPairId_t id)
 {
-    if (id < 1 || id > this->usedColorPairs)
-        throw util::IndexOutOfRangeException(id, this->usedColorPairs);
+    if (id < 1 || id > this->colorPairs.Length())
+        throw util::IndexOutOfRangeException(id, this->colorPairs.Length());
 
     this->activeColorPair = id;
     wcolor_set(this->window, id, nullptr);
 }
 
-void terminal::TerminalView::SetBackgroundColorPair(int id)
+void terminal::TerminalView::SetBackgroundColorPair(colorPairId_t id)
 {
-    if (id < 1 || id > this->usedColorPairs)
-        throw util::IndexOutOfRangeException(id, this->usedColorPairs);
+    if (id < 1 || id > this->colorPairs.Length())
+        throw util::IndexOutOfRangeException(id, this->colorPairs.Length());
 
     this->activeBackgroundColorPair = id;
     wbkgd(this->window, id);
 }
 
-int terminal::TerminalView::GetActiveColorPair() const
+terminal::colorPairId_t terminal::TerminalView::GetActiveColorPair() const
 {
     return this->activeColorPair;
 }
 
-int terminal::TerminalView::GetActiveBackground() const
+terminal::colorPairId_t terminal::TerminalView::GetActiveBackground() const
 {
     return this->activeBackgroundColorPair;
 }
 
-const terminal::TerminalView::ColorPair &terminal::TerminalView::GetContent(int id) const
+const terminal::ColorPair &terminal::TerminalView::GetContent(colorPairId_t id) const
 {
     return this->colorPairs[id - 1];
 }

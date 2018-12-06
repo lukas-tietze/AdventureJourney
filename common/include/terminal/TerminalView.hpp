@@ -8,14 +8,17 @@
 #include "Values.hpp"
 #include "Geometry.hpp"
 #include "graphics/Color.hpp"
+#include "data/collection/Array.hpp"
 
 namespace terminal
 {
+typedef uint16_t colorId_t;
+typedef uint16_t colorPairId_t;
+typedef std::tuple<colorId_t, colorId_t> ColorPair;
+
 class TerminalView
 {
   public:
-    typedef std::tuple<int, int> ColorPair;
-
     ~TerminalView();
 
     static TerminalView *GetInstance();
@@ -50,30 +53,22 @@ class TerminalView
     void SetActiveAttributes(terminal::OutputAttribute);
     OutputAttribute GetActiveAttributes() const;
 
-    void SetActiveColorPair(int);
-    void SetBackgroundColorPair(int);
-    int GetActiveColorPair() const;
-    int GetActiveBackground() const;
-    const ColorPair &GetContent(int id) const;
-    const util::Color &GetColor(int id) const;
+    void SetActiveColorPair(colorPairId_t);
+    void SetBackgroundColorPair(colorPairId_t);
+    colorPairId_t GetActiveColorPair() const;
+    colorPairId_t GetActiveBackground() const;
+    const ColorPair &GetContent(colorPairId_t id) const;
+    const util::Color &GetColor(colorId_t id) const;
 
-    int GetMaxColors() const;
-    int GetUsedColors() const;
-    int GetMaxColorPairs() const;
-    int GetUsedColorPairs() const;
+    size_t GetMaxColors() const;
+    size_t GetMaxColorPairs() const;
     bool CanChangeColors() const;
 
-    int AddColor(const util::Color &);
-    void SetColor(int, const util::Color &);
-    int Find(const util::Color &);
-    int AddColorPair(const util::Color &fg, const util::Color &bg);
-    int AddColorPair(int, int);
-    void SetColorPair(int, int, int);
-    int FindColorPair(int, int);
+    bool BufferColor(colorId_t, const util::Color &);
+    colorId_t FindColor(const util::Color &);
+    bool BufferColorPair(colorPairId_t, colorId_t, colorId_t);
+    colorPairId_t FindColorPair(colorId_t, colorId_t);
 
-    bool CanAddColors() const;
-    bool CanAddColorPairs() const;
-    
     int CreateStyle(terminal::OutputAttribute attributes, int colorPair);
 
   protected:
@@ -91,14 +86,10 @@ class TerminalView
     bool echoOn;
     bool liveMode;
 
-    util::Color *colors;
-    int maxColors;
-    int usedColors;
-    ColorPair *colorPairs;
+    util::Array<util::Color> colors;
+    util::Array<ColorPair> colorPairs;
     int activeColorPair;
     int activeBackgroundColorPair;
-    int maxColorPairs;
-    int usedColorPairs;
 
     OutputAttribute activeAttributes;
 

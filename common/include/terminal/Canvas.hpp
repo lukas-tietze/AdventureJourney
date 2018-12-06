@@ -99,23 +99,11 @@ class Canvas
     void DisableClip();
     void EnableAttribute(terminal::OutputAttribute);
     void DisableAttribute(terminal::OutputAttribute);
-    void SetForegroundColor(const util::Color &);
-    void SetBackgroundColor(const util::Color &);
-    void SetForegroundColor(int);
-    void SetBackgroundColor(int);
-    void SetActiveColorPair(short);
-    void ResetForegroundColor();
-    void ResetBackgroundColor();
+    void SetBackgroundColorPair(colorPairId_t);
+    void SetActiveColorPair(colorPairId_t);
 
     void Flush();
 
     TerminalView *GetView() const;
-
-    short AddColor(const util::Color &);
-    void SetColor(short, const util::Color &);
-    short AddColorPair(const util::Color &fg, const util::Color &bg);
-    short AddColorPair(short, short);
-    void SetColorPair(short, short, short);
-    short FindColorPair(short, short);
 };
 } // namespace terminal

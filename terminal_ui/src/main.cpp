@@ -30,12 +30,10 @@ void Loop(terminal::TerminalView *v)
     c.DrawBox(util::Rectangle(0, 0, 4, 4), '-', '|', '+');
 
     c.DrawString(util::Point(10, 3), "current terminal size is: " + util::ToString(c.GetSize()));
-    c.DrawString(util::Point(10, 4), util::Format("number of supported colors: %i (%i used)",
-                                                   v->GetMaxColors(),
-                                                   v->GetUsedColors()));
-    c.DrawString(util::Point(10, 5), util::Format("number of supported color pairs: %i (%i used)",
-                                                   v->GetMaxColorPairs(),
-                                                   v->GetUsedColorPairs()));
+    c.DrawString(util::Point(10, 4), util::Format("number of supported colors: %i",
+                                                   v->GetMaxColors()));
+    c.DrawString(util::Point(10, 5), util::Format("number of supported color pairs: %i",
+                                                   v->GetMaxColorPairs()));
 
     c.DrawString(util::Point(10, 6), util::ToString(terminal::OutputAttribute::None), terminal::OutputAttribute::None);
     c.DrawString(util::Point(10, 7), util::ToString(terminal::OutputAttribute::Standout), terminal::OutputAttribute::Standout);
@@ -99,12 +97,6 @@ void RunFunctionTest()
     {
         v->SetEcho(false);
         v->SetInputMode(terminal::InputMode::Break);
-
-        ColorsSchemes[0] = v->AddColorPair(util::colors::DarkGoldenrod1, util::colors::DarkSalmon);
-        ColorsSchemes[1] = v->AddColorPair(util::colors::Firebrick3, util::colors::Goldenrod4);
-        ColorsSchemes[2] = v->AddColorPair(util::colors::Gray39, util::colors::Grey12);
-        ColorsSchemes[3] = v->AddColorPair(util::colors::LightBlue2, util::colors::Grey75);
-        ColorsSchemes[4] = v->AddColorPair(util::colors::LightSeaGreen, util::colors::MediumOrchid3);
 
         int key;
 

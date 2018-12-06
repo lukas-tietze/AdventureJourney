@@ -2,9 +2,9 @@
 #include "data/Helper.hpp"
 
 terminal::Canvas::Canvas(TerminalView *view) : view(view),
-                                                size(view->GetSize()),
-                                                clippedArea(0, 0, this->size),
-                                                origin(0, 0)
+                                               size(view->GetSize()),
+                                               clippedArea(0, 0, this->size),
+                                               origin(0, 0)
 {
     this->view->SetLiveMode(false);
 }
@@ -237,81 +237,20 @@ void terminal::Canvas::DisableAttribute(terminal::OutputAttribute a)
     this->view->AttributeOff(a);
 }
 
-void terminal::Canvas::SetForegroundColor(const util::Color &c)
+void terminal::Canvas::SetBackgroundColorPair(colorPairId_t c)
 {
-    //     int colorIndex = this->view->find(c);
-    //     int pairIndex;
-
-    //     if (colorIndex == -1 && this->view->can_add_colors() && this->view->can_add_color_pairs())
-    //     {
-    //         colorIndex = this->view->add_color(c);
-    //         pairIndex = this->view->AddColorPair(colorIndex, this->view->GetActiveColorPair().item_2())
-    //     }
-
-    //     if(pairIndex != -1)
-    //     this->view->SetActiveColorPair(pairIndex);
+    this->view->SetBackgroundColorPair(c);
 }
 
-void terminal::Canvas::SetBackgroundColor(const util::Color &c)
-{
-}
-
-void terminal::Canvas::SetForegroundColor(int c)
-{
-}
-
-void terminal::Canvas::SetBackgroundColor(int c)
-{
-}
-
-void terminal::Canvas::SetActiveColorPair(short index)
+void terminal::Canvas::SetActiveColorPair(colorPairId_t index)
 {
     this->view->SetActiveColorPair(index);
 }
 
-void terminal::Canvas::ResetForegroundColor()
-{
-    this->SetForegroundColor(util::colors::BasicWhite);
-}
-
-void terminal::Canvas::ResetBackgroundColor()
-{
-    this->SetBackgroundColor(util::colors::BasicBlack);
-}
 
 terminal::TerminalView *terminal::Canvas::GetView() const
 {
     return this->view;
-}
-
-short terminal::Canvas::AddColor(const util::Color &c)
-{
-    this->view->AddColor(c);
-}
-
-void terminal::Canvas::SetColor(short index, const util::Color &c)
-{
-    this->view->SetColor(index, c);
-}
-
-short terminal::Canvas::AddColorPair(const util::Color &fg, const util::Color &bg)
-{
-    this->view->AddColorPair(fg, bg);
-}
-
-short terminal::Canvas::AddColorPair(short fg, short bg)
-{
-    this->view->AddColorPair(fg, bg);
-}
-
-void terminal::Canvas::SetColorPair(short index, short fg, short bg)
-{
-    this->view->SetColorPair(index, fg, bg);
-}
-
-short terminal::Canvas::FindColorPair(short id1, short id2)
-{
-    return this->view->FindColorPair(id1, id2);
 }
 
 void terminal::Canvas::Flush()

@@ -11,20 +11,22 @@ class Array
 {
   private:
     T *data;
-    size_t size;
+    size_t length;
     TAlloc allocator;
 
     void ReleaseResources()
     {
         if (this->data != nullptr)
         {
-            this->allocator.deallocate(this->data, this->size);
+            this->allocator.deallocate(this->data, this->length);
             this->data = nullptr;
-            this->size = 0;
+            this->length = 0;
         }
     }
 
   public:
+    static constexpr size_t NPos = static_cast<size_t>(-1l);
+
     class Iterator
     {
       private:
@@ -88,12 +90,17 @@ class Array
         {
             return this->data + this->pos;
         }
+
+        const size_t Index() const
+        {
+            return this->pos;
+        }
     };
 
-    Array(size_t size)
+    Array(size_t length)
     {
-        this->size = size;
-        this->data = this->allocator.allocate(this->size);
+        this->length = length;
+        this->data = this->allocator.allocate(this->length);
     }
 
     Array(const Array<T> &copy)
@@ -123,22 +130,22 @@ class Array
 
     T &Last()
     {
-        return this->data[this->size - 1];
+        return this->data[this->length - 1];
     }
 
     const T &Last() const
     {
-        return this->data[this->size - 1];
+        return this->data[this->length - 1];
     }
 
     size_t Length() const
     {
-        return this->size;
+        return this->length;
     }
 
     const T &operator[](int index) const
     {
-        if (index < 0 || (size_t)index >= this->size)
+        if (index < 0 || (size_t)index >= this->length)
             throw util::IndexOutOfRangeException();
 
         return this->data[index];
@@ -146,7 +153,7 @@ class Array
 
     T &operator[](int index)
     {
-        if (index < 0 || (size_t)index >= this->size)
+        if (index < 0 || (size_t)index >= this->length)
             throw util::IndexOutOfRangeException();
 
         return this->data[index];
@@ -154,27 +161,27 @@ class Array
 
     Iterator begin()
     {
-        return Iterator(this->data, 0, this->size);
+        return Iterator(this->data, 0, this->length);
     }
 
     Iterator end()
     {
-        return Iterator(this->data, this->size, this->size);
+        return Iterator(this->data, this->length, this->length);
     }
 
     void Swap(Array<T> &other)
     {
         std::swap(this->data, other.data);
-        std::swap(this->size, other.size);
+        std::swap(this->length, other.length);
     }
 
     void CopyFrom(const Array<T> &other)
     {
         this->ReleaseResources();
-        this->size = other.size();
-        this->data = this->allocator.allocate(this->size);
+        this->length = other.length;
+        this->data = this->allocator.allocate(this->length);
 
-        for (size_t i = 0; i < this->size; i++)
+        for (size_t i = 0; i < this->length; i++)
         {
             this->allocator.construct(this->data + i, other.data[i]);
         }
@@ -189,6 +196,17 @@ class Array
     {
         this->ReleaseResources();
         this->Swap(initializer);
+    }
+
+    size_t IndexOf(const T &item)
+    {
+        for (size_t i = 0; i < this->length; i++)
+        {
+            if (this->data[i] == item)
+                return i;
+        }
+
+        return Array<T>::NPos;
     }
 }; /*Array*/
 } // namespace util
