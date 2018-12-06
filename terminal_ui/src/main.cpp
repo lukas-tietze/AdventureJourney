@@ -64,8 +64,6 @@ void Loop(terminal::TerminalView *v)
 
 void RunComponentTest()
 {
-    terminal::TerminalView *v = terminal::TerminalView::GetInstance();
-
     terminal::TerminalWindow w;
 
     auto cb = new terminal::Checkbox();
@@ -160,7 +158,7 @@ void RunFunctionTest()
     catch (...)
     {
         Quit();
-        std::printf("Unknown Error occurred!\n");
+        std::printf("Unknown error occurred!\n");
     }
 }
 

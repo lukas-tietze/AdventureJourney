@@ -118,8 +118,8 @@ json::Node *CreateTestNode()
 
     subObject = new json::ObjectNode();
     subObject->Put("prop1", 1.0);
-    subObject->Put("prop2", "PropTwo");
-    subObject->Put("prop3", "PropThree");
+    subObject->Put("prop2", "prop_two");
+    subObject->Put("prop3", "prop_three");
 
     n->Put("object", subObject);
 
