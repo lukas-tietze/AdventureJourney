@@ -74,6 +74,9 @@ class TerminalView
 
   private:
     static TerminalView *instance;
+    
+    TerminalView();
+    TerminalView(int width, int height);
 
     WINDOW *window;
     int width;
@@ -90,8 +93,5 @@ class TerminalView
     int activeBackgroundColorPair;
 
     OutputAttribute activeAttributes;
-
-    TerminalView();
-    TerminalView(int width, int height);
 };
 } // namespace terminal

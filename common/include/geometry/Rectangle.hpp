@@ -81,7 +81,7 @@ class BasicRectangle
         return this->size.GetHeight();
     }
 
-    T get_area() const
+    T GetArea() const
     {
         return this->size.GetArea();
     }
@@ -96,7 +96,7 @@ class BasicRectangle
         return this->size;
     }
 
-    util::BasicRectangle<T> resize(double factor) const
+    util::BasicRectangle<T> Resize(double factor) const
     {
         return BasicRectangle<T>(this->location, this->dimension * factor);
     }

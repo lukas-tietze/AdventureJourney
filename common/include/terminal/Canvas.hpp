@@ -67,25 +67,16 @@ class Canvas
     Canvas(TerminalView *);
     Canvas(const Canvas &);
 
-    terminal::Canvas &DrawVerticalLine(const util::Point &, int length, char c);
-    terminal::Canvas &DrawVerticalLine(const util::Point &, int length, char c, int Color);
+    terminal::Canvas &DrawVerticalLine(int x, int y, int length, char c);
+    terminal::Canvas &DrawHorizontalLine(int x, int y, int length, char c);
+    terminal::Canvas &DrawBox(int x, int y, int width, int height, char horizontal, char vertical, char cornor);
 
-    terminal::Canvas &DrawHorizontalLine(const util::Point &, int y, char c);
-    terminal::Canvas &DrawHorizontalLine(const util::Point &, int y, char c, int Color);
+    terminal::Canvas &DrawBox(int x, int y, int width, int height, char c);
 
-    terminal::Canvas &DrawBox(const util::Rectangle &, char horizontal, char vertical, char cornor);
-    terminal::Canvas &DrawBox(const util::Rectangle &, char horizontal, char vertical, char cornor, int Color);
-    terminal::Canvas &DrawBox(const util::Rectangle &, char horizontal, int hColor, char vertical, int vColor, char cornor, int cColor);
+    terminal::Canvas &DrawString(int x, int y, const std::string &);
+    terminal::Canvas &DrawString(int x, int y, const std::string &, terminal::OutputAttribute attributes);
 
-    terminal::Canvas &DrawBox(const util::Rectangle &, char c);
-    terminal::Canvas &DrawBox(const util::Rectangle &, char c, int Color);
-
-    terminal::Canvas &DrawString(const util::Point &, const std::string &);
-    terminal::Canvas &DrawString(const util::Point &, const std::string &, int Color);
-    terminal::Canvas &DrawString(const util::Point &, const std::string &, terminal::OutputAttribute attributes);
-    terminal::Canvas &DrawString(const util::Point &, const std::string &, int Color, terminal::OutputAttribute attributes);
-
-    terminal::Canvas &Fill(const util::Rectangle &, char c);
+    terminal::Canvas &Fill(int x, int y, int width, int height, char c);
     terminal::Canvas &Clear(char c);
     terminal::Canvas &Clear();
 
@@ -93,14 +84,13 @@ class Canvas
     const util::Point &GetOrigin() const;
     const util::Rectangle &GetClippedArea() const;
 
-    void SetOrigin(const util::Point &);
-    void ClipArea(const util::Dimension &);
-    void ClipArea(const util::Rectangle &);
-    void DisableClip();
-    void EnableAttribute(terminal::OutputAttribute);
-    void DisableAttribute(terminal::OutputAttribute);
-    void SetBackgroundColorPair(colorPairId_t);
-    void SetActiveColorPair(colorPairId_t);
+    terminal::Canvas &SetOrigin(int x, int y);
+    terminal::Canvas &ClipArea(int x, int y, int width, int height);
+    terminal::Canvas &DisableClip();
+    terminal::Canvas &EnableAttribute(terminal::OutputAttribute);
+    terminal::Canvas &DisableAttribute(terminal::OutputAttribute);
+    terminal::Canvas &SetBackgroundColorPair(colorPairId_t);
+    terminal::Canvas &SetActiveColorPair(colorPairId_t);
 
     void Flush();
 

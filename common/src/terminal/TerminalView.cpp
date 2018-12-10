@@ -20,14 +20,14 @@ terminal::TerminalView::TerminalView(int width, int height) : width(width),
                                                               colors(COLORS),
                                                               colorPairs(COLOR_PAIRS)
 {
-    this->BufferColor(COLOR_BLACK, util::colors::BasicBlack);
-    this->BufferColor(COLOR_BLUE, util::colors::BasicBlue);
-    this->BufferColor(COLOR_CYAN, util::colors::BasicCyan);
-    this->BufferColor(COLOR_GREEN, util::colors::BasicGreen);
-    this->BufferColor(COLOR_MAGENTA, util::colors::BasicMagenta);
-    this->BufferColor(COLOR_RED, util::colors::BasicRed);
-    this->BufferColor(COLOR_WHITE, util::colors::BasicWhite);
-    this->BufferColor(COLOR_YELLOW, util::colors::BasicYellow);
+    // this->BufferColor(COLOR_BLACK, util::colors::BasicBlack);
+    // this->BufferColor(COLOR_BLUE, util::colors::BasicBlue);
+    // this->BufferColor(COLOR_CYAN, util::colors::BasicCyan);
+    // this->BufferColor(COLOR_GREEN, util::colors::BasicGreen);
+    // this->BufferColor(COLOR_MAGENTA, util::colors::BasicMagenta);
+    // this->BufferColor(COLOR_RED, util::colors::BasicRed);
+    // this->BufferColor(COLOR_WHITE, util::colors::BasicWhite);
+    // this->BufferColor(COLOR_YELLOW, util::colors::BasicYellow);
 
     this->BufferColorPair(0, COLOR_WHITE, COLOR_BLACK);
     this->SetActiveColorPair(0);
@@ -48,15 +48,25 @@ terminal::TerminalView::~TerminalView()
 terminal::TerminalView *terminal::TerminalView::GetInstance()
 {
     if (TerminalView::instance == nullptr)
+    {
+        initscr();
+        start_color();
+        mousemask(ALL_MOUSE_EVENTS, nullptr);
         TerminalView::instance = new TerminalView();
+    }
 
     return TerminalView::instance;
 }
 
 void terminal::TerminalView::DeleteInstance()
 {
-    delete TerminalView::instance;
-    TerminalView::instance = nullptr;
+    if (TerminalView::instance != nullptr)
+    {
+        delete TerminalView::instance;
+        TerminalView::instance = nullptr;
+
+        endwin();
+    }
 }
 
 void terminal::TerminalView::SetInputMode(terminal::InputMode mode)
@@ -233,9 +243,9 @@ bool terminal::TerminalView::BufferColor(colorId_t index, const util::Color &Col
     this->colors[index] = Color;
 
     return init_color(index,
-               static_cast<int>(Color.RedPercentage() * 1000),
-               static_cast<int>(Color.GreenPercentage() * 1000),
-               static_cast<int>(Color.BluePercentage() * 1000)) == OK;
+                      static_cast<int>(Color.RedPercentage() * 1000),
+                      static_cast<int>(Color.GreenPercentage() * 1000),
+                      static_cast<int>(Color.BluePercentage() * 1000)) == OK;
 }
 
 bool terminal::TerminalView::BufferColorPair(colorPairId_t index, colorId_t id1, colorId_t id2)
@@ -274,7 +284,7 @@ terminal::OutputAttribute terminal::TerminalView::GetActiveAttributes() const
 
 void terminal::TerminalView::SetActiveColorPair(colorPairId_t id)
 {
-    if (id < 1 || id > this->colorPairs.Length())
+    if (id < 0 || id >= this->colorPairs.Length())
         throw util::IndexOutOfRangeException(id, this->colorPairs.Length());
 
     this->activeColorPair = id;
@@ -283,7 +293,7 @@ void terminal::TerminalView::SetActiveColorPair(colorPairId_t id)
 
 void terminal::TerminalView::SetBackgroundColorPair(colorPairId_t id)
 {
-    if (id < 1 || id > this->colorPairs.Length())
+    if (id < 0 || id >= this->colorPairs.Length())
         throw util::IndexOutOfRangeException(id, this->colorPairs.Length());
 
     this->activeBackgroundColorPair = id;

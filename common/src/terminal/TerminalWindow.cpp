@@ -2,6 +2,9 @@
 
 #include "Terminal.hpp"
 
+using util::Point;
+using util::Rectangle;
+
 terminal::TerminalWindow::TerminalWindow() : controls(),
                                              focusedControlIndex(-1),
                                              loop(true),
@@ -89,7 +92,7 @@ void terminal::TerminalWindow::Start()
                     input.handled = false;
                     input.action = static_cast<MouseAction>(mouseEvent.bstate);
 
-                    auto location = util::Point(input.cx, input.cy);
+                    auto location = Point(input.cx, input.cy);
 
                     if (focusedControl->GetBounds().Contains(location))
                     {
@@ -133,7 +136,7 @@ void terminal::TerminalWindow::Quit()
 void terminal::TerminalWindow::Render()
 {
     auto view = TerminalView::GetInstance();
-    auto bounds = util::Rectangle(0, 0, view->GetSize());
+    auto bounds = Rectangle(0, 0, view->GetSize());
     auto canvas = terminal::Canvas(view);
 
     canvas.Clear();
