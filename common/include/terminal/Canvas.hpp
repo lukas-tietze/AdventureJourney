@@ -8,53 +8,6 @@
 
 namespace terminal
 {
-struct PatternItem final
-{
-    int length;
-    char symbol;
-    bool useCustomColor;
-    util::Color customColor;
-    bool useCustomAttributes;
-    terminal::OutputAttribute customAttributes;
-};
-
-class Pattern final
-{
-  private:
-    std::vector<PatternItem> items;
-    uint totalLength;
-
-  public:
-    Pattern();
-    Pattern(const Pattern &);
-
-    typedef std::vector<PatternItem>::iterator Iterator;
-    typedef std::vector<PatternItem>::const_iterator ConstIterator;
-
-    Pattern &Push(const PatternItem &);
-    Pattern &Push(char c);
-    Pattern &Push(char c, int count);
-    Pattern &Push(char c, terminal::OutputAttribute);
-    Pattern &Push(char c, int count, terminal::OutputAttribute);
-    Pattern &Push(char c, const util::Color &);
-    Pattern &Push(char c, int count, const util::Color &);
-    Pattern &Push(char c, const util::Color &, terminal::OutputAttribute);
-    Pattern &Push(char c, int count, const util::Color &, terminal::OutputAttribute);
-    Pattern &PushEc(char c, int Color);
-    Pattern &PushEc(char c, int count, int Color);
-    Pattern &PushEc(char c, int, terminal::OutputAttribute);
-    Pattern &PushEc(char c, int count, int Color, terminal::OutputAttribute);
-
-    void Pop();
-    uint GetTotalLength();
-    uint GetItemCount();
-
-    ConstIterator begin() const;
-    ConstIterator end() const;
-    Iterator begin();
-    Iterator end();
-};
-
 class Canvas
 {
   private:
@@ -68,15 +21,19 @@ class Canvas
     Canvas(const Canvas &);
 
     terminal::Canvas &DrawVerticalLine(int x, int y, int length, char c);
+    terminal::Canvas &DrawVerticalLine(const util::Point &, int length, char c);
     terminal::Canvas &DrawHorizontalLine(int x, int y, int length, char c);
+    terminal::Canvas &DrawHorizontalLine(const util::Point &, int length, char c);
     terminal::Canvas &DrawBox(int x, int y, int width, int height, char horizontal, char vertical, char cornor);
-
+    terminal::Canvas &DrawBox(const util::Rectangle &, char horizontal, char vertical, char cornor);
     terminal::Canvas &DrawBox(int x, int y, int width, int height, char c);
-
+    terminal::Canvas &DrawBox(const util::Rectangle &, char c);
     terminal::Canvas &DrawString(int x, int y, const std::string &);
+    terminal::Canvas &DrawString(const util::Point &, const std::string &);
     terminal::Canvas &DrawString(int x, int y, const std::string &, terminal::OutputAttribute attributes);
-
+    terminal::Canvas &DrawString(const util::Point &, const std::string &, terminal::OutputAttribute attributes);
     terminal::Canvas &Fill(int x, int y, int width, int height, char c);
+    terminal::Canvas &Fill(const util::Rectangle &, char c);
     terminal::Canvas &Clear(char c);
     terminal::Canvas &Clear();
 
@@ -85,7 +42,9 @@ class Canvas
     const util::Rectangle &GetClippedArea() const;
 
     terminal::Canvas &SetOrigin(int x, int y);
+    terminal::Canvas &SetOrigin(const util::Point &);
     terminal::Canvas &ClipArea(int x, int y, int width, int height);
+    terminal::Canvas &ClipArea(const util::Rectangle &);
     terminal::Canvas &DisableClip();
     terminal::Canvas &EnableAttribute(terminal::OutputAttribute);
     terminal::Canvas &DisableAttribute(terminal::OutputAttribute);

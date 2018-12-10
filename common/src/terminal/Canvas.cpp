@@ -1,6 +1,9 @@
 #include "terminal/Canvas.hpp"
 #include "data/Helper.hpp"
 
+using util::Point;
+using util::Rectangle;
+
 terminal::Canvas::Canvas(TerminalView *view) : view(view),
                                                size(view->GetSize()),
                                                clippedArea(0, 0, this->size),
@@ -14,6 +17,11 @@ terminal::Canvas::Canvas(const Canvas &copy) : view(copy.view),
                                                clippedArea(copy.clippedArea),
                                                origin(copy.origin)
 {
+}
+
+terminal::Canvas &terminal::Canvas::DrawVerticalLine(const Point &p, int length, char c)
+{
+    return this->DrawVerticalLine(p.GetX(), p.GetY(), length, c);
 }
 
 terminal::Canvas &terminal::Canvas::DrawVerticalLine(int x, int y, int length, char c)
@@ -30,6 +38,11 @@ terminal::Canvas &terminal::Canvas::DrawVerticalLine(int x, int y, int length, c
     return *this;
 }
 
+terminal::Canvas &terminal::Canvas::DrawHorizontalLine(const Point &p, int length, char c)
+{
+    return this->DrawHorizontalLine(p.GetX(), p.GetY(), length, c);
+}
+
 terminal::Canvas &terminal::Canvas::DrawHorizontalLine(int x, int y, int length, char c)
 {
     auto p = util::Point(x, y);
@@ -42,6 +55,11 @@ terminal::Canvas &terminal::Canvas::DrawHorizontalLine(int x, int y, int length,
     }
 
     return *this;
+}
+
+terminal::Canvas &terminal::Canvas::DrawBox(const Rectangle &r, char horizontal, char vertical, char cornor)
+{
+    return this->DrawBox(r.GetX(), r.GetY(), r.GetWidth(), r.GetHeight(), horizontal, vertical, cornor);
 }
 
 terminal::Canvas &terminal::Canvas::DrawBox(int x, int y, int width, int height, char horizontal, char vertical, char cornor)
@@ -69,9 +87,19 @@ terminal::Canvas &terminal::Canvas::DrawBox(int x, int y, int width, int height,
     return *this;
 }
 
+terminal::Canvas &terminal::Canvas::DrawBox(const Rectangle &r, char c)
+{
+    return this->DrawBox(r.GetX(), r.GetY(), r.GetWidth(), r.GetHeight(), c);
+}
+
 terminal::Canvas &terminal::Canvas::DrawBox(int x, int y, int width, int height, char c)
 {
     return this->DrawBox(x, y, width, height, c, c, c);
+}
+
+terminal::Canvas &terminal::Canvas::Fill(const Rectangle &r, char c)
+{
+    return this->Fill(r.GetX(), r.GetY(), r.GetWidth(), r.GetHeight(), c);
 }
 
 terminal::Canvas &terminal::Canvas::Fill(int x, int y, int width, int height, char c)
@@ -97,11 +125,21 @@ terminal::Canvas &terminal::Canvas::Clear()
     return this->Clear(' ');
 }
 
+terminal::Canvas &terminal::Canvas::DrawString(const Point &p, const std::string &s)
+{
+    return this->DrawString(p.GetX(), p.GetY(), s);
+}
+
 terminal::Canvas &terminal::Canvas::DrawString(int x, int y, const std::string &s)
 {
     this->view->Print(s, x, y);
 
     return *this;
+}
+
+terminal::Canvas &terminal::Canvas::DrawString(const Point &p, const std::string &s, terminal::OutputAttribute attributes)
+{
+    return this->DrawString(p.GetX(), p.GetY(), s, attributes);
 }
 
 terminal::Canvas &terminal::Canvas::DrawString(int x, int y, const std::string &s, terminal::OutputAttribute attributes)
@@ -127,9 +165,23 @@ const util::Rectangle &terminal::Canvas::GetClippedArea() const
     return this->clippedArea;
 }
 
+terminal::Canvas &terminal::Canvas::SetOrigin(const Point &p)
+{
+    this->origin = p;
+
+    return *this;
+}
+
 terminal::Canvas &terminal::Canvas::SetOrigin(int x, int y)
 {
     this->origin = util::Point(x, y);
+
+    return *this;
+}
+
+terminal::Canvas &terminal::Canvas::ClipArea(const Rectangle &r)
+{
+    this->clippedArea = r;
 
     return *this;
 }
