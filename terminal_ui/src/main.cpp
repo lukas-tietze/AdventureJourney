@@ -76,18 +76,11 @@ void RunComponentTest()
     auto bt = new terminal::Button("Press Me!");
     bt->SetBounds(5, 10, 20, 3);
 
-    auto tv = new terminal::TextView(
-        "01 2\n"
-        "3 45\n"
-        "678 90");
-    tv->SetBounds(5, 5, 40, 40);
+    auto tv = new terminal::TextView("0123456789101112");
+    tv->SetBounds(0, 0, 6, 6);
 
-    auto tb = new terminal::Textbox("Enter text here!");
-    tb->SetBounds(5, 15, 20, 3);
-
-    // w.AddControl(cb);
-    // w.AddControl(bt);
-    // w.AddControl(tb);
+    w.AddControl(cb);
+    w.AddControl(bt);
     w.AddControl(tv);
 
     w.Start('q');

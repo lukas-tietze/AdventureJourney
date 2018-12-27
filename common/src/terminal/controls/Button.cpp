@@ -15,6 +15,7 @@ terminal::Button::~Button()
 
 void terminal::Button::HandleMouse(terminal::MouseInput &action)
 {
+    this->SetText("Yo pressed me!");
 }
 
 void terminal::Button::HandleKey(terminal::KeyInput &action)

@@ -9,11 +9,11 @@ template <class T>
 class IdGeneratorBase : public HasIdBase
 {
   private:
-    static id_t next_id;
-    static constexpr id_t INVALID_ID = (id_t)-1;
+    static id_t nextId;
+    static constexpr id_t InvalidId = (id_t)-1;
 
   protected:
-    IdGeneratorBase() : HasIdBase(next_id++)
+    IdGeneratorBase() : HasIdBase(nextId++)
     {
     }
 
@@ -23,7 +23,7 @@ class IdGeneratorBase : public HasIdBase
 
     IdGeneratorBase(IdGeneratorBase &&initializer) : HasIdBase(initializer.id)
     {
-        initializer.SetId(INVALID_ID);
+        initializer.SetId(InvalidId);
     }
 };
 } // namespace logic

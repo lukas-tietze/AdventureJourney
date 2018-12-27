@@ -168,7 +168,7 @@ class CollectRope
         return Iterator(nullptr);
     }
 
-    void PushBack(const T &item)
+    void Push(const T &item)
     {
         this->totalCount++;
 

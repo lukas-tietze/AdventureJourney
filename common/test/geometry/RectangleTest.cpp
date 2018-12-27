@@ -16,7 +16,7 @@ int test::geometryTest::TestRectangle()
     assert::AreEqual(5, r.GetHeight());
     assert::AreEqual(util::Point(1, 2), r.GetLocation());
     assert::AreEqual(util::Dimension(4, 5), r.GetSize());
-    assert::AreEqual(4 * 5, r.get_area());
+    assert::AreEqual(4 * 5, r.GetArea());
 
     r = util::Rectangle(0, 0, 10, 10);
 

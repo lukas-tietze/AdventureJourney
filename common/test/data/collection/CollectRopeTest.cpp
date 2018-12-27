@@ -8,7 +8,7 @@ int test::dataTest::collectionTest::TestCollectRope()
 
     for (int i = 0; i < 1000; i++)
     {
-        rope->PushBack(i);
+        rope->Push(i);
     }
 
     assert::AreEqual((size_t)1000, rope->Size());

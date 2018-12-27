@@ -21,8 +21,8 @@ class TextView : public ControlBase
 
     virtual void HandleKey(KeyInput &);
     virtual void HandleMouse(MouseInput &);
-    virtual void HandleBoundsChanged(const util::Rectangle &);
-    virtual void HandleTextChanged(const std::string &);
+    virtual void HandleBoundsChanged();
+    virtual void HandleTextChanged();
 
     virtual void Render(Canvas &);
 };

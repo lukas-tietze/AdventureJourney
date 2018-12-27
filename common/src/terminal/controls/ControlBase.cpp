@@ -44,29 +44,34 @@ const util::Rectangle &terminal::ControlBase::GetBounds() const
     return this->bounds;
 }
 
+void terminal::ControlBase::SetBounds(int x, int y, int w, int h)
+{
+    this->SetBounds(util::Rectangle(x, y, w, h));
+}
+
 void terminal::ControlBase::SetBounds(const util::Rectangle &bounds)
 {
     if (this->bounds != bounds)
     {
-        this->HandleBoundsChanged();
         this->SetBoundsCore(bounds);
+        this->HandleBoundsChanged();
     }
 }
 
 void terminal::ControlBase::SetBoundsCore(const util::Rectangle &bounds)
 {
-    this->ValidateBounds(this->bounds);
+    if (this->ValidateBounds(this->bounds))
+        this->bounds = bounds;
+    else
+        this->bounds = util::Rectangle(bounds.GetLocation(), bounds.GetSize().Crop(this->minimumSize, this->maximumSize));
 }
 
 bool terminal::ControlBase::ValidateBounds(util::Rectangle &alternative)
 {
-    if (bounds.GetSize().GetWidth() < this->minimumSize.GetWidth() ||
-        bounds.GetSize().GetHeight() < this->minimumSize.GetHeight() ||
-        bounds.GetSize().GetWidth() > this->maximumSize.GetWidth() ||
-        bounds.GetSize().GetHeight() > this->maximumSize.GetHeight())
-    {
-        alternative = util::Rectangle(util::Rectangle(bounds.GetLocation(), bounds.GetSize().Crop(this->minimumSize, this->maximumSize)));
-    }
+    return (bounds.GetSize().GetWidth() < this->minimumSize.GetWidth() ||
+            bounds.GetSize().GetHeight() < this->minimumSize.GetHeight() ||
+            bounds.GetSize().GetWidth() > this->maximumSize.GetWidth() ||
+            bounds.GetSize().GetHeight() > this->maximumSize.GetHeight());
 }
 
 void terminal::ControlBase::SetZIndex(int zIndex)
@@ -142,6 +147,11 @@ const util::Dimension &terminal::ControlBase::GetMaxSize() const
     return this->maximumSize;
 }
 
+void terminal::ControlBase::SetMinSize(int w, int h)
+{
+    this->SetMinSize(util::Dimension(w, h));
+}
+
 void terminal::ControlBase::SetMinSize(const util::Dimension &size)
 {
     this->minimumSize = size;
@@ -153,6 +163,11 @@ void terminal::ControlBase::SetMinSize(const util::Dimension &size)
             this->bounds.GetLocation(),
             this->bounds.GetSize().Crop(this->minimumSize, this->maximumSize)));
     }
+}
+
+void terminal::ControlBase::SetMaxSize(int w, int h)
+{
+    this->SetMaxSize(util::Dimension(w, h));
 }
 
 void terminal::ControlBase::SetMaxSize(const util::Dimension &size)

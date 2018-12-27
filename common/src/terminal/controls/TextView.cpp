@@ -22,21 +22,15 @@ void terminal::TextView::HandleKey(terminal::KeyInput &action)
 {
 }
 
-void terminal::TextView::HandleBoundsChanged(const util::Rectangle &oldBounds)
+void terminal::TextView::HandleBoundsChanged()
 {
-    if (oldBounds.GetSize() != this->GetBounds().GetSize())
-    {
-        this->PrepareLines();
-    }
+    this->PrepareLines();
 }
 
-void terminal::TextView::HandleTextChanged(const std::string &oldText)
+void terminal::TextView::HandleTextChanged()
 {
-    if (this->GetText() != oldText)
-    {
-        this->PrepareText();
-        this->PrepareLines();
-    }
+    this->PrepareText();
+    this->PrepareLines();
 }
 
 void terminal::TextView::PrepareText()
@@ -70,33 +64,56 @@ void terminal::TextView::PrepareLines()
     this->lines.clear();
 
     const auto &text = this->GetText();
-
-    size_t last = 0;
+    const size_t maxLineLength = this->GetBounds().GetWidth() - 2;
     size_t pos = 0;
-    size_t next = 0;
-    size_t maxLineLength = this->GetBounds().GetWidth() - 2;
 
     while (pos < text.length())
     {
-        next = text.length();
+        size_t next = 0;
+        bool lineBreakFound = false;
 
-        for (size_t i = pos; i < text.length(); i++)
+        for (auto i = pos; i < text.length() && i < pos + maxLineLength; i++)
         {
-            if (std::isspace(text[i]) ||
-                pos + i > maxLineLength)
+            if (text[i] == '\n')
             {
-                next = i;
+                this->lines.push_back(text.substr(pos, i - pos));
+                pos = i + 1;
+                lineBreakFound = true;
                 break;
             }
         }
 
-        if (next - last > maxLineLength || text[next] == '\n')
-        {
-            this->lines.push_back(util::Strip(text.substr(last, pos - last)));
-            last = pos;
-        }
+        if (lineBreakFound)
+            break;
 
-        pos = next + 1;
+        if (pos + maxLineLength >= text.length())
+        {
+            this->lines.push_back(text.substr(pos));
+
+            break;
+        }
+        else
+        {
+            auto next = pos + maxLineLength;
+
+            // Zum Ende des letzten Wortes gehen
+            while (next > pos && !std::isspace(text[next]))
+            {
+                next--;
+            }
+
+            if (next > pos)
+            {
+                this->lines.push_back(text.substr(pos, next - pos));
+
+                pos = next + 1;
+            }
+            else
+            {
+                this->lines.push_back(text.substr(pos, maxLineLength));
+                pos += maxLineLength;
+            }
+        }
     }
 }
 
@@ -107,10 +124,12 @@ void terminal::TextView::Render(terminal::Canvas &c)
     if (this->GetBounds().GetHeight() > 2 && !this->lines.empty())
     {
         int visibleLines = std::min(this->lines.size(), (size_t)(this->GetBounds().GetHeight() - 2));
+        int x = this->GetBounds().GetMinX() + 1;
+        int y = this->GetBounds().GetMinY() + 1;
 
         for (size_t i = 0; i < visibleLines; i++)
         {
-            c.DrawString(this->GetBounds().GetLocation() + util::Point(1, i + 1), this->lines[i]);
+            c.DrawString(x, y + i, this->lines[i]);
         }
     }
 }

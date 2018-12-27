@@ -76,7 +76,7 @@ enum class planetaryBodyType
 class PlanetaryBody : public HasNameBase, public IdGeneratorBase<PlanetaryBody>
 {
   private:
-    DevelopmentRate DevelopmentRate;
+    DevelopmentRate developmentRate;
     Development totalDevelopment;
     planetaryBodyType type;
 

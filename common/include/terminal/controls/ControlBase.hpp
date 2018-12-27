@@ -65,6 +65,7 @@ class ControlBase
     bool HasParent() const;
     const util::Rectangle &GetBounds() const;
     void SetBounds(const util::Rectangle &);
+    void SetBounds(int x, int y, int w, int h);
     void SetZIndex(int);
     int GetZIndex() const;
     const std::string &GetText() const;
@@ -77,6 +78,8 @@ class ControlBase
     const util::Dimension &GetMaxSize() const;
     void SetMinSize(const util::Dimension &);
     void SetMaxSize(const util::Dimension &);
+    void SetMinSize(int w, int h);
+    void SetMaxSize(int w, int h);
 
     virtual void HandleZIndexChanged();
     virtual void HandleTabIndexChanged();

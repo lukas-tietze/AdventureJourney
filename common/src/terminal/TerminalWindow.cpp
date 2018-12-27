@@ -42,9 +42,17 @@ terminal::ControlBase *terminal::TerminalWindow::AddControl(terminal::ControlBas
 
 void terminal::TerminalWindow::SwitchFocus(int next)
 {
-    this->controls[this->focusedControlIndex]->HandleFocusLost();
+    if (this->focusedControlIndex > 0)
+    {
+        this->controls[this->focusedControlIndex]->HandleFocusLost();
+    }
+
     this->focusedControlIndex = next;
-    this->controls[this->focusedControlIndex]->HandleFocusAquired();
+
+    if (this->focusedControlIndex > 0)
+    {
+        this->controls[this->focusedControlIndex]->HandleFocusAquired();
+    }
 }
 
 void terminal::TerminalWindow::Start(int escapeKey)
@@ -57,7 +65,6 @@ void terminal::TerminalWindow::Start(int escapeKey)
 
 void terminal::TerminalWindow::Start()
 {
-
     auto view = TerminalView::GetInstance();
 
     this->Render();
@@ -92,6 +99,8 @@ void terminal::TerminalWindow::Start()
                     input.handled = false;
                     input.action = static_cast<MouseAction>(mouseEvent.bstate);
 
+                    std::fprintf(stderr, "Clicked at %i/%i\n", input.cx, input.cy);
+
                     auto location = Point(input.cx, input.cy);
 
                     if (focusedControl->GetBounds().Contains(location))
@@ -100,6 +109,8 @@ void terminal::TerminalWindow::Start()
                     }
                     else
                     {
+                        bool controlHit = false;
+
                         for (size_t i = 0; i < this->controls.size(); i++)
                         {
                             auto control = this->controls[i];
@@ -108,8 +119,14 @@ void terminal::TerminalWindow::Start()
                             {
                                 this->SwitchFocus(i);
                                 control->HandleMouse(input);
+                                controlHit = true;
                                 break;
                             }
+                        }
+
+                        if (!controlHit)
+                        {
+                            this->SwitchFocus(-1);
                         }
                     }
                 }

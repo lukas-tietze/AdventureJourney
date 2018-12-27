@@ -3,6 +3,8 @@
 #include <vector>
 
 #include "entities/Planet.hpp"
+#include "entities/Resources.hpp"
+#include "entities/Planet.hpp"
 #include "entities/Army.hpp"
 
 namespace logic

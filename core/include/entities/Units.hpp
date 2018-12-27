@@ -1,12 +1,13 @@
 #pragma once
 
-#include "data/json.hpp"
-#include "resources.hpp"
-#include "util/id_generator_base.hpp"
+#include "data/Json.hpp"
+#include "Resources.hpp"
+#include "util/IdGeneratorBase.hpp"
+#include "util/HasNameBase.hpp"
 
 namespace logic
 {
-enum class unit_type
+enum class UnitType
 {
     Infantry,
     Armour,
@@ -14,15 +15,14 @@ enum class unit_type
     Ship,
 };
 
-class unit
-{
-  private:
-    unit_class *type;
+class Unit
+{  private:
+    UnitTemplate *type;
 
     long remaining_hit_points;
 };
 
-class space_ship : public unit, public has_name_base
+class SpaceShip : public Unit, public HasNameBase
 {
   private:
     uint crew;
@@ -32,28 +32,28 @@ class space_ship : public unit, public has_name_base
     uint staff;
 };
 
-class attachement_type
+class AttachementType
 {
 
 };
 
-class attachement
+class Attachement
 {
 
 };
 
-class unit_class : public has_name_base, public id_generator_base<unit>, public json::i_json_serializable
+class UnitTemplate : public HasNameBase, public IdGeneratorBase<Unit>, public json::IJsonSerializable
 {
   private:
-    long hit_points;
-    long energy_defense;
-    long energy_penetration;
-    long energy_damage;
-    long physical_defense;
-    long physical_penetration;
-    long physical_damage;
+    long hitPoints;
+    long energyDefense;
+    long energyPenetration;
+    long energyDamage;
+    long physicalDefense;
+    long physicalPenetration;
+    long physicalDamage;
     long movement;
 
-    logic::resource_set upkeep;
+    logic::ResourceSet upkeep;
 };
 } // namespace logic

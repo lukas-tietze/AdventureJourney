@@ -2,40 +2,39 @@
 
 #include <string>
 
-#include "data/collection/array.hpp"
-#include "util/id_generator_base.hpp"
+#include "data/collection/Array.hpp"
+#include "util/IdGeneratorBase.hpp"
 
 namespace logic
 {
-class resource : public has_name_base, public id_generator_base<resource>
+class Resource : public HasNameBase, public IdGeneratorBase<Resource>
 {
   private:
 };
 
-class resource_set
+class ResourceSet
 {
   private:
-    util::array<long> items;
+    util::Array<long> items;
 
   public:
-    long get_amount_of(id_t) const;
-    long get_amount_of(const resource &) const;
+    long GetAmountOf(id_t) const;
+    long GetAmountOf(const Resource &) const;
 
-    void set_amount_of(id_t, long);
-    void set_amount_of(const resource &, long);
+    void SetAmountOf(id_t, long);
+    void SetAmountOf(const Resource &, long);
 
-    bool can_satisfy_requirements(const resource_set &);
+    bool CanSatisfyRequirements(const ResourceSet &);
+    bool CanSatisfyRequirement(id_t, long);
+    bool CanSatisfyRequirement(const Resource &, long);
 
-    bool can_satisfy_requirement(id_t, long);
-    bool can_satisfy_requirement(const resource &, long);
-
-    resource_set operator+(const resource_set &other) const;
-    resource_set operator-(const resource_set &other) const;
-    resource_set operator/(const resource_set &other) const;
-    resource_set operator*(const resource_set &other) const;
-    resource_set &operator+=(const resource_set &other);
-    resource_set &operator-=(const resource_set &other);
-    resource_set &operator*=(const resource_set &other);
-    resource_set &operator/=(const resource_set &other);
+    ResourceSet operator+(const ResourceSet &other) const;
+    ResourceSet operator-(const ResourceSet &other) const;
+    ResourceSet operator/(const ResourceSet &other) const;
+    ResourceSet operator*(const ResourceSet &other) const;
+    ResourceSet &operator+=(const ResourceSet &other);
+    ResourceSet &operator-=(const ResourceSet &other);
+    ResourceSet &operator*=(const ResourceSet &other);
+    ResourceSet &operator/=(const ResourceSet &other);
 };
 } // namespace logic
