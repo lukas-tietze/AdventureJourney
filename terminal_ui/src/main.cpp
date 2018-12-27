@@ -7,6 +7,7 @@
 #include "data/Random.hpp"
 #include "Event.hpp"
 #include "data/String.hpp"
+#include "data/Io.hpp"
 
 using util::Format;
 using util::ToString;
