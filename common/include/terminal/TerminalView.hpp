@@ -69,6 +69,14 @@ class TerminalView
 
     int CreateStyle(terminal::OutputAttribute attributes, int colorPair);
 
+    util::Point GetCursorPosition() const;
+    void SetCursorPosition(const util::Point &point);
+    terminal::CursorMode GetCursorMode() const;
+    void SetCursorMode(terminal::CursorMode);
+
+    bool CursorVisibilitySupported() const;
+    bool ColorsSupported() const;
+
   protected:
     void OnTerminalPropertyChanged();
 
@@ -86,6 +94,9 @@ class TerminalView
     InputMode inputMode;
     bool echoOn;
     bool liveMode;
+    bool colorsSupported;
+    bool cursorModeSupported;
+    CursorMode cursorMode;
 
     util::Array<util::Color> colors;
     util::Array<ColorPair> colorPairs;

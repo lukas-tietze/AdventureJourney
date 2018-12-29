@@ -80,9 +80,13 @@ void RunComponentTest()
     auto tv = new terminal::TextView("0123456789101112");
     tv->SetBounds(0, 0, 6, 6);
 
+    auto tb = new terminal::Textbox();
+    tb->SetBounds(10, 0, 10, 3);
+
     w.AddControl(cb);
     w.AddControl(bt);
     w.AddControl(tv);
+    w.AddControl(tb);
 
     w.Start('q');
 }

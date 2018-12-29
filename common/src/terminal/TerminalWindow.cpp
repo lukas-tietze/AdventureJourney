@@ -53,6 +53,8 @@ void terminal::TerminalWindow::SwitchFocus(int next)
     {
         this->controls[this->focusedControlIndex]->HandleFocusAquired();
     }
+
+    TerminalView::GetInstance()->SetCursorMode(terminal::CursorMode::Invisible);
 }
 
 void terminal::TerminalWindow::Start(int escapeKey)
@@ -113,7 +115,7 @@ void terminal::TerminalWindow::Start()
 
                         for (size_t i = 0; i < this->controls.size(); i++)
                         {
-                            auto control = this->controls[i];
+                            const auto &control = this->controls[i];
 
                             if (control->GetBounds().Contains(location))
                             {

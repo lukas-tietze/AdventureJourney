@@ -116,7 +116,7 @@ class BasicRectangle
         return this->GetMinX() <= p.GetX() &&
                this->GetMaxX() >= p.GetX() &&
                this->GetMinY() <= p.GetY() &&
-               this->GetMaxX() >= p.GetY();
+               this->GetMaxY() >= p.GetY();
     }
 
     BasicPoint<T> Fit(const util::BasicPoint<T> &p) const

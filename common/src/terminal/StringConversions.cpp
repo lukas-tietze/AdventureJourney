@@ -133,3 +133,337 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::DefaultColor
 
     return s;
 }
+
+std::ostream &terminal::operator<<(std::ostream &s, const terminal::CursorMode &value)
+{
+    switch (value)
+    {
+
+    case CursorMode::Invisible:
+        s << "Invisible";
+        break;
+    case CursorMode::Default:
+        s << "Default";
+        break;
+    case CursorMode::Highlighted:
+        s << "Highlighted";
+        break;
+    default:
+        throw util::InvalidCaseException();
+    }
+}
+
+std::ostream &terminal::operator<<(std::ostream &s, const terminal::Key &value)
+{
+    switch (value)
+    {
+    case terminal::Key::Down:
+        s << "Down";
+        break;
+    case terminal::Key::Up:
+        s << "Up";
+        break;
+    case terminal::Key::Left:
+        s << "Left";
+        break;
+    case terminal::Key::Right:
+        s << "Right";
+        break;
+    case terminal::Key::Home:
+        s << "Home";
+        break;
+    case terminal::Key::Backspace:
+        s << "Backspace";
+        break;
+    case terminal::Key::F0:
+        s << "F0";
+        break;
+    case terminal::Key::F1:
+        s << "F1";
+        break;
+    case terminal::Key::F2:
+        s << "F2";
+        break;
+    case terminal::Key::F3:
+        s << "F3";
+        break;
+    case terminal::Key::F4:
+        s << "F4";
+        break;
+    case terminal::Key::F5:
+        s << "F5";
+        break;
+    case terminal::Key::F6:
+        s << "F6";
+        break;
+    case terminal::Key::F7:
+        s << "F7";
+        break;
+    case terminal::Key::F8:
+        s << "F8";
+        break;
+    case terminal::Key::F9:
+        s << "F9";
+        break;
+    case terminal::Key::F10:
+        s << "F10";
+        break;
+    case terminal::Key::F11:
+        s << "F11";
+        break;
+    case terminal::Key::F12:
+        s << "F12";
+        break;
+    case terminal::Key::DeleteLine:
+        s << "DeleteLine";
+        break;
+    case terminal::Key::InsertLine:
+        s << "InsertLine";
+        break;
+    case terminal::Key::DeleteChar:
+        s << "DeleteChar";
+        break;
+    case terminal::Key::InsertChar:
+        s << "InsertChar";
+        break;
+    case terminal::Key::Eic:
+        s << "Eic";
+        break;
+    case terminal::Key::Clear:
+        s << "Clear";
+        break;
+    case terminal::Key::ClearToEndOfScreen:
+        s << "ClearToEndOfScreen";
+        break;
+    case terminal::Key::ClearToEndOfLine:
+        s << "ClearToEndOfLine";
+        break;
+    case terminal::Key::ScrollForward:
+        s << "ScrollForward";
+        break;
+    case terminal::Key::ScrollBackward:
+        s << "ScrollBackward";
+        break;
+    case terminal::Key::NextPage:
+        s << "NextPage";
+        break;
+    case terminal::Key::PreviousPage:
+        s << "PreviousPage";
+        break;
+    case terminal::Key::Tab:
+        s << "Tab";
+        break;
+    case terminal::Key::ClearTab:
+        s << "ClearTab";
+        break;
+    case terminal::Key::ClearAllTabs:
+        s << "ClearAllTabs";
+        break;
+    case terminal::Key::Enter:
+        s << "Enter";
+        break;
+    case terminal::Key::Print:
+        s << "Print";
+        break;
+    case terminal::Key::LowerLeft:
+        s << "LowerLeft";
+        break;
+    case terminal::Key::KeypadA1:
+        s << "KeypadA1";
+        break;
+    case terminal::Key::KeypadA3:
+        s << "KeypadA3";
+        break;
+    case terminal::Key::KeypadB2:
+        s << "KeypadB2";
+        break;
+    case terminal::Key::KeypadC1:
+        s << "KeypadC1";
+        break;
+    case terminal::Key::KeypadC3:
+        s << "KeypadC3";
+        break;
+    case terminal::Key::BackTab:
+        s << "BackTab";
+        break;
+    case terminal::Key::Begin:
+        s << "Begin";
+        break;
+    case terminal::Key::Cancel:
+        s << "Cancel";
+        break;
+    case terminal::Key::Close:
+        s << "Close";
+        break;
+    case terminal::Key::Command:
+        s << "Command";
+        break;
+    case terminal::Key::Copy:
+        s << "Copy";
+        break;
+    case terminal::Key::Create:
+        s << "Create";
+        break;
+    case terminal::Key::End:
+        s << "End";
+        break;
+    case terminal::Key::Exit:
+        s << "Exit";
+        break;
+    case terminal::Key::Find:
+        s << "Find";
+        break;
+    case terminal::Key::Help:
+        s << "Help";
+        break;
+    case terminal::Key::Mark:
+        s << "Mark";
+        break;
+    case terminal::Key::Message:
+        s << "Message";
+        break;
+    case terminal::Key::Move:
+        s << "Move";
+        break;
+    case terminal::Key::Next:
+        s << "Next";
+        break;
+    case terminal::Key::Open:
+        s << "Open";
+        break;
+    case terminal::Key::Options:
+        s << "Options";
+        break;
+    case terminal::Key::Previous:
+        s << "Previous";
+        break;
+    case terminal::Key::Redo:
+        s << "Redo";
+        break;
+    case terminal::Key::Reference:
+        s << "Reference";
+        break;
+    case terminal::Key::Refresh:
+        s << "Refresh";
+        break;
+    case terminal::Key::Replace:
+        s << "Replace";
+        break;
+    case terminal::Key::Restart:
+        s << "Restart";
+        break;
+    case terminal::Key::Resume:
+        s << "Resume";
+        break;
+    case terminal::Key::Save:
+        s << "Save";
+        break;
+    case terminal::Key::Sbeg:
+        s << "Sbeg";
+        break;
+    case terminal::Key::ShiftCommand:
+        s << "ShiftCommand";
+        break;
+    case terminal::Key::ShiftCancel:
+        s << "ShiftCancel";
+        break;
+    case terminal::Key::ShiftCopy:
+        s << "ShiftCopy";
+        break;
+    case terminal::Key::ShiftCreate:
+        s << "ShiftCreate";
+        break;
+    case terminal::Key::ShiftDeleteChar:
+        s << "ShiftDeleteChar";
+        break;
+    case terminal::Key::ShiftDeleteLine:
+        s << "ShiftDeleteLine";
+        break;
+    case terminal::Key::Select:
+        s << "Select";
+        break;
+    case terminal::Key::ShiftEnd:
+        s << "ShiftEnd";
+        break;
+    case terminal::Key::ShiftClearToEndOfLine:
+        s << "ShiftClearToEndOfLine";
+        break;
+    case terminal::Key::ShiftExit:
+        s << "ShiftExit";
+        break;
+    case terminal::Key::ShiftFind:
+        s << "ShiftFind";
+        break;
+    case terminal::Key::ShiftHelp:
+        s << "ShiftHelp";
+        break;
+    case terminal::Key::ShiftHome:
+        s << "ShiftHome";
+        break;
+    case terminal::Key::ShiftInsertChar:
+        s << "ShiftInsertChar";
+        break;
+    case terminal::Key::ShiftLeft:
+        s << "ShiftLeft";
+        break;
+    case terminal::Key::ShiftMessage:
+        s << "ShiftMessage";
+        break;
+    case terminal::Key::ShiftMove:
+        s << "ShiftMove";
+        break;
+    case terminal::Key::ShiftNext:
+        s << "ShiftNext";
+        break;
+    case terminal::Key::ShiftOptions:
+        s << "ShiftOptions";
+        break;
+    case terminal::Key::ShiftPrevious:
+        s << "ShiftPrevious";
+        break;
+    case terminal::Key::ShiftPrint:
+        s << "ShiftPrint";
+        break;
+    case terminal::Key::ShiftRedo:
+        s << "ShiftRedo";
+        break;
+    case terminal::Key::ShiftReplace:
+        s << "ShiftReplace";
+        break;
+    case terminal::Key::ShiftRight:
+        s << "ShiftRight";
+        break;
+    case terminal::Key::ShiftResume:
+        s << "ShiftResume";
+        break;
+    case terminal::Key::ShiftSave:
+        s << "ShiftSave";
+        break;
+    case terminal::Key::ShiftSuspend:
+        s << "ShiftSuspend";
+        break;
+    case terminal::Key::ShiftUndo:
+        s << "ShiftUndo";
+        break;
+    case terminal::Key::Suspend:
+        s << "Suspend";
+        break;
+    case terminal::Key::Undo:
+        s << "Undo";
+        break;
+    case terminal::Key::Mouse:
+        s << "Mouse";
+        break;
+    case terminal::Key::Resize:
+        s << "Resize";
+        break;
+    case terminal::Key::Event:
+        s << "Event";
+        break;
+    default:
+        throw util::InvalidCaseException();
+        break;
+    }
+
+    return s;
+}

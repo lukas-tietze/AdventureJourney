@@ -35,6 +35,11 @@ terminal::TerminalView::TerminalView(int width, int height) : width(width),
 
     this->window = newwin(this->height, this->width, 0, 0);
     keypad(this->window, true);
+
+    this->colorsSupported = has_colors();
+    this->cursorModeSupported = curs_set(static_cast<int>(terminal::CursorMode::Default)) != ERR;
+    this->cursorMode = terminal::CursorMode::Default;
+
     this->Flush();
 }
 
@@ -318,4 +323,50 @@ const terminal::ColorPair &terminal::TerminalView::GetContent(colorPairId_t id) 
 int terminal::TerminalView::CreateStyle(terminal::OutputAttribute attribs, int ColorPair)
 {
     return static_cast<int>(attribs) | COLOR_PAIR(ColorPair);
+}
+
+util::Point terminal::TerminalView::GetCursorPosition() const
+{
+    int x, y;
+
+    getyx(this->window, y, x);
+
+    return util::Point(x, y);
+}
+
+void terminal::TerminalView::SetCursorPosition(const util::Point &point)
+{
+    wmove(this->window, point.GetY(), point.GetX());
+
+    if (this->liveMode)
+        this->Flush();
+}
+
+terminal::CursorMode terminal::TerminalView::GetCursorMode() const
+{
+    if (!this->cursorModeSupported)
+        return CursorMode::Default;
+
+    return this->cursorMode;
+}
+
+void terminal::TerminalView::SetCursorMode(terminal::CursorMode mode)
+{
+    if (this->cursorModeSupported && curs_set(static_cast<int>(mode)) != ERR)
+    {
+        this->cursorMode = mode;
+
+        if (this->liveMode)
+            this->Flush();
+    }
+}
+
+bool terminal::TerminalView::CursorVisibilitySupported() const
+{
+    return this->cursorModeSupported;
+}
+
+bool terminal::TerminalView::ColorsSupported() const
+{
+    return this->colorsSupported;
 }
