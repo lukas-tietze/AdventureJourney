@@ -31,6 +31,7 @@ int main(int argc, char **argv)
     tests.push_back(test::TestRun(new test::SimpleTest("member handler event test", &test::eventTest::MemberHandlerEvents)));
     tests.push_back(test::TestRun(new test::SimpleTest("rectangle test", &test::geometryTest::TestRectangle)));
     tests.push_back(test::TestRun(new test::SimpleTest("format", &test::stringTest::Format)));
+    tests.push_back(test::TestRun(new test::SimpleTest("format2", &test::stringTest::Format2)));
     tests.push_back(test::TestRun(new test::SimpleTest("to upper", &test::stringTest::ToUpper)));
     tests.push_back(test::TestRun(new test::SimpleTest("to lower", &test::stringTest::ToLower)));
     tests.push_back(test::TestRun(new test::SimpleTest("split with space", &test::stringTest::SplitSpace)));

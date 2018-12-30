@@ -68,4 +68,53 @@ bool ParseFloat(const std::string &text, NumT &target)
 
     return true;
 }
+
+namespace
+{
+void Format2Internal(const std::string &format, std::stringstream &buf, int pos)
+{
+    buf << format.c_str() + pos;
+}
+
+template <class TFirst, class... TArgs>
+void Format2Internal(const std::string &format, std::stringstream &buf, int pos, const TFirst &firstArg, const TArgs &... args)
+{
+    while (pos < format.length() - 1)
+    {
+        if (format[pos] == '%')
+        {
+            buf << firstArg;
+            Format2Internal(format, buf, pos + 1, args...);
+            return;
+        }
+        else if (format[pos] == '\\')
+        {
+            buf << format[pos + 1];
+            pos += 2;
+        }
+        else
+        {
+            buf << format[pos];
+            pos++;
+        }
+    }
+
+    if (format.back() == '%')
+    {
+        buf << firstArg;
+    }
+}
+} // namespace
+
+std::string Format2(const std::string &format);
+
+template <class TFirst, class... TArgs>
+std::string Format2(const std::string &format, const TFirst &firstArg, const TArgs &... args)
+{
+    std::stringstream buf;
+
+    Format2Internal(format, buf, 0, firstArg, args...);
+
+    return buf.str();
+}
 } // namespace util

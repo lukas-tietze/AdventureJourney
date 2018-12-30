@@ -39,6 +39,7 @@ int SplitFunction();
 int Strip();
 int StripFront();
 int StripBack();
+int Format2();
 } // namespace StringTest
 namespace mathTest
 {
