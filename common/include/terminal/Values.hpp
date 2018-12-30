@@ -97,6 +97,7 @@ enum class CursorMode
 std::ostream &operator<<(std::ostream &, const CursorMode &);
 
 bool IsSpecialKey(int key);
+bool IsAsciiKey(int key);
 
 enum class Key
 {

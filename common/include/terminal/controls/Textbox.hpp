@@ -3,14 +3,15 @@
 #include <string>
 
 #include "terminal/controls/ControlBase.hpp"
-#include "terminal/controls/TextView.hpp"
 
 namespace terminal
 {
-class Textbox : public terminal::TextView
+class Textbox : public terminal::ControlBase
 {
   private:
     int cursorIndex;
+
+    int GetTrueCursorIndex() const;
 
   public:
     Textbox();
@@ -20,7 +21,6 @@ class Textbox : public terminal::TextView
     virtual void HandleFocusAquired();
     virtual void HandleKey(KeyInput &);
     virtual void HandleMouse(MouseInput &);
-
-    // virtual void Render(Canvas &);
+    virtual void Render(Canvas &);
 };
 } // namespace terminal

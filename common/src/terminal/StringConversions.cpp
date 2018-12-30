@@ -169,8 +169,8 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::Key &value)
     case terminal::Key::Right:
         s << "Right";
         break;
-    case terminal::Key::Home:
-        s << "Home";
+    case terminal::Key::Pos1:
+        s << "Pos1";
         break;
     case terminal::Key::Backspace:
         s << "Backspace";
@@ -220,11 +220,11 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::Key &value)
     case terminal::Key::InsertLine:
         s << "InsertLine";
         break;
-    case terminal::Key::DeleteChar:
-        s << "DeleteChar";
+    case terminal::Key::Delete:
+        s << "Delete";
         break;
-    case terminal::Key::InsertChar:
-        s << "InsertChar";
+    case terminal::Key::Insert:
+        s << "Insert";
         break;
     case terminal::Key::Eic:
         s << "Eic";
@@ -244,11 +244,11 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::Key &value)
     case terminal::Key::ScrollBackward:
         s << "ScrollBackward";
         break;
-    case terminal::Key::NextPage:
-        s << "NextPage";
+    case terminal::Key::PageUp:
+        s << "PageUp";
         break;
-    case terminal::Key::PreviousPage:
-        s << "PreviousPage";
+    case terminal::Key::PageDown:
+        s << "PageDown";
         break;
     case terminal::Key::Tab:
         s << "Tab";
@@ -462,7 +462,6 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::Key &value)
         break;
     default:
         throw util::InvalidCaseException();
-        break;
     }
 
     return s;

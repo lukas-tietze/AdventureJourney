@@ -37,8 +37,10 @@ terminal::TerminalView::TerminalView(int width, int height) : width(width),
     keypad(this->window, true);
 
     this->colorsSupported = has_colors();
-    this->cursorModeSupported = curs_set(static_cast<int>(terminal::CursorMode::Default)) != ERR;
-    this->cursorMode = terminal::CursorMode::Default;
+    this->cursorModeSupported = curs_set(static_cast<int>(terminal::CursorMode::Invisible)) != ERR;
+    this->cursorMode = terminal::CursorMode::Invisible;
+
+    std::fprintf(stderr, "CursorMode Supported: %i", this->cursorMode);
 
     this->Flush();
 }
@@ -359,6 +361,8 @@ void terminal::TerminalView::SetCursorMode(terminal::CursorMode mode)
         if (this->liveMode)
             this->Flush();
     }
+
+    std::fprintf(stderr, "Changing CursorMode to %s, is now %s", util::ToString(mode).c_str(), util::ToString(this->cursorMode).c_str());
 }
 
 bool terminal::TerminalView::CursorVisibilitySupported() const

@@ -11,6 +11,7 @@ terminal::TerminalWindow::TerminalWindow() : controls(),
                                              escapeKey(0),
                                              hasEscapeKey(false)
 {
+    this->SwitchFocus(-1);
 }
 
 terminal::TerminalWindow::~TerminalWindow()
