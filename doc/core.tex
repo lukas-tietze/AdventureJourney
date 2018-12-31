@@ -1,6 +1,7 @@
 \documentclass[11pt, a4paper]{article}
 %
 \usepackage[utf8]{inputenc}
+\usepackage{tabularx}
 %
 \include{commands}
 %
@@ -74,12 +75,12 @@ Das Spiel ist rundenbasiert.
 \subsection{Planeten}
 Planeten verfügen über die folgenden Gesichtspunkte:
 \begin{itemize}
-	\item Entwicklung - ein Maß für den Ausbau des Planeten
-	\item Einrichtungen - spezielle Gebäude die den Planeten nachhaltig verändern
-	\item Bevölkerung - die menschlichen Ressourcen des Planeten
-	\item Rohstoffe - die natürlichen Ressourcen, die auf einem Planeten vorkommen
-	\item Produktion - die verschiedenen Ressourcen, die ein Planet erzeugt, exportiert oder importiert
-	\item Verkehr - die Anbindung an interstellare Schiffsrouten
+    \item Entwicklung - ein Maß für den Ausbau des Planeten
+    \item Einrichtungen - spezielle Gebäude die den Planeten nachhaltig verändern
+    \item Bevölkerung - die menschlichen Ressourcen des Planeten
+    \item Rohstoffe - die natürlichen Ressourcen, die auf einem Planeten vorkommen
+    \item Produktion - die verschiedenen Ressourcen, die ein Planet erzeugt, exportiert oder importiert
+    \item Verkehr - die Anbindung an interstellare Schiffsrouten
 \end{itemize}
 %
 \subsubsection{Entwicklung}
@@ -88,11 +89,11 @@ Fähigkeit zum weiteren Ausbau. In jeder Runde steht ein bestimmtes Maß an Entw
 Dies beschreibt die Fähigkeit den Planeten weiter auszubauen und in bestimmte Richtungen zu entwickeln.
 Entwicklung kann auf verschiedene Bereiche verteilt werden. Diese sind:
 \begin{itemize}
-	\item Wachstum
-	\item Wissenschaft
-	\item Industrie
-	\item Militär
-	\item Bauprojekte für Einrichtungen
+    \item Wachstum
+    \item Wissenschaft
+    \item Industrie
+    \item Militär
+    \item Bauprojekte für Einrichtungen
 \end{itemize}
 %
 Somit kann der Planet in beliebige Richtungen entwickelt werden.
@@ -129,13 +130,13 @@ Einrichtungen sind spezielle Gebäude, die einen Planten langfristig und schwerw
 Jeder Planet kann aufgrund ihrer Größe und Bedeutung nur eine einzige Einrichtung unterhalten.
 Es existieren die folgenden Einrichtungen:
 \begin{itemize}
-	\item Orbitaler Ring
-	\item Weltuntergangsgerät (Doomsday-Device)
-	\item Orbitale Handelsstation
-	\item Große Bibliothek
-	\item Hydroponische Gärten
-	\item Weltenfestung
-	\item Heimatwelt für legendäres Regiment
+    \item Orbitaler Ring
+    \item Weltuntergangsgerät (Doomsday-Device)
+    \item Orbitale Handelsstation
+    \item Große Bibliothek
+    \item Hydroponische Gärten
+    \item Weltenfestung
+    \item Heimatwelt für legendäres Regiment
 \end{itemize}
 %
 \paragraph{Orbitaler Ring}
@@ -183,8 +184,8 @@ Sternensysteme profitieren von allen Gebäuden und Ausbaustufen der Planeten, di
 Außerdem lassen sind in Sternensystemen einzigartige Verbesserungen errichten.
 Verbesserungen für Sternensysteme sind
 \begin{itemize}
-	\item Sternenschmiede
-	\item Weltenschiff
+    \item Sternenschmiede
+    \item Weltenschiff
 \end{itemize}
 %
 \paragraph{Sternenschmiede}
@@ -201,21 +202,21 @@ Für den Abbau seltener Rohstoffe sind zusätzlich noch bestimmte Technologien e
 \\
 Einfache Rohstoffe sind
 \begin{itemize}
-	\item Anbaufläche
-	\item einfache Metalle
-	\item einfaches Baumaterial
+    \item Anbaufläche
+    \item einfache Metalle
+    \item einfaches Baumaterial
 \end{itemize}
 %
 Fortgeschrittene Rohstoffe sind
 \begin{itemize}
-	\item fortgeschrittene Metalle
-	\item fortgeschrittene Baustoffe
+    \item fortgeschrittene Metalle
+    \item fortgeschrittene Baustoffe
 \end{itemize}
 %
 Seltene Rohstoffe sind
 \begin{itemize}
-	\item seltene Metalle
-	\item superschwere Isotope
+    \item seltene Metalle
+    \item superschwere Isotope
 \end{itemize}
 %
 \paragraph{Anbaufläche}
@@ -245,11 +246,12 @@ um friedlich beieinander zu leben. Manche Lebensformen sind durch andauernden Kr
 misstrauisch gegenüber Fremden geworden.\\
 Der Zustand der Bevölkerung wird durch die folgenden Aspekte ausgemacht:
 \begin{itemize}
-	\item Bevölkerungswachstum
-	\item Arbeit
-	\item Rekrutierung
-	\item Unruhe
-	\item Rebellion
+    \item Bevölkerungswachstum
+    \item Arbeit
+    \item Rekrutierung
+    \item Unruhe
+    \item Rebellion
+    \item Attribute
 \end{itemize}
 %
 \paragraph{Bevölkerungswachstum}
@@ -285,7 +287,34 @@ beginnt mit gewaltsamen Protesten und Aufständen. Wenn diese nicht schnell und 
 versinkt der Planet schnell im Bürgerkrieg. Je nachdem ob Rebellen oder Loyalisten (sofern noch loyale Kräfte
 vorhanden sind) diesen Krieg gewinnen, fällt der Planet wieder dem Imperium zu oder sagt sich von diesem los.\\
 Während einer aktiven Rebellion ist die Produktion eines Planeten stark reduziert. Während einer Rebellion kann
-der Planet nicht kontrolliert werden und die Infrastruktur des Planeten wird beschädigt.\\
+der Planet nicht kontrolliert werden und die Infrastruktur des Planeten wird beschädigt.
+%
+\paragraph{Attribute}
+Die Bevölkerung eines Planeten kann verschiedene Attribute besitzen. Diese Attribute werden durch den 
+entsprechenden Planeten verursacht oder durch Ereignisse.
+%
+\begin{center}
+    \begin{tabularx}{0.8\linewidth}{|l X|}
+        \hline
+        Attribute        & Beschreibung                                                                                                                    \\
+        \hline
+        % Negative
+        Seuche           & Die Population ist von einer Seuche betroffen.                                                                                  \\
+        Kriegsmüde       & Nachdem große Teile der Bevölkerung (zwangs-)rekrutiert wurden kann Kriegsmüdigkeit auftreten.                                  \\
+        
+        % Positive
+        Widerstandsfähig & Durch das Klima des Planeten oder einen konstanten Kriegszustand entwickelt sich eine widerstandsfähige und starke Bevölkerung. \\
+        
+        % Neutrale
+        Intelligent      &                                                                                                                                 \\                                                                                                                      \\
+        Industriell      &                                                                                                                                 \\                                                                                                                    \\
+        Kriegerisch      &                                                                                                                                 \\
+        Demokratisch     &                                                                                                                                 \\
+        Eigenwillig      &                                                                                                                                 \\
+        
+        \hline
+    \end{tabularx}
+\end{center}
 %
 \subsection{Militär}
 Ein weiterer Hauptaspekt des Spiels ist das Militär. Das Militär, das einem Spieler zur Verfügung steht
@@ -300,10 +329,10 @@ Panzerbatallione, bis hin zu mächtigen Raumschiffen benötigt jede militärisch
 Meist werden zusätzlich noch bestimmte Technologien benötigt um eine Einheiten auszubilden. Prizipiell können
 alle Truppentypen auf jedem Planeten ausgehoben werden. Dafür müssen folgende Vorraussetzungen erfüllt sein:
 \begin{itemize}
-	\item der Planet verfügt über alle erforderlichen Technologien
-	\item der Planet verfügt über ausreichend wissenschaftliche Entwicklung um die Technologie(n) anzuwenden
-	\item es stehen ausreichend Ressourcen zur Verfügung
-	\item die Bevölkerung ist ausreichend groß um Rekruten anzuwerben
+    \item der Planet verfügt über alle erforderlichen Technologien
+    \item der Planet verfügt über ausreichend wissenschaftliche Entwicklung um die Technologie(n) anzuwenden
+    \item es stehen ausreichend Ressourcen zur Verfügung
+    \item die Bevölkerung ist ausreichend groß um Rekruten anzuwerben
 \end{itemize}
 %
 Sowohl Qualität als auch Quantität der rekrutierten Einheiten hängen stark von der militärischen Entwicklung
@@ -362,19 +391,19 @@ Raumschiffe benötigen fortschrittliche Technologie und erheblichen Einsatz von 
 Doch die Kosten lassen sich rechtfertigen, da es keine andere Möglichkeit gibt fremde Planeten zu kolonisieren.
 Raumschiffe lassen sich in folgende Kategorien einteilen:
 \begin{itemize}
-	\item Frachter
-	\item Makrofrachter
-	\item Unterstützungsschiffe
-	\item Entdecker
-	\item Jäger
+    \item Frachter
+    \item Makrofrachter
+    \item Unterstützungsschiffe
+    \item Entdecker
+    \item Jäger
     \item Bomber
     \item Truppentransporter
-	\item Brander
-	\item Kreuzer
-	\item Fregatten
-	\item Zerstörer
-	\item Träger
-	\item Schlachtschiffe
+    \item Brander
+    \item Kreuzer
+    \item Fregatten
+    \item Zerstörer
+    \item Träger
+    \item Schlachtschiffe
 \end{itemize}
 %
 \paragraph{Frachter}
