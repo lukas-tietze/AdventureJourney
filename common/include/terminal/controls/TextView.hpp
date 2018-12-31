@@ -11,6 +11,8 @@ class TextView : public ControlBase
 {
   private:
     std::vector<std::string> lines;
+    size_t firstLine;
+
     void PrepareLines();
     void PrepareText();
 

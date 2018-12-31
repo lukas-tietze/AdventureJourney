@@ -20,6 +20,27 @@ void terminal::TextView::HandleMouse(terminal::MouseInput &action)
 
 void terminal::TextView::HandleKey(terminal::KeyInput &action)
 {
+    if (action.handled || !terminal::IsSpecialKey(action.key))
+        return;
+
+    auto key = static_cast<Key>(action.key);
+
+    if (key == Key::Up && this->firstLine > 0)
+    {
+        this->firstLine--;
+    }
+    else if (key == Key::Down && this->firstLine < this->lines.size())
+    {
+        this->firstLine++;
+    }
+    else if (key == Key::PageUp && this->firstLine > 0)
+    {
+        this->firstLine = std::max(static_cast<size_t>(0), this->firstLine - (this->GetBounds().GetHeight() - 2));
+    }
+    else if (key == Key::PageDown && this->firstLine < this->lines.size())
+    {
+        this->firstLine = std::min(this->lines.size() - 1, this->firstLine + (this->GetBounds().GetHeight() - 2));
+    }
 }
 
 void terminal::TextView::HandleBoundsChanged()
@@ -123,7 +144,7 @@ void terminal::TextView::Render(terminal::Canvas &c)
 
     if (this->GetBounds().GetHeight() > 2 && !this->lines.empty())
     {
-        int visibleLines = std::min(this->lines.size(), (size_t)(this->GetBounds().GetHeight() - 2));
+        int visibleLines = std::min(this->lines.size() - this->firstLine, (size_t)(this->GetBounds().GetHeight() - 2));
         int x = this->GetBounds().GetMinX() + 1;
         int y = this->GetBounds().GetMinY() + 1;
 

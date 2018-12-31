@@ -1,1 +1,3 @@
-CursorMode Supported: 0
+CursorMode Supported: 0Changing CursorMode to Invisible, is now InvisibleClicked at 14/1
+Changing CursorMode to Default, is now DefaultChanging CursorMode to Invisible, is now InvisibleChanging CursorMode to Invisible, is now InvisibleClicked at 16/1
+Changing CursorMode to Default, is now DefaultChanging CursorMode to Invisible, is now InvisibleClicked at 16/1
