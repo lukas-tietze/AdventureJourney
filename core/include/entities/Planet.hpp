@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Defs.hpp"
 #include "util/IdGeneratorBase.hpp"
 #include "util/HasNameBase.hpp"
 
@@ -60,7 +61,7 @@ class Development
     Development &operator-=(const DevelopmentRate &);
 };
 
-enum class planetaryBodyType
+enum class PlanetaryBodyType
 {
     AsteroidBelt,
     Planet,
@@ -73,19 +74,46 @@ enum class planetaryBodyType
     WellTempered,
 };
 
+enum class PopulationEffect
+{
+    Plague,
+    Tough,
+    Intelligent,
+    Sad,
+    Happy,
+};
+
+class PopulationState
+{
+  private:
+    ulong total;
+    ulong recruitable;
+    double growthRate;
+
+  public:
+    PopulationState();
+
+    ulong GetTotalCount() const;
+    ulong GetWorkerCount() const;
+    ulong GetRecruitableCount() const;
+    ulong GetPredictedGrowth() const;
+};
+
 class PlanetaryBody : public HasNameBase, public IdGeneratorBase<PlanetaryBody>
 {
   private:
     DevelopmentRate developmentRate;
     Development totalDevelopment;
-    planetaryBodyType type;
+    PopulationState population;
+    PlanetaryBodyType type;
 
   public:
     PlanetaryBody();
 
     const DevelopmentRate &GetDevelopmentRate() const;
     const Development &GetTotalDevelopment() const;
-    planetaryBodyType GetType() const;
+    const PopulationState& GetPopulationState() const;
+    PlanetaryBodyType GetType() const;
 };
 
 class PlanetarySystem : public HasNameBase, public IdGeneratorBase<PlanetarySystem>
@@ -93,7 +121,7 @@ class PlanetarySystem : public HasNameBase, public IdGeneratorBase<PlanetarySyst
   private:
     std::vector<PlanetaryBody *> planets;
 
-    public:
+  public:
     PlanetarySystem();
 };
 } // namespace logic
