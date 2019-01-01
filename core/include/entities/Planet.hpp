@@ -3,10 +3,12 @@
 #include "Defs.hpp"
 #include "util/IdGeneratorBase.hpp"
 #include "util/HasNameBase.hpp"
+#include "util/HasEngineBase.hpp"
+#include "data/Json.hpp"
 
 namespace logic
 {
-class DevelopmentRate
+class DevelopmentRate : public json::IJsonSerializable
 {
   private:
     long totalValue;
@@ -37,9 +39,12 @@ class DevelopmentRate
     long GetTotalIndustry() const;
     long GetTotalMilitary() const;
     long GetTotalProject() const;
+
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
 };
 
-class Development
+class Development : public json::IJsonSerializable
 {
   private:
     long growth;
@@ -59,6 +64,9 @@ class Development
     Development operator-(const DevelopmentRate &) const;
     Development &operator+=(const DevelopmentRate &);
     Development &operator-=(const DevelopmentRate &);
+
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
 };
 
 enum class PlanetaryBodyType
@@ -77,18 +85,29 @@ enum class PlanetaryBodyType
 enum class PopulationEffect
 {
     Plague,
+    Starvation,
+    Mad,
+    Unrest,
+    Rebellion,
+    Resilient,
     Tough,
     Intelligent,
+    Industrial,
+    Warlike,
     Sad,
     Happy,
+    Fanatical,
 };
 
-class PopulationState
+class PopulationState : public json::IJsonSerializable
 {
   private:
     ulong total;
-    ulong recruitable;
+    double workerPercentage;
+    double recruitablePercentage;
     double growthRate;
+    double loyality;
+    PopulationEffect effects;
 
   public:
     PopulationState();
@@ -97,9 +116,18 @@ class PopulationState
     ulong GetWorkerCount() const;
     ulong GetRecruitableCount() const;
     ulong GetPredictedGrowth() const;
+    ulong GetGrowthRate() const;
+    double GetLoyality() const;
+    double GetPredictedLoyality() const;
+    PopulationEffect GetEffects() const;
+
+    DevelopmentRate ModifyDevelopmentRate(const DevelopmentRate &) const;
+
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
 };
 
-class PlanetaryBody : public HasNameBase, public IdGeneratorBase<PlanetaryBody>
+class PlanetaryBody : public HasNameBase, public json::IJsonSerializable, public IdGeneratorBase<PlanetaryBody>
 {
   private:
     DevelopmentRate developmentRate;
@@ -112,16 +140,22 @@ class PlanetaryBody : public HasNameBase, public IdGeneratorBase<PlanetaryBody>
 
     const DevelopmentRate &GetDevelopmentRate() const;
     const Development &GetTotalDevelopment() const;
-    const PopulationState& GetPopulationState() const;
+    const PopulationState &GetPopulationState() const;
     PlanetaryBodyType GetType() const;
+
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
 };
 
-class PlanetarySystem : public HasNameBase, public IdGeneratorBase<PlanetarySystem>
+class PlanetarySystem : public HasEngineBase, public HasNameBase, public json::IJsonSerializable, public IdGeneratorBase<PlanetarySystem>
 {
   private:
     std::vector<PlanetaryBody *> planets;
 
   public:
     PlanetarySystem();
+
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
 };
 } // namespace logic
