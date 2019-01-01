@@ -55,7 +55,7 @@ void terminal::Textbox::HandleKey(terminal::KeyInput &action)
 
             text.erase();
         }
-        else if (key == Key::Delete this->cursorIndex < this->GetText().length())
+        else if (key == Key::Delete && this->cursorIndex < this->GetText().length())
         {
             std::string text;
             text.reserve(this->GetText().length());

@@ -10,6 +10,7 @@ namespace logic
 class Resource : public HasNameBase, public IdGeneratorBase<Resource>
 {
   private:
+    int rarity;
 };
 
 class ResourceSet

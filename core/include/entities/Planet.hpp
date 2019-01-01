@@ -8,67 +8,6 @@
 
 namespace logic
 {
-class DevelopmentRate : public json::IJsonSerializable
-{
-  private:
-    long totalValue;
-    double growth;
-    double science;
-    double industry;
-    double military;
-    double project;
-
-  public:
-    long GetTotalValue() const;
-    void SetTotalValue(long) const;
-
-    double GetGrowthRate() const;
-    double GetScienceRate() const;
-    double GetIndustryRate() const;
-    double GetMilitaryRate() const;
-    double GetProjectRate() const;
-
-    void SetGrowthRate(double) const;
-    void SetScienceRate(double) const;
-    void SetIndustryRate(double) const;
-    void SetMilitaryRate(double) const;
-    void SetProjectRate(double) const;
-
-    long GetTotalGrowth() const;
-    long GetTotalScience() const;
-    long GetTotalIndustry() const;
-    long GetTotalMilitary() const;
-    long GetTotalProject() const;
-
-    virtual json::Node *Serialize();
-    virtual void Deserialize(const json::Node *);
-};
-
-class Development : public json::IJsonSerializable
-{
-  private:
-    long growth;
-    long science;
-    long industry;
-    long military;
-    long project;
-
-  public:
-    long GetGrowth() const;
-    long GetScience() const;
-    long GetIndustry() const;
-    long GetMilitary() const;
-    long GetProject() const;
-
-    Development operator+(const DevelopmentRate &) const;
-    Development operator-(const DevelopmentRate &) const;
-    Development &operator+=(const DevelopmentRate &);
-    Development &operator-=(const DevelopmentRate &);
-
-    virtual json::Node *Serialize();
-    virtual void Deserialize(const json::Node *);
-};
-
 enum class PlanetaryBodyType
 {
     AsteroidBelt,
@@ -99,49 +38,64 @@ enum class PopulationEffect
     Fanatical,
 };
 
-class PopulationState : public json::IJsonSerializable
-{
-  private:
-    ulong total;
-    double workerPercentage;
-    double recruitablePercentage;
-    double growthRate;
-    double loyality;
-    PopulationEffect effects;
-
-  public:
-    PopulationState();
-
-    ulong GetTotalCount() const;
-    ulong GetWorkerCount() const;
-    ulong GetRecruitableCount() const;
-    ulong GetPredictedGrowth() const;
-    ulong GetGrowthRate() const;
-    double GetLoyality() const;
-    double GetPredictedLoyality() const;
-    PopulationEffect GetEffects() const;
-
-    DevelopmentRate ModifyDevelopmentRate(const DevelopmentRate &) const;
-
-    virtual json::Node *Serialize();
-    virtual void Deserialize(const json::Node *);
-};
-
 class PlanetaryBody : public HasNameBase, public json::IJsonSerializable, public IdGeneratorBase<PlanetaryBody>
 {
   private:
-    DevelopmentRate developmentRate;
-    Development totalDevelopment;
-    PopulationState population;
     PlanetaryBodyType type;
+    PopulationEffect effects;
+
+    ulong populationCount;
+    double workerPercentage;
+    double recruitablePercentage;
+    double populationGrowthRate;
+    double loyalty;
+
+    double socialGrowthRate;
+    double scienceGrowthRate;
+    double industryGrowthRate;
+    double militaryGrowthRate;
+    double projectGrowthRate;
+    long developmentLevel;
+    long socialLevel;
+    long scienceLevel;
+    long industryLevel;
+    long militaryLevel;
+    long projectLevel;
 
   public:
     PlanetaryBody();
 
-    const DevelopmentRate &GetDevelopmentRate() const;
-    const Development &GetTotalDevelopment() const;
-    const PopulationState &GetPopulationState() const;
     PlanetaryBodyType GetType() const;
+
+    ulong GetPopulationCount() const;
+    ulong GetWorkerCount() const;
+    ulong GetWorkerPercentage() const;
+    ulong GetRecruitableCount() const;
+    ulong GetRecruitablePercentage() const;
+    ulong GetPredictedPopulationCount() const;
+    ulong GetPopulationGrowthRate() const;
+    double GetLoyality() const;
+    double GetPredictedLoyality() const;
+    PopulationEffect GetPopulationEffects() const;
+
+    long GetSocialLevel() const;
+    long GetScienceLevel() const;
+    long GetIndustryLevel() const;
+    long GetMilitaryLevel() const;
+    long GetProjectLevel() const;
+    long GetTotalGrowth() const;
+
+    double GetSocialhGrowthRate() const;
+    double GetScienceGrowthRate() const;
+    double GetIndustryGrowthRate() const;
+    double GetMilitaryGrowthRate() const;
+    double GetProjectGrowthRate() const;
+
+    long GetSocialGrowth() const;
+    long GetScienceGrowth() const;
+    long GetIndustryGrowth() const;
+    long GetMilitaryGrowth() const;
+    long GetProjectGrowth() const;
 
     virtual json::Node *Serialize();
     virtual void Deserialize(const json::Node *);

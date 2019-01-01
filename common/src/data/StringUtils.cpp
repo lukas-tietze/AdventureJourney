@@ -168,7 +168,7 @@ std::string util::Strip(const std::string &str)
     while (start < str.length() && std::isspace(str[start]))
         start++;
 
-    while (end >= 0 && std::isspace(str[end]))
+    while (end >= start && end < str.length() && std::isspace(str[end]))
         end--;
 
     return str.substr(start, end - start + 1);
@@ -198,7 +198,7 @@ std::string util::StripBack(const std::string &str)
 
     size_t end = str.length() - 1;
 
-    while (end >= 0 && std::isspace(str[end]))
+    while (end < str.length() && std::isspace(str[end]))
         end--;
 
     return str.substr(0, end + 1);

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "Engine.hpp"
-
 namespace logic
 {
+class Engine;
+
 class HasEngineBase
 {
   private:
