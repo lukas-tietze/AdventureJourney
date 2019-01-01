@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Defs.hpp"
+#include "entities/Resources.hpp"
 #include "util/IdGeneratorBase.hpp"
 #include "util/HasNameBase.hpp"
 #include "util/HasEngineBase.hpp"
@@ -41,6 +42,8 @@ enum class PopulationEffect
 class PlanetaryBody : public HasNameBase, public json::IJsonSerializable, public IdGeneratorBase<PlanetaryBody>
 {
   private:
+    ResourceSet resources;
+
     PlanetaryBodyType type;
     PopulationEffect effects;
 
