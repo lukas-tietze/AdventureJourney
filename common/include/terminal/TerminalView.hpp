@@ -9,12 +9,36 @@
 #include "Geometry.hpp"
 #include "graphics/Color.hpp"
 #include "data/collection/Array.hpp"
+#include "data/Json.hpp"
 
 namespace terminal
 {
 typedef uint16_t colorId_t;
 typedef uint16_t colorPairId_t;
 typedef std::tuple<colorId_t, colorId_t> ColorPair;
+
+class ColorPallette : public json::IJsonSerializable
+{
+  private:
+    util::Array<util::Color> colors;
+    util::Array<ColorPair> colorPairs;
+
+  public:
+    ColorPallette();
+    ColorPallette(const util::Array<util::Color> &, const util::Array<ColorPair> &);
+
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
+
+    const util::Array<util::Color> GetColors() const;
+    const util::Array<ColorPair> GetColorPairs() const;
+
+    util::Array<util::Color> GetColors();
+    util::Array<ColorPair> GetColorPairs();
+
+    bool operator==(const ColorPallette &) const;
+    bool operator!=(const ColorPallette &) const;
+};
 
 class TerminalView
 {
@@ -77,12 +101,18 @@ class TerminalView
     bool CursorVisibilitySupported() const;
     bool ColorsSupported() const;
 
+    void ApplyColorPallette(const ColorPallette &);
+    ColorPallette ExportCurrentColorPallette() const;
+    void LoadColorPalletteFromJson(const std::string &path);
+    void SaveCurrentColorPallette(const std::string &path) const;
+    void RestoreDefaultColors();
+
   protected:
     void OnTerminalPropertyChanged();
 
   private:
     static TerminalView *instance;
-    
+
     TerminalView();
     TerminalView(int width, int height);
 

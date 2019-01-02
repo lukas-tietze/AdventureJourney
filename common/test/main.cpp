@@ -25,6 +25,8 @@ int main(int argc, char **argv)
     tests.push_back(test::TestRun(new test::SimpleTest("string escaping", &test::jsonTest::StringEscaping)));
     tests.push_back(test::TestRun(new test::SimpleTest("number parsing", &test::jsonTest::NumberParsing)));
     tests.push_back(test::TestRun(new test::SimpleTest("basic color definitions", &test::colorTest::BasicColorValues)));
+    tests.push_back(test::TestRun(new test::SimpleTest("Color conversions hsv <> rgb", &test::colorTest::HsvRgbConversions)));
+    tests.push_back(test::TestRun(new test::SimpleTest("Color conversions color <> hex string", &test::colorTest::HexStringConversions)));
     tests.push_back(test::TestRun(new test::SimpleTest("function event test", &test::eventTest::FunctionEvents)));
     tests.push_back(test::TestRun(new test::SimpleTest("listener event test", &test::eventTest::ListenerEvents)));
     tests.push_back(test::TestRun(new test::SimpleTest("handler event test", &test::eventTest::HandlerEvents)));
@@ -48,6 +50,7 @@ int main(int argc, char **argv)
     tests.push_back(test::TestRun(new test::SimpleTest("hex to number", &test::mathTest::TestHexToNumber)));
     tests.push_back(test::TestRun(new test::SimpleTest("is hex char", &test::mathTest::TestIsHexChar)));
     tests.push_back(test::TestRun(new test::SimpleTest("crop", &test::mathTest::TestCrop)));
+    tests.push_back(test::TestRun(new test::SimpleTest("variadic max", &test::mathTest::TestMax)));
 
     return test::RunTests(tests, test::TestConfig::InitFromArgs(argc, argv));
 }

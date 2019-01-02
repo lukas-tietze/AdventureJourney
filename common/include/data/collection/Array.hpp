@@ -105,12 +105,12 @@ class Array
 
     Array(const Array<T> &copy)
     {
-        this->copy_from(copy);
+        this->CopyFrom(copy);
     }
 
     Array(Array &&initializer)
     {
-        this->swap(initializer);
+        this->Swap(initializer);
     }
 
     ~Array()
@@ -196,6 +196,16 @@ class Array
     {
         this->ReleaseResources();
         this->Swap(initializer);
+    }
+
+    Array &operator=(const std::initializer_list<T> &list)
+    {
+        size_t i = 0;
+
+        for (auto pos = list.begin(), end = list.end(); pos != end && i < this->length; pos++, i++)
+        {
+            this->data[i] = *pos;
+        }
     }
 
     size_t IndexOf(const T &item)

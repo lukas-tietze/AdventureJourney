@@ -1,5 +1,8 @@
 #pragma once
 
+#include <tuple>
+#include <ostream>
+
 #include "Defs.hpp"
 
 namespace util
@@ -22,7 +25,7 @@ class Color
     Color();
     Color(const Color &copy);
     Color(int r, int g, int b, int a = 255);
-    Color(float r, float g, float b, float a = 255);
+    Color(float r, float g, float b, float a = 1.f);
     Color(uint Color);
     int Alpha() const;
     int Red() const;
@@ -33,10 +36,19 @@ class Color
     float GreenPercentage() const;
     float BluePercentage() const;
     uint Value() const;
+
+    void AsHSV(float &hue, float &saturation, float &value);
+    std::string AsHex3String() const;
+    std::string AsHex4String() const;
+
+    static Color FromHexString(const std::string &);
+    static Color FromHSV(float hue, float saturation, float value);
+
 }; /*Color*/
 
 bool operator==(const util::Color &, const util::Color &);
 bool operator!=(const util::Color &, const util::Color &);
+std::ostream &operator<<(std::ostream &, const util::Color &);
 
 namespace colors
 {

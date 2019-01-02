@@ -374,3 +374,23 @@ bool terminal::TerminalView::ColorsSupported() const
 {
     return this->colorsSupported;
 }
+
+void terminal::TerminalView::ApplyColorPallette(const ColorPallette &)
+{
+}
+
+terminal::ColorPallette terminal::TerminalView::ExportCurrentColorPallette() const
+{
+}
+
+void terminal::TerminalView::LoadColorPalletteFromJson(const std::string &path)
+{
+}
+
+void terminal::TerminalView::SaveCurrentColorPallette(const std::string &path) const
+{
+}
+
+void terminal::TerminalView::RestoreDefaultColors()
+{
+}

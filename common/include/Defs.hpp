@@ -9,4 +9,4 @@ typedef __id_t id_t;
 
 #define BIT(i) (1 << i)
 
-#define CPL_LOCATION (util::format("in <%s> (at %s:%i)", __PRETTY_FUNCTION__, __FILE__, __LINE__))
+#define CPL_LOCATION (util::Format("in <%s> (at %s:%i)", __PRETTY_FUNCTION__, __FILE__, __LINE__))

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <thread>
 
 #include "terminal/controls/ContainerBase.hpp"
 #include "terminal/controls/ControlBase.hpp"
@@ -18,6 +19,9 @@ class TerminalWindow : public ContainerBase
     int escapeKey;
     bool hasEscapeKey;
 
+    std::thread thread;
+    bool hasThread;
+
     void Render();
     void SwitchFocus(int);
 
@@ -29,6 +33,10 @@ class TerminalWindow : public ContainerBase
 
     void Start(int);
     void Start();
+
+    void StartAsync(int);
+    void StartAsync();
+
     void Quit();
 
     ControlBase *GetFocusedControl() const;

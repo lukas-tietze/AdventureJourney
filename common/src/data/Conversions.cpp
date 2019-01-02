@@ -1,4 +1,4 @@
-#include "data/Math.hpp"
+#include "data/String.hpp"
 #include "Exception.hpp"
 #include "Defs.hpp"
 
@@ -70,4 +70,37 @@ uint8_t util::HexToNumber(char c)
     default:
         throw util::InvalidCaseException("illegal value for hexadecimal digit!");
     }
+}
+
+uint8_t util::HexToNumber(char high, char low)
+{
+    return (HexToNumber(high) << 4) | HexToNumber(low);
+}
+
+uint32_t util::HexToNumber(const std::string &str)
+{
+    uint32_t res = 0;
+
+    for (size_t i = 0; i < str.length() && i < sizeof(uint32_t) * 2; i++)
+    {
+        res |= HexToNumber(str[i]) << (i * 4);
+    }
+
+    return res;
+}
+
+uint32_t util::HexToNumber(const char *str)
+{
+    uint32_t res = 0;
+    size_t i = 0;
+
+    while (*str != '\0' && i < sizeof(uint32_t) * 2)
+    {
+        res = (res << 4) | HexToNumber(*str);
+
+        str++;
+        i++;
+    }
+
+    return res;
 }

@@ -9,7 +9,9 @@ terminal::TerminalWindow::TerminalWindow() : controls(),
                                              focusedControlIndex(-1),
                                              loop(true),
                                              escapeKey(0),
-                                             hasEscapeKey(false)
+                                             hasEscapeKey(false),
+                                             thread(),
+                                             hasThread(false)
 {
     this->SwitchFocus(-1);
 }
@@ -55,7 +57,7 @@ void terminal::TerminalWindow::SwitchFocus(int next)
         this->controls[this->focusedControlIndex]->HandleFocusAquired();
     }
 
-    TerminalView::GetInstance()->SetCursorMode(terminal::CursorMode::Invisible);
+    TerminalView::GetInstance()->SetCursorMode(terminal::CursorMode::Default);
 }
 
 void terminal::TerminalWindow::Start(int escapeKey)
@@ -64,6 +66,11 @@ void terminal::TerminalWindow::Start(int escapeKey)
     this->hasEscapeKey = true;
 
     this->Start();
+}
+
+void terminal::TerminalWindow::StartAsync()
+{
+
 }
 
 void terminal::TerminalWindow::Start()
@@ -76,18 +83,7 @@ void terminal::TerminalWindow::Start()
     {
         auto key = view->ReadKey();
 
-        if (key == '\t')
-        {
-            auto nextControl = (this->focusedControlIndex + 1) % this->controls.size();
-
-            if (nextControl != this->focusedControlIndex)
-                this->SwitchFocus(nextControl);
-        }
-        else if (this->hasEscapeKey && key == this->escapeKey)
-        {
-            this->loop = false;
-        }
-        else if (this->focusedControlIndex >= 0)
+        if (this->focusedControlIndex >= 0)
         {
             auto focusedControl = this->controls[this->focusedControlIndex];
 
@@ -141,6 +137,21 @@ void terminal::TerminalWindow::Start()
                 input.key = key;
 
                 focusedControl->HandleKey(input);
+
+                if (!input.handled)
+                {
+                    if (key == '\t')
+                    {
+                        auto nextControl = (this->focusedControlIndex + 1) % this->controls.size();
+
+                        if (nextControl != this->focusedControlIndex)
+                            this->SwitchFocus(nextControl);
+                    }
+                    else if (this->hasEscapeKey && key == this->escapeKey)
+                    {
+                        this->loop = false;
+                    }
+                }
             }
         }
 

@@ -15,6 +15,8 @@ int NumberParsing();
 namespace colorTest
 {
 int BasicColorValues();
+int HsvRgbConversions();
+int HexStringConversions();
 }
 namespace eventTest
 {
@@ -47,6 +49,7 @@ int TestHex4ToNumber();
 int TestHexToNumber();
 int TestIsHexChar();
 int TestCrop();
+int TestMax();
 } // namespace MathTest
 namespace dataTest
 {

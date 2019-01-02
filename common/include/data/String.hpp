@@ -21,6 +21,14 @@ std::string StripBack(const std::string &);
 
 std::string UtfCodePointToNarrowString(uint32_t);
 
+uint32_t Hex4ToNumber(const std::string &);
+uint32_t Hex4ToNumber(const char *);
+uint8_t HexToNumber(char);
+uint8_t HexToNumber(char, char);
+uint32_t HexToNumber(const std::string &);
+uint32_t HexToNumber(const char *);
+bool IsHexChar(char);
+
 template <class T>
 std::string ToString(const T &arg)
 {
