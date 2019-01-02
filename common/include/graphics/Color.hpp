@@ -37,12 +37,12 @@ class Color
     float BluePercentage() const;
     uint Value() const;
 
-    void AsHSV(float &hue, float &saturation, float &value);
+    void AsHSV(double &hue, double &saturation, double &value);
     std::string AsHex3String() const;
     std::string AsHex4String() const;
 
     static Color FromHexString(const std::string &);
-    static Color FromHSV(float hue, float saturation, float value);
+    static Color FromHSV(double hue, double saturation, double value);
 
 }; /*Color*/
 

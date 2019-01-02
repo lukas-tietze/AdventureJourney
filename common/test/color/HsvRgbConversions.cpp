@@ -8,7 +8,7 @@ void TestIdentity(uint8_t r, uint8_t g, uint8_t b)
 {
     auto c = util::Color(r, g, b);
 
-    float h, s, v;
+    double h, s, v;
 
     c.AsHSV(h, s, v);
 
@@ -18,22 +18,22 @@ void TestIdentity(uint8_t r, uint8_t g, uint8_t b)
 
 int test::colorTest::HsvRgbConversions()
 {
-    assert::AreEqual(util::Color(0, 0, 0), util::Color::FromHSV(0.f, 0.f, 0.f), CPL_LOCATION);
-    assert::AreEqual(util::Color(255, 255, 255), util::Color::FromHSV(0.f, 0.f, 1.f), CPL_LOCATION);
-    assert::AreEqual(util::Color(255, 0, 0), util::Color::FromHSV(0.f, 1.f, 1.f), CPL_LOCATION);
-    assert::AreEqual(util::Color(0, 255, 0), util::Color::FromHSV(120.f, 1.f, 1.f), CPL_LOCATION);
-    assert::AreEqual(util::Color(0, 0, 255), util::Color::FromHSV(240.f, 1.f, 1.f), CPL_LOCATION);
-    assert::AreEqual(util::Color(255, 255, 0), util::Color::FromHSV(60.f, 1.f, 1.f), CPL_LOCATION);
-    assert::AreEqual(util::Color(0, 255, 255), util::Color::FromHSV(180.f, 1.f, 1.f), CPL_LOCATION);
-    assert::AreEqual(util::Color(255, 0, 255), util::Color::FromHSV(300.f, 1.f, 1.f), CPL_LOCATION);
-    assert::AreEqual(util::Color(192, 192, 192), util::Color::FromHSV(0.f, 0.f, 0.75f), CPL_LOCATION);
-    assert::AreEqual(util::Color(128, 128, 128), util::Color::FromHSV(0.f, 0.f, 0.5f), CPL_LOCATION);
-    assert::AreEqual(util::Color(128, 0, 0), util::Color::FromHSV(0.f, 1.f, 0.5f), CPL_LOCATION);
-    assert::AreEqual(util::Color(128, 128, 0), util::Color::FromHSV(60.f, 1.f, 0.5f), CPL_LOCATION);
-    assert::AreEqual(util::Color(0, 128, 0), util::Color::FromHSV(120.f, 1.f, 0.5f), CPL_LOCATION);
-    assert::AreEqual(util::Color(128, 0, 128), util::Color::FromHSV(300.f, 1.f, 0.5f), CPL_LOCATION);
-    assert::AreEqual(util::Color(0, 128, 128), util::Color::FromHSV(180.f, 1.f, 0.5f), CPL_LOCATION);
-    assert::AreEqual(util::Color(0, 0, 128), util::Color::FromHSV(240.f, 1.f, 0.5f), CPL_LOCATION);
+    assert::AreEqual(util::Color(0, 0, 0), util::Color::FromHSV(0.0, 0.0, 0.0), CPL_LOCATION);
+    assert::AreEqual(util::Color(255, 255, 255), util::Color::FromHSV(0.0, 0.0, 1.0), CPL_LOCATION);
+    assert::AreEqual(util::Color(255, 0, 0), util::Color::FromHSV(0.0, 1.0, 1.0), CPL_LOCATION);
+    assert::AreEqual(util::Color(0, 255, 0), util::Color::FromHSV(120.0, 1.0, 1.0), CPL_LOCATION);
+    assert::AreEqual(util::Color(0, 0, 255), util::Color::FromHSV(240.0, 1.0, 1.0), CPL_LOCATION);
+    assert::AreEqual(util::Color(255, 255, 0), util::Color::FromHSV(60.0, 1.0, 1.0), CPL_LOCATION);
+    assert::AreEqual(util::Color(0, 255, 255), util::Color::FromHSV(180.0, 1.0, 1.0), CPL_LOCATION);
+    assert::AreEqual(util::Color(255, 0, 255), util::Color::FromHSV(300.0, 1.0, 1.0), CPL_LOCATION);
+    assert::AreEqual(util::Color(191, 191, 191), util::Color::FromHSV(0.0, 0.0, 0.75), CPL_LOCATION);
+    assert::AreEqual(util::Color(128, 128, 128), util::Color::FromHSV(0.0, 0.0, 0.5f), CPL_LOCATION);
+    assert::AreEqual(util::Color(128, 0, 0), util::Color::FromHSV(0.0, 1.0, 0.5f), CPL_LOCATION);
+    assert::AreEqual(util::Color(128, 128, 0), util::Color::FromHSV(60.0, 1.0, 0.5f), CPL_LOCATION);
+    assert::AreEqual(util::Color(0, 128, 0), util::Color::FromHSV(120.0, 1.0, 0.5f), CPL_LOCATION);
+    assert::AreEqual(util::Color(128, 0, 128), util::Color::FromHSV(300.0, 1.0, 0.5f), CPL_LOCATION);
+    assert::AreEqual(util::Color(0, 128, 128), util::Color::FromHSV(180.0, 1.0, 0.5f), CPL_LOCATION);
+    assert::AreEqual(util::Color(0, 0, 128), util::Color::FromHSV(240.0, 1.0, 0.5f), CPL_LOCATION);
 
     TestIdentity(123, 244, 209);
     TestIdentity(5, 33, 223);

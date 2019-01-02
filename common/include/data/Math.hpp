@@ -33,13 +33,13 @@ TFirst Max(const TFirst &a, const TFirst &b, const TArgs &... args)
 template <class T>
 T Min(const T &a, const T &b)
 {
-    return a > b ? a : b;
+    return a < b ? a : b;
 }
 
 template <class TFirst, class... TArgs>
 TFirst Min(const TFirst &a, const TFirst &b, const TArgs &... args)
 {
-    return a > b ? Max(a, args...) : Max(b, args...);
+    return a < b ? Min(a, args...) : Min(b, args...);
 }
 
 template <class T>
