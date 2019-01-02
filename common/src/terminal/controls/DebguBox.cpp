@@ -11,6 +11,12 @@ terminal::DebugBox::~DebugBox()
 
 void terminal::DebugBox::HandleMouse(terminal::MouseInput &action)
 {
+    if (action.handled)
+        return;
+
+    this->SetText(util::Format2("{%} [%/%]", action.action, action.cx, action.cy));
+
+    action.handled = true;
 }
 
 void terminal::DebugBox::HandleKey(terminal::KeyInput &action)
@@ -18,19 +24,17 @@ void terminal::DebugBox::HandleKey(terminal::KeyInput &action)
     if (action.handled)
         return;
 
-    std::string format = "% [%]";
-
     if (terminal::IsSpecialKey(action.key))
     {
-        this->SetText(util::Format2(format, static_cast<terminal::Key>(action.key), action.key));
+        this->SetText(util::Format2("<%> [%]", static_cast<terminal::Key>(action.key), action.key));
     }
     else if (terminal::IsAsciiKey(action.key))
     {
-        this->SetText(util::Format2(format, static_cast<char>(action.key), action.key));
+        this->SetText(util::Format2("'%' [%]", static_cast<char>(action.key), action.key));
     }
     else
     {
-        this->SetText(util::Format2(format, util::UtfCodePointToNarrowString(action.key), action.key));
+        this->SetText(util::Format2("\"%\" [%]", util::UtfCodePointToNarrowString(action.key), action.key));
     }
 
     action.handled = true;
