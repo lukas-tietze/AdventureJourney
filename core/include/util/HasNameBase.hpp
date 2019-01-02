@@ -2,9 +2,11 @@
 
 #include <string>
 
+#include "data/Json.hpp"
+
 namespace logic
 {
-class HasNameBase
+class HasNameBase : public json::IJsonSerializable
 {
   private:
     std::string name;
@@ -19,5 +21,8 @@ class HasNameBase
 
   public:
     const std::string GetName() const;
+
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
 };
 } // namespace logic

@@ -3,13 +3,14 @@
 #include <string>
 #include <vector>
 
+#include "data/Json.hpp"
 #include "Defs.hpp"
 #include "util/HasNameBase.hpp"
 #include "entities/Army.hpp"
 
 namespace logic
 {
-class CommanderBase : public HasNameBase
+class CommanderBase : public HasNameBase, public json::IJsonSerializable
 {
   private:
     std::vector<std::string> titles;
@@ -24,6 +25,9 @@ class CommanderBase : public HasNameBase
     int GetReputation() const;
     int GetRank() const;
     int GetCommandPoints() const;
+
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
 };
 
 class Admiral : public CommanderBase

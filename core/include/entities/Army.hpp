@@ -4,6 +4,7 @@
 #include <vector>
 #include <tuple>
 
+#include "data/Json.hpp"
 #include "util/HasNameBase.hpp"
 
 namespace logic
@@ -11,7 +12,7 @@ namespace logic
 class General;
 class Admiral;
 
-class Army : public HasNameBase
+class Army : public HasNameBase, public json::IJsonSerializable
 {
   private:
     General *leader;
@@ -19,9 +20,12 @@ class Army : public HasNameBase
 
   public:
     Army();
+
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
 };
 
-class Fleet : public HasNameBase
+class Fleet : public HasNameBase, public json::IJsonSerializable
 {
   private:
     Admiral *leader;
@@ -31,5 +35,7 @@ class Fleet : public HasNameBase
   public:
     Fleet();
 
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
 };
 } // namespace logic
