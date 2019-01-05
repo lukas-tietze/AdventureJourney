@@ -54,6 +54,6 @@ void terminal::DebugBox::Render(Canvas &c)
     int y0 = this->GetBounds().GetMinY();
     int x0 = this->GetBounds().GetMinX();
     c.DrawString(x0 + 1, y0 + 1, this->GetText());
-    c.DrawString(x0 + 1, y0 + 2, util::Format("FocusedControlIndex: %i", dynamic_cast<TerminalWindow*>(this->GetParent())->GetFocusedControlIndex()));
+    // c.DrawString(x0 + 1, y0 + 2, util::Format("FocusedControlIndex: %i", dynamic_cast<TerminalWindow*>(this->GetParent())->GetFocusedControlIndex()));
     c.DrawString(x0 + 1, y0 + 3, util::Format(""));
 }
