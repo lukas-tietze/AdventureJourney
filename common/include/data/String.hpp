@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <sstream>
+#include <Exception.hpp>
 
 namespace util
 {
@@ -80,8 +81,16 @@ bool ParseFloat(const std::string &text, NumT &target)
 namespace
 {
 template <class T>
-void WriteFormat(const std::string &format, std::stringstream &buf, size_t pos)
+size_t WriteWithFormat(const std::string &format, std::stringstream &buf, size_t pos, const T &arg)
 {
+    auto end = format.find('}', pos);
+
+    buf << arg;
+
+    if (end == std::string::npos)
+        throw util::Exception("Wrong format!");
+
+    return end;
 }
 
 void Format2Internal(const std::string &format, std::stringstream &buf, size_t pos)
@@ -98,11 +107,15 @@ void Format2Internal(const std::string &format, std::stringstream &buf, size_t p
         {
             if (format[pos + 1] == '{')
             {
-                pos = WriteFormat(format, buf, pos);
+                pos = WriteWithFormat(format, buf, pos + 1, firstArg);
+            }
+            else
+            {
+                buf << firstArg;
             }
 
-            buf << firstArg;
             Format2Internal(format, buf, pos + 1, args...);
+
             return;
         }
         else if (format[pos] == '\\')

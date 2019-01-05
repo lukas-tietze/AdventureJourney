@@ -3,10 +3,19 @@
 #include <cstdio>
 #include <cmath>
 
+void foo(const std::string &)
+{
+    std::printf("foo");
+}
+
+void foo(const char *)
+{
+    std::printf("bar");
+}
+
 int main()
 {
-    std::printf("round(0.5f)=%f", std::round(0.5f));
-    std::printf("round(0.5)=%f", std::round(0.5));
+    foo("abc");
 
     return 0;
 }

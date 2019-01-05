@@ -4,40 +4,45 @@
 #include <vector>
 #include <sstream>
 
+#include "String.hpp"
+
 namespace util
 {
 std::string ReadFile(const std::string &file);
-
 bool TryReadFile(const std::string &file, std::string &buf);
-
 void WriteFile(const std::string &file, const std::string &data);
-
 void WriteFile(const std::string &path, const std::vector<std::string &> data);
-
 bool TryWriteFile(const std::string &file, const std::string &data);
-
 bool TryWriteFile(const std::string &path, const std::vector<std::string &> data);
 
 template <class T>
-int PrintR(const T &obj)
+int Print(const T &arg)
 {
-    std::stringstream stream;
+    std::stringstream s;
+    s << arg;
 
-    stream << obj;
+    return std::printf("%s", s.str().c_str());
+}
 
-    return std::printf("%s", stream.str().c_str());
+template <class TFirst, class... TArgs>
+int Print(const std::string &format, const TFirst &first, const TArgs &... args)
+{
+    return std::printf("%s", util::Format2(format, first, args...).c_str());
 }
 
 template <class T>
-int PrintP(const T *obj)
+int PrintLine(const T &arg)
 {
-    std::stringstream stream;
+    std::stringstream s;
+    s << arg;
 
-    obj->operator<<(stream);
+    return std::printf("%s\n", s.str().c_str());
+}
 
-    stream << std::endl;
-
-    return std::printf("%s", stream.str().c_str());
+template <class TFirst, class... TArgs>
+int PrintLine(const std::string &format, const TFirst &first, const TArgs &... args)
+{
+    return std::printf("%s\n", util::Format2(format, first, args...).c_str());
 }
 
 class Channel
@@ -62,14 +67,44 @@ class Channel
     std::FILE *GetTarget();
     void SetTarget(std::FILE *);
 
-    int Print(const char *format, ...);
-    int Print(const char *format, va_list args);
-    int PrintLine(const char *format, ...);
-    int PrintLine(const char *format, va_list args);
-    int Print(const std::string &format, ...);
-    int Print(const std::string &format, va_list args);
-    int PrintLine(const std::string &format, ...);
-    int PrintLine(const std::string &format, va_list args);
+    int Write(const char *format, ...);
+    int Write(const char *format, va_list args);
+    int WriteLine(const char *format, ...);
+    int WriteLine(const char *format, va_list args);
+    int Write(const std::string &format, ...);
+    int Write(const std::string &format, va_list args);
+    int WriteLine(const std::string &format, ...);
+    int WriteLine(const std::string &format, va_list args);
+
+    template <class TFirst, class... TArgs>
+    int Write(const std::string &format, const TFirst &first, const TArgs &... args)
+    {
+        return std::printf("%s\n", util::Format2(format, first, args...).c_str());
+    }
+
+    template <class TFirst, class... TArgs>
+    int WriteLine(const std::string &format, const TFirst &first, const TArgs &... args)
+    {
+        return std::printf("%s\n", util::Format2(format, first, args...).c_str());
+    }
+
+    template <class T>
+    int Write(const T &arg)
+    {
+        std::stringstream s;
+        s << arg;
+
+        return std::printf("%s", s.str().c_str());
+    }
+
+    template <class T>
+    int WriteLine(const T &arg)
+    {
+        std::stringstream s;
+        s << arg;
+
+        return std::printf("%s\n", s.str().c_str());
+    }
 };
 
 enum class CommunicationLevel
@@ -109,16 +144,60 @@ class Communicator
     const Channel &GetDebugChannel() const;
     const Channel &GetErrorChannel() const;
 
-    int Print(CommunicationLevel importance, const char *format, ...);
-    int PrintLine(CommunicationLevel importance, const char *format, ...);
-    int Print(CommunicationLevel importance, const std::string &format, ...);
-    int PrintLine(CommunicationLevel importance, const std::string &format, ...);
+    int Write(CommunicationLevel, const char *, ...);
+    int WriteLine(CommunicationLevel, const char *, ...);
+    int Write(CommunicationLevel, const std::string &, ...);
+    int WriteLine(CommunicationLevel, const std::string &, ...);
+    int Write(CommunicationLevel, const std::string &);
+    int WriteLine(CommunicationLevel, const std::string &);
 
-    Communicator &Message(const char *format, ...);
-    Communicator &Message(const std::string &format, ...);
+    template <class TFirst, class... TArgs>
+    int Write(CommunicationLevel importance, const std::string &format, const TFirst &first, const TArgs &... args)
+    {
+        this->SelectChannel(importance).Write(format, first, args...);
+    }
+
+    template <class TFirst, class... TArgs>
+    int WriteLine(CommunicationLevel importance, const std::string &format, const TFirst &first, const TArgs &... args)
+    {
+        this->SelectChannel(importance).WriteLine(format, first, args...);
+    }
+
+    template <class T>
+    int Write(CommunicationLevel importance, const T &arg)
+    {
+        this->SelectChannel(importance).Write(arg);
+    }
+
+    template <class T>
+    int WriteLine(CommunicationLevel importance, const T &arg)
+    {
+        this->SelectChannel(importance).WriteLine(arg);
+    }
+
+    Communicator &Message(const char *, ...);
+    Communicator &Message(const std::string &, ...);
     Communicator &Debug(const char *format, ...);
-    Communicator &Debug(const std::string &format, ...);
+    Communicator &Debug(const std::string &, ...);
     Communicator &Error(const char *format, ...);
-    Communicator &Error(const std::string &format, ...);
+    Communicator &Error(const std::string &, ...);
+
+    template <class TFirst, class... TArgs>
+    Communicator &Message(const std::string &format, const TFirst &first, const TArgs &... args)
+    {
+        this->SelectChannel(CommunicationLevel::Message).WriteLine(format, first, args...);
+    }
+
+    template <class TFirst, class... TArgs>
+    Communicator &Debug(const std::string &format, const TFirst &first, const TArgs &... args)
+    {
+        this->SelectChannel(CommunicationLevel::Debug).WriteLine(format, first, args...);
+    }
+
+    template <class TFirst, class... TArgs>
+    Communicator &Error(const std::string &format, const TFirst &first, const TArgs &... args)
+    {
+        this->SelectChannel(CommunicationLevel::Error).WriteLine(format, first, args...);
+    }
 };
 } // namespace util

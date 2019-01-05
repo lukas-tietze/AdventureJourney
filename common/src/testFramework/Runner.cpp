@@ -15,7 +15,7 @@ void RunTestThread(test::TestCollection tests, const test::TestConfig config, ui
 
         if (!test.IsGood() || !config.IsShowOnlyFailedEnabled())
         {
-            util::PrintR(test);
+            util::Print(test);
         }
     }
 }
@@ -48,7 +48,7 @@ int test::RunTests(test::TestCollection &tests, const test::TestConfig &config)
             if (testRun.IsGood())
                 good++;
 
-            util::PrintR(testRun);
+            util::Print(testRun);
         }
     }
     else

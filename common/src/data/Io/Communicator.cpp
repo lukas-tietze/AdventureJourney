@@ -70,46 +70,46 @@ const util::Channel &util::Communicator::GetErrorChannel() const
     return this->error;
 }
 
-int util::Communicator::Print(CommunicationLevel importance, const char *format, ...)
+int util::Communicator::Write(CommunicationLevel importance, const char *format, ...)
 {
     if (importance <= this->communicationLevel)
     {
         va_list args;
         va_start(args, format);
-        this->SelectChannel(importance).Print(format, args);
+        this->SelectChannel(importance).Write(format, args);
         va_end(args);
     }
 }
 
-int util::Communicator::PrintLine(CommunicationLevel importance, const char *format, ...)
+int util::Communicator::WriteLine(CommunicationLevel importance, const char *format, ...)
 {
     if (importance <= this->communicationLevel)
     {
         va_list args;
         va_start(args, format);
-        this->SelectChannel(importance).PrintLine(format, args);
+        this->SelectChannel(importance).WriteLine(format, args);
         va_end(args);
     }
 }
 
-int util::Communicator::Print(CommunicationLevel importance, const std::string &format, ...)
+int util::Communicator::Write(CommunicationLevel importance, const std::string &format, ...)
 {
     if (importance <= this->communicationLevel)
     {
         va_list args;
         va_start(args, format);
-        this->SelectChannel(importance).Print(format, args);
+        this->SelectChannel(importance).Write(format, args);
         va_end(args);
     }
 }
 
-int util::Communicator::PrintLine(CommunicationLevel importance, const std::string &format, ...)
+int util::Communicator::WriteLine(CommunicationLevel importance, const std::string &format, ...)
 {
     if (importance <= this->communicationLevel)
     {
         va_list args;
         va_start(args, format);
-        this->SelectChannel(importance).PrintLine(format, args);
+        this->SelectChannel(importance).WriteLine(format, args);
         va_end(args);
     }
 }
@@ -120,7 +120,7 @@ util::Communicator &util::Communicator::Message(const char *format, ...)
     {
         va_list args;
         va_start(args, format);
-        this->SelectChannel(CommunicationLevel::Message).Print(format, args);
+        this->SelectChannel(CommunicationLevel::Message).Write(format, args);
         va_end(args);
     }
 }
@@ -131,7 +131,7 @@ util::Communicator &util::Communicator::Message(const std::string &format, ...)
     {
         va_list args;
         va_start(args, format);
-        this->SelectChannel(CommunicationLevel::Message).Print(format, args);
+        this->SelectChannel(CommunicationLevel::Message).Write(format, args);
         va_end(args);
     }
 }
@@ -142,7 +142,7 @@ util::Communicator &util::Communicator::Debug(const char *format, ...)
     {
         va_list args;
         va_start(args, format);
-        this->SelectChannel(CommunicationLevel::Debug).Print(format, args);
+        this->SelectChannel(CommunicationLevel::Debug).Write(format, args);
         va_end(args);
     }
 }
@@ -153,7 +153,7 @@ util::Communicator &util::Communicator::Debug(const std::string &format, ...)
     {
         va_list args;
         va_start(args, format);
-        this->SelectChannel(CommunicationLevel::Debug).Print(format, args);
+        this->SelectChannel(CommunicationLevel::Debug).Write(format, args);
         va_end(args);
     }
 }
@@ -164,7 +164,7 @@ util::Communicator &util::Communicator::Error(const char *format, ...)
     {
         va_list args;
         va_start(args, format);
-        this->SelectChannel(CommunicationLevel::Error).Print(format, args);
+        this->SelectChannel(CommunicationLevel::Error).Write(format, args);
         va_end(args);
     }
 }
@@ -175,7 +175,7 @@ util::Communicator &util::Communicator::Error(const std::string &format, ...)
     {
         va_list args;
         va_start(args, format);
-        this->SelectChannel(CommunicationLevel::Error).Print(format, args);
+        this->SelectChannel(CommunicationLevel::Error).Write(format, args);
         va_end(args);
     }
 }
