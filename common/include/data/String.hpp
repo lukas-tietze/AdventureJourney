@@ -79,9 +79,14 @@ bool ParseFloat(const std::string &text, NumT &target)
 
 namespace
 {
+template <class T>
+void WriteFormat(const std::string &format, std::stringstream &buf, size_t pos)
+{
+}
+
 void Format2Internal(const std::string &format, std::stringstream &buf, size_t pos)
 {
-    buf << format.c_str() + pos;
+    buf << (format.c_str() + pos);
 }
 
 template <class TFirst, class... TArgs>
@@ -93,8 +98,9 @@ void Format2Internal(const std::string &format, std::stringstream &buf, size_t p
         {
             if (format[pos + 1] == '{')
             {
+                pos = WriteFormat(format, buf, pos);
             }
-            
+
             buf << firstArg;
             Format2Internal(format, buf, pos + 1, args...);
             return;
