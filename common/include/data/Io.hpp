@@ -67,25 +67,29 @@ class Channel
     std::FILE *GetTarget();
     void SetTarget(std::FILE *);
 
-    int Write(const char *format, ...);
-    int Write(const char *format, va_list args);
-    int WriteLine(const char *format, ...);
-    int WriteLine(const char *format, va_list args);
-    int Write(const std::string &format, ...);
-    int Write(const std::string &format, va_list args);
-    int WriteLine(const std::string &format, ...);
-    int WriteLine(const std::string &format, va_list args);
+    int Write2(const char *format, ...);
+    int Write2(const char *format, va_list args);
+    int WriteLine2(const char *format, ...);
+    int WriteLine2(const char *format, va_list args);
+    int Write2(const std::string &format, ...);
+    int Write2(const std::string &format, va_list args);
+    int WriteLine2(const std::string &format, ...);
+    int WriteLine2(const std::string &format, va_list args);
 
     template <class TFirst, class... TArgs>
     int Write(const std::string &format, const TFirst &first, const TArgs &... args)
     {
-        return std::printf("%s\n", util::Format2(format, first, args...).c_str());
+        return std::fprintf(this->file, "%s\n", util::Format2(format, first, args...).c_str());
     }
 
     template <class TFirst, class... TArgs>
     int WriteLine(const std::string &format, const TFirst &first, const TArgs &... args)
     {
-        return std::printf("%s\n", util::Format2(format, first, args...).c_str());
+        auto res = std::fprintf(this->file, "%s\n", util::Format2(format, first, args...).c_str());
+
+        std::fflush(this->file);
+
+        return res;
     }
 
     template <class T>
@@ -94,7 +98,7 @@ class Channel
         std::stringstream s;
         s << arg;
 
-        return std::printf("%s", s.str().c_str());
+        return std::fprintf(this->file, "%s", s.str().c_str());
     }
 
     template <class T>
@@ -103,7 +107,11 @@ class Channel
         std::stringstream s;
         s << arg;
 
-        return std::printf("%s\n", s.str().c_str());
+        auto res = std::fprintf(this->file, "%s\n", s.str().c_str());
+
+        std::fflush(this->file);
+
+        return res;
     }
 };
 
@@ -144,12 +152,12 @@ class Communicator
     const Channel &GetDebugChannel() const;
     const Channel &GetErrorChannel() const;
 
-    int Write(CommunicationLevel, const char *, ...);
-    int WriteLine(CommunicationLevel, const char *, ...);
-    int Write(CommunicationLevel, const std::string &, ...);
-    int WriteLine(CommunicationLevel, const std::string &, ...);
-    int Write(CommunicationLevel, const std::string &);
-    int WriteLine(CommunicationLevel, const std::string &);
+    int Write2(CommunicationLevel, const char *, ...);
+    int WriteLine2(CommunicationLevel, const char *, ...);
+    int Write2(CommunicationLevel, const std::string &, ...);
+    int WriteLine2(CommunicationLevel, const std::string &, ...);
+    int Write2(CommunicationLevel, const std::string &);
+    int WriteLine2(CommunicationLevel, const std::string &);
 
     template <class TFirst, class... TArgs>
     int Write(CommunicationLevel importance, const std::string &format, const TFirst &first, const TArgs &... args)
@@ -175,12 +183,12 @@ class Communicator
         this->SelectChannel(importance).WriteLine(arg);
     }
 
-    Communicator &Message(const char *, ...);
-    Communicator &Message(const std::string &, ...);
-    Communicator &Debug(const char *format, ...);
-    Communicator &Debug(const std::string &, ...);
-    Communicator &Error(const char *format, ...);
-    Communicator &Error(const std::string &, ...);
+    Communicator &Message2(const char *, ...);
+    Communicator &Message2(const std::string &, ...);
+    Communicator &Debug2(const char *format, ...);
+    Communicator &Debug2(const std::string &, ...);
+    Communicator &Error2(const char *format, ...);
+    Communicator &Error2(const std::string &, ...);
 
     template <class TFirst, class... TArgs>
     Communicator &Message(const std::string &format, const TFirst &first, const TArgs &... args)
@@ -200,4 +208,7 @@ class Communicator
         this->SelectChannel(CommunicationLevel::Error).WriteLine(format, first, args...);
     }
 };
+extern Channel out;
+extern Channel err;
+extern Communicator com;
 } // namespace util

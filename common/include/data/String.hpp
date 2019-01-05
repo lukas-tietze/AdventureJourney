@@ -7,7 +7,7 @@
 
 namespace util
 {
-std::string Format(const std::string &format, ...);
+std::string Format2(const std::string &format, ...);
 std::string ToUpper(const std::string &nameBuf);
 std::string ToLower(const std::string &nameBuf);
 void ToUpperInplace(std::string &nameBuf);
@@ -93,13 +93,13 @@ size_t WriteWithFormat(const std::string &format, std::stringstream &buf, size_t
     return end;
 }
 
-void Format2Internal(const std::string &format, std::stringstream &buf, size_t pos)
+void FormatInternal(const std::string &format, std::stringstream &buf, size_t pos)
 {
     buf << (format.c_str() + pos);
 }
 
 template <class TFirst, class... TArgs>
-void Format2Internal(const std::string &format, std::stringstream &buf, size_t pos, const TFirst &firstArg, const TArgs &... args)
+void FormatInternal(const std::string &format, std::stringstream &buf, size_t pos, const TFirst &firstArg, const TArgs &... args)
 {
     while (pos < format.length() - 1)
     {
@@ -114,7 +114,7 @@ void Format2Internal(const std::string &format, std::stringstream &buf, size_t p
                 buf << firstArg;
             }
 
-            Format2Internal(format, buf, pos + 1, args...);
+            FormatInternal(format, buf, pos + 1, args...);
 
             return;
         }
@@ -137,14 +137,14 @@ void Format2Internal(const std::string &format, std::stringstream &buf, size_t p
 }
 } // namespace
 
-std::string Format2(const std::string &format);
+std::string Format(const std::string &format);
 
 template <class TFirst, class... TArgs>
-std::string Format2(const std::string &format, const TFirst &firstArg, const TArgs &... args)
+std::string Format(const std::string &format, const TFirst &firstArg, const TArgs &... args)
 {
     std::stringstream buf;
 
-    Format2Internal(format, buf, 0, firstArg, args...);
+    FormatInternal(format, buf, 0, firstArg, args...);
 
     return buf.str();
 }

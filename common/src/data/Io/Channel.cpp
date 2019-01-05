@@ -64,7 +64,7 @@ void util::Channel::SetTarget(std::FILE *target)
     this->file = target;
 }
 
-int util::Channel::Write(const char *format, ...)
+int util::Channel::Write2(const char *format, ...)
 {
     if (!this->active || this->file == nullptr)
         return -1;
@@ -77,7 +77,7 @@ int util::Channel::Write(const char *format, ...)
     va_end(args);
 }
 
-int util::Channel::Write(const char *format, va_list args)
+int util::Channel::Write2(const char *format, va_list args)
 {
     if (!this->active || this->file == nullptr)
         return -1;
@@ -85,7 +85,7 @@ int util::Channel::Write(const char *format, va_list args)
     return std::vfprintf(this->file, format, args);
 }
 
-int util::Channel::WriteLine(const char *format, ...)
+int util::Channel::WriteLine2(const char *format, ...)
 {
     if (!this->active || this->file == nullptr)
         return -1;
@@ -101,7 +101,7 @@ int util::Channel::WriteLine(const char *format, ...)
     return res + 1;
 }
 
-int util::Channel::WriteLine(const char *format, va_list args)
+int util::Channel::WriteLine2(const char *format, va_list args)
 {
     if (!this->active || this->file == nullptr)
         return -1;
@@ -112,7 +112,7 @@ int util::Channel::WriteLine(const char *format, va_list args)
     return res + 1;
 }
 
-int util::Channel::Write(const std::string &format, ...)
+int util::Channel::Write2(const std::string &format, ...)
 {
     if (!this->active || this->file == nullptr)
         return -1;
@@ -125,7 +125,7 @@ int util::Channel::Write(const std::string &format, ...)
     va_end(args);
 }
 
-int util::Channel::Write(const std::string &format, va_list args)
+int util::Channel::Write2(const std::string &format, va_list args)
 {
     if (!this->active || this->file == nullptr)
         return -1;
@@ -133,7 +133,7 @@ int util::Channel::Write(const std::string &format, va_list args)
     return std::vfprintf(this->file, format.c_str(), args);
 }
 
-int util::Channel::WriteLine(const std::string &format, ...)
+int util::Channel::WriteLine2(const std::string &format, ...)
 {
     if (!this->active || this->file == nullptr)
         return -1;
@@ -149,7 +149,7 @@ int util::Channel::WriteLine(const std::string &format, ...)
     return res + 1;
 }
 
-int util::Channel::WriteLine(const std::string &format, va_list args)
+int util::Channel::WriteLine2(const std::string &format, va_list args)
 {
     if (!this->active || this->file == nullptr)
         return -1;

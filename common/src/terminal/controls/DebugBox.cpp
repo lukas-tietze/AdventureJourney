@@ -1,6 +1,7 @@
 #include "terminal/controls/DebugBox.hpp"
 #include "data/String.hpp"
 #include "terminal/TerminalWindow.hpp"
+#include "data/Io.hpp"
 
 terminal::DebugBox::DebugBox() : ControlBase()
 {
@@ -26,9 +27,29 @@ void terminal::DebugBox::HandleKey(terminal::KeyInput &action)
     if (action.handled)
         return;
 
+    auto view = TerminalView::GetInstance();
+
     if (terminal::IsSpecialKey(action.key))
     {
-        this->SetText(util::Format2("<%> [%]", static_cast<terminal::Key>(action.key), action.key));
+        auto key = static_cast<terminal::Key>(action.key);
+
+        view->SetCursorMode(CursorMode::Default);
+
+        if (key == Key::Up)
+            view->SetCursorPosition(view->GetCursorPosition() + util::Point(0, 1));
+        else if (key == Key::Down)
+            view->SetCursorPosition(view->GetCursorPosition() + util::Point(0, -1));
+        else if (key == Key::Right)
+            view->SetCursorPosition(view->GetCursorPosition() + util::Point(1, 0));
+        else if (key == Key::Left)
+            view->SetCursorPosition(view->GetCursorPosition() + util::Point(-1, 0));
+        else if (key == Key::Insert)
+            if (view->GetCursorMode() == CursorMode::Highlighted)
+                view->SetCursorMode(CursorMode::Default);
+            else
+                view->SetCursorMode(CursorMode::Highlighted);
+
+        this->SetText(util::Format2("<%> [%]", key, action.key));
     }
     else if (terminal::IsAsciiKey(action.key))
     {

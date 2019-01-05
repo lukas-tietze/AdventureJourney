@@ -6,12 +6,12 @@
 
 #include "data/String.hpp"
 
-std::string util::Format2(const std::string &format)
+std::string util::Format(const std::string &format)
 {
     return format;
 }
 
-std::string util::Format(const std::string &format, ...)
+std::string util::Format2(const std::string &format, ...)
 {
     va_list va;
     va_start(va, format);

@@ -146,17 +146,17 @@ void RunFunctionTest()
     catch (const util::Exception &e)
     {
         Quit();
-        std::printf(util::Format2("Error occurred!: %\nAt %\n", e.GetMessage(), e.GetStacktrace()).c_str());
+        util::err.WriteLine("util::Exception occurred!: %\nAt %\n", e.GetMessage(), e.GetStacktrace());
     }
     catch (const std::exception &e)
     {
         Quit();
-        std::printf("Error occurred!: %s\n", e.what());
+        util::err.WriteLine("std::exception occurred!: %\n", e.what());
     }
     catch (...)
     {
         Quit();
-        std::printf("Unknown error occurred!\n");
+        util::err.WriteLine("Unknown error occurred!\n");
     }
 }
 
@@ -164,7 +164,7 @@ void HandleSignal(util::SignalEventArgs &a)
 {
     Quit();
 
-    std::printf("%s\n", util::Format2("Received signal: %: %\n", a.signal, boost::stacktrace::stacktrace()).c_str());
+    util::err.WriteLine("Received signal: %: %\n", a.signal, boost::stacktrace::stacktrace());
     std::quick_exit(-1);
 }
 

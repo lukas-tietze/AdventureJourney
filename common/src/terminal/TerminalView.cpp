@@ -6,6 +6,7 @@
 #include "data/Math.hpp"
 #include "data/String.hpp"
 #include "data/Helper.hpp"
+#include "data/Io.hpp"
 
 terminal::TerminalView *terminal::TerminalView::instance = nullptr;
 
@@ -39,8 +40,6 @@ terminal::TerminalView::TerminalView(int width, int height) : width(width),
     this->colorsSupported = has_colors();
     this->cursorModeSupported = curs_set(static_cast<int>(terminal::CursorMode::Invisible)) != ERR;
     this->cursorMode = terminal::CursorMode::Invisible;
-
-    std::fprintf(stderr, "CursorMode Supported: %i", this->cursorMode);
 
     this->Flush();
 }
@@ -340,6 +339,9 @@ void terminal::TerminalView::SetCursorPosition(const util::Point &point)
 {
     wmove(this->window, point.GetY(), point.GetX());
     wrefresh(this->window);
+    refresh();
+
+    util::err.WriteLine("Set Cursor to %", point);
 }
 
 terminal::CursorMode terminal::TerminalView::GetCursorMode() const
@@ -356,6 +358,8 @@ void terminal::TerminalView::SetCursorMode(terminal::CursorMode mode)
     {
         this->cursorMode = mode;
         wrefresh(this->window);
+
+        util::err.WriteLine("Set cursor mode to %", mode);
     }
 }
 
