@@ -16,14 +16,16 @@ include(ExternalData)
 set(CMAKE_CXX_STANDARD 11)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
-message("Creating release build")
-option(DEBUG "Debug build" OFF)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-elseif(CMAKE_BUILD_TYPE STREQUAL "Debug")
-message("Creating debug build")
-option(DEBUG "Debug build" ON)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wswitch-default -Wswitch-enum -g")
+    message("Creating release build")
+    option(DEBUG "Debug build" OFF)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
+else()
+    message("Creating debug build")
+    option(DEBUG "Debug build" ON)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wswitch-default -Wswitch-enum -g -ggdb")
 endif()
+
+set(CMAKE_BUILD_TYPE Debug)
 
 enable_language(CXX)
 

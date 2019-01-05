@@ -31,6 +31,8 @@ class TerminalWindow : public ContainerBase
 
     ControlBase *AddControl(ControlBase *);
 
+    void HandleKey(KeyInput);
+
     void Start(int);
     void Start();
 
@@ -39,6 +41,8 @@ class TerminalWindow : public ContainerBase
 
     void Quit();
 
-    ControlBase *GetFocusedControl() const;
+    ControlBase *GetFocusedControl();
+    const ControlBase *GetFocusedControl() const;
+    size_t GetFocusedControlIndex() const;
 };
 } // namespace terminal

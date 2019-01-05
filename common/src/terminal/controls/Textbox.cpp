@@ -91,13 +91,13 @@ void terminal::Textbox::HandleFocusAquired()
     auto view = TerminalView::GetInstance();
     view->SetCursorMode(terminal::CursorMode::Default);
     view->SetCursorPosition(this->GetBounds().GetLocation() + util::Point(this->GetTrueCursorIndex() + 1, 1));
+    TerminalView::GetInstance()->Flush();
 }
 
 void terminal::Textbox::Render(Canvas &c)
 {
     c.DrawBox(this->GetBounds(), '-', '|', '+');
     c.DrawString(this->GetBounds().GetMinX() + 1, this->GetBounds().GetMinY() + 1, this->GetText());
-    TerminalView::GetInstance()->SetCursorPosition(this->GetBounds().GetLocation() + util::Point(this->GetTrueCursorIndex() + 1, 1));
 }
 
 int terminal::Textbox::GetTrueCursorIndex() const

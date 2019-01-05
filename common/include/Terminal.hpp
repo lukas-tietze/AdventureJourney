@@ -12,3 +12,4 @@
 #include "terminal/controls/Table.hpp"
 #include "terminal/controls/Textbox.hpp"
 #include "terminal/controls/Button.hpp"
+#include "terminal/controls/DebugBox.hpp"

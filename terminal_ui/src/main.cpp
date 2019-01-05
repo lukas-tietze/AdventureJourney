@@ -83,10 +83,14 @@ void RunComponentTest()
     auto tb = new terminal::Textbox();
     tb->SetBounds(10, 0, 10, 3);
 
+    auto db = new terminal::DebugBox();
+    db->SetBounds(20, 20, 20, 3);
+
     w.AddControl(cb);
     w.AddControl(bt);
     w.AddControl(tv);
     w.AddControl(tb);
+    w.AddControl(db);
 
     w.Start('q');
 }
@@ -142,7 +146,7 @@ void RunFunctionTest()
     catch (const util::Exception &e)
     {
         Quit();
-        std::printf("Error occurred!: %s\n", e.GetMessage().c_str());
+        std::printf(util::Format2("Error occurred!: %\nAt %\n", e.GetMessage(), e.GetStacktrace()).c_str());
     }
     catch (const std::exception &e)
     {
@@ -159,7 +163,8 @@ void RunFunctionTest()
 void HandleSignal(util::SignalEventArgs &a)
 {
     Quit();
-    std::printf("Received signal: %s: %s\n", ToString(a.signal).c_str(), ToString(boost::stacktrace::stacktrace()).c_str());
+
+    std::printf("%s\n", util::Format2("Received signal: %: %\n", a.signal, boost::stacktrace::stacktrace()).c_str());
     std::quick_exit(-1);
 }
 

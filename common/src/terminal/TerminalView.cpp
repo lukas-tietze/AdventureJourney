@@ -339,9 +339,7 @@ util::Point terminal::TerminalView::GetCursorPosition() const
 void terminal::TerminalView::SetCursorPosition(const util::Point &point)
 {
     wmove(this->window, point.GetY(), point.GetX());
-
-    if (this->liveMode)
-        this->Flush();
+    wrefresh(this->window);
 }
 
 terminal::CursorMode terminal::TerminalView::GetCursorMode() const
@@ -357,12 +355,8 @@ void terminal::TerminalView::SetCursorMode(terminal::CursorMode mode)
     if (this->cursorModeSupported && curs_set(static_cast<int>(mode)) != ERR)
     {
         this->cursorMode = mode;
-
-        if (this->liveMode)
-            this->Flush();
+        wrefresh(this->window);
     }
-
-    std::fprintf(stderr, "Changing CursorMode to %s, is now %s", util::ToString(mode).c_str(), util::ToString(this->cursorMode).c_str());
 }
 
 bool terminal::TerminalView::CursorVisibilitySupported() const

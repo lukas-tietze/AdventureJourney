@@ -466,3 +466,79 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::Key &value)
 
     return s;
 }
+
+std::ostream &terminal::operator<<(std::ostream &s, const MouseAction &value)
+{
+    switch (value)
+    {
+    case terminal::MouseAction::Button1Pressed:
+        s << "Button1Pressed";
+        break;
+    case terminal::MouseAction::Button1Released:
+        s << "Button1Released";
+        break;
+    case terminal::MouseAction::Button1Clicked:
+        s << "Button1Clicked";
+        break;
+    case terminal::MouseAction::Button1DoubleClicked:
+        s << "Button1DoubleClicked";
+        break;
+    case terminal::MouseAction::Button1TripleClicked:
+        s << "Button1TripleClicked";
+        break;
+    case terminal::MouseAction::Button2Pressed:
+        s << "Button2Pressed";
+        break;
+    case terminal::MouseAction::Button2Released:
+        s << "Button2Released";
+        break;
+    case terminal::MouseAction::Button2Clicked:
+        s << "Button2Clicked";
+        break;
+    case terminal::MouseAction::Button2DoubleClicked:
+        s << "Button2DoubleClicked";
+        break;
+    case terminal::MouseAction::Button2TripleClicked:
+        s << "Button2TripleClicked";
+        break;
+    case terminal::MouseAction::Button3Pressed:
+        s << "Button3Pressed";
+        break;
+    case terminal::MouseAction::Button3Released:
+        s << "Button3Released";
+        break;
+    case terminal::MouseAction::Button3Clicked:
+        s << "Button3Clicked";
+        break;
+    case terminal::MouseAction::Button3DoubleClicked:
+        s << "Button3DoubleClicked";
+        break;
+    case terminal::MouseAction::Button3TripleClicked:
+        s << "Button3TripleClicked";
+        break;
+    case terminal::MouseAction::Button4Pressed:
+        s << "Button4Pressed";
+        break;
+    case terminal::MouseAction::Button4Released:
+        s << "Button4Released";
+        break;
+    case terminal::MouseAction::Button4Clicked:
+        s << "Button4Clicked";
+        break;
+    case terminal::MouseAction::Button4DoubleClicked:
+        s << "Button4DoubleClicked";
+        break;
+    case terminal::MouseAction::Button4TripleClicked:
+        s << "Button4TripleClicked";
+        break;
+    case terminal::MouseAction::ButtonShift:
+        s << "ButtonShift";
+        break;
+    case terminal::MouseAction::ButtonCtrl:
+        s << "ButtonCtrl";
+        break;
+    case terminal::MouseAction::ButtonAlt:
+        s << "ButtonAlt";
+        break;
+    }
+}

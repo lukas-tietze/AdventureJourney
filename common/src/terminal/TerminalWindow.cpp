@@ -51,13 +51,12 @@ void terminal::TerminalWindow::SwitchFocus(int next)
     }
 
     this->focusedControlIndex = next;
+    TerminalView::GetInstance()->SetCursorMode(terminal::CursorMode::Invisible);
 
     if (this->focusedControlIndex > 0)
     {
         this->controls[this->focusedControlIndex]->HandleFocusAquired();
     }
-
-    TerminalView::GetInstance()->SetCursorMode(terminal::CursorMode::Default);
 }
 
 void terminal::TerminalWindow::Start(int escapeKey)
@@ -70,7 +69,6 @@ void terminal::TerminalWindow::Start(int escapeKey)
 
 void terminal::TerminalWindow::StartAsync()
 {
-
 }
 
 void terminal::TerminalWindow::Start()
@@ -140,22 +138,35 @@ void terminal::TerminalWindow::Start()
 
                 if (!input.handled)
                 {
-                    if (key == '\t')
-                    {
-                        auto nextControl = (this->focusedControlIndex + 1) % this->controls.size();
-
-                        if (nextControl != this->focusedControlIndex)
-                            this->SwitchFocus(nextControl);
-                    }
-                    else if (this->hasEscapeKey && key == this->escapeKey)
-                    {
-                        this->loop = false;
-                    }
+                    this->HandleKey(input);
                 }
             }
         }
+        else
+        {
+            KeyInput input;
+            input.handled = false;
+            input.key = key;
+
+            this->HandleKey(input);
+        }
 
         this->Render();
+    }
+}
+
+void terminal::TerminalWindow::HandleKey(KeyInput input)
+{
+    if (input.key == '\t')
+    {
+        auto nextControl = (this->focusedControlIndex + 1) % this->controls.size();
+
+        if (nextControl != this->focusedControlIndex)
+            this->SwitchFocus(nextControl);
+    }
+    else if (this->hasEscapeKey && input.key == this->escapeKey)
+    {
+        this->loop = false;
     }
 }
 
@@ -180,10 +191,23 @@ void terminal::TerminalWindow::Render()
     }
 }
 
-terminal::ControlBase *terminal::TerminalWindow::GetFocusedControl() const
+const terminal::ControlBase *terminal::TerminalWindow::GetFocusedControl() const
 {
     if (this->focusedControlIndex == -1)
         return nullptr;
 
     return this->controls[this->focusedControlIndex];
+}
+
+terminal::ControlBase *terminal::TerminalWindow::GetFocusedControl()
+{
+    if (this->focusedControlIndex == -1)
+        return nullptr;
+
+    return this->controls[this->focusedControlIndex];
+}
+
+size_t terminal::TerminalWindow::GetFocusedControlIndex() const
+{
+    return this->focusedControlIndex;
 }

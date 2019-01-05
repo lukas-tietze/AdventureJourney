@@ -1,8 +1,10 @@
 #include "terminal/controls/DebugBox.hpp"
 #include "data/String.hpp"
+#include "terminal/TerminalWindow.hpp"
 
 terminal::DebugBox::DebugBox() : ControlBase()
 {
+    this->SetMinSize(util::Dimension(10, 5));
 }
 
 terminal::DebugBox::~DebugBox()
@@ -49,5 +51,9 @@ void terminal::DebugBox::HandleFocusAquired()
 void terminal::DebugBox::Render(Canvas &c)
 {
     c.DrawBox(this->GetBounds(), '-', '|', '+');
-    c.DrawString(this->GetBounds().GetMinX() + 1, this->GetBounds().GetMinY() + 1, this->GetText());
+    int y0 = this->GetBounds().GetMinY();
+    int x0 = this->GetBounds().GetMinX();
+    c.DrawString(x0 + 1, y0 + 1, this->GetText());
+    c.DrawString(x0 + 1, y0 + 2, util::Format("FocusedControlIndex: %i", dynamic_cast<TerminalWindow*>(this->GetParent())->GetFocusedControlIndex()));
+    c.DrawString(x0 + 1, y0 + 3, util::Format(""));
 }

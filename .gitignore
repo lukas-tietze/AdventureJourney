@@ -39,6 +39,7 @@ build/
 
 # Errors
 *.stackdump
+*.trace
 
 # Latex
 doc/*

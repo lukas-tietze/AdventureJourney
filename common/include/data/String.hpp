@@ -91,6 +91,10 @@ void Format2Internal(const std::string &format, std::stringstream &buf, size_t p
     {
         if (format[pos] == '%')
         {
+            if (format[pos + 1] == '{')
+            {
+            }
+            
             buf << firstArg;
             Format2Internal(format, buf, pos + 1, args...);
             return;
