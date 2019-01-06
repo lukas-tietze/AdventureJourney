@@ -27,7 +27,7 @@ int Print(const T &arg)
 template <class TFirst, class... TArgs>
 int Print(const std::string &format, const TFirst &first, const TArgs &... args)
 {
-    return std::printf("%s", util::Format2(format, first, args...).c_str());
+    return std::printf("%s", util::Format(format, first, args...).c_str());
 }
 
 template <class T>
@@ -42,7 +42,7 @@ int PrintLine(const T &arg)
 template <class TFirst, class... TArgs>
 int PrintLine(const std::string &format, const TFirst &first, const TArgs &... args)
 {
-    return std::printf("%s\n", util::Format2(format, first, args...).c_str());
+    return std::printf("%s\n", util::Format(format, first, args...).c_str());
 }
 
 class Channel
@@ -79,13 +79,13 @@ class Channel
     template <class TFirst, class... TArgs>
     int Write(const std::string &format, const TFirst &first, const TArgs &... args)
     {
-        return std::fprintf(this->file, "%s\n", util::Format2(format, first, args...).c_str());
+        return std::fprintf(this->file, "%s\n", util::Format(format, first, args...).c_str());
     }
 
     template <class TFirst, class... TArgs>
     int WriteLine(const std::string &format, const TFirst &first, const TArgs &... args)
     {
-        auto res = std::fprintf(this->file, "%s\n", util::Format2(format, first, args...).c_str());
+        auto res = std::fprintf(this->file, "%s\n", util::Format(format, first, args...).c_str());
 
         std::fflush(this->file);
 
@@ -162,25 +162,25 @@ class Communicator
     template <class TFirst, class... TArgs>
     int Write(CommunicationLevel importance, const std::string &format, const TFirst &first, const TArgs &... args)
     {
-        this->SelectChannel(importance).Write(format, first, args...);
+        return this->SelectChannel(importance).Write(format, first, args...);
     }
 
     template <class TFirst, class... TArgs>
     int WriteLine(CommunicationLevel importance, const std::string &format, const TFirst &first, const TArgs &... args)
     {
-        this->SelectChannel(importance).WriteLine(format, first, args...);
+        return this->SelectChannel(importance).WriteLine(format, first, args...);
     }
 
     template <class T>
     int Write(CommunicationLevel importance, const T &arg)
     {
-        this->SelectChannel(importance).Write(arg);
+        return this->SelectChannel(importance).Write(arg);
     }
 
     template <class T>
     int WriteLine(CommunicationLevel importance, const T &arg)
     {
-        this->SelectChannel(importance).WriteLine(arg);
+        return this->SelectChannel(importance).WriteLine(arg);
     }
 
     Communicator &Message2(const char *, ...);
@@ -194,18 +194,24 @@ class Communicator
     Communicator &Message(const std::string &format, const TFirst &first, const TArgs &... args)
     {
         this->SelectChannel(CommunicationLevel::Message).WriteLine(format, first, args...);
+
+        return *this;
     }
 
     template <class TFirst, class... TArgs>
     Communicator &Debug(const std::string &format, const TFirst &first, const TArgs &... args)
     {
         this->SelectChannel(CommunicationLevel::Debug).WriteLine(format, first, args...);
+
+        return *this;
     }
 
     template <class TFirst, class... TArgs>
     Communicator &Error(const std::string &format, const TFirst &first, const TArgs &... args)
     {
         this->SelectChannel(CommunicationLevel::Error).WriteLine(format, first, args...);
+
+        return *this;
     }
 };
 extern Channel out;

@@ -1,0 +1,7 @@
+Set cursor mode to Invisible
+Clicked at 29/21
+Set cursor mode to Invisible
+Set cursor mode to Default
+Clicked at 27/21
+Clicked at 44/13
+Set cursor mode to Invisible
