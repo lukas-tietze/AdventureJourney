@@ -81,64 +81,46 @@ void terminal::TerminalWindow::Start()
     {
         auto key = view->ReadKey();
 
-        if (this->focusedControlIndex >= 0)
+        if (terminal::IsMouse(key))
         {
-            auto focusedControl = this->controls[this->focusedControlIndex];
+            MEVENT mouseEvent;
 
-            if (key == KEY_MOUSE)
+            if (getmouse(&mouseEvent) == OK)
             {
-                MEVENT mouseEvent;
-                if (getmouse(&mouseEvent) == OK)
-                {
-                    MouseInput input;
-                    input.cx = mouseEvent.x;
-                    input.cy = mouseEvent.y;
-                    input.handled = false;
-                    input.action = static_cast<MouseAction>(mouseEvent.bstate);
-
-                    std::fprintf(stderr, "Clicked at %i/%i\n", input.cx, input.cy);
-
-                    auto location = Point(input.cx, input.cy);
-
-                    if (focusedControl->GetBounds().Contains(location))
-                    {
-                        this->controls[this->focusedControlIndex]->HandleMouse(input);
-                    }
-                    else
-                    {
-                        bool controlHit = false;
-
-                        for (size_t i = 0; i < this->controls.size(); i++)
-                        {
-                            const auto &control = this->controls[i];
-
-                            if (control->GetBounds().Contains(location))
-                            {
-                                this->SwitchFocus(i);
-                                control->HandleMouse(input);
-                                controlHit = true;
-                                break;
-                            }
-                        }
-
-                        if (!controlHit)
-                        {
-                            this->SwitchFocus(-1);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                KeyInput input;
+                MouseInput input;
+                input.cx = mouseEvent.x;
+                input.cy = mouseEvent.y;
                 input.handled = false;
-                input.key = key;
+                input.action = static_cast<MouseAction>(mouseEvent.bstate);
 
-                focusedControl->HandleKey(input);
+                auto click = util::Point(input.cx, input.cy);
 
-                if (!input.handled)
+                if (this->focusedControlIndex >= 0 &&
+                    this->controls[this->focusedControlIndex]->GetBounds().Contains(click))
                 {
-                    this->HandleKey(input);
+                    this->controls[focusedControlIndex]->HandleMouse(input);
+                }
+                else
+                {
+                    bool controlHit = false;
+
+                    for (size_t i = 0; i < this->controls.size(); i++)
+                    {
+                        const auto &control = this->controls[i];
+
+                        if (control->GetBounds().Contains(click))
+                        {
+                            this->SwitchFocus(i);
+                            control->HandleMouse(input);
+                            controlHit = true;
+                            break;
+                        }
+                    }
+
+                    if (!controlHit)
+                    {
+                        this->SwitchFocus(-1);
+                    }
                 }
             }
         }
@@ -148,7 +130,10 @@ void terminal::TerminalWindow::Start()
             input.handled = false;
             input.key = key;
 
-            this->HandleKey(input);
+            if (this->focusedControlIndex >= 0)
+                this->controls[focusedControlIndex]->HandleKey(input);
+            else
+                this->HandleKey(input);
         }
 
         this->Render();

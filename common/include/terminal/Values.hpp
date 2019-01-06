@@ -98,6 +98,7 @@ std::ostream &operator<<(std::ostream &, const CursorMode &);
 
 bool IsSpecialKey(int key);
 bool IsAsciiKey(int key);
+bool IsMouse(int key);
 
 enum class Key
 {
