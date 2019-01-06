@@ -10,6 +10,7 @@ class DebugBox : public terminal::ControlBase
 {
   private:
     int cursorIndex;
+    std::string command;
 
   public:
     DebugBox();

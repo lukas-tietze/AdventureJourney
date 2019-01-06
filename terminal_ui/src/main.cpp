@@ -84,7 +84,7 @@ void RunComponentTest()
     tb->SetBounds(10, 0, 10, 3);
 
     auto db = new terminal::DebugBox();
-    db->SetBounds(20, 20, 20, 3);
+    db->SetBounds(20, 15, 20, 3);
 
     w.AddControl(cb);
     w.AddControl(bt);

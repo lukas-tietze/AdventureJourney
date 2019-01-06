@@ -17,7 +17,7 @@ void terminal::DebugBox::HandleMouse(terminal::MouseInput &action)
     if (action.handled)
         return;
 
-    this->SetText(util::Format2("{%} [%/%]", action.action, action.cx, action.cy));
+    this->SetText(util::Format("{%} [%/%]", action.action, action.cx, action.cy));
 
     action.handled = true;
 }
@@ -49,15 +49,29 @@ void terminal::DebugBox::HandleKey(terminal::KeyInput &action)
             else
                 view->SetCursorMode(CursorMode::Highlighted);
 
-        this->SetText(util::Format2("<%> [%]", key, action.key));
+        this->SetText(util::Format("<%> [%]", key, action.key));
     }
     else if (terminal::IsAsciiKey(action.key))
     {
-        this->SetText(util::Format2("'%' [%]", static_cast<char>(action.key), action.key));
+        auto key = static_cast<char>(action.key);
+
+        if (key == '\n')
+        {
+            if (this->command == "")
+            {
+                this->command.clear();
+            }
+        }
+        else if (this->command.length() < 10)
+        {
+            this->command.push_back(key);
+        }
+
+        this->SetText(util::Format("'%' [%]", key, action.key));
     }
     else
     {
-        this->SetText(util::Format2("\"%\" [%]", util::UtfCodePointToNarrowString(action.key), action.key));
+        this->SetText(util::Format("\"%\" [%]", util::UtfCodePointToNarrowString(action.key), action.key));
     }
 
     action.handled = true;
@@ -75,6 +89,6 @@ void terminal::DebugBox::Render(Canvas &c)
     int y0 = this->GetBounds().GetMinY();
     int x0 = this->GetBounds().GetMinX();
     c.DrawString(x0 + 1, y0 + 1, this->GetText());
-    // c.DrawString(x0 + 1, y0 + 2, util::Format("FocusedControlIndex: %i", dynamic_cast<TerminalWindow*>(this->GetParent())->GetFocusedControlIndex()));
-    c.DrawString(x0 + 1, y0 + 3, util::Format(""));
+    c.DrawString(x0 + 1, y0 + 2, util::Format(""));
+    c.DrawString(x0 + 1, y0 + 3, this->command);
 }
