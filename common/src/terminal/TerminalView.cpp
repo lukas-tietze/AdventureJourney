@@ -79,23 +79,32 @@ void terminal::TerminalView::SetInputMode(terminal::InputMode mode)
 {
     if (mode != this->inputMode)
     {
+        int res;
+
         switch (mode)
         {
         case InputMode::Break:
-            raw();
+            res = raw();
             break;
         case InputMode::Raw:
-            cbreak();
+            res = cbreak();
             break;
         case InputMode::Line:
-            nocbreak();
+            res = nocbreak();
             break;
         default:
             throw util::Exception();
         }
 
-        this->inputMode = mode;
-        this->OnTerminalPropertyChanged();
+        if (res == ERR)
+        {
+            util::err.WriteLine("Failed to set input mode to %", mode);
+        }
+        else
+        {
+            this->inputMode = mode;
+            this->OnTerminalPropertyChanged();
+        }
     }
 }
 
@@ -103,17 +112,17 @@ void terminal::TerminalView::SetEcho(bool enableEcho)
 {
     if (enableEcho != this->echoOn)
     {
-        if (enableEcho)
+        int res = enableEcho ? echo() : noecho();
+
+        if (res == ERR)
         {
-            echo();
+            util::err.WriteLine("Failed to set echo mode to %", enableEcho);
         }
         else
         {
-            noecho();
+            this->echoOn = enableEcho;
+            this->OnTerminalPropertyChanged();
         }
-
-        this->echoOn = enableEcho;
-        this->OnTerminalPropertyChanged();
     }
 }
 

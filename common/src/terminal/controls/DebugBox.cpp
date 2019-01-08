@@ -57,12 +57,9 @@ void terminal::DebugBox::HandleKey(terminal::KeyInput &action)
 
         if (key == '\n')
         {
-            if (this->command == "")
-            {
-                this->command.clear();
-            }
+            this->command.clear();
         }
-        else if (this->command.length() < 10)
+        else if (this->command.length() < 10 && ((key >= 'a' && key <= 'z') || (key >= 'A' && key <= 'Z') || (key >= '0' && key <= '9')))
         {
             this->command.push_back(key);
         }
