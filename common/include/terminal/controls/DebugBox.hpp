@@ -11,6 +11,7 @@ class DebugBox : public terminal::ControlBase
   private:
     int cursorIndex;
     std::string command;
+    int colorIndex;
 
     void HandleCommand();
 

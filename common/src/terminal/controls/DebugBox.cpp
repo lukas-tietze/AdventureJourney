@@ -1,3 +1,5 @@
+#include <cstring>
+
 #include "terminal/controls/DebugBox.hpp"
 #include "data/String.hpp"
 #include "terminal/TerminalWindow.hpp"
@@ -43,6 +45,10 @@ void terminal::DebugBox::HandleKey(terminal::KeyInput &action)
             view->SetCursorPosition(view->GetCursorPosition() + util::Point(1, 0));
         else if (key == Key::Left)
             view->SetCursorPosition(view->GetCursorPosition() + util::Point(-1, 0));
+        else if (key == Key::PageUp && this->colorIndex < 9)
+            this->colorIndex++;
+        else if (key == Key::PageDown && this->colorIndex > 0)
+            this->colorIndex--;
         else if (key == Key::Insert)
             if (view->GetCursorMode() == CursorMode::Highlighted)
                 view->SetCursorMode(CursorMode::Default);
@@ -82,21 +88,31 @@ void terminal::DebugBox::HandleFocusAquired()
 
 void terminal::DebugBox::Render(Canvas &c)
 {
+    c.SetActiveColorPair(this->colorIndex);
     c.DrawBox(this->GetBounds(), '-', '|', '+');
     int y0 = this->GetBounds().GetMinY();
     int x0 = this->GetBounds().GetMinX();
     c.DrawString(x0 + 1, y0 + 1, this->GetText());
-    c.DrawString(x0 + 1, y0 + 2, util::Format(""));
-    c.DrawString(x0 + 1, y0 + 3, this->command);
+    c.DrawString(x0 + 1, y0 + 2, this->command);
 }
 
 void terminal::DebugBox::HandleCommand()
 {
-    if (this->command == "colDump")
-    {
-        TerminalView::GetInstance()->SaveCurrentColorPallette("colors.json");
+    auto instance = TerminalView::GetInstance();
 
-        util::err.WriteLine("Dumped colors");
+    if (std::strcmp(this->command.c_str(), "dc") == 0)
+    {
+        if (instance != nullptr)
+        {
+            instance->SaveCurrentColorPallette("debugfiles/colors.json");
+        }
+    }
+    else if (std::strcmp(this->command.c_str(), "lc") == 0)
+    {
+        if (instance != nullptr)
+        {
+            instance->LoadColorPalletteFromJson("debugfiles/colors.json");
+        }
     }
     else
     {

@@ -57,6 +57,34 @@ class Array
             return *this;
         }
 
+        bool operator<(const Iterator &other) const
+        {
+            return this->data == other.data &&
+                   this->count == other.count &&
+                   this->pos < other.pos;
+        }
+
+        bool operator<=(const Iterator &other) const
+        {
+            return this->data == other.data &&
+                   this->count == other.count &&
+                   this->pos <= other.pos;
+        }
+
+        bool operator>(const Iterator &other) const
+        {
+            return this->data == other.data &&
+                   this->count == other.count &&
+                   this->pos > other.pos;
+        }
+
+        bool operator>=(const Iterator &other) const
+        {
+            return this->data == other.data &&
+                   this->count == other.count &&
+                   this->pos >= other.pos;
+        }
+
         bool operator==(const Iterator &other) const
         {
             return this->data == other.data &&
@@ -66,8 +94,8 @@ class Array
 
         bool operator!=(const Iterator &other) const
         {
-            return this->data != other.data &&
-                   this->pos != other.pos &&
+            return this->data != other.data ||
+                   this->pos != other.pos ||
                    this->count != other.count;
         }
 
@@ -173,6 +201,7 @@ class Array
     {
         std::swap(this->data, other.data);
         std::swap(this->length, other.length);
+        std::swap(this->allocator, other.allocator);
     }
 
     void CopyFrom(const Array<T> &other)

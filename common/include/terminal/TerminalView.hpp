@@ -30,11 +30,11 @@ class ColorPallette : public json::IJsonSerializable
     virtual json::Node *Serialize();
     virtual void Deserialize(const json::Node *);
 
-    const util::Array<util::Color> GetColors() const;
-    const util::Array<ColorPair> GetColorPairs() const;
+    const util::Array<util::Color> &GetColors() const;
+    const util::Array<ColorPair> &GetColorPairs() const;
 
-    util::Array<util::Color> GetColors();
-    util::Array<ColorPair> GetColorPairs();
+    util::Array<util::Color> &GetColors();
+    util::Array<ColorPair> &GetColorPairs();
 
     bool operator==(const ColorPallette &) const;
     bool operator!=(const ColorPallette &) const;

@@ -1,5 +1,6 @@
 #include <string>
 #include <ncurses.h>
+#include <fstream>
 
 #include "Exception.hpp"
 #include "Terminal.hpp"
@@ -259,14 +260,14 @@ const util::Color &terminal::TerminalView::GetColor(colorId_t id) const
     return this->colors[id];
 }
 
-bool terminal::TerminalView::BufferColor(colorId_t index, const util::Color &Color)
+bool terminal::TerminalView::BufferColor(colorId_t index, const util::Color &color)
 {
-    this->colors[index] = Color;
+    this->colors[index] = color;
 
     return init_color(index,
-                      static_cast<int>(Color.RedPercentage() * 1000),
-                      static_cast<int>(Color.GreenPercentage() * 1000),
-                      static_cast<int>(Color.BluePercentage() * 1000)) == OK;
+                      static_cast<int>(color.RedPercentage() * 1000),
+                      static_cast<int>(color.GreenPercentage() * 1000),
+                      static_cast<int>(color.BluePercentage() * 1000)) != ERR;
 }
 
 bool terminal::TerminalView::BufferColorPair(colorPairId_t index, colorId_t id1, colorId_t id2)
@@ -380,20 +381,53 @@ bool terminal::TerminalView::ColorsSupported() const
     return this->colorsSupported;
 }
 
-void terminal::TerminalView::ApplyColorPallette(const ColorPallette &)
+void terminal::TerminalView::ApplyColorPallette(const ColorPallette &p)
 {
+    const auto &newColors = p.GetColors();
+
+    for (size_t i = 0; i < this->colors.Length() && i < newColors.Length(); i++)
+    {
+        this->BufferColor(i, newColors[i]);
+    }
+
+    const auto &newColorPairs = p.GetColorPairs();
+
+    for (size_t i = 0; i < this->colorPairs.Length() && i < newColorPairs.Length(); i++)
+    {
+        this->BufferColorPair(i, std::get<0>(newColorPairs[i]), std::get<1>(newColorPairs[i]));
+    }
+
+    if (this->liveMode)
+        this->Flush();
 }
 
 terminal::ColorPallette terminal::TerminalView::ExportCurrentColorPallette() const
 {
+    return ColorPallette(this->colors, this->colorPairs);
 }
 
 void terminal::TerminalView::LoadColorPalletteFromJson(const std::string &path)
 {
+    json::Node *res;
+    json::Parser p;
+    ColorPallette c;
+
+    p.parse(util::ReadFile(path), res);
+    c.Deserialize(res);
+
+    this->ApplyColorPallette(c);
 }
 
 void terminal::TerminalView::SaveCurrentColorPallette(const std::string &path) const
 {
+    std::ofstream out;
+
+    out.open(path);
+    json::FormattedPrinter p;
+
+    p.Print(this->ExportCurrentColorPallette().Serialize());
+
+    util::WriteFile(path, p.ToString());
 }
 
 void terminal::TerminalView::RestoreDefaultColors()

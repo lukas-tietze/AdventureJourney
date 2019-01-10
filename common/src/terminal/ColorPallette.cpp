@@ -10,22 +10,22 @@ terminal::ColorPallette::ColorPallette(const util::Array<util::Color> &colors, c
 {
 }
 
-const util::Array<util::Color> terminal::ColorPallette::GetColors() const
+const util::Array<util::Color> &terminal::ColorPallette::GetColors() const
 {
     return this->colors;
 }
 
-const util::Array<terminal::ColorPair> terminal::ColorPallette::GetColorPairs() const
+const util::Array<terminal::ColorPair> &terminal::ColorPallette::GetColorPairs() const
 {
     return this->colorPairs;
 }
 
-util::Array<util::Color> terminal::ColorPallette::GetColors()
+util::Array<util::Color> &terminal::ColorPallette::GetColors()
 {
     return this->colors;
 }
 
-util::Array<terminal::ColorPair> terminal::ColorPallette::GetColorPairs()
+util::Array<terminal::ColorPair> &terminal::ColorPallette::GetColorPairs()
 {
     return this->colorPairs;
 }
@@ -44,7 +44,7 @@ json::Node *terminal::ColorPallette::Serialize()
     for (auto pos = this->colorPairs.begin(), end = this->colorPairs.end(); pos != end; ++pos)
     {
         auto pair = new json::ObjectNode();
-
+ 
         pair->Put("fg", new json::PrimitiveNode(std::get<0>(*pos)));
         pair->Put("bg", new json::PrimitiveNode(std::get<1>(*pos)));
         colorPairs->Put(pair);
@@ -54,6 +54,8 @@ json::Node *terminal::ColorPallette::Serialize()
 
     object->Put("colors", colors);
     object->Put("colorPairs", colorPairs);
+
+    return object;
 }
 
 void terminal::ColorPallette::Deserialize(const json::Node *root)
