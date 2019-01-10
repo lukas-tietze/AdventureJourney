@@ -57,14 +57,14 @@ void terminal::DebugBox::HandleKey(terminal::KeyInput &action)
 
         if (key == '\n')
         {
-            this->command.clear();
+            this->HandleCommand();
         }
         else if (this->command.length() < 10 && ((key >= 'a' && key <= 'z') || (key >= 'A' && key <= 'Z') || (key >= '0' && key <= '9')))
         {
             this->command.push_back(key);
         }
 
-        this->SetText(util::Format("'%' [%]", key, action.key));
+        this->SetText(util::Format("'%' [%]", util::Unescape(key), action.key));
     }
     else
     {
@@ -88,4 +88,20 @@ void terminal::DebugBox::Render(Canvas &c)
     c.DrawString(x0 + 1, y0 + 1, this->GetText());
     c.DrawString(x0 + 1, y0 + 2, util::Format(""));
     c.DrawString(x0 + 1, y0 + 3, this->command);
+}
+
+void terminal::DebugBox::HandleCommand()
+{
+    if (this->command == "colDump")
+    {
+        TerminalView::GetInstance()->SaveCurrentColorPallette("colors.json");
+
+        util::err.WriteLine("Dumped colors");
+    }
+    else
+    {
+        util::err.WriteLine("Unknown command \"%\"", this->command);
+    }
+
+    this->command.clear();
 }

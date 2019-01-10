@@ -7,7 +7,7 @@ bool terminal::IsSpecialKey(int key)
 
 bool terminal::IsAsciiKey(int key)
 {
-    return key >= 33 && key <= 255;
+    return key <= 255;
 }
 
 bool terminal::IsMouse(int key)

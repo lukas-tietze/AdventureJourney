@@ -3,19 +3,27 @@
 #include <cstdio>
 #include <cmath>
 
-void foo(const std::string &)
+template <class T>
+void foo(const T &)
 {
-    std::printf("foo");
+    printf("printed by reference: %s\n", typeid(T).name());
 }
 
-void foo(const char *)
+template <class T>
+void foo(const T *)
 {
-    std::printf("bar");
+    printf("printed by pointer: %s\n", typeid(T).name());
 }
 
 int main()
 {
-    foo("abc");
+    int i;
+
+    foo(i);
+
+    foo(&i);
+
+    printf("\\n=>%i\n", static_cast<int>('\n'));
 
     return 0;
 }

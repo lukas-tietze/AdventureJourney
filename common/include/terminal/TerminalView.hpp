@@ -127,6 +127,7 @@ class TerminalView
     bool colorsSupported;
     bool cursorModeSupported;
     CursorMode cursorMode;
+    util::Point cursorPos;
 
     util::Array<util::Color> colors;
     util::Array<ColorPair> colorPairs;

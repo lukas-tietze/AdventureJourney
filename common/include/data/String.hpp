@@ -7,6 +7,7 @@
 
 namespace util
 {
+std::string Unescape(char);
 std::string Format2(const std::string &format, ...);
 std::string ToUpper(const std::string &nameBuf);
 std::string ToLower(const std::string &nameBuf);

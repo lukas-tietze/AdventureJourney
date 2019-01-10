@@ -220,6 +220,12 @@ void terminal::TerminalView::Clear(const util::Rectangle &area)
 
 void terminal::TerminalView::Flush()
 {
+    if (wmove(this->window, this->cursorPos.GetY(), this->cursorPos.GetX()) == ERR)
+        util::err.WriteLine("Failed to set cursor position to %", this->cursorPos);
+
+    if (curs_set(static_cast<int>(this->cursorMode)) == ERR)
+        util::err.WriteLine("Failed to set cursor mode to %", this->cursorMode);
+
     wrefresh(this->window);
     refresh();
 }
@@ -337,20 +343,15 @@ int terminal::TerminalView::CreateStyle(terminal::OutputAttribute attribs, int C
 
 util::Point terminal::TerminalView::GetCursorPosition() const
 {
-    int x, y;
-
-    getyx(this->window, y, x);
-
-    return util::Point(x, y);
+    return this->cursorPos;
 }
 
 void terminal::TerminalView::SetCursorPosition(const util::Point &point)
 {
-    wmove(this->window, point.GetY(), point.GetX());
-    wrefresh(this->window);
-    refresh();
+    this->cursorPos = point;
 
-    util::err.WriteLine("Set Cursor to %", point);
+    if (this->liveMode)
+        this->Flush();
 }
 
 terminal::CursorMode terminal::TerminalView::GetCursorMode() const
@@ -363,12 +364,9 @@ terminal::CursorMode terminal::TerminalView::GetCursorMode() const
 
 void terminal::TerminalView::SetCursorMode(terminal::CursorMode mode)
 {
-    if (this->cursorModeSupported && curs_set(static_cast<int>(mode)) != ERR)
+    if (this->cursorModeSupported)
     {
         this->cursorMode = mode;
-        wrefresh(this->window);
-
-        util::err.WriteLine("Set cursor mode to %", mode);
     }
 }
 

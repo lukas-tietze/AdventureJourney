@@ -191,8 +191,9 @@ void terminal::ControlBase::HandleMouse(MouseInput &)
 {
 }
 
-void terminal::ControlBase::HandleAddToControl(ContainerBase *)
+void terminal::ControlBase::HandleAddToControl(ContainerBase *newParent)
 {
+    this->parent = newParent;
 }
 
 void terminal::ControlBase::HandleTabIndexChanged()

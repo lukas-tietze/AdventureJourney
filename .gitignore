@@ -48,4 +48,4 @@ doc/*
 
 #config file for build
 compile.cfg
-errors.txt
+debugfiles

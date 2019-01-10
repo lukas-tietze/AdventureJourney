@@ -174,6 +174,8 @@ void terminal::TerminalWindow::Render()
 
         (*i)->Render(canvas);
     }
+
+    view->Flush();
 }
 
 const terminal::ControlBase *terminal::TerminalWindow::GetFocusedControl() const

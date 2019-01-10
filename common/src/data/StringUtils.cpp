@@ -6,6 +6,25 @@
 
 #include "data/String.hpp"
 
+std::string util::Unescape(char c)
+{
+    switch (c)
+    {
+    case '\n':
+        return "\\n";
+    case '\t':
+        return "\\t";
+    case '\?':
+        return "\\?";
+    case '\b':
+        return "\\b";
+    case '\a':
+        return "\\a";
+    default:
+        return std::string(1, c);
+    }
+}
+
 std::string util::Format(const std::string &format)
 {
     return format;

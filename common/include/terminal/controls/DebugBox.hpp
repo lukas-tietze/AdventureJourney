@@ -12,6 +12,8 @@ class DebugBox : public terminal::ControlBase
     int cursorIndex;
     std::string command;
 
+    void HandleCommand();
+
   public:
     DebugBox();
     virtual ~DebugBox();
