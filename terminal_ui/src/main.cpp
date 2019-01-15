@@ -86,11 +86,11 @@ void RunComponentTest()
     auto db = new terminal::DebugBox();
     db->SetBounds(20, 15, 20, 3);
 
-    w.AddControl(cb);
-    w.AddControl(bt);
-    w.AddControl(tv);
-    w.AddControl(tb);
-    w.AddControl(db);
+    w.Add(cb);
+    w.Add(bt);
+    w.Add(tv);
+    w.Add(tb);
+    w.Add(db);
 
     w.Start('q');
 }

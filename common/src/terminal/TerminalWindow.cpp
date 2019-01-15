@@ -5,58 +5,16 @@
 using util::Point;
 using util::Rectangle;
 
-terminal::TerminalWindow::TerminalWindow() : controls(),
-                                             focusedControlIndex(-1),
-                                             loop(true),
+terminal::TerminalWindow::TerminalWindow() : loop(true),
                                              escapeKey(0),
                                              hasEscapeKey(false),
                                              thread(),
                                              hasThread(false)
 {
-    this->SwitchFocus(-1);
 }
 
 terminal::TerminalWindow::~TerminalWindow()
 {
-    while (!this->controls.empty())
-    {
-        delete this->controls.back();
-        this->controls.pop_back();
-    }
-}
-
-terminal::ControlBase *terminal::TerminalWindow::AddControl(terminal::ControlBase *control)
-{
-    if (this->controls.empty())
-    {
-        this->controls.push_back(control);
-        this->focusedControlIndex = 0;
-        control->HandleFocusAquired();
-    }
-    else
-    {
-        this->controls.push_back(control);
-    }
-
-    control->HandleAddToControl(this);
-
-    return control;
-}
-
-void terminal::TerminalWindow::SwitchFocus(int next)
-{
-    if (this->focusedControlIndex > 0)
-    {
-        this->controls[this->focusedControlIndex]->HandleFocusLost();
-    }
-
-    this->focusedControlIndex = next;
-    TerminalView::GetInstance()->SetCursorMode(terminal::CursorMode::Invisible);
-
-    if (this->focusedControlIndex > 0)
-    {
-        this->controls[this->focusedControlIndex]->HandleFocusAquired();
-    }
 }
 
 void terminal::TerminalWindow::Start(int escapeKey)
@@ -93,35 +51,7 @@ void terminal::TerminalWindow::Start()
                 input.handled = false;
                 input.action = static_cast<MouseAction>(mouseEvent.bstate);
 
-                auto click = util::Point(input.cx, input.cy);
-
-                if (this->focusedControlIndex >= 0 &&
-                    this->controls[this->focusedControlIndex]->GetBounds().Contains(click))
-                {
-                    this->controls[focusedControlIndex]->HandleMouse(input);
-                }
-                else
-                {
-                    bool controlHit = false;
-
-                    for (size_t i = 0; i < this->controls.size(); i++)
-                    {
-                        const auto &control = this->controls[i];
-
-                        if (control->GetBounds().Contains(click))
-                        {
-                            this->SwitchFocus(i);
-                            control->HandleMouse(input);
-                            controlHit = true;
-                            break;
-                        }
-                    }
-
-                    if (!controlHit)
-                    {
-                        this->SwitchFocus(-1);
-                    }
-                }
+                this->HandleMouse(input);
             }
         }
         else
@@ -130,26 +60,16 @@ void terminal::TerminalWindow::Start()
             input.handled = false;
             input.key = key;
 
-            if (this->focusedControlIndex >= 0)
-                this->controls[focusedControlIndex]->HandleKey(input);
-            else
-                this->HandleKey(input);
+            this->HandleKey(input);
         }
 
         this->Render();
     }
 }
 
-void terminal::TerminalWindow::HandleKey(KeyInput input)
+void terminal::TerminalWindow::HandleKey(KeyInput &input)
 {
-    if (input.key == '\t')
-    {
-        auto nextControl = (this->focusedControlIndex + 1) % this->controls.size();
-
-        if (nextControl != this->focusedControlIndex)
-            this->SwitchFocus(nextControl);
-    }
-    else if (this->hasEscapeKey && input.key == this->escapeKey)
+    if (this->hasEscapeKey && input.key == this->escapeKey)
     {
         this->loop = false;
     }
@@ -162,39 +82,4 @@ void terminal::TerminalWindow::Quit()
 
 void terminal::TerminalWindow::Render()
 {
-    auto view = TerminalView::GetInstance();
-    auto bounds = Rectangle(0, 0, view->GetSize());
-    auto canvas = terminal::Canvas(view);
-
-    canvas.Clear();
-
-    for (auto i = this->controls.begin(), end = this->controls.end(); i != end; i++)
-    {
-        canvas.ClipArea(bounds.Intersect((*i)->GetBounds()));
-
-        (*i)->Render(canvas);
-    }
-
-    view->Flush();
-}
-
-const terminal::ControlBase *terminal::TerminalWindow::GetFocusedControl() const
-{
-    if (this->focusedControlIndex == -1)
-        return nullptr;
-
-    return this->controls[this->focusedControlIndex];
-}
-
-terminal::ControlBase *terminal::TerminalWindow::GetFocusedControl()
-{
-    if (this->focusedControlIndex == -1)
-        return nullptr;
-
-    return this->controls[this->focusedControlIndex];
-}
-
-size_t terminal::TerminalWindow::GetFocusedControlIndex() const
-{
-    return this->focusedControlIndex;
 }
