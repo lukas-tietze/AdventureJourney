@@ -102,22 +102,14 @@ void terminal::ContainerBase::HandleTabIndexChanged(int)
 {
 }
 
-void terminal::ContainerBase::Render(Canvas &)
+void terminal::ContainerBase::Render(Canvas &canvas)
 {
-    auto view = TerminalView::GetInstance();
-    auto bounds = util::Rectangle(0, 0, view->GetSize());
-    auto canvas = terminal::Canvas(view);
-
-    canvas.Clear();
-
     for (auto i = this->controls.begin(), end = this->controls.end(); i != end; i++)
     {
-        canvas.ClipArea(bounds.Intersect((*i)->GetBounds()));
+        // canvas.ClipArea(this->GetBounds().Intersect((*i)->GetBounds()));
 
         (*i)->Render(canvas);
     }
-
-    view->Flush();
 }
 
 void terminal::ContainerBase::Add(terminal::ControlBase *control)

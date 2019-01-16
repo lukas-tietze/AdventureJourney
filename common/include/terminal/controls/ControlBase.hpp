@@ -19,12 +19,23 @@ struct MouseInput
     bool handled;
 };
 
+enum class Alignment
+{
+    Right,
+    Left,
+    Top,
+    Bottom,
+    Fill,
+    Absolute,
+};
+
 class ContainerBase;
 
 class ControlBase
 {
   private:
-    util::Rectangle bounds;
+    util::Point location;
+    util::Dimension size;
     util::Dimension minimumSize;
     util::Dimension maximumSize;
     ControlBase *parent;
@@ -37,6 +48,8 @@ class ControlBase
 
   protected:
     void SetBoundsCore(const util::Rectangle &);
+    void SetSizeCore(const util::Dimension &);
+    void SetLocationCore(const util::Point &);
     void SetZIndexCore(int);
     void SetTextCore(const std::string &);
     void SetVisibilityCore(bool visible);
