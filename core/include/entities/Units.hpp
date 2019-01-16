@@ -1,9 +1,12 @@
 #pragma once
 
+#include <ostream>
+
 #include "data/Json.hpp"
 #include "Resources.hpp"
 #include "util/IdGeneratorBase.hpp"
 #include "util/HasNameBase.hpp"
+#include "Builder.hpp"
 
 namespace logic
 {
@@ -15,12 +18,23 @@ enum class UnitType
     Ship,
 };
 
-class Unit
-{  private:
+std::ostream &operator<<(std::ostream &, const UnitType &);
+
+class Unit : public json::IJsonSerializable
+{
+  private:
     UnitTemplate *type;
 
     long remaining_hit_points;
+
+  public:
+    virtual ~Unit();
+
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
 };
+
+std::ostream &operator<<(std::ostream &, const Unit &);
 
 class SpaceShip : public Unit, public HasNameBase
 {
@@ -30,30 +44,11 @@ class SpaceShip : public Unit, public HasNameBase
     uint gunners;
     uint mechanics;
     uint staff;
+
+  public:
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
 };
 
-class AttachementType
-{
-
-};
-
-class Attachement
-{
-
-};
-
-class UnitTemplate : public HasNameBase, public IdGeneratorBase<Unit>, public json::IJsonSerializable
-{
-  private:
-    long hitPoints;
-    long energyDefense;
-    long energyPenetration;
-    long energyDamage;
-    long physicalDefense;
-    long physicalPenetration;
-    long physicalDamage;
-    long movement;
-
-    logic::ResourceSet upkeep;
-};
+std::ostream &operator<<(std::ostream &, const SpaceShip &);
 } // namespace logic
