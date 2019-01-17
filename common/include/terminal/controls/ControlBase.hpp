@@ -45,6 +45,7 @@ class ControlBase
     std::string text;
     bool visible;
     int textStyle;
+    bool isValid;
 
   protected:
     void SetBoundsCore(const util::Rectangle &);
@@ -58,6 +59,8 @@ class ControlBase
     void SetMaxSizeCore(const util::Dimension &);
 
     bool ValidateBounds(util::Rectangle &);
+
+    virtual void Update();
 
   public:
     ControlBase();
@@ -93,6 +96,9 @@ class ControlBase
     void SetMaxSize(const util::Dimension &);
     void SetMinSize(int w, int h);
     void SetMaxSize(int w, int h);
+
+    void Invalidate();
+    bool IsValid() const;
 
     virtual void HandleZIndexChanged();
     virtual void HandleTabIndexChanged();

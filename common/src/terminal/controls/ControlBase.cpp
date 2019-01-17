@@ -211,3 +211,21 @@ void terminal::ControlBase::HandleBoundsChanged()
 void terminal::ControlBase::HandleTextChanged()
 {
 }
+
+void terminal::ControlBase::Update()
+{
+    this->isValid = true;
+}
+
+bool terminal::ControlBase::IsValid() const
+{
+    return this->isValid;
+}
+
+void terminal::ControlBase::Invalidate()
+{
+    this->isValid = false;
+
+    if (this->parent != nullptr)
+        this->parent->Invalidate();
+}
