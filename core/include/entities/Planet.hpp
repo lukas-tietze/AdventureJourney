@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ostream>
+
 #include "Defs.hpp"
 #include "entities/Resources.hpp"
 #include "util/IdGeneratorBase.hpp"
@@ -22,6 +24,8 @@ enum class PlanetaryBodyType
     WellTempered,
 };
 
+std::ostream &operator<<(std::ostream &, const PlanetaryBodyType &);
+
 enum class PopulationEffect
 {
     Plague,
@@ -38,6 +42,8 @@ enum class PopulationEffect
     Happy,
     Fanatical,
 };
+
+std::ostream &operator<<(std::ostream &, const PopulationEffect &);
 
 class PlanetaryBody : public HasNameBase, public json::IJsonSerializable, public IdGeneratorBase<PlanetaryBody>
 {
