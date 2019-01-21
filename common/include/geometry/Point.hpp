@@ -13,17 +13,17 @@ class BasicPoint
 
   public:
     BasicPoint(const BasicPoint<T> &copy) : x(copy.x),
-                                              y(copy.y)
+                                            y(copy.y)
     {
     }
 
     BasicPoint(T x, T y) : x(x),
-                            y(y)
+                           y(y)
     {
     }
 
     BasicPoint() : x(0),
-                    y(0)
+                   y(0)
     {
     }
 
@@ -35,6 +35,16 @@ class BasicPoint
     T GetY() const
     {
         return this->y;
+    }
+
+    void SetX(T value)
+    {
+        this->x = value;
+    }
+
+    void SetY(T value)
+    {
+        this->x = value;
     }
 
     util::BasicPoint<T> Crop(const util::BasicPoint<T> &min, const util::BasicPoint<T> &max) const

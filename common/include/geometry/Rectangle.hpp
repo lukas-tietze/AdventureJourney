@@ -41,6 +41,36 @@ class BasicRectangle
     {
     }
 
+    void SetX(T value)
+    {
+        this->location.SetX(value);
+    }
+
+    void SetY(T value)
+    {
+        this->location.SetY(value);
+    }
+
+    void SetWidth(T value)
+    {
+        this->size.SetWidth(value);
+    }
+
+    void SetHeight(T value)
+    {
+        this->size.SetHeight(value);
+    }
+
+    void SetLocation(const BasicPoint<T> &value)
+    {
+        this->location = value;
+    }
+
+    void SetSize(const BasicDimension<T> &value)
+    {
+        this->size = value;
+    }
+
     T GetX() const
     {
         return this->location.GetX();

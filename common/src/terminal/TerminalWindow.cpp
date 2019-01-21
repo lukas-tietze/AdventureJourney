@@ -85,9 +85,7 @@ void terminal::TerminalWindow::Render()
     auto view = TerminalView::GetInstance();
     auto canvas = terminal::Canvas(view);
 
-    this->ContainerBase::
-
-        canvas.Clear();
+    canvas.Clear();
 
     this->ContainerBase::Render(canvas);
 

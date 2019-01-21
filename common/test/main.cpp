@@ -45,6 +45,7 @@ int main(int argc, char **argv)
     tests.push_back(test::TestRun(new test::SimpleTest("strip back", &test::stringTest::StripBack)));
     tests.push_back(test::TestRun(new test::SimpleTest("collect rope", &test::dataTest::collectionTest::TestCollectRope)));
     tests.push_back(test::TestRun(new test::SimpleTest("array", &test::dataTest::collectionTest::TestArray)));
+    tests.push_back(test::TestRun(new test::SimpleTest("list", &test::dataTest::collectionTest::TestList)));
     tests.push_back(test::TestRun(new test::SimpleTest("cache", &test::dataTest::collectionTest::TestCache)));
     tests.push_back(test::TestRun(new test::SimpleTest("hex4 to number", &test::mathTest::TestHex4ToNumber)));
     tests.push_back(test::TestRun(new test::SimpleTest("hex to number", &test::mathTest::TestHexToNumber)));
