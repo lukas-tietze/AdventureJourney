@@ -114,6 +114,10 @@ void terminal::DebugBox::HandleCommand()
             instance->LoadColorPalletteFromJson("debugfiles/colors.json");
         }
     }
+    else if (std::strcmp(this->command.c_str(), "except") == 0)
+    {
+        throw util::Exception("Test Exception");
+    }
     else
     {
         util::err.WriteLine("Unknown command \"%\"", this->command);

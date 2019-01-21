@@ -1,7 +1,8 @@
 #pragma once
 
 #include <memory>
-#include <cstdlib>
+#include <cstring>
+#include <algorithm>
 
 #include "Exception.hpp"
 
@@ -12,29 +13,49 @@ class List
 {
   private:
     T *data;
-    size_t length;
+    T *pos;
+    T *cap;
     TAlloc allocator;
 
     void ReleaseResources()
     {
         if (this->data != nullptr)
         {
-            this->allocator.deallocate(this->data, this->length);
+            this->allocator.deallocate(this->data, this->Capacity());
             this->data = nullptr;
-            this->length = 0;
+            this->pos = nullptr;
+            this->cap = nullptr;
         }
     }
 
-    void Resize()
+    void Resize(size_t size)
     {
         if (this->data != nullptr)
         {
-            size_t newLength = this->length * 2;
+            auto cap = this->Capacity();
+            auto len = this->Length();
+
             T *buf;
-            this->allocator.allocate(buf, newLength);
-            std::memcpy(this->data, buf, this->length * sizeof(T));
+            this->allocator.allocate(buf, size);
+
+            std::memcpy(this->data, buf, sizeof(T) * len);
+
+            this->allocator.deallocate(this->data, cap);
+
             this->data = buf;
-            this->length = newLength;
+            this->pos = this->data + len;
+            this->cap = this->data + size;
+        }
+    }
+
+    void InitFromInitializerList(const std::initializer_list<T> &list)
+    {
+        this->EnsureCapacity(list.size());
+        T *i;
+
+        for (auto pos = list.begin(), end = list.end(); pos != end; pos++, i++)
+        {
+            *i = *pos;
         }
     }
 
@@ -44,14 +65,12 @@ class List
     class Iterator
     {
       private:
-        T *data;
-        size_t pos;
-        size_t count;
+        T *pos;
+        T *end;
 
       public:
-        Iterator(T *data, size_t pos, size_t count) : data(data),
-                                                      pos(pos),
-                                                      count(count)
+        Iterator(T *pos, T *end) : pos(pos),
+                                   end(end)
         {
         }
 
@@ -73,67 +92,56 @@ class List
 
         bool operator<(const Iterator &other) const
         {
-            return this->data == other.data &&
-                   this->count == other.count &&
+            return this->cap == other.end &&
                    this->pos < other.pos;
         }
 
         bool operator<=(const Iterator &other) const
         {
-            return this->data == other.data &&
-                   this->count == other.count &&
+            return this->cap == other.end &&
                    this->pos <= other.pos;
         }
 
         bool operator>(const Iterator &other) const
         {
-            return this->data == other.data &&
-                   this->count == other.count &&
+            return this->cap == other.end &&
                    this->pos > other.pos;
         }
 
         bool operator>=(const Iterator &other) const
         {
-            return this->data == other.data &&
-                   this->count == other.count &&
+            return this->cap == other.end &&
                    this->pos >= other.pos;
         }
 
         bool operator==(const Iterator &other) const
         {
-            return this->data == other.data &&
-                   this->pos == other.pos &&
-                   this->count == other.count;
+            return this->cap == other.end &&
+                   this->pos == other.pos;
         }
 
         bool operator!=(const Iterator &other) const
         {
-            return this->data != other.data ||
-                   this->pos != other.pos ||
-                   this->count != other.count;
+            return this->cap != other.end ||
+                   this->pos != other.pos;
         }
 
         T &operator*()
         {
-            return this->data[this->pos];
+            return *(this->pos);
         }
 
         const T &operator*() const
         {
-            return this->data[this->pos];
+            return *(this->pos);
         }
 
         T *operator->()
         {
-            return this->data + this->pos;
+            return this->pos;
         }
 
         const T *operator->() const
-        {
-            return this->data + this->pos;
-        }
-
-        size_t Index() const
         {
             return this->pos;
         }
@@ -141,8 +149,13 @@ class List
 
     List(size_t length)
     {
-        this->length = length;
-        this->data = this->allocator.allocate(this->length);
+        this->data = this->allocator.allocate(length);
+        this->pos = this->data;
+        this->cap = this->data + length;
+    }
+
+    List() : List(std::min((size_t)(4096 / sizeof(T)), (size_t)16))
+    {
     }
 
     List(const List<T> &copy)
@@ -155,6 +168,11 @@ class List
         this->Swap(initializer);
     }
 
+    List(const std::initializer_list<T> &list)
+    {
+        this->InitFromInitializerList(list);
+    }
+
     ~List()
     {
         this->ReleaseResources();
@@ -162,72 +180,91 @@ class List
 
     T &First()
     {
-        return this->data[0];
+        return *this->data;
     }
 
     const T &First() const
     {
-        return this->data[0];
+        return *this->data;
     }
 
     T &Last()
     {
-        return this->data[this->length - 1];
+        return *this->pos;
     }
 
     const T &Last() const
     {
-        return this->data[this->length - 1];
+        return *this->pos;
     }
 
     size_t Length() const
     {
-        return this->length;
+        return this->pos - this->data;
     }
 
     const T &operator[](int index) const
     {
-        if (index < 0 || (size_t)index >= this->length)
+        T *res = this->data + index;
+
+        if (index < 0 || res >= this->pos)
             throw util::IndexOutOfRangeException();
 
-        return this->data[index];
+        return *res;
     }
 
     T &operator[](int index)
     {
-        if (index < 0 || (size_t)index >= this->length)
+        T *res = this->data + index;
+
+        if (index < 0 || res >= this->pos)
             throw util::IndexOutOfRangeException();
 
-        return this->data[index];
+        return *res;
     }
 
     Iterator begin()
     {
-        return Iterator(this->data, 0, this->length);
+        return Iterator(this->data, this->pos);
     }
 
     Iterator end()
     {
-        return Iterator(this->data, this->length, this->length);
+        return Iterator(this->pos, this->pos);
     }
 
     void Swap(List<T> &other)
     {
         std::swap(this->data, other.data);
-        std::swap(this->length, other.length);
-        std::swap(this->allocator, other.allocator);
+        std::swap(this->pos, other.pos);
     }
 
     void CopyFrom(const List<T> &other)
     {
         this->ReleaseResources();
-        this->length = other.length;
-        this->data = this->allocator.allocate(this->length);
+        this->data = this->allocator.allocate(this->data, other.Capacity());
 
-        for (size_t i = 0; i < this->length; i++)
+        std::memcpy(other.data, this->data, other.Length() * sizeof(T));
+        this->cap = this->data + other.Capacity();
+        this->pos = this->data + other.Length();
+    }
+
+    void Reserve(size_t count)
+    {
+        this->EnsureCapacity(this->Length() + count);
+    }
+
+    void EnsureCapacity(size_t count)
+    {
+        if (this->Capacity() < count)
         {
-            this->allocator.construct(this->data + i, other.data[i]);
+            this->Resize(count);
         }
+    }
+
+    size_t Capacity() const
+    {
+        return this->cap - this->data;
     }
 
     List &operator=(const List<T> &copy)
@@ -243,22 +280,45 @@ class List
 
     List &operator=(const std::initializer_list<T> &list)
     {
-        size_t i = 0;
-
-        for (auto pos = list.begin(), end = list.end(); pos != end && i < this->length; pos++, i++)
-        {
-            this->data[i] = *pos;
-        }
+        this->InitFromInitializerList(list);
     }
 
     size_t IndexOf(const T &item)
     {
-        for (size_t i = 0; i < this->length; i++)
+        for (T *i = 0; i < end; i++)
         {
-            if (this->data[i] == item)
+            if (*i == item)
                 return i;
         }
 
         return List<T>::NPos;
     }
+
+    bool Empty() const
+    {
+        return this->pos == this->data;
+    }
+
+    bool Full() const
+    {
+        return this->pos == this->cap;
+    }
+
+    void Add(const T &item)
+    {
+        if (this->Full())
+            this->Resize(this->Capacity() * 2);
+
+        *this->pos = item;
+        this->pos++;
+    }
+
+    void Remove(size_t index)
+    {
+    }
+
+    void Remove(const T &item)
+    {
+    }
 }; /*List*/
+} // namespace util

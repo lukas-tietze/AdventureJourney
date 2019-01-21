@@ -47,6 +47,7 @@ class ControlBase
     bool isValid;
 
   protected:
+    void SetBoundsCore(const util::Rectangle &);
     void SetSizeCore(const util::Dimension &);
     void SetLocationCore(const util::Point &);
     void SetZIndexCore(int);
@@ -89,17 +90,17 @@ class ControlBase
     const util::Dimension &GetMaxSize() const;
     const util::Dimension &GetSize() const;
     const util::Point &GetLocation() const;
+    const util::Rectangle &GetBounds() const;
     void SetSize(const util::Dimension &);
     void SetSize(int w, int h);
     void SetMinSize(const util::Dimension &);
     void SetMaxSize(const util::Dimension &);
     void SetMinSize(int w, int h);
     void SetMaxSize(int w, int h);
-
-    void SetSize(const util::Dimension &);
-    void SetSize(int w, int h);
     void SetLocation(const util::Point &);
     void SetLocation(int x, int y);
+    void SetBounds(int x, int y, int w, int h);
+    void SetBounds(const util::Rectangle &);
     bool Contains(int x, int y) const;
     void Invalidate();
     bool IsValid() const;
