@@ -48,7 +48,6 @@ class ControlBase
     bool isValid;
 
   protected:
-    void SetBoundsCore(const util::Rectangle &);
     void SetSizeCore(const util::Dimension &);
     void SetLocationCore(const util::Point &);
     void SetZIndexCore(int);
@@ -58,7 +57,7 @@ class ControlBase
     void SetMinSizeCore(const util::Dimension &);
     void SetMaxSizeCore(const util::Dimension &);
 
-    bool ValidateBounds(util::Rectangle &);
+    bool ValidateSize(const util::Dimension &) const;
 
     virtual void Update();
 
@@ -79,9 +78,6 @@ class ControlBase
     ControlBase *GetParent();
     const ControlBase *GetParent() const;
     bool HasParent() const;
-    const util::Rectangle &GetBounds() const;
-    void SetBounds(const util::Rectangle &);
-    void SetBounds(int x, int y, int w, int h);
     void SetZIndex(int);
     int GetZIndex() const;
     const std::string &GetText() const;
@@ -92,10 +88,18 @@ class ControlBase
     void SetTabIndex(int);
     const util::Dimension &GetMinSize() const;
     const util::Dimension &GetMaxSize() const;
+    const util::Dimension &GetSize() const;
+    const util::Point &GetLocation() const;
+    void SetSize(const util::Dimension &);
+    void SetSize(int w, int h);
     void SetMinSize(const util::Dimension &);
     void SetMaxSize(const util::Dimension &);
     void SetMinSize(int w, int h);
     void SetMaxSize(int w, int h);
+    void SetLocation(const util::Point &);
+    void SetLocation(int x, int y);
+
+    bool Contains(int x, int y) const;
 
     void Invalidate();
     bool IsValid() const;

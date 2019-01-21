@@ -10,7 +10,8 @@ int terminal::ControlBase::TabIndexSorter::operator()(const ControlBase &a, cons
     return a.tabIndex - b.tabIndex;
 }
 
-terminal::ControlBase::ControlBase() : bounds(0, 0, 0, 0),
+terminal::ControlBase::ControlBase() : size(0, 0),
+                                       location(0, 0),
                                        parent(nullptr),
                                        zIndex(0),
                                        hasFocus(false),
@@ -39,39 +40,62 @@ bool terminal::ControlBase::HasParent() const
     return this->parent != nullptr;
 }
 
-const util::Rectangle &terminal::ControlBase::GetBounds() const
+void terminal::ControlBase::SetLocation(const util::Point &location)
 {
-    return this->bounds;
-}
-
-void terminal::ControlBase::SetBounds(int x, int y, int w, int h)
-{
-    this->SetBounds(util::Rectangle(x, y, w, h));
-}
-
-void terminal::ControlBase::SetBounds(const util::Rectangle &bounds)
-{
-    if (this->bounds != bounds)
+    if (location != this->location)
     {
-        this->SetBoundsCore(bounds);
-        this->HandleBoundsChanged();
+        this->SetLocationCore(location);
     }
 }
 
-void terminal::ControlBase::SetBoundsCore(const util::Rectangle &bounds)
+void terminal::ControlBase::SetLocation(int x, int y)
 {
-    if (this->ValidateBounds(this->bounds))
-        this->bounds = bounds;
-    else
-        this->bounds = util::Rectangle(bounds.GetLocation(), bounds.GetSize().Crop(this->minimumSize, this->maximumSize));
+    if (this->location.GetX() != x || this->location.GetY() != y)
+    {
+        this->SetLocationCore(util::Point(x, y));
+    }
 }
 
-bool terminal::ControlBase::ValidateBounds(util::Rectangle &alternative)
+void terminal::ControlBase::SetSize(const util::Dimension &size)
 {
-    return (bounds.GetSize().GetWidth() < this->minimumSize.GetWidth() ||
-            bounds.GetSize().GetHeight() < this->minimumSize.GetHeight() ||
-            bounds.GetSize().GetWidth() > this->maximumSize.GetWidth() ||
-            bounds.GetSize().GetHeight() > this->maximumSize.GetHeight());
+    if (this->size != size)
+    {
+        this->SetSizeCore(size);
+    }
+}
+
+void terminal::ControlBase::SetSize(int w, int h)
+{
+    if (this->size.GetWidth() != w || this->size.GetHeight() != h)
+    {
+        this->SetSizeCore(util::Dimension(w, h));
+    }
+}
+
+const util::Dimension &terminal::ControlBase::GetSize() const
+{
+    return this->size;
+}
+
+const util::Point &terminal::ControlBase::GetLocation() const
+{
+    return this->location;
+}
+
+bool terminal::ControlBase::Contains(int x, int y) const
+{
+    return x >= this->location.GetX() &&
+           x <= this->location.GetX() + this->size.GetWidth() &&
+           y >= this->location.GetY() &&
+           y <= this->location.GetY() + this->size.GetHeight();
+}
+
+bool terminal::ControlBase::ValidateSize(const util::Dimension &size) const
+{
+    return (size.GetWidth() < this->minimumSize.GetWidth() ||
+            size.GetHeight() < this->minimumSize.GetHeight() ||
+            size.GetWidth() > this->maximumSize.GetWidth() ||
+            size.GetHeight() > this->maximumSize.GetHeight());
 }
 
 void terminal::ControlBase::SetZIndex(int zIndex)
@@ -156,12 +180,10 @@ void terminal::ControlBase::SetMinSize(const util::Dimension &size)
 {
     this->minimumSize = size;
 
-    if (this->bounds.GetSize().GetHeight() < this->minimumSize.GetHeight() ||
-        this->bounds.GetSize().GetWidth() < this->minimumSize.GetWidth())
+    if (this->size.GetHeight() < this->minimumSize.GetHeight() ||
+        this->size.GetWidth() < this->minimumSize.GetWidth())
     {
-        this->SetBoundsCore(util::Rectangle(
-            this->bounds.GetLocation(),
-            this->bounds.GetSize().Crop(this->minimumSize, this->maximumSize)));
+        this->SetSizeCore(this->size.Crop(this->minimumSize, this->maximumSize));
     }
 }
 

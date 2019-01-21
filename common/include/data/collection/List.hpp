@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <cstdlib>
 
 #include "Exception.hpp"
 
@@ -28,8 +29,12 @@ class List
     {
         if (this->data != nullptr)
         {
+            size_t newLength = this->length * 2;
             T *buf;
-            this->allocator.allocate(buf, this->length * 2);
+            this->allocator.allocate(buf, newLength);
+            std::memcpy(this->data, buf, this->length * sizeof(T));
+            this->data = buf;
+            this->length = newLength;
         }
     }
 

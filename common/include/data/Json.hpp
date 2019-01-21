@@ -70,6 +70,27 @@ class ObjectNode final : public Node
     const json::Node *Get(const std::string &name) const;
     bool TryGet(const std::string &name, json::Node *&) const;
 
+    template <class T>
+    bool TryGetAs(const std::string &name, T *&out) const
+    {
+        Node *item;
+
+        return this->TryGet(name, item) &&
+               item != nullptr &&
+               (out = dynamic_cast<T *>(item)) != nullptr;
+    }
+
+    template <class T>
+    bool TryGetAs(const std::string &name, T *&out, ValueType exactType) const
+    {
+        Node *item;
+
+        return this->TryGet(name, item) &&
+               item != nullptr &&
+               item->GetType() == exactType &&
+               (out = dynamic_cast<T *>(item)) != nullptr;
+    }
+
     typedef std::vector<std::pair<std::string, Node *>>::iterator ChildIterator;
     typedef std::vector<std::pair<std::string, Node *>>::const_iterator ConstChildIterator;
 
@@ -116,6 +137,27 @@ class ArrayNode final : public Node
     json::Node *Get(uint index);
     const json::Node *Get(uint index) const;
     bool TryGet(uint index, json::Node *&) const;
+
+    template <class T>
+    bool TryGetAs(uint index, T *&out) const
+    {
+        Node *item;
+
+        return this->TryGet(index, item) &&
+               item != nullptr &&
+               (out = dynamic_cast<T *>(item)) != nullptr;
+    }
+
+    template <class T>
+    bool TryGetAs(uint index, T *&out, ValueType exactType) const
+    {
+        Node *item;
+
+        return this->TryGet(index, item) &&
+               item != nullptr &&
+               item->GetType() == exactType &&
+               (out = dynamic_cast<T *>(item)) != nullptr;
+    }
 
     typedef std::vector<Node *>::const_iterator ConstChildIterator;
     typedef std::vector<Node *>::iterator ChildIterator;
