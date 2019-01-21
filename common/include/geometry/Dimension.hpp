@@ -15,17 +15,17 @@ class BasicDimension
 
   public:
     BasicDimension(const util::BasicDimension<T> &copy) : width(copy.width),
-                                                            height(copy.height)
+                                                          height(copy.height)
     {
     }
 
     BasicDimension(T width, T height) : width(width),
-                                         height(height)
+                                        height(height)
     {
     }
 
     BasicDimension() : width(0),
-                        height(0)
+                       height(0)
     {
     }
 
@@ -37,6 +37,16 @@ class BasicDimension
     T GetHeight() const
     {
         return this->height;
+    }
+
+    void SetWidth(T value)
+    {
+        this->width = value;
+    }
+
+    void SetHeight(T value)
+    {
+        this->height = value;
     }
 
     T GetArea() const

@@ -262,4 +262,3 @@ class List
         return List<T>::NPos;
     }
 }; /*List*/
-} // namespace util

@@ -58,6 +58,7 @@ namespace collectionTest
 int TestArray();
 int TestCollectRope();
 int TestCache();
+int TestList();
 } // namespace CollectionTest
 } // namespace DataTest
 } // namespace test

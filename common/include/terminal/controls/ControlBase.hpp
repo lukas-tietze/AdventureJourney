@@ -34,8 +34,7 @@ class ContainerBase;
 class ControlBase
 {
   private:
-    util::Point location;
-    util::Dimension size;
+    util::Rectangle bounds;
     util::Dimension minimumSize;
     util::Dimension maximumSize;
     ControlBase *parent;
@@ -96,11 +95,12 @@ class ControlBase
     void SetMaxSize(const util::Dimension &);
     void SetMinSize(int w, int h);
     void SetMaxSize(int w, int h);
+
+    void SetSize(const util::Dimension &);
+    void SetSize(int w, int h);
     void SetLocation(const util::Point &);
     void SetLocation(int x, int y);
-
     bool Contains(int x, int y) const;
-
     void Invalidate();
     bool IsValid() const;
 
