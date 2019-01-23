@@ -13,8 +13,8 @@
 
 namespace terminal
 {
-typedef uint16_t colorId_t;
-typedef uint16_t colorPairId_t;
+typedef int32_t colorId_t;
+typedef int32_t colorPairId_t;
 typedef std::tuple<colorId_t, colorId_t> ColorPair;
 
 class ColorPallette : public json::IJsonSerializable
@@ -25,7 +25,14 @@ class ColorPallette : public json::IJsonSerializable
 
   public:
     ColorPallette();
+    ColorPallette(size_t colors, size_t colorPairs);
     ColorPallette(const util::Array<util::Color> &, const util::Array<ColorPair> &);
+
+    static const ColorPallette &GetDefault2();
+    static const ColorPallette &GetDefault8();
+    static const ColorPallette &GetDefault16();
+    static const ColorPallette &GetDefault88();
+    static const ColorPallette &GetDefault256();
 
     virtual json::Node *Serialize();
     virtual void Deserialize(const json::Node *);

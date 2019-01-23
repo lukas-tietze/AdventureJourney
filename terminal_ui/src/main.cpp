@@ -17,6 +17,7 @@ using util::ToString;
 namespace
 {
 bool running = true;
+bool checkErrorDump = false;
 char *DebugLocation = "debugfiles/backtrace.dump";
 } // namespace
 
@@ -50,8 +51,6 @@ void RunComponentTest()
     auto textLeft = new terminal::Textbox();
     textLeft->SetSize(util::Dimension());
 
-    util::err.WriteLine("Starting");
-
     w.Start('q');
 }
 
@@ -65,7 +64,7 @@ void HandleSignal(util::SignalEventArgs &a)
 
 void CheckErrorDump()
 {
-    if (boost::filesystem::exists(DebugLocation))
+    if (checkErrorDump && boost::filesystem::exists(DebugLocation))
     {
         std::ifstream in(DebugLocation);
 

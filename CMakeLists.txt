@@ -92,7 +92,7 @@ project(Common)
 
 configure_file(common/include/config.in.hpp common/include/config.hpp)
 add_library(Common STATIC ${COMMON_SRC})
-target_link_libraries(Common ${CURSES_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(Common ${CURSES_LIBRARIES} ${Boost_LIBRARIES} dl)
 
 #Tests dazu
 if(COMPILE_TESTS)
