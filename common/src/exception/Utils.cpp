@@ -30,7 +30,6 @@ std::string util::FormatStacktrace(const boost::stacktrace::stacktrace &trace, u
         buf << std::endl;
     }
 
-    buf.clear();
     buf << "hello";
 
     buf << trace;

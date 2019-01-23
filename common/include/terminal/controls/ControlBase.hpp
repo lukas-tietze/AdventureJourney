@@ -29,6 +29,54 @@ enum class Alignment
     Absolute,
 };
 
+enum class AutoSizeMode
+{
+    None,
+    FillHorizontal,
+    FillVertical,
+    Fill,
+    FitContent,
+};
+
+class Border
+{
+  private:
+    uint8_t sizes[4];
+    int styles[4];
+
+  public:
+    Border();
+
+    void SetSize(uint8_t size);
+    void SetStyle(int style);
+
+    void SetTopSize(uint8_t size);
+    void SetTopStyle(int style);
+
+    void SetRightSize(uint8_t size);
+    void SetRightStyle(int style);
+
+    void SetBottomSize(uint8_t size);
+    void SetBottomStyle(int style);
+
+    void SetLeftSize(uint8_t size);
+    void SetLeftStyle(int style);
+
+    uint8_t GetTopSize();
+    int GetTopStyle();
+
+    uint8_t GetRightSize();
+    int GetRightStyle();
+
+    uint8_t GetBottomSize();
+    int GetBottomStyle();
+
+    uint8_t GetLeftSize();
+    int GetLeftStyle();
+
+    void Render(const util::Rectangle &bounds, Canvas &);
+};
+
 class ContainerBase;
 
 class ControlBase
@@ -45,6 +93,9 @@ class ControlBase
     bool visible;
     int textStyle;
     bool isValid;
+    AutoSizeMode autoSizeMode;
+    Border border;
+    bool borderEnabled;
 
   protected:
     void SetBoundsCore(const util::Rectangle &);
@@ -91,6 +142,10 @@ class ControlBase
     const util::Dimension &GetSize() const;
     const util::Point &GetLocation() const;
     const util::Rectangle &GetBounds() const;
+    const Border &GetBorder() const;
+    Border &GetBorder();
+    bool IsBorderEnabled() const;
+    AutoSizeMode GetAutoSizeMode() const;
     void SetSize(const util::Dimension &);
     void SetSize(int w, int h);
     void SetMinSize(const util::Dimension &);
@@ -101,9 +156,15 @@ class ControlBase
     void SetLocation(int x, int y);
     void SetBounds(int x, int y, int w, int h);
     void SetBounds(const util::Rectangle &);
+    void SetAutoSizeMode(AutoSizeMode mode);
+    void SetBorder(const Border &);
+    void SetBorderEnabled(bool);
     bool Contains(int x, int y) const;
-    void Invalidate();
     bool IsValid() const;
+    virtual void Invalidate();
+    virtual void RestoreLayout();
+
+    virtual void ApplyAutoSize(const util::Dimension &availableSpace);
 
     virtual void HandleZIndexChanged();
     virtual void HandleTabIndexChanged();
@@ -115,6 +176,6 @@ class ControlBase
     virtual void HandleMouse(MouseInput &);
     virtual void HandleAddToControl(ContainerBase *);
 
-    virtual void Render(Canvas &) = 0;
+    virtual void Render(Canvas &);
 };
 } // namespace terminal

@@ -17,8 +17,6 @@ class ContainerBase : public ControlBase
     const std::vector<terminal::ControlBase *> &GetControls() const;
 
   public:
-    bool showBorder;
-
     ContainerBase();
     virtual ~ContainerBase();
 
@@ -39,5 +37,7 @@ class ContainerBase : public ControlBase
     ControlBase *GetFocusedControl();
     const ControlBase *GetFocusedControl() const;
     size_t GetFocusedControlIndex() const;
+
+    virtual void RestoreLayout();
 };
 } // namespace terminal

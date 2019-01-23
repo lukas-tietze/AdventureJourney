@@ -17,6 +17,8 @@ class LinearContainer : public ContainerBase
     };
 
     virtual void Add(ControlBase *item);
+    virtual void Add(Orientation where, ControlBase *item);
+    virtual void RestoreLayout();
 
   private:
     Orientation orientation;

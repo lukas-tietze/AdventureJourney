@@ -293,3 +293,52 @@ void terminal::ControlBase::Invalidate()
     if (this->parent != nullptr)
         this->parent->Invalidate();
 }
+
+void terminal::ControlBase::Render(Canvas &c)
+{
+    if (this->borderEnabled)
+        this->border.Render(this->bounds, c);
+}
+
+const terminal::Border &terminal::ControlBase::GetBorder() const
+{
+    return this->border;
+}
+
+terminal::Border &terminal::ControlBase::GetBorder()
+{
+    return this->border;
+}
+
+bool terminal::ControlBase::IsBorderEnabled() const
+{
+    return this->borderEnabled;
+}
+
+void terminal::ControlBase::ApplyAutoSize(const util::Dimension &availableSpace)
+{
+}
+
+void terminal::ControlBase::SetAutoSizeMode(AutoSizeMode mode)
+{
+    this->autoSizeMode = mode;
+}
+
+void terminal::ControlBase::SetBorder(const Border &b)
+{
+    this->border = b;
+}
+
+void terminal::ControlBase::SetBorderEnabled(bool enabled)
+{
+    this->borderEnabled = enabled;
+}
+
+terminal::AutoSizeMode terminal::ControlBase::GetAutoSizeMode() const
+{
+    return this->autoSizeMode;
+}
+
+void terminal::ControlBase::RestoreLayout()
+{
+}

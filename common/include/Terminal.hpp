@@ -13,3 +13,7 @@
 #include "terminal/controls/Button.hpp"
 #include "terminal/controls/DebugBox.hpp"
 #include "terminal/controls/containers/ContainerBase.hpp"
+#include "terminal/controls/containers/LinearContainer.hpp"
+#include "terminal/controls/containers/FrameContainer.hpp"
+#include "terminal/controls/containers/GridContainer.hpp"
+#include "terminal/controls/containers/ScrollFrameContainer.hpp"

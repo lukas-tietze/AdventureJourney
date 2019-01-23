@@ -46,9 +46,7 @@ set(_Boost_STACKTRACE_BASIC_HEADERS     "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_BACKTRACE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_ADDR2LINE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_NOOP_HEADERS      "boost/stacktrace.hpp")
-find_package(Boost 1.65.0 COMPONENTS stacktrace_basic stacktrace_backtrace stacktrace_addr2line stacktrace_noop)
-
-add_definitions(-DBOOST_STACKTRACE_USE_BACKTRACE)
+find_package(Boost 1.65.0 COMPONENTS stacktrace_basic stacktrace_backtrace stacktrace_addr2line stacktrace_noop filesystem)
 
 include_directories(${CURSES_INCLUDE_DIRS})
 include_directories(${Vulkan_INCLUDE_DIRS})
@@ -59,6 +57,8 @@ include_directories(playground)
 include_directories(terminal_ui/include)
 include_directories(vulkan_gui/include)
 include_directories(.)
+
+add_definitions(-DBOOST_FILESYSTEM_NO_DEPRECATED)
 
 if(glfw3_FOUND)
 include_directories(${Glfw_INCLUDE_DIRS})
