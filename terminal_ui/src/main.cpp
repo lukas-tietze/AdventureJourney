@@ -77,7 +77,8 @@ void CheckErrorDump()
         in.close();
         boost::filesystem::remove(DebugLocation);
 
-        std::scanf("\n");
+        char c;
+        std::scanf("%c", &c);
     }
 }
 

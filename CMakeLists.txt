@@ -22,7 +22,7 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
 else()
     message("Creating debug build")
     option(DEBUG "Debug build" ON)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wswitch-default -Wswitch-enum -g -ggdb")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wswitch-default -Wswitch-enum -g")
 endif()
 
 set(CMAKE_BUILD_TYPE Debug)
@@ -46,7 +46,7 @@ set(_Boost_STACKTRACE_BASIC_HEADERS     "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_BACKTRACE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_ADDR2LINE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_NOOP_HEADERS      "boost/stacktrace.hpp")
-find_package(Boost 1.65.0 COMPONENTS stacktrace_basic stacktrace_backtrace stacktrace_addr2line stacktrace_noop filesystem)
+find_package(Boost 1.65.0 COMPONENTS stacktrace_backtrace filesystem)
 
 include_directories(${CURSES_INCLUDE_DIRS})
 include_directories(${Vulkan_INCLUDE_DIRS})
@@ -59,6 +59,8 @@ include_directories(vulkan_gui/include)
 include_directories(.)
 
 add_definitions(-DBOOST_FILESYSTEM_NO_DEPRECATED)
+add_definitions(-DBOOST_STACKTRACE_LINK)
+add_definitions(-DBOOST_STACKTRACE_USE_BACKTRACE)
 
 if(glfw3_FOUND)
 include_directories(${Glfw_INCLUDE_DIRS})
@@ -92,7 +94,7 @@ project(Common)
 
 configure_file(common/include/config.in.hpp common/include/config.hpp)
 add_library(Common STATIC ${COMMON_SRC})
-target_link_libraries(Common ${CURSES_LIBRARIES} ${Boost_LIBRARIES})
+target_link_libraries(Common ${CURSES_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS})
 
 #Tests dazu
 if(COMPILE_TESTS)
