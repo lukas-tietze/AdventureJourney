@@ -28,12 +28,6 @@ class ColorPallette : public json::IJsonSerializable
     ColorPallette(size_t colors, size_t colorPairs);
     ColorPallette(const util::Array<util::Color> &, const util::Array<ColorPair> &);
 
-    static const ColorPallette &GetDefault2();
-    static const ColorPallette &GetDefault8();
-    static const ColorPallette &GetDefault16();
-    static const ColorPallette &GetDefault88();
-    static const ColorPallette &GetDefault256();
-
     virtual json::Node *Serialize();
     virtual void Deserialize(const json::Node *);
 
@@ -43,9 +37,28 @@ class ColorPallette : public json::IJsonSerializable
     util::Array<util::Color> &GetColors();
     util::Array<ColorPair> &GetColorPairs();
 
+    size_t GetColorCount() const;
+    size_t GetColorPairCount() const;
+
+    bool IsCompatible(size_t colors, size_t colorPairs) const;
+    bool Matches(size_t colors, size_t colorPairs) const;
+
     bool operator==(const ColorPallette &) const;
     bool operator!=(const ColorPallette &) const;
 };
+
+namespace controlStyles
+{
+extern ColorPallette default8x16;
+
+std::tuple<size_t, size_t> LoadStyles();
+
+extern colorPairId_t controlText;
+extern colorPairId_t disabledControlText;
+extern colorPairId_t controlBorder;
+extern colorPairId_t inactiveControlBorder;
+extern colorPairId_t disabledControlBorder;
+} // namespace controlStyles
 
 class TerminalView
 {

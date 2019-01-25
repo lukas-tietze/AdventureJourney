@@ -34,6 +34,26 @@ util::Array<terminal::ColorPair> &terminal::ColorPallette::GetColorPairs()
     return this->colorPairs;
 }
 
+size_t terminal::ColorPallette::GetColorCount() const
+{
+    return this->colors.Length();
+}
+
+size_t terminal::ColorPallette::GetColorPairCount() const
+{
+    return this->colorPairs.Length();
+}
+
+bool terminal::ColorPallette::IsCompatible(size_t colors, size_t colorPairs) const
+{
+    return this->colors.Length() <= colors && this->colorPairs.Length() <= colorPairs;
+}
+
+bool terminal::ColorPallette::Matches(size_t colors, size_t colorPairs) const
+{
+    return this->colors.Length() == colors && this->colorPairs.Length() == colorPairs;
+}
+
 json::Node *terminal::ColorPallette::Serialize()
 {
     auto colors = new json::ArrayNode();
@@ -123,97 +143,4 @@ void terminal::ColorPallette::Deserialize(const json::Node *root)
             }
         }
     }
-}
-
-namespace
-{
-terminal::ColorPallette default2;
-bool default2Initialized = false;
-
-terminal::ColorPallette default8;
-bool default8Initialized = false;
-
-terminal::ColorPallette default16;
-bool default16Initialized = false;
-
-terminal::ColorPallette default88;
-bool default88Initialized = false;
-
-terminal::ColorPallette default256;
-bool default256Initialized = false;
-
-} // namespace
-
-const terminal::ColorPallette &terminal::ColorPallette::GetDefault2()
-{
-    if (!default2Initialized)
-    {
-        default2 = ColorPallette(2, 2);
-        auto &c = default2.colors;
-        auto &p = default2.colorPairs;
-
-        c[0] = util::colors::Black;
-        c[1] = util::colors::White;
-        p[0] = std::make_tuple(0, 1);
-        p[1] = std::make_tuple(1, 0);
-    }
-
-    return default2;
-}
-
-const terminal::ColorPallette &terminal::ColorPallette::GetDefault8()
-{
-    if (!default8Initialized)
-    {
-        default2 = ColorPallette(8, 8);
-        auto &c = default2.colors;
-        auto &p = default2.colorPairs;
-
-        c[0] = util::colors::Black;
-        c[1] = util::colors::White;
-        c[2] = util::colors::Red;
-        c[3] = util::colors::Green;
-        c[4] = util::colors::Blue;
-        c[5] = util::colors::DarkRed;
-        c[6] = util::colors::DarkGreen;
-        c[7] = util::colors::DarkBlue;
-
-        p[0] = std::make_tuple(0, 1);
-        p[1] = std::make_tuple(1, 0);
-        p[0] = std::make_tuple(0, 1);
-        p[0] = std::make_tuple(0, 1);
-        p[0] = std::make_tuple(0, 1);
-        p[0] = std::make_tuple(0, 1);
-        p[0] = std::make_tuple(0, 1);
-        p[0] = std::make_tuple(0, 1);
-    }
-
-    return default8;
-}
-
-const terminal::ColorPallette &terminal::ColorPallette::GetDefault16()
-{
-    if (!default16Initialized)
-    {
-    }
-
-    return default16;
-}
-
-const terminal::ColorPallette &terminal::ColorPallette::GetDefault88()
-{
-    if (!default88Initialized)
-    {
-    }
-
-    return default88;
-}
-
-const terminal::ColorPallette &terminal::ColorPallette::GetDefault256()
-{
-    if (!default256Initialized)
-    {
-    }
-
-    return default256;
 }
