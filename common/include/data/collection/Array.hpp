@@ -24,6 +24,17 @@ class Array
         }
     }
 
+    void CreateFromInitializerList(const std::initializer_list<T> &list)
+    {
+        this->ReleaseResources();
+         this->data = this->allocator.allocate(list.size());
+        this->length = list.size();
+
+        T *item = this->data;
+        for (auto pos = list.begin(), end = list.end(); pos != end; pos++)
+            *item++ = *pos;
+    }
+
   public:
     static constexpr size_t NPos = static_cast<size_t>(-1l);
 
@@ -141,6 +152,11 @@ class Array
         this->Swap(initializer);
     }
 
+    Array(const std::initializer_list<T> &list)
+    {
+        this->CreateFromInitializerList(list);
+    }
+
     ~Array()
     {
         this->ReleaseResources();
@@ -229,12 +245,7 @@ class Array
 
     Array &operator=(const std::initializer_list<T> &list)
     {
-        size_t i = 0;
-
-        for (auto pos = list.begin(), end = list.end(); pos != end && i < this->length; pos++, i++)
-        {
-            this->data[i] = *pos;
-        }
+        this->CreateFromInitializerList(list);
     }
 
     size_t IndexOf(const T &item)

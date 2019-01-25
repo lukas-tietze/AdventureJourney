@@ -1,7 +1,11 @@
 #include "terminal/TerminalView.hpp"
 
-terminal::ColorPallette::ColorPallette() : colors(COLORS),
-                                           colorPairs(COLOR_PAIRS)
+terminal::ColorPallette::ColorPallette() : ColorPallette(COLORS, COLOR_PAIRS)
+{
+}
+
+terminal::ColorPallette::ColorPallette(size_t colors, size_t colorPairs) : colors(colors),
+                                                                           colorPairs(colorPairs)
 {
 }
 
@@ -30,6 +34,26 @@ util::Array<terminal::ColorPair> &terminal::ColorPallette::GetColorPairs()
     return this->colorPairs;
 }
 
+size_t terminal::ColorPallette::GetColorCount() const
+{
+    return this->colors.Length();
+}
+
+size_t terminal::ColorPallette::GetColorPairCount() const
+{
+    return this->colorPairs.Length();
+}
+
+bool terminal::ColorPallette::IsCompatible(size_t colors, size_t colorPairs) const
+{
+    return this->colors.Length() <= colors && this->colorPairs.Length() <= colorPairs;
+}
+
+bool terminal::ColorPallette::Matches(size_t colors, size_t colorPairs) const
+{
+    return this->colors.Length() == colors && this->colorPairs.Length() == colorPairs;
+}
+
 json::Node *terminal::ColorPallette::Serialize()
 {
     auto colors = new json::ArrayNode();
@@ -44,7 +68,7 @@ json::Node *terminal::ColorPallette::Serialize()
     for (auto pos = this->colorPairs.begin(), end = this->colorPairs.end(); pos != end; ++pos)
     {
         auto pair = new json::ObjectNode();
- 
+
         pair->Put("fg", new json::PrimitiveNode(std::get<0>(*pos)));
         pair->Put("bg", new json::PrimitiveNode(std::get<1>(*pos)));
         colorPairs->Put(pair);

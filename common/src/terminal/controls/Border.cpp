@@ -2,10 +2,10 @@
 
 terminal::Border::Border()
 {
-    this->styles[0] = COLOR_PAIR(1);
-    this->styles[1] = COLOR_PAIR(1);
-    this->styles[2] = COLOR_PAIR(1);
-    this->styles[3] = COLOR_PAIR(1);
+    this->styles[0] = 0;
+    this->styles[1] = 0;
+    this->styles[2] = 0;
+    this->styles[3] = 0;
 
     this->sizes[0] = 1;
     this->sizes[1] = 1;

@@ -13,8 +13,8 @@
 
 namespace terminal
 {
-typedef uint16_t colorId_t;
-typedef uint16_t colorPairId_t;
+typedef int32_t colorId_t;
+typedef int32_t colorPairId_t;
 typedef std::tuple<colorId_t, colorId_t> ColorPair;
 
 class ColorPallette : public json::IJsonSerializable
@@ -25,6 +25,7 @@ class ColorPallette : public json::IJsonSerializable
 
   public:
     ColorPallette();
+    ColorPallette(size_t colors, size_t colorPairs);
     ColorPallette(const util::Array<util::Color> &, const util::Array<ColorPair> &);
 
     virtual json::Node *Serialize();
@@ -36,9 +37,28 @@ class ColorPallette : public json::IJsonSerializable
     util::Array<util::Color> &GetColors();
     util::Array<ColorPair> &GetColorPairs();
 
+    size_t GetColorCount() const;
+    size_t GetColorPairCount() const;
+
+    bool IsCompatible(size_t colors, size_t colorPairs) const;
+    bool Matches(size_t colors, size_t colorPairs) const;
+
     bool operator==(const ColorPallette &) const;
     bool operator!=(const ColorPallette &) const;
 };
+
+namespace controlStyles
+{
+extern ColorPallette default8x16;
+
+std::tuple<size_t, size_t> LoadStyles();
+
+extern colorPairId_t controlText;
+extern colorPairId_t disabledControlText;
+extern colorPairId_t controlBorder;
+extern colorPairId_t inactiveControlBorder;
+extern colorPairId_t disabledControlBorder;
+} // namespace controlStyles
 
 class TerminalView
 {

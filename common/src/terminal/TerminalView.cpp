@@ -62,6 +62,8 @@ terminal::TerminalView *terminal::TerminalView::GetInstance()
         TerminalView::instance = new TerminalView();
     }
 
+    util::err.WriteLine("Debug Mark 0");
+
     return TerminalView::instance;
 }
 

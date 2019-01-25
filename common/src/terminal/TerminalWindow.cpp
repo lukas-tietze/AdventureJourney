@@ -1,6 +1,7 @@
 #include <algorithm>
 
 #include "Terminal.hpp"
+#include "data/Io.hpp"
 
 using util::Point;
 using util::Rectangle;
