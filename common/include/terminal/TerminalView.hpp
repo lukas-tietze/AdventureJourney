@@ -49,9 +49,39 @@ class ColorPallette : public json::IJsonSerializable
 
 namespace controlStyles
 {
-extern ColorPallette default8x16;
+class ControlStyleColorPallette : public ColorPallette
+{
+  private:
+    colorPairId_t controlText;
+    colorPairId_t disabledControlText;
+    colorPairId_t controlBorder;
+    colorPairId_t inactiveControlBorder;
+    colorPairId_t disabledControlBorder;
+
+  public:
+    ControlStyleColorPallette(const util::Array<util::Color> &, const util::Array<ColorPair> &);
+
+    colorPairId_t GetControlText() const;
+    colorPairId_t GetDisabledControlText() const;
+    colorPairId_t GetControlBorder() const;
+    colorPairId_t GetInactiveControlBorder() const;
+    colorPairId_t GetDisabledControlBorder() const;
+
+    void SetControlText(colorPairId_t);
+    void SetDisabledControlText(colorPairId_t);
+    void SetControlBorder(colorPairId_t);
+    void SetInactiveControlBorder(colorPairId_t);
+    void SetDisabledControlBorder(colorPairId_t);
+
+    virtual json::Node *Serialize();
+    virtual void Deserialize(const json::Node *);
+};
 
 std::tuple<size_t, size_t> LoadStyles();
+
+extern ControlStyleColorPallette defaultMinimal;
+extern ControlStyleColorPallette defaultReduced;
+extern ControlStyleColorPallette defaultFull;
 
 extern colorPairId_t controlText;
 extern colorPairId_t disabledControlText;
