@@ -43,6 +43,7 @@ class Border
   private:
     uint8_t sizes[4];
     int styles[4];
+    char values[4]; //TOOD
 
   public:
     Border();
@@ -111,6 +112,7 @@ class ControlBase
     bool ValidateSize(const util::Dimension &) const;
 
     virtual void Update();
+    colorPairId_t Style(ControlStyleColor);
 
   public:
     ControlBase();

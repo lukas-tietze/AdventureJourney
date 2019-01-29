@@ -47,48 +47,30 @@ class ColorPallette : public json::IJsonSerializable
     bool operator!=(const ColorPallette &) const;
 };
 
-namespace controlStyles
+enum class ControlStyleColor
 {
+    ControlText = 0,
+    DisabledControlText,
+    ControlBorder,
+    InactiveControlBorder,
+    DisabledControlBorder,
+    ColorCount,
+};
+
 class ControlStyleColorPallette : public ColorPallette
 {
   private:
-    colorPairId_t controlText;
-    colorPairId_t disabledControlText;
-    colorPairId_t controlBorder;
-    colorPairId_t inactiveControlBorder;
-    colorPairId_t disabledControlBorder;
+    std::array<colorId_t, static_cast<int>(ControlStyleColor::ColorCount)> colors;
 
   public:
     ControlStyleColorPallette(const util::Array<util::Color> &, const util::Array<ColorPair> &);
 
-    colorPairId_t GetControlText() const;
-    colorPairId_t GetDisabledControlText() const;
-    colorPairId_t GetControlBorder() const;
-    colorPairId_t GetInactiveControlBorder() const;
-    colorPairId_t GetDisabledControlBorder() const;
-
-    void SetControlText(colorPairId_t);
-    void SetDisabledControlText(colorPairId_t);
-    void SetControlBorder(colorPairId_t);
-    void SetInactiveControlBorder(colorPairId_t);
-    void SetDisabledControlBorder(colorPairId_t);
+    colorId_t operator[](ControlStyleColor) const;
+    colorId_t &operator[](ControlStyleColor);
 
     virtual json::Node *Serialize();
     virtual void Deserialize(const json::Node *);
 };
-
-std::tuple<size_t, size_t> LoadStyles();
-
-extern ControlStyleColorPallette defaultMinimal;
-extern ControlStyleColorPallette defaultReduced;
-extern ControlStyleColorPallette defaultFull;
-
-extern colorPairId_t controlText;
-extern colorPairId_t disabledControlText;
-extern colorPairId_t controlBorder;
-extern colorPairId_t inactiveControlBorder;
-extern colorPairId_t disabledControlBorder;
-} // namespace controlStyles
 
 class TerminalView
 {
