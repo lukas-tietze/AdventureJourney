@@ -12,7 +12,7 @@ enum class InputMode
     Line,
 };
 
-std::ostream &operator<<(std::ostream &, const InputMode &);
+std::ostream &operator<<(std::ostream &, const InputMode);
 
 enum class ResizeMode
 {
@@ -25,7 +25,7 @@ enum class ResizeMode
     All = North | South | West | East,
 };
 
-std::ostream &operator<<(std::ostream &, const ResizeMode &);
+std::ostream &operator<<(std::ostream &, const ResizeMode);
 
 enum class OutputAttribute
 {
@@ -42,7 +42,7 @@ enum class OutputAttribute
     All = None | Standout | Underline | Reverse | Blink | Dimmed | Bold | Protect | Invisible | AlternatCharset,
 };
 
-std::ostream &operator<<(std::ostream &, const OutputAttribute &);
+std::ostream &operator<<(std::ostream &, const OutputAttribute);
 
 enum class DefaultColors
 {
@@ -56,7 +56,7 @@ enum class DefaultColors
     White = COLOR_WHITE,
 };
 
-std::ostream &operator<<(std::ostream &, const DefaultColors &);
+std::ostream &operator<<(std::ostream &, const DefaultColors);
 
 enum class MouseAction
 {
@@ -85,7 +85,7 @@ enum class MouseAction
     ButtonAlt = BUTTON_ALT,
 };
 
-std::ostream &operator<<(std::ostream &, const MouseAction &);
+std::ostream &operator<<(std::ostream &, const MouseAction);
 
 enum class CursorMode
 {
@@ -94,7 +94,7 @@ enum class CursorMode
     Highlighted = 2
 };
 
-std::ostream &operator<<(std::ostream &, const CursorMode &);
+std::ostream &operator<<(std::ostream &, const CursorMode);
 
 bool IsSpecialKey(int key);
 bool IsAsciiKey(int key);
@@ -205,5 +205,5 @@ enum class Key
     Event = KEY_EVENT,
 };
 
-std::ostream &operator<<(std::ostream &, const Key &);
+std::ostream &operator<<(std::ostream &, const Key);
 } // namespace terminal

@@ -34,6 +34,7 @@ terminal::TerminalView::TerminalView(int width, int height) : width(width),
     this->BufferColorPair(0, COLOR_WHITE, COLOR_BLACK);
     this->SetActiveColorPair(0);
     this->SetBackgroundColorPair(0);
+    this->RestoreDefaultColors();
 
     this->window = newwin(this->height, this->width, 0, 0);
     keypad(this->window, true);
@@ -403,9 +404,24 @@ void terminal::TerminalView::ApplyColorPallette(const ColorPallette &p)
         this->Flush();
 }
 
+void terminal::TerminalView::ApplyControlColorPallette(const ControlStyleColorPallette &p)
+{
+    this->ApplyColorPallette(p);
+
+    this->controlStyles = p.GetControlColors();
+
+    if (this->liveMode)
+        this->Flush();
+}
+
 terminal::ColorPallette terminal::TerminalView::ExportCurrentColorPallette() const
 {
     return ColorPallette(this->colors, this->colorPairs);
+}
+
+terminal::ControlStyleColorPallette terminal::TerminalView::ExportCurrentControlColorPallette() const
+{
+    return ControlStyleColorPallette(this->colors, this->colorPairs, this->controlStyles);
 }
 
 void terminal::TerminalView::LoadColorPalletteFromJson(const std::string &path)
@@ -420,6 +436,18 @@ void terminal::TerminalView::LoadColorPalletteFromJson(const std::string &path)
     this->ApplyColorPallette(c);
 }
 
+void terminal::TerminalView::LoadControlColorPalletteFromJson(const std::string &path)
+{
+    json::Node *res;
+    json::Parser p;
+    ControlStyleColorPallette c;
+
+    p.parse(util::ReadFile(path), res);
+    c.Deserialize(res);
+
+    this->ApplyControlColorPallette(c);
+}
+
 void terminal::TerminalView::SaveCurrentColorPallette(const std::string &path) const
 {
     std::ofstream out;
@@ -432,6 +460,27 @@ void terminal::TerminalView::SaveCurrentColorPallette(const std::string &path) c
     util::WriteFile(path, p.ToString());
 }
 
+void terminal::TerminalView::SaveCurrentControlColorPallette(const std::string &path) const
+{
+    std::ofstream out;
+
+    out.open(path);
+    json::FormattedPrinter p;
+
+    p.Print(this->ExportCurrentControlColorPallette().Serialize());
+
+    util::WriteFile(path, p.ToString());
+}
+
 void terminal::TerminalView::RestoreDefaultColors()
 {
+    auto colors = this->colors.Length();
+    auto colorPairs = this->colorPairs.Length();
+
+    if (colors >= 8)
+    {
+        if (colorPairs >= 8)
+        {
+        }
+    }
 }

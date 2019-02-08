@@ -1,8 +1,9 @@
 #include "Exception.hpp"
 
 #include "terminal/Values.hpp"
+#include "terminal/TerminalView.hpp"
 
-std::ostream &terminal::operator<<(std::ostream &s, const terminal::InputMode &value)
+std::ostream &terminal::operator<<(std::ostream &s, const terminal::InputMode value)
 {
     switch (value)
     {
@@ -22,7 +23,7 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::InputMode &v
     return s;
 }
 
-std::ostream &terminal::operator<<(std::ostream &s, const terminal::ResizeMode &value)
+std::ostream &terminal::operator<<(std::ostream &s, const terminal::ResizeMode value)
 {
     switch (value)
     {
@@ -54,7 +55,7 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::ResizeMode &
     return s;
 }
 
-std::ostream &terminal::operator<<(std::ostream &s, const terminal::OutputAttribute &value)
+std::ostream &terminal::operator<<(std::ostream &s, const terminal::OutputAttribute value)
 {
     switch (value)
     {
@@ -99,7 +100,7 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::OutputAttrib
     return s;
 }
 
-std::ostream &terminal::operator<<(std::ostream &s, const terminal::DefaultColors &value)
+std::ostream &terminal::operator<<(std::ostream &s, const terminal::DefaultColors value)
 {
     switch (value)
     {
@@ -134,7 +135,7 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::DefaultColor
     return s;
 }
 
-std::ostream &terminal::operator<<(std::ostream &s, const terminal::CursorMode &value)
+std::ostream &terminal::operator<<(std::ostream &s, const terminal::CursorMode value)
 {
     switch (value)
     {
@@ -153,7 +154,7 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::CursorMode &
     }
 }
 
-std::ostream &terminal::operator<<(std::ostream &s, const terminal::Key &value)
+std::ostream &terminal::operator<<(std::ostream &s, const terminal::Key value)
 {
     switch (value)
     {
@@ -467,7 +468,7 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::Key &value)
     return s;
 }
 
-std::ostream &terminal::operator<<(std::ostream &s, const MouseAction &value)
+std::ostream &terminal::operator<<(std::ostream &s, MouseAction value)
 {
     switch (value)
     {
@@ -540,5 +541,36 @@ std::ostream &terminal::operator<<(std::ostream &s, const MouseAction &value)
     case terminal::MouseAction::ButtonAlt:
         s << "ButtonAlt";
         break;
+    default:
+        throw util::InvalidCaseException();
     }
+}
+
+std::ostream &terminal::operator<<(std::ostream &s, const terminal::ControlStyleColor value)
+{
+    switch (value)
+    {
+    case terminal::ControlStyleColor::ControlText:
+        s << "ControlText";
+        break;
+    case terminal::ControlStyleColor::DisabledControlText:
+        s << "DisabledControlText";
+        break;
+    case terminal::ControlStyleColor::ControlBorder:
+        s << "ControlBorder";
+        break;
+    case terminal::ControlStyleColor::InactiveControlBorder:
+        s << "InactiveControlBorder";
+        break;
+    case terminal::ControlStyleColor::DisabledControlBorder:
+        s << "DisabledControlBorder";
+        break;
+    case terminal::ControlStyleColor::ColorCount:
+        s << "ColorCount";
+        break;
+    default:
+        throw util::InvalidCaseException();
+    }
+
+    return s;
 }

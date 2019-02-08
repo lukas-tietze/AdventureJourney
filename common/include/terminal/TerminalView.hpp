@@ -57,16 +57,26 @@ enum class ControlStyleColor
     ColorCount,
 };
 
+std::ostream &operator<<(std::ostream &, ControlStyleColor);
+
 class ControlStyleColorPallette : public ColorPallette
 {
   private:
-    std::array<colorId_t, static_cast<int>(ControlStyleColor::ColorCount)> colors;
+    std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ColorCount)> styles;
 
   public:
+    ControlStyleColorPallette();
     ControlStyleColorPallette(const util::Array<util::Color> &, const util::Array<ColorPair> &);
+    ControlStyleColorPallette(const util::Array<util::Color> &, const util::Array<ColorPair> &, const std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ColorCount)> &);
 
     colorId_t operator[](ControlStyleColor) const;
     colorId_t &operator[](ControlStyleColor);
+
+    colorId_t GetStyle(ControlStyleColor) const;
+    void SetStyle(ControlStyleColor, colorId_t);
+
+    std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ColorCount)> &GetControlColors();
+    const std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ColorCount)> &GetControlColors() const;
 
     virtual json::Node *Serialize();
     virtual void Deserialize(const json::Node *);
@@ -134,9 +144,13 @@ class TerminalView
     bool ColorsSupported() const;
 
     void ApplyColorPallette(const ColorPallette &);
+    void ApplyControlColorPallette(const ControlStyleColorPallette &);
     ColorPallette ExportCurrentColorPallette() const;
+    ControlStyleColorPallette ExportCurrentControlColorPallette() const;
     void LoadColorPalletteFromJson(const std::string &path);
+    void LoadControlColorPalletteFromJson(const std::string &path);
     void SaveCurrentColorPallette(const std::string &path) const;
+    void SaveCurrentControlColorPallette(const std::string &path) const;
     void RestoreDefaultColors();
 
   protected:
@@ -163,6 +177,7 @@ class TerminalView
 
     util::Array<util::Color> colors;
     util::Array<ColorPair> colorPairs;
+    std::array<colorId_t, static_cast<int>(ControlStyleColor::ColorCount)> controlStyles;
     int activeColorPair;
     int activeBackgroundColorPair;
 

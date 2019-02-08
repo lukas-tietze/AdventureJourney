@@ -38,8 +38,6 @@ void QuitAfterError()
 
 void RunComponentTest()
 {
-    util::err.WriteLine("Loaded Styles with: %", terminal::controlStyles::LoadStyles());
-
     terminal::TerminalWindow w;
 
     auto container = new terminal::FrameContainer();
