@@ -123,8 +123,9 @@ class TerminalView
     void SetBackgroundColorPair(colorPairId_t);
     colorPairId_t GetActiveColorPair() const;
     colorPairId_t GetActiveBackground() const;
-    const ColorPair &GetContent(colorPairId_t id) const;
-    const util::Color &GetColor(colorId_t id) const;
+    ColorPair GetContent(colorPairId_t id) const;
+    util::Color GetColor(colorId_t id) const;
+    colorPairId_t GetControlStyle(ControlStyleColor) const;
 
     size_t GetMaxColors() const;
     size_t GetMaxColorPairs() const;

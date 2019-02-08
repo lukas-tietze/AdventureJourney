@@ -342,3 +342,8 @@ terminal::AutoSizeMode terminal::ControlBase::GetAutoSizeMode() const
 void terminal::ControlBase::RestoreLayout()
 {
 }
+
+terminal::colorPairId_t terminal::ControlBase::Style(ControlStyleColor color)
+{
+    return TerminalView::GetInstance()->GetControlStyle(color);
+}

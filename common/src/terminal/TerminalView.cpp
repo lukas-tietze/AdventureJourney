@@ -258,9 +258,19 @@ bool terminal::TerminalView::CanChangeColors() const
     return can_change_color();
 }
 
-const util::Color &terminal::TerminalView::GetColor(colorId_t id) const
+util::Color terminal::TerminalView::GetColor(colorId_t id) const
 {
     return this->colors[id];
+}
+
+terminal::ColorPair terminal::TerminalView::GetContent(colorPairId_t id) const
+{
+    return this->colorPairs[id - 1];
+}
+
+terminal::colorPairId_t terminal::TerminalView::GetControlStyle(ControlStyleColor id) const
+{
+    return this->controlStyles[static_cast<size_t>(id)];
 }
 
 bool terminal::TerminalView::BufferColor(colorId_t index, const util::Color &color)
@@ -333,11 +343,6 @@ terminal::colorPairId_t terminal::TerminalView::GetActiveColorPair() const
 terminal::colorPairId_t terminal::TerminalView::GetActiveBackground() const
 {
     return this->activeBackgroundColorPair;
-}
-
-const terminal::ColorPair &terminal::TerminalView::GetContent(colorPairId_t id) const
-{
-    return this->colorPairs[id - 1];
 }
 
 int terminal::TerminalView::CreateStyle(terminal::OutputAttribute attribs, int ColorPair)
