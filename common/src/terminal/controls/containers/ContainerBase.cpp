@@ -128,6 +128,19 @@ void terminal::ContainerBase::Add(terminal::ControlBase *control)
     control->HandleAddToControl(this);
 }
 
+bool terminal::ContainerBase::Remove(terminal::ControlBase *control)
+{
+    auto pos = std::find(this->controls.begin(), this->controls.end(), control);
+
+    if (pos != this->controls.end())
+    {
+        this->controls.erase(pos);
+        return true;
+    }
+
+    return false;
+}
+
 void terminal::ContainerBase::SwitchFocus(int next)
 {
     if (this->focusedControlIndex > 0)

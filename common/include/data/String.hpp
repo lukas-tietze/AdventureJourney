@@ -41,6 +41,12 @@ std::string ToString(const T &arg)
     return s.str();
 }
 
+template <class T>
+T Parse(const std::string &value)
+{
+    return T();
+}
+
 template <typename NumT>
 bool ParseIntegral(const std::string &text, NumT &target)
 {

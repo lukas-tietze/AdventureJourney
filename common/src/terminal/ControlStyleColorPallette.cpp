@@ -1,5 +1,6 @@
 #include "terminal/TerminalView.hpp"
 #include "data/String.hpp"
+#include "data/EnumHelper.hpp"
 
 terminal::ControlStyleColorPallette::ControlStyleColorPallette() : ColorPallette()
 {
@@ -10,7 +11,7 @@ terminal::ControlStyleColorPallette::ControlStyleColorPallette(const util::Array
 }
 
 terminal::ControlStyleColorPallette::ControlStyleColorPallette(const util::Array<util::Color> &colors, const util::Array<ColorPair> &colorPairs, const std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ColorCount)> &styles) : ColorPallette(colors, colorPairs),
-                                                                                                                                                                                                                                      styles(styles)
+                                                                                                                                                                                                                                            styles(styles)
 {
 }
 
@@ -64,7 +65,30 @@ json::Node *terminal::ControlStyleColorPallette::Serialize()
     return node;
 }
 
-void terminal::ControlStyleColorPallette::Deserialize(const json::Node *)
+void terminal::ControlStyleColorPallette::Deserialize(const json::Node *node)
 {
-    // TODO
+    this->ColorPallette::Deserialize(node);
+
+    const json::ObjectNode *obj;
+    const json::PrimitiveNode *prim;
+
+    if (node != nullptr &&
+        node->GetType() == json::ValueType::Object &&
+        (obj = static_cast<const json::ObjectNode *>(node)) != nullptr)
+    {
+        for(const auto &value : *obj)
+        {
+            auto item = util::Deserialize<terminal::ControlStyleColor>((*value).first());
+
+            switch (util::)
+            {
+                case /* constant-expression */:
+                    /* code */
+                    break;
+            
+                default:
+                    break;
+            }
+        }
+    }
 }

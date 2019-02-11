@@ -21,6 +21,7 @@ class ContainerBase : public ControlBase
     virtual ~ContainerBase();
 
     virtual void Add(ControlBase *item);
+    virtual bool Remove(ControlBase *item);
 
     virtual void HandleChildZIndexChanged(ControlBase *);
     virtual void HandleChildTabIndexChanged(ControlBase *);

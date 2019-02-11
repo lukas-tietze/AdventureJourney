@@ -10,14 +10,13 @@ namespace terminal
 class FrameContainer : public ContainerBase
 {
   private:
-    ControlBase *top;
-    ControlBase *bottom;
-    ControlBase *left;
-    ControlBase *right;
-    ControlBase *center;
+    ControlBase *controls[5];
+    int weigths[5];
+    bool weigthsFixed[5];
 
   public:
     FrameContainer();
+    virtual ~FrameContainer();
 
     enum class Orientation
     {
@@ -28,8 +27,13 @@ class FrameContainer : public ContainerBase
         Center,
     };
 
-    virtual void Add(ControlBase *item);
-    virtual void Add(Orientation where, ControlBase *item);
-    virtual void RestoreLayout();
+    void Add(ControlBase *);
+    void Add(Orientation, ControlBase *);
+    bool Remove(ControlBase *);
+
+    void RestoreLayout();
+    void SetWeigth(Orientation, int);
+
+    void Render(Canvas &);
 };
 } // namespace terminal
