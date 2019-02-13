@@ -11,10 +11,7 @@ namespace util
 class ParsingException : public util::Exception
 {
   public:
-    template <class T>
-    ParsingException(const std::string &value) : Exception(util::Format("Failed to parse %: % is no valid value!", typeid(T).name(), value))
-    {
-    }
+    ParsingException(const std::type_info &, const std::string &value);
 };
 
 template <class T>
@@ -30,17 +27,17 @@ bool TryDeserialize(const std::string &value, T &buf)
 
     if (items.empty())
     {
-        for(const auto &item in util::ListValues<T>()
+        for(const auto &item : util::ListValues<T>())
         {
-            items.push_back(std::make_tuple(item, std::ToString(item)));
+            items.push_back(std::make_tuple(item, util::ToString(item)));
         }
     }
 
     for (const auto &item : items)
     {
-        if (std::get<1>(*item) == value)
+        if (std::get<1>(item) == value)
         {
-            buf = std::get<1>(*item);
+            buf = std::get<0>(item);
             return true;
         }
     }
@@ -56,6 +53,6 @@ T Deserialize(const std::string &value)
     if (TryDeserialize<T>(value, res))
         return res;
 
-    throw ParsingException<T>(value);
+    throw ParsingException(typeid(T), value);
 }
 } // namespace util

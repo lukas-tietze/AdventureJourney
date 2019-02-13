@@ -64,6 +64,11 @@ void terminal::TerminalWindow::Start()
             this->HandleKey(input);
         }
 
+        if(!this->IsValid())
+        {
+            this->RestoreLayout();
+        }
+
         this->Render();
     }
 }

@@ -396,4 +396,12 @@ class FormattedPrinter
     std::string ToString() const;
     std::ostream &operator<<(std::ostream &) const;
 };
+
+template <class T>
+bool AssureType(const json::Node *n, const T *&out, json::ValueType type)
+{
+    return n != nullptr &&
+           n->GetType() == type &&
+           (out = dynamic_cast<const T *>(n)) != nullptr;
+}
 } // namespace json

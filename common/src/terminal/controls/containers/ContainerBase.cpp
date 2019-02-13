@@ -180,4 +180,9 @@ size_t terminal::ContainerBase::GetFocusedControlIndex() const
 
 void terminal::ContainerBase::RestoreLayout()
 {
+    for (auto control : this->controls)
+    {
+        control->ApplyAutoSize(this->GetSize());
+        control->RestoreLayout();
+    }
 }

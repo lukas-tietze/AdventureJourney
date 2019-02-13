@@ -32,10 +32,8 @@ enum class Alignment
 enum class AutoSizeMode
 {
     None,
-    FillHorizontal,
-    FillVertical,
     Fill,
-    FitContent,
+    Fit,
 };
 
 class Border
@@ -43,7 +41,7 @@ class Border
   private:
     uint8_t sizes[4];
     int styles[4];
-    char values[4]; //TOOD
+    char values[4]; //TODO
 
   public:
     Border();
@@ -86,7 +84,7 @@ class ControlBase
     util::Rectangle bounds;
     util::Dimension minimumSize;
     util::Dimension maximumSize;
-    ControlBase *parent;
+    ContainerBase *parent;
     int zIndex;
     bool hasFocus;
     int tabIndex;
@@ -128,8 +126,8 @@ class ControlBase
         int operator()(const ControlBase &, const ControlBase &);
     };
 
-    ControlBase *GetParent();
-    const ControlBase *GetParent() const;
+    ContainerBase *GetParent();
+    const ContainerBase *GetParent() const;
     bool HasParent() const;
     void SetZIndex(int);
     int GetZIndex() const;

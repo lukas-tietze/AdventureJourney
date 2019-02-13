@@ -24,12 +24,12 @@ terminal::ControlBase::~ControlBase()
 {
 }
 
-terminal::ControlBase *terminal::ControlBase::GetParent()
+terminal::ContainerBase *terminal::ControlBase::GetParent()
 {
     return this->parent;
 }
 
-const terminal::ControlBase *terminal::ControlBase::GetParent() const
+const terminal::ContainerBase *terminal::ControlBase::GetParent() const
 {
     return this->parent;
 }
@@ -257,6 +257,9 @@ void terminal::ControlBase::HandleMouse(MouseInput &)
 
 void terminal::ControlBase::HandleAddToControl(ContainerBase *newParent)
 {
+    if (this->parent != nullptr)
+        this->parent->Remove(this);
+
     this->parent = newParent;
 }
 

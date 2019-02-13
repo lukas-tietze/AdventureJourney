@@ -72,22 +72,14 @@ void terminal::ControlStyleColorPallette::Deserialize(const json::Node *node)
     const json::ObjectNode *obj;
     const json::PrimitiveNode *prim;
 
-    if (node != nullptr &&
-        node->GetType() == json::ValueType::Object &&
-        (obj = static_cast<const json::ObjectNode *>(node)) != nullptr)
+    if (json::AssureType<json::ObjectNode>(node, obj, json::ValueType::Object))
     {
-        for(const auto &value : *obj)
+        for (const auto &value : *obj)
         {
-            auto item = util::Deserialize<terminal::ControlStyleColor>((*value).first());
-
-            switch (util::)
+            if(json::AssureType<json::PrimitiveNode>(value.second, prim, json::ValueType::Number))
             {
-                case /* constant-expression */:
-                    /* code */
-                    break;
-            
-                default:
-                    break;
+                auto id = util::Deserialize<terminal::ControlStyleColor>(value.first);
+                auto style = static_cast<colorPairId_t>(prim->GetValueAsNumber());
             }
         }
     }

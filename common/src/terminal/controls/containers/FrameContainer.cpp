@@ -3,8 +3,8 @@
 
 terminal::FrameContainer::FrameContainer() : ContainerBase(),
                                              controls(),
-                                             weigths(),
-                                             weigthsFixed()
+                                             weights(),
+                                             weightsFixed()
 {
 }
 
@@ -58,7 +58,14 @@ bool terminal::FrameContainer::Remove(ControlBase *control)
 
 void terminal::FrameContainer::RestoreLayout()
 {
-    this->controls[0];
+    auto offset = this->GetLocation();
+    auto remainingSpace = util::Rectangle(0, 0, this->GetSize());
+
+    for (auto control : this->controls)
+    {
+        control->ApplyAutoSize(this->GetSize());
+        control->RestoreLayout();
+    }
 }
 
 void terminal::FrameContainer::Render(Canvas &c)

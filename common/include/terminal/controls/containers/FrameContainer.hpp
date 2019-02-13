@@ -11,8 +11,10 @@ class FrameContainer : public ContainerBase
 {
   private:
     ControlBase *controls[5];
-    int weigths[5];
-    bool weigthsFixed[5];
+    int weights[5];
+    bool weightsFixed[5];
+    int minWidths[4];
+    int maxWidths[4];
 
   public:
     FrameContainer();
@@ -32,7 +34,9 @@ class FrameContainer : public ContainerBase
     bool Remove(ControlBase *);
 
     void RestoreLayout();
-    void SetWeigth(Orientation, int);
+    void SetWeight(Orientation, int);
+    void SetMaxSize(Orientation, int);
+    void SetMinSize(Orientation, int);
 
     void Render(Canvas &);
 };
