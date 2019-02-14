@@ -85,6 +85,12 @@ bool ParseFloat(const std::string &text, NumT &target)
     return true;
 }
 
+class FormatException : public util::Exception
+{
+  public:
+    FormatException(const std::string &what);
+};
+
 namespace
 {
 template <class T>
@@ -95,14 +101,38 @@ size_t WriteWithFormat(const std::string &format, std::stringstream &buf, size_t
     buf << arg;
 
     if (end == std::string::npos)
-        throw util::Exception("Wrong format!");
+        throw util::FormatException("Format specifier has no closing '}'-bracket!");
 
     return end;
 }
 
 void FormatInternal(const std::string &format, std::stringstream &buf, size_t pos)
 {
-    buf << (format.c_str() + pos);
+    while (pos < format.length() - 1)
+    {
+        if (format[pos] == '%')
+        {
+            throw FormatException("Format placeholder without too few arguments!");
+        }
+        else if (format[pos] == '\\')
+        {
+            buf << format[pos + 1];
+            pos += 2;
+        }
+        else
+        {
+            buf << format[pos];
+            pos++;
+        }
+    }
+
+    if (pos < format.length())
+    {
+        if (format.back() == '%')
+            throw FormatException("Format placeholder without too few arguments!");
+        else
+            buf << format.back();
+    }
 }
 
 template <class TFirst, class... TArgs>
@@ -137,18 +167,24 @@ void FormatInternal(const std::string &format, std::stringstream &buf, size_t po
         }
     }
 
-    if (format.back() == '%')
+    if (pos < format.length())
     {
-        buf << firstArg;
+        if (format.back() == '%')
+            buf << firstArg;
+        else
+            buf << format.back();
     }
 }
 } // namespace
 
-std::string Format(const std::string &format);
-
 template <class TFirst, class... TArgs>
 std::string Format(const std::string &format, const TFirst &firstArg, const TArgs &... args)
 {
+    if (format.empty())
+    {
+        return std::string("");
+    }
+
     std::stringstream buf;
 
     FormatInternal(format, buf, 0, firstArg, args...);

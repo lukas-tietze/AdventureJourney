@@ -59,6 +59,7 @@ int TestArray();
 int TestCollectRope();
 int TestCache();
 int TestList();
+int TestIndexMapper();
 } // namespace CollectionTest
 } // namespace DataTest
 } // namespace test

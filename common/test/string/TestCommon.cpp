@@ -4,6 +4,11 @@
 
 int test::stringTest::Format()
 {
+    assert::AreEqual(std::string(""), util::Format("", 0));
+    assert::AreEqual(std::string("%"), util::Format("\\%", 0));
+    assert::AreEqual(std::string("\\abc12"), util::Format("\\\\%", "abc12"));
+    assert::AreEqual(std::string("123abcd"), util::Format("1%%%d", 23, 'a', "bc"));
+
     return 0;
 }
 

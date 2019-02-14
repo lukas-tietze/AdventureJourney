@@ -47,6 +47,7 @@ int main(int argc, char **argv)
     tests.push_back(test::TestRun(new test::SimpleTest("array", &test::dataTest::collectionTest::TestArray)));
     tests.push_back(test::TestRun(new test::SimpleTest("list", &test::dataTest::collectionTest::TestList)));
     tests.push_back(test::TestRun(new test::SimpleTest("cache", &test::dataTest::collectionTest::TestCache)));
+    tests.push_back(test::TestRun(new test::SimpleTest("index mapper", &test::dataTest::collectionTest::TestIndexMapper)));
     tests.push_back(test::TestRun(new test::SimpleTest("hex4 to number", &test::mathTest::TestHex4ToNumber)));
     tests.push_back(test::TestRun(new test::SimpleTest("hex to number", &test::mathTest::TestHexToNumber)));
     tests.push_back(test::TestRun(new test::SimpleTest("is hex char", &test::mathTest::TestIsHexChar)));
