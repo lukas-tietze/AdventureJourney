@@ -16,6 +16,11 @@ class BasicRectangle
     BasicDimension<T> size;
 
   public:
+    BasicRectangle() : location(),
+                       size()
+    {
+    }
+
     BasicRectangle(const util::BasicRectangle<T> &copy) : location(copy.location),
                                                           size(copy.size)
     {
@@ -114,6 +119,96 @@ class BasicRectangle
     T GetArea() const
     {
         return this->size.GetArea();
+    }
+
+    BasicRectangle<T> GetLeftSub(T units) const
+    {
+        return BasicRectangle<T>(this->GetLocation(),
+                                 units,
+                                 this->GetHeight());
+    }
+
+    BasicRectangle<T> &MoveLeftEdge(T units)
+    {
+        this->location.SetX(this->GetX() + units);
+        this->size.SetWidth(this->GetWidth() - units);
+
+        return *this;
+    }
+
+    BasicRectangle<T> MoveLeftEdge(T units) const
+    {
+        return BasicRectangle<T>(this->location.GetX() + units,
+                                 this->location.GetY(),
+                                 this->size.GetWidth() - units,
+                                 this->size.GetHeight());
+    }
+
+    BasicRectangle<T> GetRightSub(T units) const
+    {
+        return BasicRectangle<T>(this->GetMaxX() - units,
+                                 this->GetMinY(),
+                                 units,
+                                 this->GetHeight());
+    }
+
+    BasicRectangle<T> &MoveRightEdge(T units)
+    {
+        this->size.SetWidth(this->GetWidth() + units);
+
+        return *this;
+    }
+
+    BasicRectangle<T> MoveRightEdge(T units) const
+    {
+        return util::BasicRectangle<T>(this->location,
+                                       this->size.GetWidth() + units,
+                                       this->size.GetHeight());
+    }
+
+    BasicRectangle<T> GetTopSub(T units) const
+    {
+        return BasicRectangle<T>(this->GetLocation(),
+                                 this->GetWidth(),
+                                 units);
+    }
+
+    BasicRectangle<T> &MoveTopEdge(T units)
+    {
+        this->location.SetY(this->GetY() + units);
+        this->size.SetHeight(this->GetHeight() - units);
+
+        return *this;
+    }
+
+    BasicRectangle<T> MoveTopEdge(T units) const
+    {
+        return BasicRectangle<T>(this->location.GetX(),
+                                 this->location.GetY() + units,
+                                 this->size.GetWidth(),
+                                 this->size.GetHeight() - units);
+    }
+
+    BasicRectangle<T> GetBottomSub(T units) const
+    {
+        return BasicRectangle<T>(this->GetMinX(),
+                                 this->GetMaxY() - units,
+                                 this->GetWidth(),
+                                 units);
+    }
+
+    BasicRectangle<T> &MoveBottomEdge(T units)
+    {
+        this->size.SetHeight(this->GetHeight() + units);
+
+        return *this;
+    }
+
+    BasicRectangle<T> MoveBottomEdge(T units) const
+    {
+        return BasicRectangle<T>(this->location,
+                                 this->size.GetWidth(),
+                                 this->size.GetHeight() + units);
     }
 
     const util::BasicPoint<T> &GetLocation() const

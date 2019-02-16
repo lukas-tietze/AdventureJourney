@@ -2,7 +2,10 @@
 
 #include "terminal/Values.hpp"
 #include "terminal/TerminalView.hpp"
+#include "terminal/controls/ControlBase.hpp"
+#include "terminal/controls/containers/FrameContainer.hpp"
 
+#pragma region enums
 std::ostream &terminal::operator<<(std::ostream &s, const terminal::InputMode value)
 {
     switch (value)
@@ -574,3 +577,97 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::ControlStyle
 
     return s;
 }
+
+std::ostream &terminal::operator<<(std::ostream &s, terminal::AutoSizeMode value)
+{
+    switch (value)
+    {
+    case terminal::AutoSizeMode::None:
+        s << "None";
+        break;
+    case terminal::AutoSizeMode::Fill:
+        s << "Fill";
+        break;
+    case terminal::AutoSizeMode::Fit:
+        s << "Fit";
+        break;
+    default:
+        throw util::InvalidCaseException::MakeException(value);
+    }
+
+    return s;
+}
+
+std::ostream &terminal::operator<<(std::ostream &s, terminal::Alignment value)
+{
+    switch (value)
+    {
+    case terminal::Alignment::Right:
+        s << "Right";
+        break;
+    case terminal::Alignment::Left:
+        s << "Left";
+        break;
+    case terminal::Alignment::Top:
+        s << "Top";
+        break;
+    case terminal::Alignment::Bottom:
+        s << "Bottom";
+        break;
+    case terminal::Alignment::Fill:
+        s << "Fill";
+        break;
+    case terminal::Alignment::Absolute:
+        s << "Absolute";
+        break;
+    default:
+        throw util::InvalidCaseException::MakeException(value);
+    }
+
+    return s;
+}
+
+std::ostream &terminal::operator<<(std::ostream &s, terminal::FrameContainer::Orientation value)
+{
+    switch (value)
+    {
+    case terminal::FrameContainer::Orientation::Left:
+        s << "Left";
+        break;
+    case terminal::FrameContainer::Orientation::Right:
+        s << "Right";
+        break;
+    case terminal::FrameContainer::Orientation::Top:
+        s << "Top";
+        break;
+    case terminal::FrameContainer::Orientation::Bottom:
+        s << "Bottom";
+        break;
+    case terminal::FrameContainer::Orientation::Center:
+        s << "Center";
+        break;
+    default:
+        throw util::InvalidCaseException();
+    }
+
+    return s;
+}
+
+#pragma endregion enums
+#pragma region structs
+
+std::ostream &terminal::operator<<(std::ostream &s, const terminal::KeyInput &value)
+{
+    s << value.key << " (" << (value.handled ? "handled" : "unhandled") << ")";
+
+    return s;
+}
+
+std::ostream &terminal::operator<<(std::ostream &s, const terminal::MouseInput &value)
+{
+    s << value.action << " [" << value.cx << ", " << value.cy << "] (" << (value.handled ? "handled" : "unhandled") << ")";
+
+    return s;
+}
+
+#pragma endregion structs

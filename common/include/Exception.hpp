@@ -2,6 +2,7 @@
 
 #include <stdexcept>
 #include <string>
+#include <sstream>
 
 #include <boost/stacktrace/stacktrace.hpp>
 
@@ -71,5 +72,16 @@ class InvalidCaseException : public util::Exception
     InvalidCaseException();
     InvalidCaseException(const std::string &which);
     InvalidCaseException(const std::string &which, const std::string &customMsg);
+
+    template<class TEnum>
+    static InvalidCaseException MakeException(TEnum value)
+    {
+        std::stringstream s[2];
+
+        s[0] << static_cast<int>(value);
+        s[1] << '"' << static_cast<int>(value) << "\" is no valid enum value for type \"" << typeid(TEnum).name() << '"';
+
+        return InvalidCaseException(s[0].str(), s[1].str());
+    }
 };
 } // namespace util

@@ -2,6 +2,8 @@
 #include "common/test/TestList.hpp"
 #include "Geometry.hpp"
 
+using util::Rectangle;
+
 int test::geometryTest::TestRectangle()
 {
     util::Rectangle r(1, 2, 4, 5);
@@ -53,4 +55,24 @@ int test::geometryTest::TestRectangle()
     assert::AreEqual(util::Rectangle(0, 5, 5, 5), r.Intersect(util::Rectangle(-5, 5, 10, 10)));
 
     return 0;
+}
+
+int test::geometryTest::TestRectangleCuts()
+{
+    const Rectangle r(3, 5, 12, 8);
+
+    assert::AreEqual(Rectangle(7, 5, 8, 8), r.MoveLeftEdge(4));
+    assert::AreEqual(Rectangle(3, 5, 8, 8), r.MoveRightEdge(-4));
+    assert::AreEqual(Rectangle(3, 9, 12, 4), r.MoveTopEdge(4));
+    assert::AreEqual(Rectangle(3, 5, 12, 4), r.MoveBottomEdge(-4));
+}
+
+int test::geometryTest::TestRectangleMoves()
+{
+    const Rectangle r(3, 5, 12, 8);
+
+    assert::AreEqual(Rectangle(3, 5, 4, 8), r.GetLeftSub(4));
+    assert::AreEqual(Rectangle(11, 5, 4, 8), r.GetRightSub(4));
+    assert::AreEqual(Rectangle(3, 5, 12, 4), r.GetTopSub(4));
+    assert::AreEqual(Rectangle(3, 9, 12, 4), r.GetBottomSub(4));
 }

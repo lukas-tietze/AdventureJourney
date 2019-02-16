@@ -2,6 +2,9 @@
 
 #include <string>
 #include <vector>
+#include <map>
+#include <tuple>
+#include <list>
 #include <sstream>
 #include <Exception.hpp>
 
@@ -191,4 +194,71 @@ std::string Format(const std::string &format, const TFirst &firstArg, const TArg
 
     return buf.str();
 }
+
+namespace
+{
+template <class TIterator>
+void PrintSequence(std::ostream &s, TIterator pos, TIterator end)
+{
+    s << '{';
+
+    if (pos != end)
+        s << ' ' << *pos;
+
+    while (++pos != end)
+        s << ", " << *pos;
+
+    s << " }";
+}
+
+template <class TIterator>
+void PrintSequenceOfPairs(std::ostream &s, TIterator pos, TIterator end)
+{
+    s << '{';
+
+    if (pos != end)
+        s << ' ' << pos->first << "=>" << pos->second;
+
+    while (++pos != end)
+        s << ", " << pos->first << "=>" << pos->second;
+
+    s << " }";
+}
+
+// template<int pos, class ...Ts>
+// void PrintTuple(std::ostream &, const std::tuple<Ts...> &tuple)
+// {
+//     std::get<pos>
+// }
+} // namespace
+
+template <class T>
+std::ostream &operator<<(std::ostream &s, const std::vector<T> &vector)
+{
+    PrintSequence(s, vector.begin(), vector.end());
+
+    return s;
+}
+
+template <class T>
+std::ostream &operator<<(std::ostream &s, const std::list<T> &list)
+{
+    PrintSequence(s, list.begin(), list.end());
+
+    return s;
+}
+
+template <class TKey, class TValue>
+std::ostream &operator<<(std::ostream &s, const std::map<TKey, TValue> &map)
+{
+    PrintSequenceOfPairs(s, map.begin(), map.end());
+
+    return s;
+}
+
+// template <class... Ts>
+// std::ostream &operator<<(std::ostream &s, const std::tuple<Ts...> &)
+// {
+    
+// }
 } // namespace util

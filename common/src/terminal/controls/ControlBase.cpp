@@ -1,4 +1,5 @@
 #include "Terminal.hpp"
+#include "data/Io.hpp"
 
 int terminal::ControlBase::ZIndexSorter::operator()(const ControlBase &a, const ControlBase &b)
 {
@@ -16,7 +17,8 @@ terminal::ControlBase::ControlBase() : bounds(0, 0, 0, 0),
                                        hasFocus(false),
                                        visible(true),
                                        minimumSize(0, 0),
-                                       maximumSize(std::numeric_limits<int>::max(), std::numeric_limits<int>::max())
+                                       maximumSize(std::numeric_limits<int>::max(), std::numeric_limits<int>::max()),
+                                       autoSizeMode(AutoSizeMode::None)
 {
 }
 
@@ -320,6 +322,21 @@ bool terminal::ControlBase::IsBorderEnabled() const
 
 void terminal::ControlBase::ApplyAutoSize(const util::Dimension &availableSpace)
 {
+    switch (this->autoSizeMode)
+    {
+    case AutoSizeMode::None:
+        return;
+    case AutoSizeMode::Fill:
+        this->SetSize(availableSpace);
+        break;
+    case AutoSizeMode::Fit:
+        this->RestoreLayout();
+        break;
+    default:
+        throw util::InvalidCaseException::MakeException(this->autoSizeMode);
+    }
+
+    util::dbg.WriteLine("Applied Autosize to [%]. Mode is %. Proposed size: %. New size is %.", static_cast<void *>(this), this->autoSizeMode, availableSpace, this->GetSize());
 }
 
 void terminal::ControlBase::SetAutoSizeMode(AutoSizeMode mode)

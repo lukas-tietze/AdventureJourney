@@ -1,7 +1,9 @@
 #include "terminal/controls/containers/ContainerBase.hpp"
 #include "geometry/Rectangle.hpp"
 
-terminal::ContainerBase::ContainerBase() : ControlBase()
+terminal::ContainerBase::ContainerBase() : ControlBase(),
+                                           controls(0),
+                                           focusedControlIndex(-1)
 {
     this->SwitchFocus(-1);
 }

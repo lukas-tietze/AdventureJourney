@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ostream>
+
 #include "terminal/Canvas.hpp"
 #include "Geometry.hpp"
 
@@ -11,6 +13,8 @@ struct KeyInput
     bool handled;
 };
 
+std::ostream &operator<<(std::ostream &, const KeyInput &);
+
 struct MouseInput
 {
     int cx;
@@ -18,6 +22,8 @@ struct MouseInput
     MouseAction action;
     bool handled;
 };
+
+std::ostream &operator<<(std::ostream &, const MouseInput &);
 
 enum class Alignment
 {
@@ -29,12 +35,16 @@ enum class Alignment
     Absolute,
 };
 
+std::ostream &operator<<(std::ostream &, Alignment);
+
 enum class AutoSizeMode
 {
     None,
     Fill,
     Fit,
 };
+
+std::ostream &operator<<(std::ostream &, AutoSizeMode);
 
 class Border
 {

@@ -6,7 +6,8 @@
 using util::Point;
 using util::Rectangle;
 
-terminal::TerminalWindow::TerminalWindow() : loop(true),
+terminal::TerminalWindow::TerminalWindow() : ContainerBase(),
+                                             loop(true),
                                              escapeKey(0),
                                              hasEscapeKey(false),
                                              thread(),
@@ -34,6 +35,11 @@ void terminal::TerminalWindow::Start()
 {
     auto view = TerminalView::GetInstance();
 
+    this->SetSize(view->GetSize());
+
+    util::dbg.WriteLine("Initializing window! Size is %.", this->GetSize());
+
+    this->RestoreLayout();
     this->Render();
 
     while (this->loop)
@@ -64,7 +70,7 @@ void terminal::TerminalWindow::Start()
             this->HandleKey(input);
         }
 
-        if(!this->IsValid())
+        if (!this->IsValid())
         {
             this->RestoreLayout();
         }

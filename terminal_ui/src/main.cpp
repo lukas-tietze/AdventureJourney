@@ -45,11 +45,23 @@ void RunComponentTest()
     container->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
     container->SetSize(20, 20);
     container->SetLocation(0, 0);
+    container->SetMaxSize(terminal::FrameContainer::Orientation::Bottom, 5);
+    container->SetMaxSize(terminal::FrameContainer::Orientation::Top, 5);
+    container->SetMaxSize(terminal::FrameContainer::Orientation::Right, 10);
+    container->SetMaxSize(terminal::FrameContainer::Orientation::Left, 10);
 
     w.Add(container);
 
-    auto textLeft = new terminal::Textbox();
-    textLeft->SetSize(util::Dimension());
+    terminal::TextView *texts[5];
+
+    for (int i = 0; i < 5; i++)
+    {
+        auto where = static_cast<terminal::FrameContainer::Orientation>(i);
+
+        texts[i] = new terminal::TextView(util::ToString(where));
+        texts[i]->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
+        container->Add(where, texts[i]);
+    }
 
     w.Start('q');
 }
@@ -81,12 +93,20 @@ void CheckErrorDump()
     }
 }
 
+void RerouteChannels()
+{
+    util::err.SetTarget(std::fopen("debugfiles/err.txt", "w"));
+    util::out.SetTarget(std::fopen("debugfiles/out.txt", "w"));
+    util::dbg.SetTarget(std::fopen("debugfiles/dbg.txt", "w"));
+}
+
 int main()
 {
     util::EnableSignalHandling();
     util::StdSignalEvent() += HandleSignal;
 
     CheckErrorDump();
+    RerouteChannels();
 
     try
     {

@@ -216,5 +216,6 @@ class Communicator
 };
 extern Channel out;
 extern Channel err;
+extern Channel dbg;
 extern Communicator com;
 } // namespace util

@@ -28,6 +28,8 @@ int MemberHandlerEvents();
 namespace geometryTest
 {
 int TestRectangle();
+int TestRectangleMoves();
+int TestRectangleCuts();
 }
 namespace stringTest
 {

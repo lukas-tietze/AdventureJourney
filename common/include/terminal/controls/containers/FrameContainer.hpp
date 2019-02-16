@@ -2,6 +2,7 @@
 
 #include <tuple>
 #include <vector>
+#include <ostream>
 
 #include "terminal/controls/containers/ContainerBase.hpp"
 
@@ -13,8 +14,8 @@ class FrameContainer : public ContainerBase
     ControlBase *controls[5];
     int weights[5];
     bool weightsFixed[5];
-    int minWidths[4];
-    int maxWidths[4];
+    int minSizes[4];
+    int maxSizes[4];
 
   public:
     FrameContainer();
@@ -40,4 +41,6 @@ class FrameContainer : public ContainerBase
 
     void Render(Canvas &);
 };
+
+std::ostream &operator<<(std::ostream &s, terminal::FrameContainer::Orientation value);
 } // namespace terminal
