@@ -109,7 +109,6 @@ void terminal::FrameContainer::RestoreLayout()
 
     int id;
     ControlBase *control;
-    util::Rectangle space;
     int size;
 
     for (int i = 0; i < 5; i++)
