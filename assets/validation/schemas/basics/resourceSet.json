@@ -1,0 +1,20 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "resource set",
+    "description": "schema for resource sets.",
+    "type": "array",
+    "items": {
+        "type": "object",
+        "properties": {
+            "id": {
+                "type": [
+                    "string",
+                    "integer"
+                ]
+            },
+            "amount": {
+                "type": "integer"
+            }
+        }
+    }
+}

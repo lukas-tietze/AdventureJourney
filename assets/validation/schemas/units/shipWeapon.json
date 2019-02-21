@@ -1,0 +1,45 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "space ship weapon",
+    "description": "schema for weapon systems used in space craft.",
+    "type": "object",
+    "properties": {
+        "physicalPenetration": {
+            "type": "number"
+        },
+        "energyPenetration": {
+            "type": "number"
+        },
+        "physicalDamage": {
+            "type": "object",
+            "properties": {
+                "min": {
+                    "type": "integer"
+                },
+                "max": {
+                    "type": "integer"
+                }
+            }
+        },
+        "energyDamage": {
+            "type": "object",
+            "properties": {
+                "min": {
+                    "type": "integer"
+                },
+                "max": {
+                    "type": "integer"
+                }
+            }
+        },
+        "slots": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "buildCosts": {
+            "$ref": "../basics/resourceSet.json"
+        }
+    }
+}

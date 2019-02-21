@@ -1,0 +1,30 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "space ship engine",
+    "description": "schema for engines used in space craft.",
+    "type": "object",
+    "properties": {
+        "energyConsumption": {
+            "type": "number"
+        },
+        "speedChange": {
+            "type": "number"
+        },
+        "visibilityChange": {
+            "type": "number"
+        },
+        "weightPenalty": {
+            "type": "number"
+        },
+        "buildCosts": {
+            "$ref": "../basics/resourceSet.json"
+        }
+    },
+    "required": [
+        "energyConsumption",
+        "speedChange",
+        "visibilityChange",
+        "weightPenalty",
+        "buildCosts"
+    ]
+}

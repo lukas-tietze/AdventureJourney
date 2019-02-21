@@ -1,0 +1,73 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "space ship engine",
+    "description": "schema for pieces of equipment used in space craft.",
+    "type": "object",
+    "properties": {
+        "energyConsumption": {
+            "type": "number"
+        },
+        "structureChange": {
+            "type": "number"
+        },
+        "armourChange": {
+            "type": "number"
+        },
+        "shieldChange": {
+            "type": "number"
+        },
+        "speedChange": {
+            "type": "number"
+        },
+        "weaponPowerChange": {
+            "type": "number"
+        },
+        "sensorRangeChange": {
+            "type": "number"
+        },
+        "visibilityChange": {
+            "type": "number"
+        },
+        "energyProductionChange": {
+            "type": "number"
+        },
+        "hangarCapacityChange": {
+            "type": "integer"
+        },
+        "materialStorageChange": {
+            "type": "integer"
+        },
+        "unitStorageChange": {
+            "type": "integer"
+        },
+        "weightPenalty": {
+            "type": "number"
+        },
+        "slots": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "buildCosts": {
+            "$ref": "../basics/resourceSet.json"
+        }
+    },
+    "required": [
+        "energyConsumption",
+        "structureChange",
+        "armourChange",
+        "shieldChange",
+        "speedChange",
+        "weaponPowerChange",
+        "sensorRangeChange",
+        "visibilityChange",
+        "energyProductionChange",
+        "hangarCapacityChange",
+        "materialStorageChange",
+        "unitStorageChange",
+        "weightPenalty",
+        "slots",
+        "buildCosts"
+    ]
+}
