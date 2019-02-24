@@ -16,7 +16,13 @@
         "weightPenalty": {
             "type": "number"
         },
+        "crewCost": {
+            "type": "number"
+        },
         "buildCosts": {
+            "$ref": "../basics/resourceSet.json"
+        },
+        "maintenanceCosts": {
             "$ref": "../basics/resourceSet.json"
         }
     },
@@ -25,6 +31,8 @@
         "speedChange",
         "visibilityChange",
         "weightPenalty",
-        "buildCosts"
+        "buildCosts",
+        "maintenanceCosts",
+        "crewCost"
     ]
 }

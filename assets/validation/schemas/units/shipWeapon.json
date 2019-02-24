@@ -38,8 +38,24 @@
                 "type": "string"
             }
         },
+        "crewCost": {
+            "type": "number"
+        },
         "buildCosts": {
             "$ref": "../basics/resourceSet.json"
+        },
+        "maintenanceCosts": {
+            "$ref": "../basics/resourceSet.json"
         }
-    }
+    },
+    "required": [
+        "physicalPenetration",
+        "physicalDamage",
+        "energyPenetration",
+        "energyDamage",
+        "slots",
+        "crewCost",
+        "buildCosts",
+        "maintenanceCosts"
+    ]
 }

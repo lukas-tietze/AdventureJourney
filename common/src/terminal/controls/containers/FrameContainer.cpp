@@ -11,6 +11,36 @@ constexpr int TOP = static_cast<int>(terminal::FrameContainer::Orientation::Top)
 constexpr int LEFT = static_cast<int>(terminal::FrameContainer::Orientation::Left);
 constexpr int RIGHT = static_cast<int>(terminal::FrameContainer::Orientation::Right);
 constexpr int CENTER = static_cast<int>(terminal::FrameContainer::Orientation::Center);
+
+struct OrderSorter
+{
+    int weights[5];
+
+    OrderSorter(int *weights)
+    {
+        std::memcpy(weights, this->weights, 5 * sizeof(int));
+    }
+
+    int operator()(int i, int j)
+    {
+        if (weights[i] >= 0 && weights[j] >= 0)
+        {
+            return (weights[i] > weights[j]) - (weights[j] < weights[i]);
+        }
+        else if (weights[i] >= 0)
+        {
+            return 1;
+        }
+        else if (weights[j] >= 0)
+        {
+            return -1;
+        }
+        else
+        {
+            return (i > j) - (i < j);
+        }
+    }
+};
 } // namespace
 
 terminal::FrameContainer::FrameContainer() : ContainerBase(),
@@ -55,6 +85,7 @@ void terminal::FrameContainer::Add(ControlBase *item)
         if (this->controls[i] == nullptr)
         {
             this->Add(static_cast<terminal::FrameContainer::Orientation>(i), item);
+
             break;
         }
     }
@@ -113,17 +144,11 @@ void terminal::FrameContainer::RestoreLayout()
         }
     }
 
-    // for (int i = 0; i < 5; i++)
-    // {
-    //     for (int j = 0; j < 5; j++)
-    //     {
-    //         if (this->weights[j] < this->weights[order[i]] &&
-    //             (i == 0 || this->weights[j] > this->weights[i - 1]))
-    //         {
-    //             order[i] = j;
-    //         }
-    //     }
-    // }
+    if (activeControls == 0)
+        return;
+
+    if (activeControls > 1)
+        std::sort(order, order + activeControls, OrderSorter(this->weights));
 
     int id;
     Orientation where;
