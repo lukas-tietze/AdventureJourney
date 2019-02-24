@@ -110,7 +110,6 @@ class TerminalView
     void Clear(const util::Rectangle &area);
     void Flush();
 
-    void Maximise();
     void SetLiveMode(bool);
 
     void SetAttribute(terminal::OutputAttribute, bool);
@@ -164,7 +163,9 @@ class TerminalView
     TerminalView();
     TerminalView(int width, int height);
 
-    WINDOW *window;
+    void Recreate();
+
+    // WINDOW *window;
     int width;
     int height;
     char inputBuf[4096];

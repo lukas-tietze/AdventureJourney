@@ -13,7 +13,7 @@ terminal::TerminalView *terminal::TerminalView::instance = nullptr;
 
 terminal::TerminalView::TerminalView() : TerminalView(COLS, LINES)
 {
-    this->Maximise();
+    this->Recreate();
     this->Flush();
 }
 
@@ -36,9 +36,6 @@ terminal::TerminalView::TerminalView(int width, int height) : width(width),
     this->SetBackgroundColorPair(0);
     this->RestoreDefaultColors();
 
-    this->window = newwin(this->height, this->width, 0, 0);
-    keypad(this->window, true);
-
     this->colorsSupported = has_colors();
     this->cursorModeSupported = curs_set(static_cast<int>(terminal::CursorMode::Invisible)) != ERR;
     this->cursorMode = terminal::CursorMode::Invisible;
@@ -46,10 +43,41 @@ terminal::TerminalView::TerminalView(int width, int height) : width(width),
     this->Flush();
 }
 
+void terminal::TerminalView::Recreate()
+{
+    endwin();
+
+    initscr();
+    start_color();
+
+    switch (this->inputMode)
+    {
+    case InputMode::Break:
+        raw();
+        break;
+    case InputMode::Raw:
+        cbreak();
+        break;
+    case InputMode::Line:
+        nocbreak();
+        break;
+    default:
+        throw util::InvalidCaseException();
+    }
+
+    if (this->echoOn)
+        echo();
+    else
+        noecho();
+
+    mousemask(ALL_MOUSE_EVENTS, nullptr);
+    keypad(stdscr, true);
+
+    refresh();
+}
+
 terminal::TerminalView::~TerminalView()
 {
-    wrefresh(this->window);
-    delwin(this->window);
     refresh();
 }
 
@@ -59,11 +87,9 @@ terminal::TerminalView *terminal::TerminalView::GetInstance()
     {
         initscr();
         start_color();
-        mousemask(ALL_MOUSE_EVENTS, nullptr);
         TerminalView::instance = new TerminalView();
+        TerminalView::instance->Recreate();
     }
-
-    util::err.WriteLine("Debug Mark 0");
 
     return TerminalView::instance;
 }
@@ -97,7 +123,7 @@ void terminal::TerminalView::SetInputMode(terminal::InputMode mode)
             res = nocbreak();
             break;
         default:
-            throw util::Exception();
+            throw util::InvalidCaseException();
         }
 
         if (res == ERR)
@@ -132,12 +158,12 @@ void terminal::TerminalView::SetEcho(bool enableEcho)
 
 int terminal::TerminalView::ReadKey()
 {
-    return wgetch(this->window);
+    return wgetch(stdscr);
 }
 
 std::string terminal::TerminalView::ReadLine()
 {
-    wgetstr(this->window, this->inputBuf);
+    wgetstr(stdscr, this->inputBuf);
     return std::string(this->inputBuf);
 }
 
@@ -153,46 +179,46 @@ bool terminal::TerminalView::ReadLine(long timeOut, std::string &result)
 
 void terminal::TerminalView::Print(const std::string &text)
 {
-    wprintw(this->window, text.c_str());
+    printw(text.c_str());
 
     if (this->liveMode)
-        wrefresh(this->window);
+        refresh();
 }
 
 void terminal::TerminalView::Print(const std::string &text, int x, int y)
 {
-    mvwprintw(this->window, y, x, text.c_str());
+    mvprintw(y, x, text.c_str());
 
     if (this->liveMode)
-        wrefresh(this->window);
+        refresh();
 }
 
 void terminal::TerminalView::Print(char c)
 {
-    waddch(this->window, c);
+    addch(c);
 
     if (this->liveMode)
-        wrefresh(this->window);
+        refresh();
 }
 
 void terminal::TerminalView::Print(char c, int x, int y)
 {
-    mvwaddch(this->window, y, x, c);
+    mvaddch(y, x, c);
 
     if (this->liveMode)
-        wrefresh(this->window);
+        refresh();
 }
 
 void terminal::TerminalView::OnTerminalPropertyChanged()
 {
-    wrefresh(this->window);
+    refresh();
 }
 
 util::Dimension terminal::TerminalView::GetSize() const
 {
     int w, h;
 
-    getmaxyx(this->window, h, w);
+    getmaxyx(stdscr, h, w);
 
     return util::Dimension(w, h);
 }
@@ -201,24 +227,18 @@ bool terminal::TerminalView::NeedsResize() const
 {
     int w, h;
 
-    getmaxyx(this->window, h, w);
+    getmaxyx(stdscr, h, w);
 
     return w != this->width || h != this->height;
 }
 
 void terminal::TerminalView::Resize()
 {
+    this->Recreate();
+
     int w, h;
 
-    getmaxyx(this->window, h, w);
-    endwin();
-
-    refresh();
-    initscr();
-
-    wresize(this->window, h, w);
-    wrefresh(this->window);
-    refresh();
+    getmaxyx(stdscr, h, w);
 
     this->width = w;
     this->height = h;
@@ -246,23 +266,13 @@ void terminal::TerminalView::Clear(const util::Rectangle &area)
 
 void terminal::TerminalView::Flush()
 {
-    if (wmove(this->window, this->cursorPos.GetY(), this->cursorPos.GetX()) == ERR)
+    if (move(this->cursorPos.GetY(), this->cursorPos.GetX()) == ERR)
         util::err.WriteLine("Failed to set cursor position to %", this->cursorPos);
 
     if (curs_set(static_cast<int>(this->cursorMode)) == ERR)
         util::err.WriteLine("Failed to set cursor mode to %", this->cursorMode);
 
-    wrefresh(this->window);
     refresh();
-}
-
-void terminal::TerminalView::Maximise()
-{
-    int x, y;
-    getmaxyx(this->window, y, x);
-    resize_term(y, x);
-    wresize(this->window, y, x);
-    this->Flush();
 }
 
 size_t terminal::TerminalView::GetMaxColors() const
@@ -319,19 +329,19 @@ bool terminal::TerminalView::BufferColorPair(colorPairId_t index, colorId_t id1,
 void terminal::TerminalView::AttributeOn(terminal::OutputAttribute a)
 {
     util::EnableFlag(this->activeAttributes, a);
-    wattron(this->window, static_cast<int>(a));
+    attron(static_cast<int>(a));
 }
 
 void terminal::TerminalView::AttributeOff(terminal::OutputAttribute a)
 {
     util::DisableFlag(this->activeAttributes, a);
-    wattroff(this->window, static_cast<int>(a));
+    attroff(static_cast<int>(a));
 }
 
 void terminal::TerminalView::SetActiveAttributes(terminal::OutputAttribute a)
 {
     this->activeAttributes = a;
-    wattrset(this->window, static_cast<int>(a));
+    attrset(static_cast<int>(a));
 }
 
 terminal::OutputAttribute terminal::TerminalView::GetActiveAttributes() const
@@ -345,7 +355,7 @@ void terminal::TerminalView::SetActiveColorPair(colorPairId_t id)
         throw util::IndexOutOfRangeException(id, this->colorPairs.Length());
 
     this->activeColorPair = id;
-    wcolor_set(this->window, id, nullptr);
+    color_set(id, nullptr);
 }
 
 void terminal::TerminalView::SetBackgroundColorPair(colorPairId_t id)
@@ -354,7 +364,7 @@ void terminal::TerminalView::SetBackgroundColorPair(colorPairId_t id)
         throw util::IndexOutOfRangeException(id, this->colorPairs.Length());
 
     this->activeBackgroundColorPair = id;
-    wbkgd(this->window, id);
+    bkgd(id);
 }
 
 terminal::colorPairId_t terminal::TerminalView::GetActiveColorPair() const

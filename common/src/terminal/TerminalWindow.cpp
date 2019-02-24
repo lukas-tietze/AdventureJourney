@@ -63,11 +63,12 @@ void terminal::TerminalWindow::Start()
         }
         else if (key == KEY_RESIZE || view->NeedsResize())
         {
-            util::dbg.WriteLine("Initializing resize");
-
             this->Invalidate();
 
             view->Resize();
+            this->SetSize(view->GetSize());
+
+            util::dbg.WriteLine("Initializing resize. New size is %.", view->GetSize());
         }
         else
         {
