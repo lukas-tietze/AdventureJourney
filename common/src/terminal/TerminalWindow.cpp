@@ -61,19 +61,26 @@ void terminal::TerminalWindow::Start()
                 this->HandleMouse(input);
             }
         }
+        else if (key == KEY_RESIZE || view->NeedsResize())
+        {
+            util::dbg.WriteLine("Initializing resize");
+
+            this->Invalidate();
+
+            view->Resize();
+        }
         else
         {
             KeyInput input;
             input.handled = false;
             input.key = key;
+            input.specialKey = static_cast<Key>(key);
 
             this->HandleKey(input);
         }
 
         if (!this->IsValid())
-        {
             this->RestoreLayout();
-        }
 
         this->Render();
     }
@@ -81,6 +88,11 @@ void terminal::TerminalWindow::Start()
 
 void terminal::TerminalWindow::HandleKey(KeyInput &input)
 {
+    this->ContainerBase::HandleKey(input);
+
+    if (input.handled)
+        return;
+
     if (this->hasEscapeKey && input.key == this->escapeKey)
     {
         this->loop = false;

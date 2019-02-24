@@ -52,15 +52,17 @@ void RunComponentTest()
 
     w.Add(container);
 
-    terminal::TextView *texts[5];
+    terminal::ControlBase *items[5];
 
-    for (int i = 0; i < 5; i++)
+    for (int i = 0; i < 4; i++)
     {
         auto where = static_cast<terminal::FrameContainer::Orientation>(i);
+        auto item = new terminal::DebugBox();
+        item->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
+        item->SetColor(i * 2);
 
-        texts[i] = new terminal::TextView(util::ToString(where));
-        texts[i]->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
-        container->Add(where, texts[i]);
+        items[i] = item;
+        container->Add(where, items[i]);
     }
 
     w.Start('q');

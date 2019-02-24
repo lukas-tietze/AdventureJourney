@@ -2,6 +2,16 @@
 
 #include "terminal/controls/containers/FrameContainer.hpp"
 #include "Exception.hpp"
+#include "data/Io.hpp"
+
+namespace
+{
+constexpr int BOTTOM = static_cast<int>(terminal::FrameContainer::Orientation::Bottom);
+constexpr int TOP = static_cast<int>(terminal::FrameContainer::Orientation::Top);
+constexpr int LEFT = static_cast<int>(terminal::FrameContainer::Orientation::Left);
+constexpr int RIGHT = static_cast<int>(terminal::FrameContainer::Orientation::Right);
+constexpr int CENTER = static_cast<int>(terminal::FrameContainer::Orientation::Center);
+} // namespace
 
 terminal::FrameContainer::FrameContainer() : ContainerBase(),
                                              controls(),
@@ -91,9 +101,17 @@ bool terminal::FrameContainer::Remove(ControlBase *control)
 
 void terminal::FrameContainer::RestoreLayout()
 {
-    auto remainingArea = util::Rectangle(0, 0, this->GetSize());
+    int activeControls = 0;
+    int order[5];
 
-    int order[5] = {0, 1, 2, 3, 4};
+    for (size_t i = 0; i < 5; i++)
+    {
+        if (this->controls[i] != nullptr)
+        {
+            order[activeControls] = i;
+            activeControls++;
+        }
+    }
 
     // for (int i = 0; i < 5; i++)
     // {
@@ -108,57 +126,195 @@ void terminal::FrameContainer::RestoreLayout()
     // }
 
     int id;
+    Orientation where;
     ControlBase *control;
-    int size;
+    auto centerArea = util::Rectangle();
+    auto centerSet = false;
+    int sizes[4] = {-1, -1, -1, -1};
 
-    for (int i = 0; i < 5; i++)
+    int yOff = 0;
+    int xOff = 0;
+    int maxW = 0;
+    int maxH = 0;
+
+    for (int i = 0; i < activeControls; i++)
     {
         id = order[i];
         control = this->controls[id];
-        size = remainingArea.GetWidth();
 
-        if (this->minSizes[id] > 0)
-            size = util::Max(this->minSizes[id], size);
+        yOff = 0;
+        xOff = 0;
+        maxW = 0;
+        maxH = 0;
+        where = static_cast<Orientation>(id);
 
-        if (this->maxSizes[id] > 0)
-            size = util::Min(this->maxSizes[id], size);
+        if (where == Orientation::Left || where == Orientation::Right)
+        {
+            maxH = this->GetSize().GetHeight();
 
-        switch (static_cast<Orientation>(id))
+            if (sizes[BOTTOM] != -1)
+                maxH -= sizes[BOTTOM];
+
+            if (sizes[TOP] != -1)
+            {
+                maxH -= sizes[TOP];
+                yOff = sizes[TOP];
+            }
+        }
+
+        if (where == Orientation::Top || where == Orientation::Bottom)
+        {
+            maxW = this->GetSize().GetWidth();
+
+            if (sizes[RIGHT] != -1)
+                maxW -= sizes[RIGHT];
+
+            if (sizes[LEFT] != -1)
+            {
+                maxW -= sizes[LEFT];
+                xOff = sizes[LEFT];
+            }
+        }
+
+        switch (where)
         {
         case Orientation::Left:
-            space = remainingArea.GetLeftSub(size);
-            remainingArea.MoveLeftEdge(size);
+            if (centerSet)
+                maxW = centerArea.GetX();
+            else if (sizes[RIGHT] >= 0)
+                maxW = this->GetBounds().GetWidth() - sizes[RIGHT];
+            else
+                maxW = this->GetBounds().GetWidth();
+
+            if (this->minSizes[LEFT] >= 0 && maxW < this->minSizes[LEFT])
+                maxW = this->minSizes[LEFT];
+
+            if (this->maxSizes[LEFT] >= 0 && maxW > this->maxSizes[LEFT])
+                maxW = this->maxSizes[LEFT];
+
             break;
         case Orientation::Right:
-            space = remainingArea.GetRightSub(size);
-            remainingArea.MoveRightEdge(-size);
+            if (centerSet)
+                maxW = this->GetBounds().GetWidth() - centerArea.GetMaxX();
+            else if (sizes[LEFT] >= 0)
+                maxW = this->GetBounds().GetWidth() - sizes[LEFT];
+            else
+                maxW = this->GetBounds().GetWidth();
+
+            if (this->minSizes[RIGHT] >= 0 && maxW < this->minSizes[RIGHT])
+                maxW = this->minSizes[RIGHT];
+
+            if (this->maxSizes[RIGHT] >= 0 && maxW > this->maxSizes[RIGHT])
+                maxW = this->maxSizes[RIGHT];
+
+            xOff = this->GetBounds().GetWidth() - maxW;
+
             break;
         case Orientation::Top:
-            space = remainingArea.GetTopSub(size);
-            remainingArea.MoveTopEdge(size);
+            if (centerSet)
+                maxH = centerArea.GetY();
+            else if (sizes[BOTTOM] >= 0)
+                maxH = this->GetBounds().GetHeight() - sizes[BOTTOM];
+            else
+                maxH = this->GetBounds().GetHeight();
+
+            if (this->minSizes[TOP] >= 0 && maxH < this->minSizes[TOP])
+                maxH = this->minSizes[TOP];
+
+            if (this->maxSizes[TOP] >= 0 && maxH > this->maxSizes[TOP])
+                maxH = this->maxSizes[TOP];
+
             break;
         case Orientation::Bottom:
-            space = remainingArea.GetBottomSub(size);
-            remainingArea.MoveBottomEdge(-size);
+            if (centerSet)
+                maxH = this->GetBounds().GetHeight() - centerArea.GetMaxY();
+            else if (sizes[TOP] >= 0)
+                maxH = this->GetBounds().GetHeight() - sizes[TOP];
+            else
+                maxH = this->GetBounds().GetHeight();
+
+            if (this->minSizes[BOTTOM] >= 0 && maxH < this->minSizes[BOTTOM])
+                maxH = this->minSizes[BOTTOM];
+
+            if (this->maxSizes[BOTTOM] >= 0 && maxH > this->maxSizes[BOTTOM])
+                maxH = this->maxSizes[BOTTOM];
+
+            yOff = this->GetBounds().GetHeight() - maxH;
+
             break;
         case Orientation::Center:
-            space = remainingArea;
-            auto buf = 0;
+            maxW = this->GetBounds().GetWidth();
+            maxH = this->GetBounds().GetHeight();
 
-            if ((buf = this->minSizes[static_cast<int>(Orientation::Left)]) > 0)
+            if (sizes[LEFT] >= 0)
             {
-                space.MoveLeftEdge(buf);
+                xOff = sizes[LEFT];
+                maxW -= sizes[LEFT];
+            }
+            else if (this->minSizes[LEFT] >= 0)
+            {
+                xOff = this->minSizes[LEFT];
+                maxW -= this->minSizes[LEFT];
             }
 
-            remainingArea = space;
+            if (sizes[RIGHT] >= 0)
+                maxW -= sizes[RIGHT];
+            else if (this->minSizes[RIGHT] >= 0)
+                maxW -= this->minSizes[RIGHT];
+
+            if (sizes[TOP] >= 0)
+            {
+                yOff = sizes[TOP];
+                maxH -= sizes[TOP];
+            }
+            else if (this->minSizes[TOP] >= 0)
+            {
+                yOff = this->minSizes[TOP];
+                maxH -= this->minSizes[TOP];
+            }
+
+            if (sizes[BOTTOM] >= 0)
+                maxH -= sizes[BOTTOM];
+            else if (this->minSizes[BOTTOM] >= 0)
+                maxH -= this->minSizes[BOTTOM];
+
             break;
         default:
             throw util::InvalidCaseException();
         }
 
-        control->ApplyAutoSize(space.GetSize());
-        control->SetLocation(space.GetLocation() + this->GetLocation());
+        util::dbg.WriteLine("FrameContainer [%]: Fitting [%] to % at x=%, y=%, w=%, h=%", this, control, where, xOff, yOff, maxW, maxH);
+
+        control->SetLocation(xOff, yOff);
+        control->ApplyAutoSize(util::Dimension(maxW, maxH));
         control->RestoreLayout();
+
+        if (where == Orientation::Center)
+        {
+            centerArea = control->GetBounds();
+            centerSet = true;
+        }
+        else
+        {
+            if (where == Orientation::Left || where == Orientation::Right)
+            {
+                sizes[id] = control->GetBounds().GetWidth();
+            }
+            else if (where == Orientation::Top || where == Orientation::Bottom)
+            {
+                sizes[id] = control->GetBounds().GetHeight();
+            }
+
+            if (this->minSizes[id] >= 0 && sizes[id] < this->minSizes[id])
+            {
+                sizes[id] = this->minSizes[id];
+            }
+
+            if (this->maxSizes[id] >= 0 && sizes[id] > this->maxSizes[id])
+            {
+                sizes[id] = this->maxSizes[id];
+            }
+        }
     }
 }
 

@@ -10,6 +10,7 @@ namespace terminal
 struct KeyInput
 {
     int key;
+    Key specialKey;
     bool handled;
 };
 

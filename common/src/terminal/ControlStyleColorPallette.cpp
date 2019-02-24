@@ -10,8 +10,8 @@ terminal::ControlStyleColorPallette::ControlStyleColorPallette(const util::Array
 {
 }
 
-terminal::ControlStyleColorPallette::ControlStyleColorPallette(const util::Array<util::Color> &colors, const util::Array<ColorPair> &colorPairs, const std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ColorCount)> &styles) : ColorPallette(colors, colorPairs),
-                                                                                                                                                                                                                                            styles(styles)
+terminal::ControlStyleColorPallette::ControlStyleColorPallette(const util::Array<util::Color> &colors, const util::Array<ColorPair> &colorPairs, const std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ClearColor) + 1> &styles) : ColorPallette(colors, colorPairs),
+                                                                                                                                                                                                                                                styles(styles)
 {
 }
 
@@ -35,12 +35,12 @@ void terminal::ControlStyleColorPallette::SetStyle(ControlStyleColor styleId, co
     this->styles[static_cast<size_t>(styleId)] = value;
 }
 
-std::array<terminal::colorId_t, static_cast<int>(terminal::ControlStyleColor::ColorCount)> &terminal::ControlStyleColorPallette::GetControlColors()
+std::array<terminal::colorId_t, static_cast<int>(terminal::ControlStyleColor::ClearColor) + 1> &terminal::ControlStyleColorPallette::GetControlColors()
 {
     return this->styles;
 }
 
-const std::array<terminal::colorId_t, static_cast<int>(terminal::ControlStyleColor::ColorCount)> &terminal::ControlStyleColorPallette::GetControlColors() const
+const std::array<terminal::colorId_t, static_cast<int>(terminal::ControlStyleColor::ClearColor) + 1> &terminal::ControlStyleColorPallette::GetControlColors() const
 {
     return this->styles;
 }
@@ -55,7 +55,7 @@ json::Node *terminal::ControlStyleColorPallette::Serialize()
 
         if (obj != nullptr)
         {
-            for (size_t i = 0, end = static_cast<size_t>(terminal::ControlStyleColor::ColorCount); i < end; i++)
+            for (size_t i = 0, end = static_cast<size_t>(terminal::ControlStyleColor::ClearColor) + 1; i < end; i++)
             {
                 obj->Put(util::ToString(static_cast<terminal::ControlStyleColor>(i)), this->styles[i]);
             }
@@ -76,7 +76,7 @@ void terminal::ControlStyleColorPallette::Deserialize(const json::Node *node)
     {
         for (const auto &value : *obj)
         {
-            if(json::AssureType<json::PrimitiveNode>(value.second, prim, json::ValueType::Number))
+            if (json::AssureType<json::PrimitiveNode>(value.second, prim, json::ValueType::Number))
             {
                 auto id = util::Deserialize<terminal::ControlStyleColor>(value.first);
                 auto style = static_cast<colorPairId_t>(prim->GetValueAsNumber());

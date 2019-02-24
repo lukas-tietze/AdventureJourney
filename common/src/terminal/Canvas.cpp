@@ -117,7 +117,13 @@ terminal::Canvas &terminal::Canvas::Fill(int x, int y, int width, int height, ch
 
 terminal::Canvas &terminal::Canvas::Clear(char c)
 {
-    return this->Fill(this->clippedArea.GetX(), this->clippedArea.GetY(), this->clippedArea.GetWidth(), this->clippedArea.GetHeight(), c);
+    this->SetActiveColorPair(this->view->GetControlStyle(ControlStyleColor::ClearColor));
+
+    return this->Fill(this->clippedArea.GetX(),
+                      this->clippedArea.GetY(),
+                      this->clippedArea.GetWidth(),
+                      this->clippedArea.GetHeight(),
+                      c);
 }
 
 terminal::Canvas &terminal::Canvas::Clear()

@@ -54,7 +54,7 @@ enum class ControlStyleColor
     ControlBorder,
     InactiveControlBorder,
     DisabledControlBorder,
-    ColorCount,
+    ClearColor,
 };
 
 std::ostream &operator<<(std::ostream &, ControlStyleColor);
@@ -62,12 +62,12 @@ std::ostream &operator<<(std::ostream &, ControlStyleColor);
 class ControlStyleColorPallette : public ColorPallette
 {
   private:
-    std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ColorCount)> styles;
+    std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ClearColor) + 1> styles;
 
   public:
     ControlStyleColorPallette();
     ControlStyleColorPallette(const util::Array<util::Color> &, const util::Array<ColorPair> &);
-    ControlStyleColorPallette(const util::Array<util::Color> &, const util::Array<ColorPair> &, const std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ColorCount)> &);
+    ControlStyleColorPallette(const util::Array<util::Color> &, const util::Array<ColorPair> &, const std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ClearColor) + 1> &);
 
     colorId_t operator[](ControlStyleColor) const;
     colorId_t &operator[](ControlStyleColor);
@@ -75,8 +75,8 @@ class ControlStyleColorPallette : public ColorPallette
     colorId_t GetStyle(ControlStyleColor) const;
     void SetStyle(ControlStyleColor, colorId_t);
 
-    std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ColorCount)> &GetControlColors();
-    const std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ColorCount)> &GetControlColors() const;
+    std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ClearColor) + 1> &GetControlColors();
+    const std::array<colorId_t, static_cast<size_t>(ControlStyleColor::ClearColor) + 1> &GetControlColors() const;
 
     virtual json::Node *Serialize();
     virtual void Deserialize(const json::Node *);
@@ -94,7 +94,8 @@ class TerminalView
     void SetEcho(bool echo);
 
     util::Dimension GetSize() const;
-    bool SetSize(const util::Dimension &);
+    void Resize();
+    bool NeedsResize() const;
 
     int ReadKey();
     std::string ReadLine();
@@ -178,7 +179,7 @@ class TerminalView
 
     util::Array<util::Color> colors;
     util::Array<ColorPair> colorPairs;
-    std::array<colorId_t, static_cast<int>(ControlStyleColor::ColorCount)> controlStyles;
+    std::array<colorId_t, static_cast<int>(ControlStyleColor::ClearColor) + 1> controlStyles;
     int activeColorPair;
     int activeBackgroundColorPair;
 

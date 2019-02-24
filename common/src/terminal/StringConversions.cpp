@@ -568,8 +568,8 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::ControlStyle
     case terminal::ControlStyleColor::DisabledControlBorder:
         s << "DisabledControlBorder";
         break;
-    case terminal::ControlStyleColor::ColorCount:
-        s << "ColorCount";
+    case terminal::ControlStyleColor::ClearColor:
+        s << "ClearColor";
         break;
     default:
         throw util::InvalidCaseException();

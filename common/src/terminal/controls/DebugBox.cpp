@@ -45,10 +45,10 @@ void terminal::DebugBox::HandleKey(terminal::KeyInput &action)
             view->SetCursorPosition(view->GetCursorPosition() + util::Point(1, 0));
         else if (key == Key::Left)
             view->SetCursorPosition(view->GetCursorPosition() + util::Point(-1, 0));
-        else if (key == Key::PageUp && this->colorIndex < 9)
-            this->colorIndex++;
-        else if (key == Key::PageDown && this->colorIndex > 0)
-            this->colorIndex--;
+        else if (key == Key::PageUp && this->color < 9)
+            this->color++;
+        else if (key == Key::PageDown && this->color > 0)
+            this->color--;
         else if (key == Key::Insert)
             if (view->GetCursorMode() == CursorMode::Highlighted)
                 view->SetCursorMode(CursorMode::Default);
@@ -86,9 +86,14 @@ void terminal::DebugBox::HandleFocusAquired()
     view->SetCursorMode(terminal::CursorMode::Default);
 }
 
+void terminal::DebugBox::SetColor(colorId_t color)
+{
+    this->color = color % 10;
+}
+
 void terminal::DebugBox::Render(Canvas &c)
 {
-    c.SetActiveColorPair(this->colorIndex);
+    c.SetActiveColorPair(this->color);
     c.DrawBox(this->GetBounds(), '-', '|', '+');
     int y0 = this->GetBounds().GetMinY();
     int x0 = this->GetBounds().GetMinX();

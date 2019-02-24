@@ -190,16 +190,38 @@ void terminal::TerminalView::OnTerminalPropertyChanged()
 
 util::Dimension terminal::TerminalView::GetSize() const
 {
-    int x, y;
+    int w, h;
 
-    getmaxyx(this->window, y, x);
+    getmaxyx(this->window, h, w);
 
-    return util::Dimension(x, y);
+    return util::Dimension(w, h);
 }
 
-bool terminal::TerminalView::SetSize(const util::Dimension &dim)
+bool terminal::TerminalView::NeedsResize() const
 {
-    return resizeterm(dim.GetHeight(), dim.GetWidth()) == OK;
+    int w, h;
+
+    getmaxyx(this->window, h, w);
+
+    return w != this->width || h != this->height;
+}
+
+void terminal::TerminalView::Resize()
+{
+    int w, h;
+
+    getmaxyx(this->window, h, w);
+    endwin();
+
+    refresh();
+    initscr();
+
+    wresize(this->window, h, w);
+    wrefresh(this->window);
+    refresh();
+
+    this->width = w;
+    this->height = h;
 }
 
 void terminal::TerminalView::SetLiveMode(bool live)
@@ -481,11 +503,48 @@ void terminal::TerminalView::RestoreDefaultColors()
 {
     auto colors = this->colors.Length();
     auto colorPairs = this->colorPairs.Length();
+    auto &c = this->colors;
+    auto &p = this->colorPairs;
+    auto &s = this->controlStyles;
 
-    if (colors >= 8)
+    if (colors >= 8 && colorPairs >= 8)
     {
-        if (colorPairs >= 8)
-        {
-        }
+        c[0] = util::colors::Black;
+        c[1] = util::colors::White;
+        c[2] = util::colors::Red1;
+        c[3] = util::colors::Red4;
+        c[4] = util::colors::Green1;
+        c[5] = util::colors::Green4;
+        c[6] = util::colors::Blue1;
+        c[7] = util::colors::Blue4;
+
+        p[0] = std::make_pair(0, 1);
+        p[1] = std::make_pair(0, 2);
+        p[2] = std::make_pair(0, 3);
+        p[3] = std::make_pair(0, 4);
+        p[4] = std::make_pair(0, 5);
+        p[5] = std::make_pair(0, 6);
+        p[6] = std::make_pair(0, 7);
+        p[7] = std::make_pair(1, 0);
+
+        s[static_cast<size_t>(ControlStyleColor::ControlText)] = 0;
+        s[static_cast<size_t>(ControlStyleColor::DisabledControlText)] = 0;
+        s[static_cast<size_t>(ControlStyleColor::ControlBorder)] = 0;
+        s[static_cast<size_t>(ControlStyleColor::InactiveControlBorder)] = 0;
+        s[static_cast<size_t>(ControlStyleColor::DisabledControlBorder)] = 0;
+        s[static_cast<size_t>(ControlStyleColor::ClearColor)] = 0;
+    }
+
+    for (size_t i = 0; i < colors; i++)
+    {
+        init_color(i,
+                   static_cast<int>(c[i].RedPercentage() * 1000),
+                   static_cast<int>(c[i].GreenPercentage() * 1000),
+                   static_cast<int>(c[i].BluePercentage() * 1000));
+    }
+
+    for (size_t i = 0; i < colorPairs; i++)
+    {
+        init_pair(i + 1, std::get<0>(p[i]), std::get<1>(p[i]));
     }
 }

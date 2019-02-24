@@ -49,6 +49,8 @@ void terminal::ControlBase::SetSizeCore(const util::Dimension &size)
 
 void terminal::ControlBase::SetLocationCore(const util::Point &location)
 {
+    util::dbg.WriteLine("Setting location of [%]. (%)->(%)", this, this->bounds.GetLocation(), location);
+
     this->bounds.SetLocation(location);
 }
 
