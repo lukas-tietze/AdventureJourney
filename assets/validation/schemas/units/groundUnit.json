@@ -1,17 +1,20 @@
 {
     "$schema": "http://json-schema.org/schema#",
-    "title": "space ship",
-    "description": "schema for all space crafts in the game.",
+    "title": "ground unit",
+    "description": "schema for groundforces in the game. Infantry, Tanks, Walkers, Basic Airplanes",
     "type": "object",
 
     "properties": {
         "class": {
-            "$ref": "../basics/unitClass.json"
+            "type": "string"
+        },
+        "subclass": {
+            "type": "string"
         },
         "metaData": {
             "type": "object",
             "properties": {
-                "className": {
+                "designName": {
                     "type": "string"
                 },
                 "length": {
@@ -31,20 +34,26 @@
         "buildCosts": {
             "$ref": "../basics/resourceSet.json"
         },
-        "structurePoints": {
+        "maintenanceCosts": {
+            "$ref": "../basics/resourceSet.json"
+        },
+        "armour": {
             "type": "integer"
         },
-        "armourValue": {
-            "type": "integer"
+        "shield": {
+            "type": "number"
         },
-        "unitStorage": {
-            "type": "integer"
+        "speed": {
+            "type": "number"
         },
-        "materialStorage": {
-            "type": "integer"
+        "stealth": {
+            "type": "number"
         },
-        "hangarCapacity": {
-            "type": "integer"
+        "recon": {
+            "type": "number"
+        },
+        "damage": {
+            "type": "number"
         },
         "equipmentSlots": {
             "type": "array",
@@ -68,36 +77,17 @@
                     }
                 }
             }
-        },
-        "engineSlot": {
-            "type": "object",
-            "properties": {
-                "maxSizeClass": {
-                    "type": "integer"
-                },
-                "energyConsumption": {
-                    "type": "integer"
-                },
-                "fuelConsumption": {
-                    "type": "integer"
-                },
-                "defaultItem": {
-                    "type": [
-                        "string"
-                    ]
-                }
-            }
         }
     },
     "required": [
         "class",
+        "subclass",
         "buildCosts",
-        "structurePoints",
-        "armourValue",
-        "unitStorage",
-        "materialStorage",
-        "hangarCapacity",
-        "equipmentSlots",
-        "engineSlot"
+        "armour",
+        "shield",
+        "speed",
+        "stealth",
+        "recon",
+        "damage"
     ]
 }

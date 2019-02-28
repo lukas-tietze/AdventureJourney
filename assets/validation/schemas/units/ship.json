@@ -6,12 +6,15 @@
 
     "properties": {
         "class": {
-            "$ref": "../basics/unitClass.json"
+            "type": "string"
+        },
+        "subclass": {
+            "type": "string"
         },
         "metaData": {
             "type": "object",
             "properties": {
-                "className": {
+                "designName": {
                     "type": "string"
                 },
                 "length": {
