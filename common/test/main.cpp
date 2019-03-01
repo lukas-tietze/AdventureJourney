@@ -31,6 +31,7 @@ int main(int argc, char **argv)
     tests.push_back(test::TestRun(new test::SimpleTest("listener event test", &test::eventTest::ListenerEvents)));
     tests.push_back(test::TestRun(new test::SimpleTest("handler event test", &test::eventTest::HandlerEvents)));
     tests.push_back(test::TestRun(new test::SimpleTest("member handler event test", &test::eventTest::MemberHandlerEvents)));
+    tests.push_back(test::TestRun(new test::SimpleTest("generalized event test", &test::eventTest::GeneralizedEventTest)));
     tests.push_back(test::TestRun(new test::SimpleTest("rectangle test", &test::geometryTest::TestRectangle)));
     tests.push_back(test::TestRun(new test::SimpleTest("rectangle move edge test", &test::geometryTest::TestRectangleMoves)));
     tests.push_back(test::TestRun(new test::SimpleTest("rectangle cut test", &test::geometryTest::TestRectangleCuts)));

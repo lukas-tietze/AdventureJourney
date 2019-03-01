@@ -7,7 +7,6 @@ namespace
 constexpr int RES_X = 10;
 constexpr int RES_Y = 100;
 constexpr int RES_Z = 1000;
-} // namespace
 
 struct EventArgs
 {
@@ -29,6 +28,7 @@ struct EventListener : public util::IEventListener<EventArgs>
         args.z = RES_Z + this->id;
     }
 };
+} // namespace
 
 int test::eventTest::ListenerEvents()
 {

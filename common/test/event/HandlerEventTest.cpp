@@ -7,7 +7,6 @@ namespace
 constexpr int RES_X = 10;
 constexpr int RES_Y = 100;
 constexpr int RES_Z = 1000;
-} // namespace
 
 struct EventArgs
 {
@@ -30,6 +29,7 @@ struct EventHandler
         return this->id == other.id;
     }
 };
+} // namespace
 
 int test::eventTest::HandlerEvents()
 {

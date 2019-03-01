@@ -24,6 +24,7 @@ int FunctionEvents();
 int ListenerEvents();
 int HandlerEvents();
 int MemberHandlerEvents();
+int GeneralizedEventTest();
 } // namespace EventTest
 namespace geometryTest
 {
