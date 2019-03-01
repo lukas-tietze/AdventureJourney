@@ -58,8 +58,16 @@ void terminal::FrameContainer::SetWeight(Orientation where, int value)
 {
     auto id = static_cast<int>(where);
 
-    this->weights[id] = value;
-    this->weightsFixed[id] = value >= 0;
+    if (value >= 0)
+    {
+        this->weightsFixed[id] = true;
+        this->weights[id] = value;
+    }
+    else
+    {
+        this->weightsFixed[id] = false;
+        this->weights[id] = 0;
+    }
 }
 
 void terminal::FrameContainer::SetMaxSize(Orientation where, int value)
@@ -95,22 +103,32 @@ void terminal::FrameContainer::Add(Orientation where, ControlBase *item)
 {
     auto id = -1;
 
-    switch (where)
-    {
-    case terminal::FrameContainer::Orientation::Left:
-    case terminal::FrameContainer::Orientation::Right:
-    case terminal::FrameContainer::Orientation::Top:
-    case terminal::FrameContainer::Orientation::Bottom:
-    case terminal::FrameContainer::Orientation::Center:
+    if (
+        where == terminal::FrameContainer::Orientation::Left ||
+        where == terminal::FrameContainer::Orientation::Right ||
+        where == terminal::FrameContainer::Orientation::Top ||
+        where == terminal::FrameContainer::Orientation::Bottom ||
+        where == terminal::FrameContainer::Orientation::Center)
         id = static_cast<int>(where);
-        break;
-    default:
-        throw util::InvalidCaseException();
-    }
+    else
+        throw util::InvalidCaseException::MakeException(where);
 
     if (this->controls[id] != nullptr)
     {
         this->terminal::ContainerBase::Remove(this->controls[id]);
+    }
+
+    if (!this->weightsFixed[id])
+    {
+        int max = 0;
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (i != id && !this->weightsFixed[id] && this->weights[i] > max)
+                max = this->weights[i];
+        }
+
+        this->weights[id] = max + 1;
     }
 
     this->controls[id] = item;
@@ -124,10 +142,17 @@ bool terminal::FrameContainer::Remove(ControlBase *control)
     for (int i = 0; i < 5; i++)
     {
         if (this->controls[i] == control)
+        {
             this->controls[i] = nullptr;
+
+            if (!this->weightsFixed[i])
+                this->weights[i] = 0;
+
+            return this->ContainerBase::Remove(control);
+        }
     }
 
-    this->ContainerBase::Remove(control);
+    return false;
 }
 
 void terminal::FrameContainer::RestoreLayout()

@@ -5,6 +5,7 @@
 #include <ostream>
 
 #include "terminal/controls/containers/ContainerBase.hpp"
+#include "terminal/Size.hpp"
 
 namespace terminal
 {
