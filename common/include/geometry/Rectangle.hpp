@@ -216,6 +216,26 @@ class BasicRectangle
         return this->location;
     }
 
+    util::BasicPoint<T> TopLeft() const
+    {
+        return util::BasicPoint<T>(this->GetMinX(), this->GetMinY());
+    }
+
+    util::BasicPoint<T> BottomLeft() const
+    {
+        return util::BasicPoint<T>(this->GetMinX(), this->GetMaxY());
+    }
+
+    util::BasicPoint<T> TopRight() const
+    {
+        return util::BasicPoint<T>(this->GetMaxX(), this->GetMinY());
+    }
+
+    util::BasicPoint<T> BottomRight() const
+    {
+        return util::BasicPoint<T>(this->GetMaxX(), this->GetMaxY());
+    }
+
     const util::BasicDimension<T> &GetSize() const
     {
         return this->size;
