@@ -141,10 +141,15 @@ void terminal::Window::SetActiveScreen(Screen *s)
 
     if (pos != this->screens.end())
     {
+        if (this->activeScreen != nullptr)
+            this->activeScreen->HandleHide();
+
         auto view = View::GetInstance();
 
         this->activeScreen = *pos;
-
+        this->activeScreen->HandleShow();
+        this->activeScreen->Invalidate();
         this->activeScreen->SetSize(view->GetSize());
+        this->activeScreen->RestoreLayout();
     }
 }

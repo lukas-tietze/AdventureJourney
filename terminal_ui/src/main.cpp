@@ -36,11 +36,24 @@ void QuitAfterError()
     Quit();
 }
 
+terminal::Screen *CreateStartScreen()
+{
+    auto res = new terminal::Screen();
+
+    return res;
+}
+
 void RunComponentTest()
 {
     terminal::Window w;
 
+    auto startScreen = CreateStartScreen();
+
+    w.AddScreen(startScreen);
+
     w.Start('q');
+
+    delete startScreen;
 }
 
 void HandleSignal(util::SignalEventArgs &a)
