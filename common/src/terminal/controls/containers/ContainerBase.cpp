@@ -180,6 +180,16 @@ size_t terminal::ContainerBase::GetFocusedControlIndex() const
     return this->focusedControlIndex;
 }
 
+std::vector<terminal::ControlBase *> &terminal::ContainerBase::GetControls()
+{
+    return this->controls;
+}
+
+const std::vector<terminal::ControlBase *> &terminal::ContainerBase::GetControls() const
+{
+    return this->controls;
+}
+
 void terminal::ContainerBase::RestoreLayout()
 {
     for (auto control : this->controls)

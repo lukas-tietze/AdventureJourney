@@ -10,6 +10,7 @@
 #include "Event.hpp"
 #include "data/String.hpp"
 #include "data/Io.hpp"
+#include "Screens.hpp"
 
 using util::Format;
 using util::ToString;
@@ -19,7 +20,6 @@ namespace
 bool running = true;
 bool checkErrorDump = false;
 char *DebugLocation = "debugfiles/backtrace.dump";
-} // namespace
 
 void Quit()
 {
@@ -36,24 +36,20 @@ void QuitAfterError()
     Quit();
 }
 
-terminal::Screen *CreateStartScreen()
-{
-    auto res = new terminal::Screen();
-
-    return res;
-}
-
 void RunComponentTest()
 {
     terminal::Window w;
 
-    auto startScreen = CreateStartScreen();
+    screens::Start = screens::CreateStartScreen();
+    screens::Menu = screens::CreateMenuScreen();
 
-    w.AddScreen(startScreen);
+    w.AddScreen(screens::Start);
+    w.AddScreen(screens::Menu);
 
     w.Start('q');
 
-    delete startScreen;
+    delete screens::Start;
+    delete screens::Menu;
 }
 
 void HandleSignal(util::SignalEventArgs &a)
@@ -89,6 +85,7 @@ void RerouteChannels()
     util::out.SetTarget(std::fopen("debugfiles/out.txt", "w"));
     util::dbg.SetTarget(std::fopen("debugfiles/dbg.txt", "w"));
 }
+} // namespace
 
 int main()
 {

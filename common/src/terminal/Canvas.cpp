@@ -1,5 +1,6 @@
 #include "terminal/Canvas.hpp"
 #include "data/Helper.hpp"
+#include "Geometry.hpp"
 
 using util::Point;
 using util::Rectangle;

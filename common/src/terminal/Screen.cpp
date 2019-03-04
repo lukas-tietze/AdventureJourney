@@ -59,22 +59,22 @@ terminal::ScreenEventArgs terminal::Screen::MakeArgs()
     return args;
 }
 
-util::Event<terminal::ScreenEventArgs> const &terminal::Screen::OnShown()
+util::Event<terminal::ScreenEventArgs> &terminal::Screen::OnShown()
 {
     return this->onShown;
 }
 
-util::Event<terminal::ScreenEventArgs> const &terminal::Screen::OnHidden()
+util::Event<terminal::ScreenEventArgs> &terminal::Screen::OnHidden()
 {
     return this->onHidden;
 }
 
-util::Event<terminal::ScreenEventArgs> const &terminal::Screen::OnDetached()
+util::Event<terminal::ScreenEventArgs> &terminal::Screen::OnDetached()
 {
     return this->onDetached;
 }
 
-util::Event<terminal::ScreenEventArgs> const &terminal::Screen::OnAttached()
+util::Event<terminal::ScreenEventArgs> &terminal::Screen::OnAttached()
 {
     return this->onAttached;
 }

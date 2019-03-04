@@ -260,6 +260,7 @@ void terminal::ControlBase::HandleKey(KeyInput &k)
     args.handled = false;
     args.key = k.key;
     args.specialKey = k.specialKey;
+    args.sender = this;
 
     this->onKey(args);
 
@@ -274,8 +275,11 @@ void terminal::ControlBase::HandleMouse(MouseInput &m)
     MouseEventArgs args;
     args.handled = false;
     args.action = m.action;
-    args.cx = m.cx;
-    args.cy = m.cy;
+    args.absoluteX = m.cx;
+    args.absoluteY = m.cy;
+    args.relativeX = m.cx - this->GetBounds().GetX();
+    args.relativeY = m.cy - this->GetBounds().GetY();
+    args.sender = this;
 
     this->onMouse(args);
 
@@ -304,6 +308,16 @@ void terminal::ControlBase::HandleBoundsChanged()
 
 void terminal::ControlBase::HandleTextChanged()
 {
+}
+
+util::Event<terminal::MouseEventArgs> &terminal::ControlBase::OnMouse()
+{
+    return this->onMouse;
+}
+
+util::Event<terminal::KeyEventArgs> &terminal::ControlBase::OnKey()
+{
+    return this->onKey;
 }
 
 void terminal::ControlBase::Update()

@@ -1,10 +1,6 @@
 #pragma once
 
-#include <string>
-#include <vector>
-
 #include "terminal/View.hpp"
-#include "graphics/Color.hpp"
 
 namespace terminal
 {

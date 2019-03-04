@@ -2,6 +2,7 @@
 
 #include <ostream>
 
+#include "terminal/View.hpp"
 #include "terminal/Canvas.hpp"
 #include "Geometry.hpp"
 #include "Event.hpp"
@@ -89,13 +90,17 @@ class Border
 };
 
 class ContainerBase;
+class ControlBase;
 
 struct MouseEventArgs
 {
-    int cx;
-    int cy;
+    int absoluteX;
+    int absoluteY;
+    int relativeX;
+    int relativeY;
     MouseAction action;
     bool handled;
+    terminal::ControlBase *sender;
 };
 
 struct KeyEventArgs
@@ -103,6 +108,7 @@ struct KeyEventArgs
     int key;
     Key specialKey;
     bool handled;
+    terminal::ControlBase *sender;
 };
 
 class ControlBase
@@ -206,8 +212,8 @@ class ControlBase
     virtual void HandleMouse(MouseInput &);
     virtual void HandleAddToControl(ContainerBase *);
 
-    util::Event<MouseEventArgs> const &OnMouse();
-    util::Event<KeyEventArgs> const &OnKey();
+    util::Event<MouseEventArgs> &OnMouse();
+    util::Event<KeyEventArgs> &OnKey();
 
     virtual void Render(Canvas &);
 };
