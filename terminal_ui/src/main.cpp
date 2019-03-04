@@ -25,7 +25,7 @@ void Quit()
 {
     if (running)
     {
-        terminal::TerminalView::DeleteInstance();
+        terminal::View::DeleteInstance();
         running = false;
     }
 }
@@ -38,32 +38,7 @@ void QuitAfterError()
 
 void RunComponentTest()
 {
-    terminal::TerminalWindow w;
-
-    auto container = new terminal::FrameContainer();
-    container->SetBorderEnabled(true);
-    container->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
-    container->SetSize(20, 20);
-    container->SetLocation(0, 0);
-    container->SetMaxSize(terminal::FrameContainer::Orientation::Bottom, 5);
-    container->SetMaxSize(terminal::FrameContainer::Orientation::Top, 5);
-    container->SetMaxSize(terminal::FrameContainer::Orientation::Right, 10);
-    container->SetMaxSize(terminal::FrameContainer::Orientation::Left, 10);
-
-    w.Add(container);
-
-    terminal::ControlBase *items[5];
-
-    for (int i = 0; i < 4; i++)
-    {
-        auto where = static_cast<terminal::FrameContainer::Orientation>(i);
-        auto item = new terminal::DebugBox();
-        item->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
-        item->SetColor(i * 2);
-
-        items[i] = item;
-        container->Add(where, items[i]);
-    }
+    terminal::Window w;
 
     w.Start('q');
 }

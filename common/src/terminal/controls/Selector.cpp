@@ -16,7 +16,7 @@ bool terminal::Selector::RemoveOption(const std::string &name)
 {
     for (auto pos = this->items.begin(), end = this->items.end(); pos != end; ++pos)
     {
-        if (pos->name == name)
+        if (pos->text == name)
         {
             this->items.erase(pos);
             break;

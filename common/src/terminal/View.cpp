@@ -9,18 +9,18 @@
 #include "data/Helper.hpp"
 #include "data/Io.hpp"
 
-terminal::TerminalView *terminal::TerminalView::instance = nullptr;
+terminal::View *terminal::View::instance = nullptr;
 
-terminal::TerminalView::TerminalView() : TerminalView(COLS, LINES)
+terminal::View::View() : View(COLS, LINES)
 {
     this->Recreate();
     this->Flush();
 }
 
-terminal::TerminalView::TerminalView(int width, int height) : width(width),
-                                                              height(height),
-                                                              colors(COLORS),
-                                                              colorPairs(COLOR_PAIRS)
+terminal::View::View(int width, int height) : width(width),
+                                              height(height),
+                                              colors(COLORS),
+                                              colorPairs(COLOR_PAIRS)
 {
     // this->BufferColor(COLOR_BLACK, util::colors::BasicBlack);
     // this->BufferColor(COLOR_BLUE, util::colors::BasicBlue);
@@ -43,7 +43,7 @@ terminal::TerminalView::TerminalView(int width, int height) : width(width),
     this->Flush();
 }
 
-void terminal::TerminalView::Recreate()
+void terminal::View::Recreate()
 {
     endwin();
 
@@ -76,36 +76,36 @@ void terminal::TerminalView::Recreate()
     refresh();
 }
 
-terminal::TerminalView::~TerminalView()
+terminal::View::~View()
 {
     refresh();
 }
 
-terminal::TerminalView *terminal::TerminalView::GetInstance()
+terminal::View *terminal::View::GetInstance()
 {
-    if (TerminalView::instance == nullptr)
+    if (View::instance == nullptr)
     {
         initscr();
         start_color();
-        TerminalView::instance = new TerminalView();
-        TerminalView::instance->Recreate();
+        View::instance = new View();
+        View::instance->Recreate();
     }
 
-    return TerminalView::instance;
+    return View::instance;
 }
 
-void terminal::TerminalView::DeleteInstance()
+void terminal::View::DeleteInstance()
 {
-    if (TerminalView::instance != nullptr)
+    if (View::instance != nullptr)
     {
-        delete TerminalView::instance;
-        TerminalView::instance = nullptr;
+        delete View::instance;
+        View::instance = nullptr;
 
         endwin();
     }
 }
 
-void terminal::TerminalView::SetInputMode(terminal::InputMode mode)
+void terminal::View::SetInputMode(terminal::InputMode mode)
 {
     if (mode != this->inputMode)
     {
@@ -138,7 +138,7 @@ void terminal::TerminalView::SetInputMode(terminal::InputMode mode)
     }
 }
 
-void terminal::TerminalView::SetEcho(bool enableEcho)
+void terminal::View::SetEcho(bool enableEcho)
 {
     if (enableEcho != this->echoOn)
     {
@@ -156,28 +156,28 @@ void terminal::TerminalView::SetEcho(bool enableEcho)
     }
 }
 
-int terminal::TerminalView::ReadKey()
+int terminal::View::ReadKey()
 {
     return wgetch(stdscr);
 }
 
-std::string terminal::TerminalView::ReadLine()
+std::string terminal::View::ReadLine()
 {
     wgetstr(stdscr, this->inputBuf);
     return std::string(this->inputBuf);
 }
 
-bool terminal::TerminalView::ReadKey(long timeOut, int &result)
+bool terminal::View::ReadKey(long timeOut, int &result)
 {
     return false;
 }
 
-bool terminal::TerminalView::ReadLine(long timeOut, std::string &result)
+bool terminal::View::ReadLine(long timeOut, std::string &result)
 {
     return false;
 }
 
-void terminal::TerminalView::Print(const std::string &text)
+void terminal::View::Print(const std::string &text)
 {
     printw(text.c_str());
 
@@ -185,7 +185,7 @@ void terminal::TerminalView::Print(const std::string &text)
         refresh();
 }
 
-void terminal::TerminalView::Print(const std::string &text, int x, int y)
+void terminal::View::Print(const std::string &text, int x, int y)
 {
     mvprintw(y, x, text.c_str());
 
@@ -193,7 +193,7 @@ void terminal::TerminalView::Print(const std::string &text, int x, int y)
         refresh();
 }
 
-void terminal::TerminalView::Print(char c)
+void terminal::View::Print(char c)
 {
     addch(c);
 
@@ -201,7 +201,7 @@ void terminal::TerminalView::Print(char c)
         refresh();
 }
 
-void terminal::TerminalView::Print(char c, int x, int y)
+void terminal::View::Print(char c, int x, int y)
 {
     mvaddch(y, x, c);
 
@@ -209,12 +209,12 @@ void terminal::TerminalView::Print(char c, int x, int y)
         refresh();
 }
 
-void terminal::TerminalView::OnTerminalPropertyChanged()
+void terminal::View::OnTerminalPropertyChanged()
 {
     refresh();
 }
 
-util::Dimension terminal::TerminalView::GetSize() const
+util::Dimension terminal::View::GetSize() const
 {
     int w, h;
 
@@ -223,7 +223,7 @@ util::Dimension terminal::TerminalView::GetSize() const
     return util::Dimension(w, h);
 }
 
-bool terminal::TerminalView::NeedsResize() const
+bool terminal::View::NeedsResize() const
 {
     int w, h;
 
@@ -232,7 +232,7 @@ bool terminal::TerminalView::NeedsResize() const
     return w != this->width || h != this->height;
 }
 
-void terminal::TerminalView::Resize()
+void terminal::View::Resize()
 {
     this->Recreate();
 
@@ -244,12 +244,12 @@ void terminal::TerminalView::Resize()
     this->height = h;
 }
 
-void terminal::TerminalView::SetLiveMode(bool live)
+void terminal::View::SetLiveMode(bool live)
 {
     this->liveMode = live;
 }
 
-void terminal::TerminalView::Clear(const util::Rectangle &area)
+void terminal::View::Clear(const util::Rectangle &area)
 {
     std::string buf(area.GetWidth(), ' ');
     auto liveRestore = this->liveMode;
@@ -264,7 +264,7 @@ void terminal::TerminalView::Clear(const util::Rectangle &area)
     this->liveMode = liveRestore;
 }
 
-void terminal::TerminalView::Flush()
+void terminal::View::Flush()
 {
     if (move(this->cursorPos.GetY(), this->cursorPos.GetX()) == ERR)
         util::err.WriteLine("Failed to set cursor position to %", this->cursorPos);
@@ -275,37 +275,37 @@ void terminal::TerminalView::Flush()
     refresh();
 }
 
-size_t terminal::TerminalView::GetMaxColors() const
+size_t terminal::View::GetMaxColors() const
 {
     return this->colors.Length();
 }
 
-size_t terminal::TerminalView::GetMaxColorPairs() const
+size_t terminal::View::GetMaxColorPairs() const
 {
     return this->colorPairs.Length();
 }
 
-bool terminal::TerminalView::CanChangeColors() const
+bool terminal::View::CanChangeColors() const
 {
     return can_change_color();
 }
 
-util::Color terminal::TerminalView::GetColor(colorId_t id) const
+util::Color terminal::View::GetColor(colorId_t id) const
 {
     return this->colors[id];
 }
 
-terminal::ColorPair terminal::TerminalView::GetContent(colorPairId_t id) const
+terminal::ColorPair terminal::View::GetContent(colorPairId_t id) const
 {
     return this->colorPairs[id - 1];
 }
 
-terminal::colorPairId_t terminal::TerminalView::GetControlStyle(ControlStyleColor id) const
+terminal::colorPairId_t terminal::View::GetControlStyle(ControlStyleColor id) const
 {
     return this->controlStyles[static_cast<size_t>(id)];
 }
 
-bool terminal::TerminalView::BufferColor(colorId_t index, const util::Color &color)
+bool terminal::View::BufferColor(colorId_t index, const util::Color &color)
 {
     this->colors[index] = color;
 
@@ -315,7 +315,7 @@ bool terminal::TerminalView::BufferColor(colorId_t index, const util::Color &col
                       static_cast<int>(color.BluePercentage() * 1000)) != ERR;
 }
 
-bool terminal::TerminalView::BufferColorPair(colorPairId_t index, colorId_t id1, colorId_t id2)
+bool terminal::View::BufferColorPair(colorPairId_t index, colorId_t id1, colorId_t id2)
 {
     if (index >= this->colors.Length())
         return false;
@@ -326,30 +326,30 @@ bool terminal::TerminalView::BufferColorPair(colorPairId_t index, colorId_t id1,
     return true;
 }
 
-void terminal::TerminalView::AttributeOn(terminal::OutputAttribute a)
+void terminal::View::AttributeOn(terminal::OutputAttribute a)
 {
     util::EnableFlag(this->activeAttributes, a);
     attron(static_cast<int>(a));
 }
 
-void terminal::TerminalView::AttributeOff(terminal::OutputAttribute a)
+void terminal::View::AttributeOff(terminal::OutputAttribute a)
 {
     util::DisableFlag(this->activeAttributes, a);
     attroff(static_cast<int>(a));
 }
 
-void terminal::TerminalView::SetActiveAttributes(terminal::OutputAttribute a)
+void terminal::View::SetActiveAttributes(terminal::OutputAttribute a)
 {
     this->activeAttributes = a;
     attrset(static_cast<int>(a));
 }
 
-terminal::OutputAttribute terminal::TerminalView::GetActiveAttributes() const
+terminal::OutputAttribute terminal::View::GetActiveAttributes() const
 {
     return this->activeAttributes;
 }
 
-void terminal::TerminalView::SetActiveColorPair(colorPairId_t id)
+void terminal::View::SetActiveColorPair(colorPairId_t id)
 {
     if (id < 0 || id >= this->colorPairs.Length())
         throw util::IndexOutOfRangeException(id, this->colorPairs.Length());
@@ -358,7 +358,7 @@ void terminal::TerminalView::SetActiveColorPair(colorPairId_t id)
     color_set(id, nullptr);
 }
 
-void terminal::TerminalView::SetBackgroundColorPair(colorPairId_t id)
+void terminal::View::SetBackgroundColorPair(colorPairId_t id)
 {
     if (id < 0 || id >= this->colorPairs.Length())
         throw util::IndexOutOfRangeException(id, this->colorPairs.Length());
@@ -367,27 +367,27 @@ void terminal::TerminalView::SetBackgroundColorPair(colorPairId_t id)
     bkgd(id);
 }
 
-terminal::colorPairId_t terminal::TerminalView::GetActiveColorPair() const
+terminal::colorPairId_t terminal::View::GetActiveColorPair() const
 {
     return this->activeColorPair;
 }
 
-terminal::colorPairId_t terminal::TerminalView::GetActiveBackground() const
+terminal::colorPairId_t terminal::View::GetActiveBackground() const
 {
     return this->activeBackgroundColorPair;
 }
 
-int terminal::TerminalView::CreateStyle(terminal::OutputAttribute attribs, int ColorPair)
+int terminal::View::CreateStyle(terminal::OutputAttribute attribs, int ColorPair)
 {
     return static_cast<int>(attribs) | COLOR_PAIR(ColorPair);
 }
 
-util::Point terminal::TerminalView::GetCursorPosition() const
+util::Point terminal::View::GetCursorPosition() const
 {
     return this->cursorPos;
 }
 
-void terminal::TerminalView::SetCursorPosition(const util::Point &point)
+void terminal::View::SetCursorPosition(const util::Point &point)
 {
     this->cursorPos = point;
 
@@ -395,7 +395,7 @@ void terminal::TerminalView::SetCursorPosition(const util::Point &point)
         this->Flush();
 }
 
-terminal::CursorMode terminal::TerminalView::GetCursorMode() const
+terminal::CursorMode terminal::View::GetCursorMode() const
 {
     if (!this->cursorModeSupported)
         return CursorMode::Default;
@@ -403,7 +403,7 @@ terminal::CursorMode terminal::TerminalView::GetCursorMode() const
     return this->cursorMode;
 }
 
-void terminal::TerminalView::SetCursorMode(terminal::CursorMode mode)
+void terminal::View::SetCursorMode(terminal::CursorMode mode)
 {
     if (this->cursorModeSupported)
     {
@@ -411,17 +411,17 @@ void terminal::TerminalView::SetCursorMode(terminal::CursorMode mode)
     }
 }
 
-bool terminal::TerminalView::CursorVisibilitySupported() const
+bool terminal::View::CursorVisibilitySupported() const
 {
     return this->cursorModeSupported;
 }
 
-bool terminal::TerminalView::ColorsSupported() const
+bool terminal::View::ColorsSupported() const
 {
     return this->colorsSupported;
 }
 
-void terminal::TerminalView::ApplyColorPallette(const ColorPallette &p)
+void terminal::View::ApplyColorPallette(const ColorPallette &p)
 {
     const auto &newColors = p.GetColors();
 
@@ -441,7 +441,7 @@ void terminal::TerminalView::ApplyColorPallette(const ColorPallette &p)
         this->Flush();
 }
 
-void terminal::TerminalView::ApplyControlColorPallette(const ControlStyleColorPallette &p)
+void terminal::View::ApplyControlColorPallette(const ControlStyleColorPallette &p)
 {
     this->ApplyColorPallette(p);
 
@@ -451,17 +451,17 @@ void terminal::TerminalView::ApplyControlColorPallette(const ControlStyleColorPa
         this->Flush();
 }
 
-terminal::ColorPallette terminal::TerminalView::ExportCurrentColorPallette() const
+terminal::ColorPallette terminal::View::ExportCurrentColorPallette() const
 {
     return ColorPallette(this->colors, this->colorPairs);
 }
 
-terminal::ControlStyleColorPallette terminal::TerminalView::ExportCurrentControlColorPallette() const
+terminal::ControlStyleColorPallette terminal::View::ExportCurrentControlColorPallette() const
 {
     return ControlStyleColorPallette(this->colors, this->colorPairs, this->controlStyles);
 }
 
-void terminal::TerminalView::LoadColorPalletteFromJson(const std::string &path)
+void terminal::View::LoadColorPalletteFromJson(const std::string &path)
 {
     json::Node *res;
     json::Parser p;
@@ -473,7 +473,7 @@ void terminal::TerminalView::LoadColorPalletteFromJson(const std::string &path)
     this->ApplyColorPallette(c);
 }
 
-void terminal::TerminalView::LoadControlColorPalletteFromJson(const std::string &path)
+void terminal::View::LoadControlColorPalletteFromJson(const std::string &path)
 {
     json::Node *res;
     json::Parser p;
@@ -485,7 +485,7 @@ void terminal::TerminalView::LoadControlColorPalletteFromJson(const std::string 
     this->ApplyControlColorPallette(c);
 }
 
-void terminal::TerminalView::SaveCurrentColorPallette(const std::string &path) const
+void terminal::View::SaveCurrentColorPallette(const std::string &path) const
 {
     std::ofstream out;
 
@@ -497,7 +497,7 @@ void terminal::TerminalView::SaveCurrentColorPallette(const std::string &path) c
     util::WriteFile(path, p.ToString());
 }
 
-void terminal::TerminalView::SaveCurrentControlColorPallette(const std::string &path) const
+void terminal::View::SaveCurrentControlColorPallette(const std::string &path) const
 {
     std::ofstream out;
 
@@ -509,7 +509,7 @@ void terminal::TerminalView::SaveCurrentControlColorPallette(const std::string &
     util::WriteFile(path, p.ToString());
 }
 
-void terminal::TerminalView::RestoreDefaultColors()
+void terminal::View::RestoreDefaultColors()
 {
     auto colors = this->colors.Length();
     auto colorPairs = this->colorPairs.Length();

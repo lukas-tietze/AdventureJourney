@@ -126,6 +126,11 @@ class Event
         {
             return this->target == t && this->f == f;
         }
+
+        bool IsFrom(T *t)
+        {
+            return this->target == t;
+        }
     };
 
     std::vector<EventHandler *> handlers;
@@ -143,9 +148,12 @@ class Event
     template <class T>
     typename std::vector<EventHandler *>::iterator Find(const T &t)
     {
+        StructEventHandler<T> *handler;
+
         for (auto pos = this->handlers.begin(), end = this->handlers.end(); pos != end; ++pos)
             if ((*pos)->GetType() == EventHandlerType::Struct &&
-                dynamic_cast<StructEventHandler<T> *>(*pos)->Equals(t))
+                (handler = dynamic_cast<StructEventHandler<T> *>(*pos)) != nullptr &&
+                handler->Equals(t))
                 return pos;
 
         return this->handlers.end();
@@ -154,9 +162,12 @@ class Event
     template <class T>
     typename std::vector<EventHandler *>::iterator Find(T *t, void (T::*f)(TArgs &args))
     {
+        MemberEventHandler<T> *handler;
+
         for (auto pos = this->handlers.begin(), end = this->handlers.end(); pos != end; ++pos)
             if ((*pos)->GetType() == EventHandlerType::MemberFunction &&
-                dynamic_cast<MemberEventHandler<T> *>(*pos)->Equals(t, f))
+                (handler = dynamic_cast<MemberEventHandler<T> *>(*pos)) != nullptr &&
+                handler->Equals(t, f))
                 return pos;
 
         return this->handlers.end();
@@ -245,15 +256,15 @@ class Event
     template <class T>
     void RemoveAllOf(T *t)
     {
-        std::vector<std::vector<EventHandler *>::iterator> toRemove;
+        std::vector<EventHandler *> old = this->handlers;
+        this->handlers.clear();
+        MemberEventHandler<T> *handler;
 
-        for (auto pos = this->handlers.begin(), end = this->handlers.end(); pos != end; ++pos)
+        for (auto pos = old.begin(), end = old.end(); pos != end; ++pos)
             if ((*pos)->GetType() == EventHandlerType::MemberFunction &&
-                dynamic_cast<MemberEventHandler<T> *>(*pos)->Equals(t, f))
-                toRemove.push_back(pos);
-
-        for (auto itemToRemove : toRemove)
-            this->handlers.erase(itemToRemove);
+                (handler = dynamic_cast<MemberEventHandler<T> *>(*pos)) != nullptr &&
+                !handler->IsFrom(t))
+                this->handlers.push_back(*pos);
     }
 
     void Clear()

@@ -4,10 +4,10 @@
 using util::Point;
 using util::Rectangle;
 
-terminal::Canvas::Canvas(TerminalView *view) : view(view),
-                                               size(view->GetSize()),
-                                               clippedArea(0, 0, this->size),
-                                               origin(0, 0)
+terminal::Canvas::Canvas() : view(terminal::View::GetInstance()),
+                             size(view->GetSize()),
+                             clippedArea(0, 0, this->size),
+                             origin(0, 0)
 {
     this->view->SetLiveMode(false);
 }
@@ -234,7 +234,7 @@ terminal::Canvas &terminal::Canvas::SetActiveColorPair(colorPairId_t index)
     return *this;
 }
 
-terminal::TerminalView *terminal::Canvas::GetView() const
+terminal::View *terminal::Canvas::GetView() const
 {
     return this->view;
 }

@@ -1,7 +1,7 @@
 #include "Exception.hpp"
 
 #include "terminal/Values.hpp"
-#include "terminal/TerminalView.hpp"
+#include "terminal/View.hpp"
 #include "terminal/controls/ControlBase.hpp"
 #include "terminal/controls/containers/FrameContainer.hpp"
 

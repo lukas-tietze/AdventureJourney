@@ -2,9 +2,9 @@
 
 #include "terminal/Values.hpp"
 #include "terminal/Util.hpp"
-#include "terminal/TerminalView.hpp"
+#include "terminal/View.hpp"
 #include "terminal/Canvas.hpp"
-#include "terminal/TerminalWindow.hpp"
+#include "terminal/Window.hpp"
 #include "terminal/controls/ControlBase.hpp"
 #include "terminal/controls/TextView.hpp"
 #include "terminal/controls/Checkbox.hpp"

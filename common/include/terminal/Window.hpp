@@ -4,21 +4,25 @@
 
 #include "terminal/controls/containers/ContainerBase.hpp"
 #include "terminal/controls/ControlBase.hpp"
-#include "terminal/TerminalView.hpp"
+#include "terminal/View.hpp"
 
 namespace terminal
 {
+class Window;
+
 class Screen : public ContainerBase
 {
-    friend class TerminalWindow;
+    friend Window;
 
   private:
-    TerminalWindow *parentWindow;
+    Window *parent;
 
-    void AttachToWindow(TerminalWindow *);
+    void AttachToWindow(Window *);
     void DetachFromWindow();
 
   public:
+    Screen();
+
     void Show();
 };
 

@@ -13,7 +13,7 @@ logic::Loader::Loader(const std::string &config)
 
     readCfg.open(config);
 
-    while (readCfg.good() && readCfg.is_open() && !readCfg.eof() && std::getline(readCfg, line);)
+    while (readCfg.good() && readCfg.is_open() && !readCfg.eof() && std::getline(readCfg, line))
     {
     }
 }

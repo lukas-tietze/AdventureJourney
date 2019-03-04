@@ -3,7 +3,7 @@
 #include <string>
 #include <vector>
 
-#include "TerminalView.hpp"
+#include "terminal/View.hpp"
 #include "graphics/Color.hpp"
 
 namespace terminal
@@ -11,13 +11,13 @@ namespace terminal
 class Canvas
 {
   private:
-    TerminalView *view;
+    View *view;
     util::Dimension size;
     util::Rectangle clippedArea;
     util::Point origin;
 
   public:
-    Canvas(TerminalView *);
+    Canvas();
     Canvas(const Canvas &);
 
     terminal::Canvas &DrawVerticalLine(int x, int y, int length, char c);
@@ -53,6 +53,6 @@ class Canvas
 
     void Flush();
 
-    TerminalView *GetView() const;
+    View *GetView() const;
 };
 } // namespace terminal

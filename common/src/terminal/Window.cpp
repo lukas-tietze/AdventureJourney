@@ -33,7 +33,7 @@ void terminal::Window::Start(int escapeKey)
 void terminal::Window::Start()
 {
     auto view = View::GetInstance();
-    auto canvas = Canvas(view);
+    auto canvas = Canvas();
 
     this->activeScreen->SetSize(view->GetSize());
 

@@ -390,5 +390,5 @@ void terminal::ControlBase::RestoreLayout()
 
 terminal::colorPairId_t terminal::ControlBase::Style(ControlStyleColor color)
 {
-    return TerminalView::GetInstance()->GetControlStyle(color);
+    return terminal::View::GetInstance()->GetControlStyle(color);
 }

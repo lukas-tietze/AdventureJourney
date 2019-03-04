@@ -2,7 +2,7 @@
 
 #include "terminal/controls/DebugBox.hpp"
 #include "data/String.hpp"
-#include "terminal/TerminalWindow.hpp"
+#include "terminal/Window.hpp"
 #include "data/Io.hpp"
 
 terminal::DebugBox::DebugBox() : ControlBase()
@@ -29,7 +29,7 @@ void terminal::DebugBox::HandleKey(terminal::KeyInput &action)
     if (action.handled)
         return;
 
-    auto view = TerminalView::GetInstance();
+    auto view = View::GetInstance();
 
     if (terminal::IsSpecialKey(action.key))
     {
@@ -82,7 +82,7 @@ void terminal::DebugBox::HandleKey(terminal::KeyInput &action)
 
 void terminal::DebugBox::HandleFocusAquired()
 {
-    auto view = TerminalView::GetInstance();
+    auto view = View::GetInstance();
     view->SetCursorMode(terminal::CursorMode::Default);
 }
 
@@ -103,7 +103,7 @@ void terminal::DebugBox::Render(Canvas &c)
 
 void terminal::DebugBox::HandleCommand()
 {
-    auto instance = TerminalView::GetInstance();
+    auto instance = View::GetInstance();
 
     if (std::strcmp(this->command.c_str(), "dc") == 0)
     {

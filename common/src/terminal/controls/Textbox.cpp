@@ -88,10 +88,10 @@ void terminal::Textbox::HandleKey(terminal::KeyInput &action)
 
 void terminal::Textbox::HandleFocusAquired()
 {
-    auto view = TerminalView::GetInstance();
+    auto view = terminal::View::GetInstance();
     view->SetCursorMode(terminal::CursorMode::Default);
     view->SetCursorPosition(this->GetBounds().GetLocation() + util::Point(this->GetTrueCursorIndex() + 1, 1));
-    TerminalView::GetInstance()->Flush();
+    terminal::View::GetInstance()->Flush();
 }
 
 void terminal::Textbox::Render(Canvas &c)

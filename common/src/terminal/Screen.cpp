@@ -4,12 +4,12 @@ terminal::Screen::Screen() : ContainerBase()
 {
 }
 
-void terminal::Screen::AttachToWindow(TerminalWindow *newParent)
+void terminal::Screen::AttachToWindow(Window *newParent)
 {
     if (this->parent != nullptr)
         this->parent->RemoveScreen(this);
 
-    this->parent = newParent();
+    this->parent = newParent;
 }
 
 void terminal::Screen::DetachFromWindow()

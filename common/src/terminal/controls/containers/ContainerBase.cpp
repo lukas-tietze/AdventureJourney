@@ -151,7 +151,7 @@ void terminal::ContainerBase::SwitchFocus(int next)
     }
 
     this->focusedControlIndex = next;
-    TerminalView::GetInstance()->SetCursorMode(terminal::CursorMode::Invisible);
+    terminal::View::GetInstance()->SetCursorMode(terminal::CursorMode::Invisible);
 
     if (this->focusedControlIndex > 0)
     {
