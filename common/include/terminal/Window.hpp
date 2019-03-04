@@ -8,12 +8,15 @@
 
 namespace terminal
 {
-class TerminalWindow;
-
 class Screen : public ContainerBase
 {
+    friend class TerminalWindow;
+
   private:
     TerminalWindow *parentWindow;
+
+    void AttachToWindow(TerminalWindow *);
+    void DetachFromWindow();
 
   public:
     void Show();

@@ -108,7 +108,10 @@ void terminal::Window::Quit()
 void terminal::Window::AddScreen(Screen *s)
 {
     if (std::find(this->screens.begin(), this->screens.end(), s) != this->screens.end())
+    {
+        s->AttachToWindow(this);
         this->screens.push_back(s);
+    }
 }
 
 void terminal::Window::RemoveScreen(Screen *s)
@@ -116,7 +119,10 @@ void terminal::Window::RemoveScreen(Screen *s)
     auto pos = std::find(this->screens.begin(), this->screens.end(), s);
 
     if (pos != this->screens.end())
+    {
+        (*pos)->DetachFromWindow();
         this->screens.erase(pos);
+    }
 
     if (this->activeScreen == s)
     {
