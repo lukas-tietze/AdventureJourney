@@ -116,15 +116,13 @@ void terminal::ContainerBase::Render(Canvas &canvas)
 
 void terminal::ContainerBase::Add(terminal::ControlBase *control)
 {
-    if (this->controls.empty())
+    this->controls.push_back(control);
+    this->Invalidate();
+
+    if (this->controls.size() == 1)
     {
-        this->controls.push_back(control);
         this->focusedControlIndex = 0;
         control->HandleFocusAquired();
-    }
-    else
-    {
-        this->controls.push_back(control);
     }
 
     control->HandleAddToControl(this);
@@ -137,6 +135,8 @@ bool terminal::ContainerBase::Remove(terminal::ControlBase *control)
     if (pos != this->controls.end())
     {
         this->controls.erase(pos);
+        this->Invalidate();
+
         return true;
     }
 

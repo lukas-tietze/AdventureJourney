@@ -7,18 +7,22 @@ namespace terminal
 class LinearContainer : public ContainerBase
 {
   public:
+    enum class Orientation
+    {
+        LeftToRight,
+        RightToLeft,
+        BottomToTop,
+        TopToBottom,
+    };
+    
     LinearContainer();
     virtual ~LinearContainer();
 
-    enum class Orientation
-    {
-        Horizontal,
-        Vertical,
-    };
-
     virtual void Add(ControlBase *item);
-    virtual void Add(Orientation where, ControlBase *item);
+    virtual bool Remove(ControlBase *item);
     virtual void RestoreLayout();
+
+    void SetOrientation(Orientation);
 
   private:
     Orientation orientation;

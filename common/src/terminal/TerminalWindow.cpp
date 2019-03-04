@@ -1,25 +1,28 @@
 #include <algorithm>
 
+#include <pthread.h>
+
 #include "Terminal.hpp"
 #include "data/Io.hpp"
 
 using util::Point;
 using util::Rectangle;
 
-terminal::TerminalWindow::TerminalWindow() : ContainerBase(),
-                                             loop(true),
-                                             escapeKey(0),
-                                             hasEscapeKey(false),
-                                             thread(),
-                                             hasThread(false)
+terminal::Window::Window() : loop(true),
+                             escapeKey(0),
+                             hasEscapeKey(false),
+                             screens(),
+                             emptyScreen(new Screen()),
+                             activeScreen(emptyScreen)
 {
 }
 
-terminal::TerminalWindow::~TerminalWindow()
+terminal::Window::~Window()
 {
+    delete this->emptyScreen;
 }
 
-void terminal::TerminalWindow::Start(int escapeKey)
+void terminal::Window::Start(int escapeKey)
 {
     this->escapeKey = escapeKey;
     this->hasEscapeKey = true;
@@ -27,20 +30,17 @@ void terminal::TerminalWindow::Start(int escapeKey)
     this->Start();
 }
 
-void terminal::TerminalWindow::StartAsync()
+void terminal::Window::Start()
 {
-}
+    auto view = View::GetInstance();
+    auto canvas = Canvas(view);
 
-void terminal::TerminalWindow::Start()
-{
-    auto view = TerminalView::GetInstance();
+    this->activeScreen->SetSize(view->GetSize());
 
-    this->SetSize(view->GetSize());
+    util::dbg.WriteLine("Initializing window! Size is %.", this->activeScreen->GetSize());
 
-    util::dbg.WriteLine("Initializing window! Size is %.", this->GetSize());
-
-    this->RestoreLayout();
-    this->Render();
+    this->activeScreen->RestoreLayout();
+    this->activeScreen->Render(canvas);
 
     while (this->loop)
     {
@@ -58,15 +58,15 @@ void terminal::TerminalWindow::Start()
                 input.handled = false;
                 input.action = static_cast<MouseAction>(mouseEvent.bstate);
 
-                this->HandleMouse(input);
+                this->activeScreen->HandleMouse(input);
             }
         }
         else if (key == KEY_RESIZE || view->NeedsResize())
         {
-            this->Invalidate();
+            this->activeScreen->Invalidate();
 
             view->Resize();
-            this->SetSize(view->GetSize());
+            this->activeScreen->SetSize(view->GetSize());
 
             util::dbg.WriteLine("Initializing resize. New size is %.", view->GetSize());
         }
@@ -77,42 +77,68 @@ void terminal::TerminalWindow::Start()
             input.key = key;
             input.specialKey = static_cast<Key>(key);
 
-            this->HandleKey(input);
+            this->activeScreen->HandleKey(input);
+
+            if (!input.handled &&
+                this->hasEscapeKey &&
+                input.key == this->escapeKey)
+            {
+                this->loop = false;
+            }
         }
 
-        if (!this->IsValid())
-            this->RestoreLayout();
+        if (!this->activeScreen->IsValid())
+            this->activeScreen->RestoreLayout();
 
-        this->Render();
+        canvas.Clear();
+        canvas.DisableClip();
+        canvas.SetOrigin(0, 0);
+
+        this->activeScreen->Render(canvas);
+
+        canvas.Flush();
     }
 }
 
-void terminal::TerminalWindow::HandleKey(KeyInput &input)
-{
-    this->ContainerBase::HandleKey(input);
-
-    if (input.handled)
-        return;
-
-    if (this->hasEscapeKey && input.key == this->escapeKey)
-    {
-        this->loop = false;
-    }
-}
-
-void terminal::TerminalWindow::Quit()
+void terminal::Window::Quit()
 {
     this->loop = false;
 }
 
-void terminal::TerminalWindow::Render()
+void terminal::Window::AddScreen(Screen *s)
 {
-    auto view = TerminalView::GetInstance();
-    auto canvas = terminal::Canvas(view);
+    if (std::find(this->screens.begin(), this->screens.end(), s) != this->screens.end())
+        this->screens.push_back(s);
+}
 
-    canvas.Clear();
+void terminal::Window::RemoveScreen(Screen *s)
+{
+    auto pos = std::find(this->screens.begin(), this->screens.end(), s);
 
-    this->ContainerBase::Render(canvas);
+    if (pos != this->screens.end())
+        this->screens.erase(pos);
 
-    view->Flush();
+    if (this->activeScreen == s)
+    {
+        if (this->screens.empty())
+            this->activeScreen = this->emptyScreen;
+        else if (pos++ < this->screens.end())
+            this->SetActiveScreen(*(pos++));
+        else if (pos-- >= this->screens.begin())
+            this->SetActiveScreen(*(pos--));
+    }
+}
+
+void terminal::Window::SetActiveScreen(Screen *s)
+{
+    auto pos = std::find(this->screens.begin(), this->screens.end(), s);
+
+    if (pos != this->screens.end())
+    {
+        auto view = View::GetInstance();
+
+        this->activeScreen = *pos;
+
+        this->activeScreen->SetSize(view->GetSize());
+    }
 }

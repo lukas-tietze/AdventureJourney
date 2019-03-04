@@ -1,0 +1,42 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "space ship engine",
+    "description": "schema for pieces of equipment used in space craft.",
+    "type": "object",
+    "properties": {
+        "armourChange": {
+            "type": "integer"
+        },
+        "shieldChange": {
+            "type": "number"
+        },
+        "speedChange": {
+            "type": "number"
+        },
+        "stealthChange": {
+            "type": "number"
+        },
+        "reconChange": {
+            "type": "number",
+        },
+        "damageChange": {
+            "type": "number"
+        },
+        "slots": {
+            "type": "array",
+            "items": {
+                "type": "string"
+            }
+        },
+        "buildCosts": {
+            "$ref": "../basics/resourceSet.json"
+        },
+        "maintenanceCosts": {
+            "$ref": "../basics/resourceSet.json"
+        }
+    },
+    "required": [
+        "slots",
+        "buildCosts"
+    ]
+}

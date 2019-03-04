@@ -251,12 +251,35 @@ void terminal::ControlBase::HandleFocusLost()
 {
 }
 
-void terminal::ControlBase::HandleKey(KeyInput &)
+void terminal::ControlBase::HandleKey(KeyInput &k)
 {
+    if (k.handled)
+        return;
+
+    KeyEventArgs args;
+    args.handled = false;
+    args.key = k.key;
+    args.specialKey = k.specialKey;
+
+    this->onKey(args);
+
+    k.handled = args.handled;
 }
 
-void terminal::ControlBase::HandleMouse(MouseInput &)
+void terminal::ControlBase::HandleMouse(MouseInput &m)
 {
+    if (m.handled)
+        return;
+
+    MouseEventArgs args;
+    args.handled = false;
+    args.action = m.action;
+    args.cx = m.cx;
+    args.cy = m.cy;
+
+    this->onMouse(args);
+
+    m.handled = args.handled;
 }
 
 void terminal::ControlBase::HandleAddToControl(ContainerBase *newParent)
