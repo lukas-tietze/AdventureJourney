@@ -4,6 +4,7 @@
 
 #include "terminal/Canvas.hpp"
 #include "Geometry.hpp"
+#include "Event.hpp"
 
 namespace terminal
 {
@@ -89,6 +90,21 @@ class Border
 
 class ContainerBase;
 
+struct MouseEventArgs
+{
+    int cx;
+    int cy;
+    MouseAction action;
+    bool handled;
+};
+
+struct KeyEventArgs
+{
+    int key;
+    Key specialKey;
+    bool handled;
+};
+
 class ControlBase
 {
   private:
@@ -106,6 +122,9 @@ class ControlBase
     AutoSizeMode autoSizeMode;
     Border border;
     bool borderEnabled;
+
+    util::Event<MouseEventArgs> onMouse;
+    util::Event<KeyEventArgs> onKey;
 
   protected:
     void SetBoundsCore(const util::Rectangle &);
@@ -186,6 +205,9 @@ class ControlBase
     virtual void HandleKey(KeyInput &);
     virtual void HandleMouse(MouseInput &);
     virtual void HandleAddToControl(ContainerBase *);
+
+    util::Event<MouseEventArgs> const &OnMouse();
+    util::Event<KeyEventArgs> const &OnKey();
 
     virtual void Render(Canvas &);
 };

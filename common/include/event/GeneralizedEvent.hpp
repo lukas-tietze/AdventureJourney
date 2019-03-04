@@ -242,6 +242,20 @@ class Event
             this->handlers.erase(pos);
     }
 
+    template <class T>
+    void RemoveAllOf(T *t)
+    {
+        std::vector<std::vector<EventHandler *>::iterator> toRemove;
+
+        for (auto pos = this->handlers.begin(), end = this->handlers.end(); pos != end; ++pos)
+            if ((*pos)->GetType() == EventHandlerType::MemberFunction &&
+                dynamic_cast<MemberEventHandler<T> *>(*pos)->Equals(t, f))
+                toRemove.push_back(pos);
+
+        for (auto itemToRemove : toRemove)
+            this->handlers.erase(itemToRemove);
+    }
+
     void Clear()
     {
         for (const auto &handler : this->handlers)

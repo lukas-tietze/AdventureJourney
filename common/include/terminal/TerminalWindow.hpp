@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <thread>
 
 #include "terminal/controls/containers/ContainerBase.hpp"
 #include "terminal/controls/ControlBase.hpp"
@@ -9,28 +8,38 @@
 
 namespace terminal
 {
-class TerminalWindow : public ContainerBase
+class TerminalWindow;
+
+class Screen : public ContainerBase
+{
+  private:
+    TerminalWindow *parentWindow;
+
+  public:
+    void Show();
+};
+
+class Window
 {
   private:
     bool loop;
     int escapeKey;
     bool hasEscapeKey;
 
-    std::thread thread;
-    bool hasThread;
-
-    void Render();
+    std::vector<Screen *> screens;
+    Screen *activeScreen;
+    Screen *emptyScreen;
 
   public:
-    TerminalWindow();
-    ~TerminalWindow();
+    Window();
+    ~Window();
 
-    void HandleKey(KeyInput &);
+    void AddScreen(Screen *);
+    void RemoveScreen(Screen *);
+    void SetActiveScreen(Screen *);
 
     void Start(int);
     void Start();
-    void StartAsync(int);
-    void StartAsync();
     void Quit();
 };
 } // namespace terminal

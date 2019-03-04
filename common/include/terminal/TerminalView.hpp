@@ -54,6 +54,8 @@ enum class ControlStyleColor
     ControlBorder,
     InactiveControlBorder,
     DisabledControlBorder,
+    UnselectedOption,
+    SelectedOption,
     ClearColor,
 };
 
@@ -82,12 +84,12 @@ class ControlStyleColorPallette : public ColorPallette
     virtual void Deserialize(const json::Node *);
 };
 
-class TerminalView
+class View
 {
   public:
-    ~TerminalView();
+    ~View();
 
-    static TerminalView *GetInstance();
+    static View *GetInstance();
     static void DeleteInstance();
 
     void SetInputMode(terminal::InputMode mode);
@@ -158,10 +160,10 @@ class TerminalView
     void OnTerminalPropertyChanged();
 
   private:
-    static TerminalView *instance;
+    static View *instance;
 
-    TerminalView();
-    TerminalView(int width, int height);
+    View();
+    View(int width, int height);
 
     void Recreate();
 
