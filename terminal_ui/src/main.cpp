@@ -18,7 +18,6 @@ using util::ToString;
 namespace
 {
 bool running = true;
-bool checkErrorDump = false;
 char *DebugLocation = "debugfiles/backtrace.dump";
 
 void Quit()
@@ -36,7 +35,7 @@ void QuitAfterError()
     Quit();
 }
 
-void RunComponentTest()
+void Start()
 {
     terminal::Window w;
 
@@ -52,30 +51,40 @@ void RunComponentTest()
     delete screens::Menu;
 }
 
-void HandleSignal(util::SignalEventArgs &a)
+void HandleSignal(int sig)
 {
     QuitAfterError();
 
-    util::err.WriteLine("Received signal: %: %\n", a.signal, boost::stacktrace::stacktrace());
+    util::err.WriteLine("Received Signal %:\n %\n", sig, boost::stacktrace::stacktrace());
+
     std::quick_exit(-1);
 }
 
 void CheckErrorDump()
 {
-    if (checkErrorDump && boost::filesystem::exists(DebugLocation))
+    if (boost::filesystem::exists(DebugLocation))
     {
-        std::ifstream in(DebugLocation);
+        try
+        {
+            std::ifstream in;
 
-        if (in.good())
-            util::out.WriteLine(boost::stacktrace::stacktrace::from_dump(in));
+            in.open(DebugLocation);
 
-        util::out.WriteLine("Press any key to continue.");
+            if (in.is_open() && in.good())
+            {
+                util::out.WriteLine(boost::stacktrace::stacktrace::from_dump(in));
+            }
 
-        in.close();
+            in.close();
+        }
+        catch (const std::exception &e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+
         boost::filesystem::remove(DebugLocation);
 
-        char c;
-        std::scanf("%c", &c);
+        util::WaitForKeyPress("Press [Enter] to continue.");
     }
 }
 
@@ -85,19 +94,27 @@ void RerouteChannels()
     util::out.SetTarget(std::fopen("debugfiles/out.txt", "w"));
     util::dbg.SetTarget(std::fopen("debugfiles/dbg.txt", "w"));
 }
+
+void CreateSignalListeners()
+{
+    std::signal(SIGABRT, HandleSignal);
+    std::signal(SIGFPE, HandleSignal);
+    std::signal(SIGILL, HandleSignal);
+    std::signal(SIGINT, HandleSignal);
+    std::signal(SIGSEGV, HandleSignal);
+    std::signal(SIGTERM, HandleSignal);
+}
 } // namespace
 
 int main()
 {
-    util::EnableSignalHandling();
-    util::StdSignalEvent() += HandleSignal;
-
+    CreateSignalListeners();
     CheckErrorDump();
     RerouteChannels();
 
     try
     {
-        RunComponentTest();
+        Start();
     }
     catch (const util::Exception &e)
     {

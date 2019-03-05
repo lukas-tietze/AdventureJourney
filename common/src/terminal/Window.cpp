@@ -19,6 +19,8 @@ terminal::Window::Window() : loop(true),
 
 terminal::Window::~Window()
 {
+    this->activeScreen = nullptr;
+
     delete this->emptyScreen;
 }
 
@@ -36,11 +38,10 @@ void terminal::Window::Start()
     auto canvas = Canvas();
 
     this->activeScreen->SetSize(view->GetSize());
-
-    util::dbg.WriteLine("Initializing window! Size is %.", this->activeScreen->GetSize());
-
     this->activeScreen->RestoreLayout();
     this->activeScreen->Render(canvas);
+
+    util::dbg.WriteLine("Initialized window! Size is %.", this->activeScreen->GetSize());
 
     while (this->loop)
     {

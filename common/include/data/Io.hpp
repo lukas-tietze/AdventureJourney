@@ -8,6 +8,8 @@
 
 namespace util
 {
+void WaitForKeyPress();
+void WaitForKeyPress(const std::string &);
 std::string ReadFile(const std::string &file);
 bool TryReadFile(const std::string &file, std::string &buf);
 void WriteFile(const std::string &file, const std::string &data);

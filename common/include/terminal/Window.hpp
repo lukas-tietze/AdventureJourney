@@ -14,8 +14,8 @@ class Window
     bool hasEscapeKey;
 
     std::vector<Screen *> screens;
-    Screen *activeScreen;
     Screen *emptyScreen;
+    Screen *activeScreen;
 
   public:
     Window();

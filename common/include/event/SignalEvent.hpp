@@ -3,7 +3,7 @@
 #include <csignal>
 #include <iostream>
 
-#include "event/FunctionEvent.hpp"
+#include "event/GeneralizedEvent.hpp"
 
 namespace util
 {
@@ -24,13 +24,11 @@ struct SignalEventArgs
 {
     util::Signal signal;
     int code;
+    bool handled;
 };
 
-typedef FunctionEvent<SignalEventArgs> SignalEvent;
-
 void EnableSignalHandling();
-
 void EnableSignalHandling(Signal);
 
-SignalEvent &StdSignalEvent();
+extern Event<SignalEventArgs> StdSignalEvent;
 } // namespace util

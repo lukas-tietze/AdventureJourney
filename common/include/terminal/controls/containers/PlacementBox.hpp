@@ -8,11 +8,16 @@ class PlacementBox : public ContainerBase
 {
   private:
     ControlBase *item;
-    float weights[4];
+    
+    float top;
+    float bottom;
+    float left;
+    float right;
+    float width;
+    float height;
 
   public:
     PlacementBox();
-    virtual ~PlacementBox();
 
     void Add(ControlBase *);
     bool Remove(ControlBase *);
@@ -22,5 +27,10 @@ class PlacementBox : public ContainerBase
     void SetBottom(float);
     void SetLeft(float);
     void SetRight(float);
+    void SetItemWidth(float);
+    void SetItemHeight(float);
+
+    void SetHorizontalPartition(float, float, float);
+    void SetVerticalPartition(float, float, float);
 };
 } // namespace terminal

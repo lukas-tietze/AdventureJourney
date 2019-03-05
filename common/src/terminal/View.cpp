@@ -101,6 +101,7 @@ void terminal::View::DeleteInstance()
         delete View::instance;
         View::instance = nullptr;
 
+        refresh();
         endwin();
     }
 }

@@ -5,8 +5,6 @@
 
 namespace
 {
-util::SignalEvent stdSignalEvent;
-
 void HandleSignal(int what)
 {
     util::SignalEventArgs args;
@@ -37,7 +35,7 @@ void HandleSignal(int what)
         break;
     }
 
-    stdSignalEvent(args);
+    util::StdSignalEvent(args);
 }
 } // namespace
 
@@ -53,37 +51,21 @@ void util::EnableSignalHandling()
 
 void util::EnableSignalHandling(Signal s)
 {
-    switch (s)
-    {
-    case util::Signal::Abort:
+    if (static_cast<int>(s) & static_cast<int>(util::Signal::Abort))
         std::signal(SIGABRT, &HandleSignal);
-        break;
-    case util::Signal::FloatingPointException:
+    if (static_cast<int>(s) & static_cast<int>(util::Signal::FloatingPointException))
         std::signal(SIGFPE, &HandleSignal);
-        break;
-    case util::Signal::IllegalInstruction:
+    if (static_cast<int>(s) & static_cast<int>(util::Signal::IllegalInstruction))
         std::signal(SIGILL, &HandleSignal);
-        break;
-    case util::Signal::Interrupt:
+    if (static_cast<int>(s) & static_cast<int>(util::Signal::Interrupt))
         std::signal(SIGINT, &HandleSignal);
-        break;
-    case util::Signal::SegmentationViolation:
+    if (static_cast<int>(s) & static_cast<int>(util::Signal::SegmentationViolation))
         std::signal(SIGSEGV, &HandleSignal);
-        break;
-    case util::Signal::Terminate:
+    if (static_cast<int>(s) & static_cast<int>(util::Signal::Terminate))
         std::signal(SIGTERM, &HandleSignal);
-        break;
-    case util::Signal::Unknown:
-    default:
-        throw util::InvalidCaseException();
-        break;
-    }
 }
 
-util::SignalEvent &util::StdSignalEvent()
-{
-    return stdSignalEvent;
-}
+util::Event<util::SignalEventArgs> util::StdSignalEvent = util::Event<util::SignalEventArgs>();
 
 std::ostream &util::operator<<(std::ostream &s, util::Signal sig)
 {

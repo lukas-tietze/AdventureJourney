@@ -4,24 +4,38 @@
 
 namespace terminal
 {
-class ControlBase;
-
 class Dimension
 {
   private:
     struct Dim
     {
-        bool isRelative;
-        union value {
+        union Value {
             float relative;
             int absolute;
         };
+
+        bool isRelative;
+        Value value;
     };
 
     Dim width;
     Dim height;
 
   public:
-    util::Dimension operator[](const terminal::ControlBase *) const;
+    Dimension(int, int);
+    Dimension(int, float);
+    Dimension(float, float);
+    Dimension(float, int);
+
+    util::Dimension Convert(const util::Dimension &d) const;
+
+    int Width(const util::Dimension &) const;
+    int Height(const util::Dimension &) const;
+
+    void SetWidth(int);
+    void SetWidth(float);
+
+    void SetHeight(int);
+    void SetHeight(float);
 };
 } // namespace terminal

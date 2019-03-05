@@ -1,6 +1,7 @@
 #include <string>
 #include <fstream>
 #include <streambuf>
+#include <iostream>
 
 #include "data/Io.hpp"
 #include "Exception.hpp"
@@ -88,4 +89,16 @@ bool util::TryWriteFile(const std::string &file, const std::string &data)
     }
 
     return true;
+}
+
+void util::WaitForKeyPress()
+{
+    char c;
+    std::scanf("%c", &c);
+}
+
+void util::WaitForKeyPress(const std::string &message)
+{
+    std::printf("%s", message.c_str());
+    WaitForKeyPress();
 }

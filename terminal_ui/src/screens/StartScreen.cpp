@@ -19,10 +19,8 @@ terminal::Screen *screens::CreateStartScreen()
     titleText->SetSize(20, 6);
 
     auto box = new terminal::PlacementBox();
-    box->SetLeft(1.f);
-    box->SetRight(1.f);
-    box->SetTop(0.5f);
-    box->SetBottom(1);
+    box->SetHorizontalPartition(0.2f, 0.6f, 0.2f);
+    box->SetVerticalPartition(0.05f, 0.8f, 0.15f);
     box->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
     box->Add(titleText);
 
