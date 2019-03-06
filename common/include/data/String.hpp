@@ -7,9 +7,16 @@
 #include <list>
 #include <sstream>
 #include <Exception.hpp>
+#include <ctime>
 
 namespace util
 {
+class TimeFormatException : public util::Exception
+{
+  public:
+    TimeFormatException(const std::string &, std::time_t);
+};
+
 std::string Unescape(char);
 std::string Format2(const std::string &format, ...);
 std::string ToUpper(const std::string &nameBuf);
@@ -25,6 +32,9 @@ std::string StripFront(const std::string &);
 std::string StripBack(const std::string &);
 
 std::string UtfCodePointToNarrowString(uint32_t);
+
+std::string FormatLocalTime(const std::string &format);
+std::string FormatLocalTime(const std::string &format, std::time_t);
 
 uint32_t Hex4ToNumber(const std::string &);
 uint32_t Hex4ToNumber(const char *);
@@ -259,6 +269,6 @@ std::ostream &operator<<(std::ostream &s, const std::map<TKey, TValue> &map)
 // template <class... Ts>
 // std::ostream &operator<<(std::ostream &s, const std::tuple<Ts...> &)
 // {
-    
+
 // }
 } // namespace util

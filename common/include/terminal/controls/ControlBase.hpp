@@ -129,6 +129,8 @@ class ControlBase
     Border border;
     bool borderEnabled;
 
+    std::string name;
+
     util::Event<MouseEventArgs> onMouse;
     util::Event<KeyEventArgs> onKey;
 
@@ -173,6 +175,7 @@ class ControlBase
     void SetVisibility(bool visible);
     int GetTabIndex() const;
     void SetTabIndex(int);
+    const std::string &GetName() const;
     const util::Dimension &GetMinSize() const;
     const util::Dimension &GetMaxSize() const;
     const util::Dimension &GetSize() const;
@@ -182,6 +185,7 @@ class ControlBase
     Border &GetBorder();
     bool IsBorderEnabled() const;
     AutoSizeMode GetAutoSizeMode() const;
+    void SetName(const std::string &);
     void SetSize(const util::Dimension &);
     void SetSize(int w, int h);
     void SetMinSize(const util::Dimension &);

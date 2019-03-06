@@ -153,4 +153,7 @@ void terminal::Window::SetActiveScreen(Screen *s)
         this->activeScreen->SetSize(view->GetSize());
         this->activeScreen->RestoreLayout();
     }
+    else
+    {
+    }
 }

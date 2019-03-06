@@ -1,4 +1,5 @@
 #include "terminal/controls/containers/PlacementBox.hpp"
+#include "data/Io.hpp"
 
 namespace
 {
@@ -55,13 +56,26 @@ void terminal::PlacementBox::RestoreLayout()
 
     auto w = this->GetSize().GetWidth();
     auto h = this->GetSize().GetHeight();
+    auto maxSize = util::Dimension(w * this->width / wTotal, h * this->height / hTotal);
 
-    this->item->ApplyAutoSize(util::Dimension(w * this->width / wTotal, h * this->height / hTotal));
+    this->item->ApplyAutoSize(maxSize);
 
     auto rw = w - this->item->GetSize().GetWidth();
     auto rh = h - this->item->GetSize().GetHeight();
+    auto location = this->GetLocation() + util::Point(w * (this->left + this->right) / wTotal, h * (this->top + this->bottom) / hTotal);
 
-    this->item->SetLocation(this->GetLocation() + util::Point(w * (this->left + this->right) / wTotal, h * (this->top + this->bottom) / hTotal));
+    this->item->SetLocation(location);
+    this->item->RestoreLayout();
+
+    util::dbg.WriteLine("PlacementBox [%]: fitting [%] to x=%, y=%, w=% (proposed %), h=% (proposed %)",
+                        this,
+                        this->item,
+                        location.GetX(),
+                        location.GetY(),
+                        this->item->GetBounds().GetWidth(),
+                        maxSize.GetWidth(),
+                        this->item->GetBounds().GetHeight(),
+                        maxSize.GetHeight());
 
     this->ContainerBase::RestoreLayout();
 }

@@ -93,6 +93,10 @@ void RerouteChannels()
     util::err.SetTarget(std::fopen("debugfiles/err.txt", "w"));
     util::out.SetTarget(std::fopen("debugfiles/out.txt", "w"));
     util::dbg.SetTarget(std::fopen("debugfiles/dbg.txt", "w"));
+
+    util::err.SetShowTime(true);
+    util::out.SetShowTime(true);
+    util::dbg.SetShowTime(true);
 }
 
 void CreateSignalListeners()
