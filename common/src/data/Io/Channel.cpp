@@ -3,8 +3,11 @@
 #include "data/Io.hpp"
 #include "Exception.hpp"
 
+const std::string util::Channel::TimeFormat = "%Y-%m-%d %H:%M:%S";
+
 util::Channel::Channel() : file(stdout),
-                           active(true)
+                           active(true),
+                           showTime(false)
 {
 }
 

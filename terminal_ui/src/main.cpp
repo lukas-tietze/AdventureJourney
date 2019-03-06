@@ -45,6 +45,8 @@ void Start()
     w.AddScreen(screens::Start);
     w.AddScreen(screens::Menu);
 
+    screens::Start->Show();
+
     w.Start('q');
 
     delete screens::Start;

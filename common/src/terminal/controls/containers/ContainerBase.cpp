@@ -194,7 +194,22 @@ void terminal::ContainerBase::RestoreLayout()
 {
     for (auto control : this->controls)
     {
-        control->ApplyAutoSize(this->GetSize());
-        control->RestoreLayout();
+        switch (control->GetAutoSizeMode())
+        {
+        case AutoSizeMode::Fill:
+            control->ApplyAutoSize(this->GetSize());
+            control->SetLocation(this->GetLocation());
+            control->RestoreLayout();
+            break;
+        case AutoSizeMode::Fit:
+            control->RestoreLayout();
+            control->ApplyAutoSize(this->GetSize());
+            break;
+        case AutoSizeMode::None:
+            control->ApplyAutoSize(this->GetSize());
+            break;
+        default:
+            break;
+        }
     }
 }

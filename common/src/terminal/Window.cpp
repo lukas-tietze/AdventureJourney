@@ -108,10 +108,12 @@ void terminal::Window::Quit()
 
 void terminal::Window::AddScreen(Screen *s)
 {
-    if (std::find(this->screens.begin(), this->screens.end(), s) != this->screens.end())
+    if (std::find(this->screens.begin(), this->screens.end(), s) == this->screens.end())
     {
         s->AttachToWindow(this);
         this->screens.push_back(s);
+
+        util::dbg.WriteLine("Window [%]: added screen [%].", this, s);
     }
 }
 
@@ -123,6 +125,8 @@ void terminal::Window::RemoveScreen(Screen *s)
     {
         (*pos)->DetachFromWindow();
         this->screens.erase(pos);
+
+        util::dbg.WriteLine("Window [%]: removed screen [%].", this, s);
     }
 
     if (this->activeScreen == s)
@@ -152,8 +156,19 @@ void terminal::Window::SetActiveScreen(Screen *s)
         this->activeScreen->Invalidate();
         this->activeScreen->SetSize(view->GetSize());
         this->activeScreen->RestoreLayout();
+
+        util::dbg.WriteLine("Window [%]: [%] is now the active screen.", this, *pos);
     }
     else
     {
+        util::dbg.WriteLine("Window [%]: could not change active screen, screen [%] is unknown.", this, s);
     }
+}
+
+void terminal::Window::Blank()
+{
+    this->activeScreen->HandleHide();
+    this->activeScreen = this->emptyScreen;
+
+    util::dbg.WriteLine("Window [%]: blanking screen.", this);
 }

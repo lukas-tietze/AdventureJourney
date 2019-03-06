@@ -55,6 +55,8 @@ class Channel
 
     bool showTime;
 
+    static const std::string TimeFormat;
+
   public:
     Channel();
     Channel(const Channel &copyFrom);
@@ -85,7 +87,7 @@ class Channel
     int Write(const std::string &format, const TFirst &first, const TArgs &... args)
     {
         return this->showTime
-                   ? std::fprintf(this->file, "[%s] %s", util::FormatLocalTime("%Y%m%d-%H%M%S").c_str(), util::Format(format, first, args...).c_str())
+                   ? std::fprintf(this->file, "[%s] %s", util::FormatLocalTime(TimeFormat).c_str(), util::Format(format, first, args...).c_str())
                    : std::fprintf(this->file, "%s", util::Format(format, first, args...).c_str());
     }
 
@@ -106,7 +108,7 @@ class Channel
         s << arg;
 
         return this->showTime
-                   ? std::fprintf(this->file, "[%s] %s", util::FormatLocalTime("%Y%m%d-%H%M%S").c_str(), s.str().c_str())
+                   ? std::fprintf(this->file, "[%s] %s", util::FormatLocalTime(TimeFormat).c_str(), s.str().c_str())
                    : std::fprintf(this->file, "%s", s.str().c_str());
     }
 
