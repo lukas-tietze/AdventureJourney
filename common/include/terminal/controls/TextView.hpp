@@ -12,6 +12,8 @@ class TextView : public ControlBase
   private:
     std::vector<std::string> lines;
     size_t firstLine;
+    bool centerVertical;
+    bool centerHorizontal;
 
     void PrepareLines();
     void PrepareText();
@@ -20,6 +22,12 @@ class TextView : public ControlBase
     TextView();
     TextView(const std::string &);
     virtual ~TextView();
+
+    void SetCenterHorizontal(bool);
+    void SetCenterVertical(bool);
+
+    bool IsCenterdHorizontal() const;
+    bool IsCenterdVertical() const;
 
     virtual void HandleKey(KeyInput &);
     virtual void HandleMouse(MouseInput &);

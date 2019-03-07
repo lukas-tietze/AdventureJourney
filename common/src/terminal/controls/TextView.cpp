@@ -146,8 +146,75 @@ void terminal::TextView::PrepareLines()
 
 void terminal::TextView::RestoreLayout()
 {
-    this->PrepareText();
-    this->PrepareLines();
+    // this->PrepareText();
+    // this->PrepareLines();
+
+    const std::string &text = this->GetText();
+    const int n = text.length();
+    const int maxLen = this->GetBounds().GetWidth();
+    int i = 0;
+    int lastBreak = 0;
+    int lastLineBreak = 0;
+    char c;
+    std::string buf;
+
+    this->lines.clear();
+
+    while (i < n)
+    {
+        c = text[i];
+
+        if (std::isspace(c))
+        {
+            lastBreak = i;
+
+            if (c == '\t')
+            {
+            }
+            else if (c == '\n')
+            {
+                this->lines.push_back(buf);
+            }
+            else if (c == '\r')
+            {
+                buf.clear();
+                lastLineBreak = i;
+                lastBreak = i;
+            }
+            else
+            {
+                buf.push_back(c);
+            }
+        }
+        else
+        {
+            buf.push_back(c);
+        }
+
+        i++;
+    }
+
+    this->ControlBase::RestoreLayout();
+}
+
+void terminal::TextView::SetCenterHorizontal(bool value)
+{
+    this->centerHorizontal = value;
+}
+
+void terminal::TextView::SetCenterVertical(bool value)
+{
+    this->centerVertical = value;
+}
+
+bool terminal::TextView::IsCenterdHorizontal() const
+{
+    return this->centerHorizontal;
+}
+
+bool terminal::TextView::IsCenterdVertical() const
+{
+    return this->centerVertical;
 }
 
 void terminal::TextView::Render(terminal::Canvas &c)

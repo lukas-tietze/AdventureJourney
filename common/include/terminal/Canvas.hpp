@@ -32,10 +32,13 @@ class Canvas
     terminal::Canvas &DrawBox(const util::Rectangle &, char c);
     terminal::Canvas &DrawString(int x, int y, const std::string &);
     terminal::Canvas &DrawString(const util::Point &, const std::string &);
+    terminal::Canvas &DrawChar(int x, int y, int value);
+    terminal::Canvas &DrawChar(const util::Point &, int value);
     terminal::Canvas &Fill(int x, int y, int width, int height, char c);
     terminal::Canvas &Fill(const util::Rectangle &, char c);
     terminal::Canvas &Clear(char c);
     terminal::Canvas &Clear();
+    terminal::Canvas &Reset();
 
     const util::Dimension &GetSize() const;
     const util::Point &GetOrigin() const;

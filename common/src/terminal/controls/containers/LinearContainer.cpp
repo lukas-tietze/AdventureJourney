@@ -85,6 +85,8 @@ void terminal::LinearContainer::RestoreLayout()
     default:
         throw util::InvalidCaseException::MakeException(this->orientation);
     }
+
+    this->ControlBase::RestoreLayout();
 }
 
 void terminal::LinearContainer::SetOrientation(Orientation o)

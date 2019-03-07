@@ -19,8 +19,7 @@ terminal::ControlBase::ControlBase() : bounds(0, 0, 0, 0),
                                        minimumSize(0, 0),
                                        maximumSize(std::numeric_limits<int>::max(), std::numeric_limits<int>::max()),
                                        autoSizeMode(AutoSizeMode::None),
-                                       border(),
-                                       borderEnabled(false);
+                                       borderEnabled(false)
 {
 }
 

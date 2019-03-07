@@ -366,6 +366,8 @@ void terminal::FrameContainer::RestoreLayout()
             }
         }
     }
+
+    this->ControlBase::RestoreLayout();
 }
 
 void terminal::FrameContainer::Render(Canvas &c)

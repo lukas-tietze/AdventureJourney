@@ -51,42 +51,47 @@ enum class AutoSizeMode
 
 std::ostream &operator<<(std::ostream &, AutoSizeMode);
 
+enum class BorderType
+{
+    TopEdge = BIT(0),
+    RightEdge = BIT(1),
+    BottomEdge = BIT(2),
+    LeftEdge = BIT(3),
+    TopLeftCorner = BIT(4),
+    TopRightCorner = BIT(5),
+    BottomRightCorner = BIT(6),
+    BottomLeftCorner = BIT(7),
+
+    TopLine = TopLeftCorner | TopEdge | TopRightCorner,
+    BottomLine = BottomLeftCorner | BottomEdge | BottomRightCorner,
+    LeftLine = TopLeftCorner | LeftEdge | BottomLeftCorner,
+    RightLine = TopRightCorner | RightEdge | BottomRightCorner,
+
+    AllEdges = TopEdge | RightEdge | BottomEdge | LeftEdge,
+    AllCorners = TopLeftCorner | TopRightCorner | BottomRightCorner | BottomLeftCorner,
+    All = AllEdges | AllCorners
+};
+
 class Border
 {
   private:
-    uint8_t sizes[4];
-    int styles[4];
-    char values[4]; //TODO
+    colorPairId_t styles[8];
+    int values[8];
+    bool enabled[8];
 
   public:
     Border();
 
-    void SetSize(uint8_t size);
-    void SetStyle(int style);
+    void SetStyle(colorPairId_t);
+    void SetStyle(BorderType, colorPairId_t);
+    colorPairId_t GetStyle(BorderType) const;
 
-    void SetTopSize(uint8_t size);
-    void SetTopStyle(int style);
+    void SetChar(BorderType, int);
+    int GetChar(BorderType) const;
 
-    void SetRightSize(uint8_t size);
-    void SetRightStyle(int style);
-
-    void SetBottomSize(uint8_t size);
-    void SetBottomStyle(int style);
-
-    void SetLeftSize(uint8_t size);
-    void SetLeftStyle(int style);
-
-    uint8_t GetTopSize();
-    int GetTopStyle();
-
-    uint8_t GetRightSize();
-    int GetRightStyle();
-
-    uint8_t GetBottomSize();
-    int GetBottomStyle();
-
-    uint8_t GetLeftSize();
-    int GetLeftStyle();
+    void SetEnabled(bool);
+    void SetEnabled(BorderType, bool);
+    bool IsEnabled(BorderType) const;
 
     void Render(const util::Rectangle &bounds, Canvas &);
 };

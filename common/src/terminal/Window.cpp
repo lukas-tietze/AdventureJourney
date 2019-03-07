@@ -92,9 +92,8 @@ void terminal::Window::Start()
             this->activeScreen->RestoreLayout();
 
         canvas.Clear();
-        canvas.DisableClip();
-        canvas.SetOrigin(0, 0);
-
+        canvas.Reset();
+        
         this->activeScreen->Render(canvas);
 
         canvas.Flush();

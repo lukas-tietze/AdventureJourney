@@ -62,7 +62,7 @@ void terminal::PlacementBox::RestoreLayout()
 
     auto rw = w - this->item->GetSize().GetWidth();
     auto rh = h - this->item->GetSize().GetHeight();
-    auto location = util::Point(w * (this->left + this->right) / wTotal, h * (this->top + this->bottom) / hTotal);
+    auto location = util::Point(w * this->left / wTotal, h * this->top / hTotal);
 
     this->item->SetLocation(location);
     this->item->RestoreLayout();
@@ -77,7 +77,7 @@ void terminal::PlacementBox::RestoreLayout()
                         this->item->GetBounds().GetHeight(),
                         maxSize.GetHeight());
 
-    this->ContainerBase::RestoreLayout();
+    this->ControlBase::RestoreLayout();
 }
 
 void terminal::PlacementBox::SetTop(float f)

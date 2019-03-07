@@ -202,6 +202,15 @@ terminal::Canvas &terminal::Canvas::Clear()
     return this->Clear(' ');
 }
 
+terminal::Canvas &terminal::Canvas::Reset()
+{
+    this->size = this->view->GetSize();
+    this->origin = util::Point(0, 0);
+    this->clippedArea = util::Rectangle(0, 0, this->size);
+
+    return *this;
+}
+
 terminal::Canvas &terminal::Canvas::DrawString(const Point &p, const std::string &s)
 {
     return this->DrawString(p.GetX(), p.GetY(), s);
@@ -260,6 +269,19 @@ terminal::Canvas &terminal::Canvas::DrawString(int x, int y, const std::string &
     this->view->Print(s, x, y);
 
     return *this;
+}
+
+terminal::Canvas &terminal::Canvas::DrawChar(int x, int y, int value)
+{
+    return this->DrawChar(util::Point(x, y), value);
+}
+
+terminal::Canvas &terminal::Canvas::DrawChar(const util::Point &p, int value)
+{
+    if (this->clippedArea.Contains(p))
+    {
+        this->view->Print(value, this->X(p.GetX()), this->Y(p.GetY()));
+    }
 }
 
 const util::Dimension &terminal::Canvas::GetSize() const
