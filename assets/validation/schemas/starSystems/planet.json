@@ -1,0 +1,37 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "planet",
+    "description": "schema for planet template.",
+    "type": "object",
+    "properties": {
+        "planetType": {
+            "type": "string"
+        },
+        "resources": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": [
+                            "string",
+                            "integer"
+                        ]
+                    },
+                    "chanceLargeDeposit": {
+                        "type": "number"
+                    },
+                    "chanceMediumDeposit": {
+                        "type": "number"
+                    },
+                    "chanceSmallDeposit": {
+                        "type": "number"
+                    }
+                }
+            }
+        },
+        "meanResources": {
+            "type": "integer"
+        }
+    }
+}
