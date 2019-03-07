@@ -26,6 +26,8 @@ class TextView : public ControlBase
     virtual void HandleBoundsChanged();
     virtual void HandleTextChanged();
 
+    virtual void RestoreLayout();
+
     virtual void Render(Canvas &);
 };
 } // namespace terminal

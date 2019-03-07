@@ -18,7 +18,9 @@ terminal::ControlBase::ControlBase() : bounds(0, 0, 0, 0),
                                        visible(true),
                                        minimumSize(0, 0),
                                        maximumSize(std::numeric_limits<int>::max(), std::numeric_limits<int>::max()),
-                                       autoSizeMode(AutoSizeMode::None)
+                                       autoSizeMode(AutoSizeMode::None),
+                                       border(),
+                                       borderEnabled(false);
 {
 }
 
@@ -365,8 +367,17 @@ void terminal::ControlBase::ApplyAutoSize(const util::Dimension &availableSpace)
     {
     case AutoSizeMode::None:
         return;
+    case AutoSizeMode::FillHorizontal:
+        this->SetSize(availableSpace.GetWidth(), this->GetSize().GetHeight());
+        this->SetLocation(0, this->GetLocation().GetY());
+        break;
+    case AutoSizeMode::FillVertical:
+        this->SetSize(this->GetSize().GetWidth(), availableSpace.GetHeight());
+        this->SetLocation(this->GetLocation().GetX(), 0);
+        break;
     case AutoSizeMode::Fill:
         this->SetSize(availableSpace);
+        this->SetLocation(0, 0);
         break;
     case AutoSizeMode::Fit:
         this->RestoreLayout();
@@ -400,6 +411,7 @@ terminal::AutoSizeMode terminal::ControlBase::GetAutoSizeMode() const
 
 void terminal::ControlBase::RestoreLayout()
 {
+    this->isValid = true;
 }
 
 terminal::colorPairId_t terminal::ControlBase::Style(ControlStyleColor color)

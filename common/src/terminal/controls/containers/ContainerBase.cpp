@@ -108,9 +108,11 @@ void terminal::ContainerBase::Render(Canvas &canvas)
 {
     this->terminal::ControlBase::Render(canvas);
 
+    auto subCanvas = canvas.GetSubCanvas(this->GetBounds());
+
     for (auto i = this->controls.begin(), end = this->controls.end(); i != end; i++)
     {
-        (*i)->Render(canvas);
+        (*i)->Render(subCanvas);
     }
 }
 
@@ -194,22 +196,9 @@ void terminal::ContainerBase::RestoreLayout()
 {
     for (auto control : this->controls)
     {
-        switch (control->GetAutoSizeMode())
-        {
-        case AutoSizeMode::Fill:
-            control->ApplyAutoSize(this->GetSize());
-            control->SetLocation(this->GetLocation());
-            control->RestoreLayout();
-            break;
-        case AutoSizeMode::Fit:
-            control->RestoreLayout();
-            control->ApplyAutoSize(this->GetSize());
-            break;
-        case AutoSizeMode::None:
-            control->ApplyAutoSize(this->GetSize());
-            break;
-        default:
-            break;
-        }
+        control->ApplyAutoSize(this->GetSize());
+        control->RestoreLayout();
     }
+
+    this->ControlBase::RestoreLayout();
 }

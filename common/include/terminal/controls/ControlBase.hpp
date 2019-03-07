@@ -44,6 +44,8 @@ enum class AutoSizeMode
 {
     None,
     Fill,
+    FillHorizontal,
+    FillVertical,
     Fit,
 };
 

@@ -23,7 +23,8 @@ void terminal::TextView::HandleKey(terminal::KeyInput &action)
     if (action.handled || !terminal::IsSpecialKey(action.key))
         return;
 
-    auto key = static_cast<Key>(action.key);
+    auto key = action.specialKey;
+    bool handled = true;
 
     if (key == Key::Up && this->firstLine > 0)
     {
@@ -41,17 +42,22 @@ void terminal::TextView::HandleKey(terminal::KeyInput &action)
     {
         this->firstLine = std::min(this->lines.size() - 1, this->firstLine + (this->GetBounds().GetHeight() - 2));
     }
+    else
+    {
+        handled = false;
+    }
+
+    action.handled = handled;
 }
 
 void terminal::TextView::HandleBoundsChanged()
 {
-    this->PrepareLines();
+    this->Invalidate();
 }
 
 void terminal::TextView::HandleTextChanged()
 {
-    this->PrepareText();
-    this->PrepareLines();
+    this->Invalidate();
 }
 
 void terminal::TextView::PrepareText()
@@ -136,6 +142,12 @@ void terminal::TextView::PrepareLines()
             }
         }
     }
+}
+
+void terminal::TextView::RestoreLayout()
+{
+    this->PrepareText();
+    this->PrepareLines();
 }
 
 void terminal::TextView::Render(terminal::Canvas &c)

@@ -588,6 +588,12 @@ std::ostream &terminal::operator<<(std::ostream &s, terminal::AutoSizeMode value
     case terminal::AutoSizeMode::Fill:
         s << "Fill";
         break;
+    case terminal::AutoSizeMode::FillHorizontal:
+        s << "FillHorizontal";
+        break;
+    case terminal::AutoSizeMode::FillVertical:
+        s << "FillVertical";
+        break;
     case terminal::AutoSizeMode::Fit:
         s << "Fit";
         break;

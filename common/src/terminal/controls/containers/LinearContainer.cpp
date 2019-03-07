@@ -25,7 +25,6 @@ void terminal::LinearContainer::RestoreLayout()
     int totalSize;
     int remainingSize;
     int otherDim;
-    util::Point offset;
     int i = 0;
 
     if (this->orientation == Orientation::TopToBottom || this->orientation == Orientation::BottomToTop)
@@ -44,48 +43,40 @@ void terminal::LinearContainer::RestoreLayout()
     switch (this->orientation)
     {
     case Orientation::TopToBottom:
-        offset = this->GetBounds().TopLeft();
-
         for (auto pos = this->GetControls().begin(), end = this->GetControls().end(); pos != end && remainingSize > 0; ++pos)
         {
             auto control = *pos;
-            control->SetLocation(offset.GetX(), offset.GetY() + (totalSize - remainingSize));
+            control->SetLocation(0, totalSize - remainingSize);
             control->ApplyAutoSize(util::Dimension(otherDim, remainingSize));
             remainingSize -= control->GetBounds().GetHeight();
         }
 
         break;
     case Orientation::BottomToTop:
-        offset = this->GetBounds().BottomLeft();
-
         for (auto pos = this->GetControls().begin(), end = this->GetControls().end(); pos != end && remainingSize > 0; ++pos)
         {
             auto control = *pos;
-            control->SetLocation(offset.GetX(), offset.GetY() - (totalSize - remainingSize));
+            control->SetLocation(0, totalSize - remainingSize);
             control->ApplyAutoSize(util::Dimension(otherDim, remainingSize));
             remainingSize -= control->GetBounds().GetHeight();
         }
 
         break;
     case Orientation::LeftToRight:
-        offset = this->GetBounds().TopLeft();
-
         for (auto pos = this->GetControls().begin(), end = this->GetControls().end(); pos != end && remainingSize > 0; ++pos)
         {
             auto control = *pos;
-            control->SetLocation(offset.GetX() + (totalSize - remainingSize), offset.GetY());
+            control->SetLocation(totalSize - remainingSize, 0);
             control->ApplyAutoSize(util::Dimension(remainingSize, otherDim));
             remainingSize -= control->GetBounds().GetWidth();
         }
 
         break;
     case Orientation::RightToLeft:
-        offset = this->GetBounds().TopRight();
-
         for (auto pos = this->GetControls().begin(), end = this->GetControls().end(); pos != end && remainingSize > 0; ++pos)
         {
             auto control = *pos;
-            control->SetLocation(offset.GetX() - (totalSize - remainingSize), offset.GetY());
+            control->SetLocation(totalSize - remainingSize, 0);
             control->ApplyAutoSize(util::Dimension(remainingSize, otherDim));
             remainingSize -= control->GetBounds().GetWidth();
         }

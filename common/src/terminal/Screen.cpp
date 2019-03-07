@@ -2,6 +2,7 @@
 
 terminal::Screen::Screen() : ContainerBase()
 {
+    this->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
 }
 
 void terminal::Screen::AttachToWindow(Window *newParent)

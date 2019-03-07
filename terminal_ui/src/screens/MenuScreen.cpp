@@ -47,10 +47,8 @@ terminal::Screen *screens::CreateMenuScreen()
     centerLayout->Add(selector);
 
     auto box = new terminal::PlacementBox();
-    box->SetLeft(1.f);
-    box->SetRight(1.f);
-    box->SetTop(0.5f);
-    box->SetBottom(1);
+    box->SetHorizontalPartition(0.3f, 0.4f, 0.3f);
+    box->SetVerticalPartition(0.05f, 0.75f, 0.2f);
     box->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
     box->Add(centerLayout);
 
