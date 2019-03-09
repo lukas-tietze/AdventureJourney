@@ -15,7 +15,7 @@ terminal::Screen *screens::CreateStartScreen()
 {
     auto s = new terminal::Screen();
 
-    auto titleText = new terminal::TextView("Welcome to \n Galaxy At War \n\n [press any key to continue]");
+    auto titleText = new terminal::TextView("Welcome to\nGalaxy At War\n\n[press any key to continue]");
     titleText->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
     titleText->SetBorderEnabled(true);
 

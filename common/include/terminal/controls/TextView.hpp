@@ -14,6 +14,8 @@ class TextView : public ControlBase
     size_t firstLine;
     bool centerVertical;
     bool centerHorizontal;
+    bool scrollAllowed;
+    bool trimLines;
 
     void PrepareLines();
     void PrepareText();
@@ -23,11 +25,17 @@ class TextView : public ControlBase
     TextView(const std::string &);
     virtual ~TextView();
 
-    void SetCenterHorizontal(bool);
     void SetCenterVertical(bool);
-
-    bool IsCenterdHorizontal() const;
     bool IsCenterdVertical() const;
+
+    void SetCenterHorizontal(bool);
+    bool IsCenterdHorizontal() const;
+
+    void SetScrollingEnabeld(bool);
+    bool IsScrollingEnabled() const;
+
+    void SetTrimLinesEnabeld(bool);
+    bool IsTrimLinesEnabled() const;
 
     virtual void HandleKey(KeyInput &);
     virtual void HandleMouse(MouseInput &);

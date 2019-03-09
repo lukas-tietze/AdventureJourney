@@ -266,8 +266,6 @@ terminal::Canvas &terminal::Canvas::DrawString(int x, int y, const std::string &
         }
     }
 
-    this->view->Print(s, x, y);
-
     return *this;
 }
 

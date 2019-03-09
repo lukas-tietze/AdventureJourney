@@ -1,5 +1,6 @@
 #include "terminal/controls/TextView.hpp"
 #include "data/String.hpp"
+#include "data/Io.hpp"
 
 terminal::TextView::TextView() : ControlBase()
 {
@@ -20,7 +21,7 @@ void terminal::TextView::HandleMouse(terminal::MouseInput &action)
 
 void terminal::TextView::HandleKey(terminal::KeyInput &action)
 {
-    if (action.handled || !terminal::IsSpecialKey(action.key))
+    if (action.handled || !terminal::IsSpecialKey(action.key) || !this->scrollAllowed)
         return;
 
     auto key = action.specialKey;
@@ -146,53 +147,12 @@ void terminal::TextView::PrepareLines()
 
 void terminal::TextView::RestoreLayout()
 {
-    // this->PrepareText();
-    // this->PrepareLines();
+    util::Justify(this->GetText(), this->GetBounds().GetWidth() - 2, this->lines);    
 
-    const std::string &text = this->GetText();
-    const int n = text.length();
-    const int maxLen = this->GetBounds().GetWidth();
-    int i = 0;
-    int lastBreak = 0;
-    int lastLineBreak = 0;
-    char c;
-    std::string buf;
+    util::dbg.WriteLine("TextView [%]: justified text: ", this);
 
-    this->lines.clear();
-
-    while (i < n)
-    {
-        c = text[i];
-
-        if (std::isspace(c))
-        {
-            lastBreak = i;
-
-            if (c == '\t')
-            {
-            }
-            else if (c == '\n')
-            {
-                this->lines.push_back(buf);
-            }
-            else if (c == '\r')
-            {
-                buf.clear();
-                lastLineBreak = i;
-                lastBreak = i;
-            }
-            else
-            {
-                buf.push_back(c);
-            }
-        }
-        else
-        {
-            buf.push_back(c);
-        }
-
-        i++;
-    }
+    for (size_t i = 0; i < this->lines.size(); i++)
+        util::dbg.WriteLine("Line %/%: \"%\"", i, this->lines.size(), this->lines[i]);
 
     this->ControlBase::RestoreLayout();
 }
@@ -217,19 +177,58 @@ bool terminal::TextView::IsCenterdVertical() const
     return this->centerVertical;
 }
 
+void terminal::TextView::SetScrollingEnabeld(bool value)
+{
+    this->scrollAllowed = value;
+}
+
+bool terminal::TextView::IsScrollingEnabled() const
+{
+    return this->scrollAllowed;
+}
+
+void terminal::TextView::SetTrimLinesEnabeld(bool value)
+{
+    this->trimLines = value;
+}
+
+bool terminal::TextView::IsTrimLinesEnabled() const
+{
+    return this->trimLines;
+}
+
 void terminal::TextView::Render(terminal::Canvas &c)
 {
     c.DrawBox(this->GetBounds(), '-', '|', '+');
 
-    if (this->GetBounds().GetHeight() > 2 && !this->lines.empty())
-    {
-        int visibleLines = std::min(this->lines.size() - this->firstLine, (size_t)(this->GetBounds().GetHeight() - 2));
-        int x = this->GetBounds().GetMinX() + 1;
-        int y = this->GetBounds().GetMinY() + 1;
+    const size_t vh = this->GetBounds().GetHeight() - 2;
+    const size_t vw = this->GetBounds().GetWidth() - 2;
 
-        for (size_t i = 0; i < visibleLines; i++)
-        {
-            c.DrawString(x, y + i, this->lines[i]);
-        }
+    if (this->lines.empty() || vh <= 0 || vw <= 0)
+        return;
+
+    int x = this->GetBounds().GetMinX() + 1;
+    int y = this->GetBounds().GetMinY() + 1;
+
+    size_t visibleLines;
+
+    if (vh > this->lines.size() && this->centerVertical)
+    {
+        y += (vh - this->lines.size()) / 2;
+        visibleLines = this->lines.size();
+    }
+    else
+    {
+        visibleLines = std::min(this->lines.size() - this->firstLine, vh);
+    }
+
+    if (visibleLines > 0)
+    {
+        if (centerHorizontal)
+            for (size_t i = 0; i < visibleLines; i++)
+                c.DrawString(x + (vw - this->lines[i].length()) / 2, y + i, this->lines[this->firstLine + i]);
+        else
+            for (size_t i = 0; i < visibleLines; i++)
+                c.DrawString(x, y + i, this->lines[this->firstLine + i]);
     }
 }

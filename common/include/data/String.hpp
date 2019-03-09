@@ -11,27 +11,49 @@
 
 namespace util
 {
+struct JustificationArgs
+{
+    bool trimLines;
+    bool trimMultipleSpaces;
+    uint32_t tabLen;
+};
+
+extern JustificationArgs defaultJustificationArgs;
+
+std::vector<std::string> Justify(const std::string &, int, const JustificationArgs & = defaultJustificationArgs);
+std::vector<std::string> &Justify(const std::string &, int, std::vector<std::string> &, const JustificationArgs & = defaultJustificationArgs);
+
+std::string Format2(const std::string &format, ...);
+
+std::string ToUpper(const std::string &nameBuf);
+std::string ToLower(const std::string &nameBuf);
+std::string &ToUpperInplace(std::string &nameBuf);
+std::string &ToLowerInplace(std::string &nameBuf);
+
+std::vector<std::string> Split(const std::string &str, bool removeEmtpyEntries = false);
+std::vector<std::string> Split(const std::string &str, char seperator, bool removeEmtpyEntries = false);
+std::vector<std::string> Split(const std::string &str, const std::string &chars, bool removeEmtpyEntries = false);
+std::vector<std::string> Split(const std::string &str, bool (*)(char), bool removeEmtpyEntries = false);
+std::vector<std::string> &Split(const std::string &str, std::vector<std::string> &buf, bool removeEmtpyEntries = false);
+std::vector<std::string> &Split(const std::string &str, std::vector<std::string> &buf, char seperator, bool removeEmtpyEntries = false);
+std::vector<std::string> &Split(const std::string &str, std::vector<std::string> &buf, const std::string &chars, bool removeEmtpyEntries = false);
+std::vector<std::string> &Split(const std::string &str, std::vector<std::string> &buf, bool (*)(char), bool removeEmtpyEntries = false);
+
+std::string Strip(const std::string &);
+std::string StripFront(const std::string &);
+std::string StripBack(const std::string &);
+std::string &StripInplace(std::string &);
+std::string &StripFrontInplace(std::string &);
+std::string &StripBackInplace(std::string &);
+
+std::string Unescape(char);
+std::string UtfCodePointToNarrowString(uint32_t);
+
 class TimeFormatException : public util::Exception
 {
   public:
     TimeFormatException(const std::string &, std::time_t);
 };
-
-std::string Unescape(char);
-std::string Format2(const std::string &format, ...);
-std::string ToUpper(const std::string &nameBuf);
-std::string ToLower(const std::string &nameBuf);
-void ToUpperInplace(std::string &nameBuf);
-void ToLowerInplace(std::string &nameBuf);
-std::vector<std::string> Split(const std::string &str, bool removeEmtpyEntries = false);
-std::vector<std::string> Split(const std::string &str, char seperator, bool removeEmtpyEntries = false);
-std::vector<std::string> Split(const std::string &str, const std::string &chars, bool removeEmtpyEntries = false);
-std::vector<std::string> Split(const std::string &str, bool (*)(char), bool removeEmtpyEntries = false);
-std::string Strip(const std::string &);
-std::string StripFront(const std::string &);
-std::string StripBack(const std::string &);
-
-std::string UtfCodePointToNarrowString(uint32_t);
 
 std::string FormatLocalTime(const std::string &format);
 std::string FormatLocalTime(const std::string &format, std::time_t);
