@@ -15,7 +15,17 @@ struct JustificationArgs
 {
     bool trimLines;
     bool trimMultipleSpaces;
+    bool filterCariageReturns;
+    bool filterBackspace;
+    bool filterFormFeed;
+    bool convertFormFeedToLineFeed;
+    bool filterTabs;
+    bool filterVerticalTab;
+    bool convertVerticalTabToLineFeed;
+    bool convertTabsToSpaces;
     uint32_t tabLen;
+    uint32_t verticalTabLen;
+    uint32_t formFeedLength;
 };
 
 extern JustificationArgs defaultJustificationArgs;

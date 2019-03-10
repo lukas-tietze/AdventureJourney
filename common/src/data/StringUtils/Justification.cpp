@@ -1,7 +1,33 @@
 #include "data/String.hpp"
+#include "data/Io.hpp"
 
 util::JustificationArgs util::defaultJustificationArgs = {
-
+    // bool trimLines;
+    false,
+    // bool trimMultipleSpaces;
+    false,
+    // bool filterCariageReturns;
+    true,
+    // bool filterBackspace;
+    true,
+    // bool filterFormFeed;
+    true,
+    // bool convertFormFeedToLineFeed;
+    false,
+    // bool filterTabs;
+    false,
+    // bool filterVerticalTab;
+    false,
+    // bool convertVerticalTabToLineFeed;
+    true,
+    // bool convertTabsToSpaces;
+    true,
+    // uint32_t tabLen;
+    4,
+    // uint32_t verticalTabLen;
+    3,
+    // uint32_t formFeedLength;
+    0,
 };
 
 std::vector<std::string> util::Justify(const std::string &text, int maxLen, const JustificationArgs &args)
@@ -15,62 +41,70 @@ std::vector<std::string> util::Justify(const std::string &text, int maxLen, cons
 
 namespace
 {
-size_t FindWordEnd(const std::string &text, size_t startPos, const util::JustificationArgs &args)
+size_t FindWordEnd(const std::string &text, size_t start, const util::JustificationArgs &args)
 {
+    auto i = start;
+
+    while (i < text.length() && std::isalnum(text[i]))
+        i++;
+
+    return i;
 }
 } // namespace
 
 std::vector<std::string> &util::Justify(const std::string &text, int maxLen, std::vector<std::string> &buf, const JustificationArgs &args)
 {
-    const int n = text.length();
-    int i = 0;
-    int lastBreak = 0;
-    int lastLineBreak = 0;
+    util::Channel log = util::Channel(std::fopen(util::Format("debugfiles/justificationLog%", std::time(nullptr)).c_str(), "w"));
+
+    const size_t n = text.length();
+    size_t i = 0;
+    size_t lastLineBreak = 0;
+    size_t nextWordEnd = 0;
     char c;
 
-    buf.clear();
+    log.WriteLine("Processing \"%\"", text);
 
     while (i < n)
     {
-        c = text[i];
+        nextWordEnd = FindWordEnd(text, i, args);
 
-        if (std::isspace(c) || i == n - 1)
+        log.WriteLine("Found word end from % at %.", i, nextWordEnd);
+
+        if (nextWordEnd - lastLineBreak > maxLen)
         {
-            if (i - lastBreak > maxLen)
-            {
-                buf.push_back(text.substr(lastLineBreak, maxLen));
-                lastBreak = lastLineBreak + maxLen;
+            buf.push_back(text.substr(lastLineBreak, nextWordEnd - lastLineBreak));
+            lastLineBreak = nextWordEnd;
 
-                while (i - lastBreak > maxLen)
-                {
-                    buf.push_back(text.substr(lastBreak, maxLen));
-                    lastBreak += maxLen;
-                }
-
-                lastLineBreak = lastBreak;
-            }
-            else if (c == '\n' || i - lastLineBreak > maxLen)
-            {
-                buf.push_back(text.substr(lastLineBreak, i - lastLineBreak - 1));
-                lastLineBreak = i + 1;
-                lastBreak = i + 1;
-            }
-            else if (c == '\t')
-            {
-                //TODO!
-            }
-            else if (c == '\r')
-            {
-                //TODO ignorieren?
-            }
+            log.WriteLine("Breaking line due to overflow at %.", lastLineBreak);
+            log.WriteLine("Flushed line \"%\"", buf.back());
         }
 
-        i++;
+        i = nextWordEnd + 1;
+
+        log.WriteLine("handling spaces after %", i);
+
+        while (i < n && std::isspace(text[i]))
+        {
+            c = text[i];
+
+            if (c == '\n')
+            {
+                log.WriteLine("Creating line break after \\n at %", i);
+
+                buf.push_back(text.substr(lastLineBreak, i - lastLineBreak));
+                lastLineBreak = i;
+
+                log.WriteLine("Flushed line \"%\"", buf.back());
+            }
+
+            i++;
+        }
     }
 
-    if (args.trimLines)
+    if (lastLineBreak < n)
     {
-        for (auto &line : buf)
-            util::StripInplace(line);
+        buf.push_back(text.substr(lastLineBreak, n - lastLineBreak));
     }
+
+    return buf;
 }
