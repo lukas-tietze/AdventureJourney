@@ -4,6 +4,7 @@
 #include <ctime>
 #include <vector>
 #include <iostream>
+#include <cstring>
 
 #include "data/String.hpp"
 #include "data/Io.hpp"
@@ -78,10 +79,10 @@ class TestConfig
   public:
     TestConfig();
     TestConfig(bool breakAfterFirstFailure,
-                uint threadCount,
-                long timeout,
-                bool quiet,
-                bool showOnlyFailed);
+               uint threadCount,
+               long timeout,
+               bool quiet,
+               bool showOnlyFailed);
 
     static TestConfig InitFromArgs(int, char **);
 
@@ -121,6 +122,8 @@ void AreEqual(const T &x, const T &y, const std::string &msg = "")
         throw AssertException("Expected <" + util::ToString(x) + ">, got <" + util::ToString(y) + ">!", msg);
     }
 }
+
+void AreEqual(const char *x, const std::string &y, const std::string &msg = "");
 
 template <class T>
 void AreNotEqual(const T &x, const T &y, const std::string &msg = "")

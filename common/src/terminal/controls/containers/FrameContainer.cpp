@@ -333,7 +333,7 @@ void terminal::FrameContainer::RestoreLayout()
             throw util::InvalidCaseException();
         }
 
-        util::dbg.WriteLine("FrameContainer [%]: Fitting [%] to % at x=%, y=%, w=%, h=%", this, control, where, xOff, yOff, maxW, maxH);
+        util::dbg.WriteLine("FrameContainer [%]: Fitting [%] to % at x=%, y=%, w=%, h=%", this->GetName(), control->GetName(), where, xOff, yOff, maxW, maxH);
 
         control->SetLocation(xOff, yOff);
         control->ApplyAutoSize(util::Dimension(maxW, maxH));

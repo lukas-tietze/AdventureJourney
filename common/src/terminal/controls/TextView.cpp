@@ -147,12 +147,12 @@ void terminal::TextView::PrepareLines()
 
 void terminal::TextView::RestoreLayout()
 {
-    util::Justify(this->GetText(), this->GetBounds().GetWidth() - 2, this->lines);    
+    this->lines.clear();
 
-    util::dbg.WriteLine("TextView [%]: justified text: ", this);
+    util::Justify(this->GetText(), this->GetBounds().GetWidth() - 2, this->lines);
 
-    for (size_t i = 0; i < this->lines.size(); i++)
-        util::dbg.WriteLine("Line %/%: \"%\"", i, this->lines.size(), this->lines[i]);
+    for (auto &line : this->lines)
+        util::StripInplace(line);
 
     this->ControlBase::RestoreLayout();
 }
@@ -225,10 +225,10 @@ void terminal::TextView::Render(terminal::Canvas &c)
     if (visibleLines > 0)
     {
         if (centerHorizontal)
-            for (size_t i = 0; i < visibleLines; i++)
-                c.DrawString(x + (vw - this->lines[i].length()) / 2, y + i, this->lines[this->firstLine + i]);
+            for (size_t i = this->firstLine; i < this->firstLine + visibleLines; i++)
+                c.DrawString(x + ((vw - this->lines[i].length()) / 2), y + i, this->lines[i]);
         else
-            for (size_t i = 0; i < visibleLines; i++)
-                c.DrawString(x, y + i, this->lines[this->firstLine + i]);
+            for (size_t i = this->firstLine; i < this->firstLine + visibleLines; i++)
+                c.DrawString(x, y + i, this->lines[i]);
     }
 }

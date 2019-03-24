@@ -54,56 +54,57 @@ size_t FindWordEnd(const std::string &text, size_t start, const util::Justificat
 
 std::vector<std::string> &util::Justify(const std::string &text, int maxLen, std::vector<std::string> &buf, const JustificationArgs &args)
 {
-    util::Channel log = util::Channel(std::fopen(util::Format("debugfiles/justificationLog%", std::time(nullptr)).c_str(), "w"));
-
     const size_t n = text.length();
     size_t i = 0;
     size_t lastLineBreak = 0;
     size_t nextWordEnd = 0;
     char c;
 
-    log.WriteLine("Processing \"%\"", text);
-
     while (i < n)
     {
         nextWordEnd = FindWordEnd(text, i, args);
 
-        log.WriteLine("Found word end from % at %.", i, nextWordEnd);
-
-        if (nextWordEnd - lastLineBreak > maxLen)
+        if (nextWordEnd - i > maxLen)
         {
-            buf.push_back(text.substr(lastLineBreak, nextWordEnd - lastLineBreak));
-            lastLineBreak = nextWordEnd;
+            buf.push_back(text.substr(lastLineBreak, maxLen));
+            i = lastLineBreak + maxLen;
 
-            log.WriteLine("Breaking line due to overflow at %.", lastLineBreak);
-            log.WriteLine("Flushed line \"%\"", buf.back());
-        }
-
-        i = nextWordEnd + 1;
-
-        log.WriteLine("handling spaces after %", i);
-
-        while (i < n && std::isspace(text[i]))
-        {
-            c = text[i];
-
-            if (c == '\n')
+            while (nextWordEnd - i > maxLen)
             {
-                log.WriteLine("Creating line break after \\n at %", i);
-
-                buf.push_back(text.substr(lastLineBreak, i - lastLineBreak));
-                lastLineBreak = i;
-
-                log.WriteLine("Flushed line \"%\"", buf.back());
+                buf.push_back(text.substr(i, maxLen));
+                i += maxLen;
             }
 
-            i++;
+            lastLineBreak = i;
         }
+        else if (nextWordEnd - lastLineBreak > maxLen)
+        {
+            buf.push_back(text.substr(lastLineBreak, i - lastLineBreak - 1));
+            lastLineBreak = i;
+        }
+
+        i = nextWordEnd;
+
+        if (!std::isspace(text[i]))
+            i++;
+        else
+            while (i < n && std::isspace(text[i]))
+            {
+                c = text[i];
+
+                if (c == '\n')
+                {
+                    buf.push_back(text.substr(lastLineBreak, i - lastLineBreak));
+                    lastLineBreak = i + 1;
+                }
+
+                i++;
+            }
     }
 
     if (lastLineBreak < n)
     {
-        buf.push_back(text.substr(lastLineBreak, n - lastLineBreak));
+        buf.push_back(text.substr(lastLineBreak));
     }
 
     return buf;

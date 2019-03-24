@@ -18,6 +18,8 @@ terminal::Screen *screens::CreateStartScreen()
     auto titleText = new terminal::TextView("Welcome to\nGalaxy At War\n\n[press any key to continue]");
     titleText->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
     titleText->SetBorderEnabled(true);
+    titleText->SetCenterVertical(true);
+    titleText->SetCenterHorizontal(true);
 
     auto box = new terminal::PlacementBox();
     box->SetHorizontalPartition(0.2f, 0.6f, 0.2f);

@@ -19,8 +19,10 @@ terminal::ControlBase::ControlBase() : bounds(0, 0, 0, 0),
                                        minimumSize(0, 0),
                                        maximumSize(std::numeric_limits<int>::max(), std::numeric_limits<int>::max()),
                                        autoSizeMode(AutoSizeMode::None),
-                                       borderEnabled(false)
+                                       borderEnabled(false)                                       
 {
+    // this->name = util::Format("% [%]", typeid(*this).name(), this);
+    this->name = util::Format("%", this);
 }
 
 terminal::ControlBase::~ControlBase()
@@ -42,6 +44,17 @@ bool terminal::ControlBase::HasParent() const
     return this->parent != nullptr;
 }
 
+void terminal::ControlBase::SetName(const std::string &name)
+{
+    this->name = name;
+    this->Invalidate();
+}
+
+const std::string &terminal::ControlBase::GetName() const
+{
+    return this->name;
+}
+
 void terminal::ControlBase::SetSizeCore(const util::Dimension &size)
 {
     this->bounds.SetWidth(util::Crop(size.GetWidth(), this->minimumSize.GetWidth(), this->maximumSize.GetWidth()));
@@ -50,15 +63,19 @@ void terminal::ControlBase::SetSizeCore(const util::Dimension &size)
 
 void terminal::ControlBase::SetLocationCore(const util::Point &location)
 {
-    util::dbg.WriteLine("Setting location of [%]. (%)->(%)", this, this->bounds.GetLocation(), location);
+    util::dbg.WriteLine("Setting location of [%]. (%)->(%)", this->GetName(), this->bounds.GetLocation(), location);
 
     this->bounds.SetLocation(location);
+
+    this->Invalidate();
 }
 
 void terminal::ControlBase::SetBoundsCore(const util::Rectangle &bounds)
 {
     this->SetLocationCore(bounds.GetLocation());
     this->SetSizeCore(bounds.GetSize());
+
+    this->Invalidate();
 }
 
 void terminal::ControlBase::SetBounds(int x, int y, int w, int h)
@@ -186,6 +203,8 @@ void terminal::ControlBase::SetText(const std::string &text)
 void terminal::ControlBase::SetTextCore(const std::string &text)
 {
     this->text = text;
+
+    this->Invalidate();
 }
 
 bool terminal::ControlBase::IsVisible() const
@@ -196,6 +215,8 @@ bool terminal::ControlBase::IsVisible() const
 void terminal::ControlBase::SetVisibility(bool visible)
 {
     this->visible = visible;
+
+    this->Invalidate();
 }
 
 int terminal::ControlBase::GetTabIndex() const
@@ -206,6 +227,8 @@ int terminal::ControlBase::GetTabIndex() const
 void terminal::ControlBase::SetTabIndex(int tabIndex)
 {
     this->tabIndex = tabIndex;
+
+    this->Invalidate();
 }
 
 const util::Dimension &terminal::ControlBase::GetMinSize() const
@@ -232,6 +255,8 @@ void terminal::ControlBase::SetMinSize(const util::Dimension &size)
     {
         this->SetSizeCore(this->bounds.GetSize().Crop(this->minimumSize, this->maximumSize));
     }
+
+    this->Invalidate();
 }
 
 void terminal::ControlBase::SetMaxSize(int w, int h)
@@ -242,6 +267,8 @@ void terminal::ControlBase::SetMaxSize(int w, int h)
 void terminal::ControlBase::SetMaxSize(const util::Dimension &size)
 {
     this->maximumSize = size;
+
+    this->Invalidate();
 }
 
 void terminal::ControlBase::HandleFocusAquired()
@@ -385,22 +412,28 @@ void terminal::ControlBase::ApplyAutoSize(const util::Dimension &availableSpace)
         throw util::InvalidCaseException::MakeException(this->autoSizeMode);
     }
 
-    util::dbg.WriteLine("Applied Autosize to [%]. Mode is %. Proposed size: %. New size is %.", static_cast<void *>(this), this->autoSizeMode, availableSpace, this->GetSize());
+    util::dbg.WriteLine("Applied Autosize to [%]. Mode is %. Proposed size: %. New size is %.", this->GetName(), this->autoSizeMode, availableSpace, this->GetSize());
 }
 
 void terminal::ControlBase::SetAutoSizeMode(AutoSizeMode mode)
 {
     this->autoSizeMode = mode;
+
+    this->Invalidate();
 }
 
 void terminal::ControlBase::SetBorder(const Border &b)
 {
     this->border = b;
+
+    this->Invalidate();
 }
 
 void terminal::ControlBase::SetBorderEnabled(bool enabled)
 {
     this->borderEnabled = enabled;
+
+    this->Invalidate();
 }
 
 terminal::AutoSizeMode terminal::ControlBase::GetAutoSizeMode() const

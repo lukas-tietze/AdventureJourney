@@ -48,6 +48,7 @@ int StripInplace();
 int StripFrontInplace();
 int StripBackInplace();
 int Format2();
+int Justification();
 } // namespace StringTest
 namespace mathTest
 {

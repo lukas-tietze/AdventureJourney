@@ -42,7 +42,7 @@ bool terminal::PlacementBox::Remove(ControlBase *item)
 
 void terminal::PlacementBox::RestoreLayout()
 {
-    if (this->IsValid() || this->item == nullptr)
+    if (this->item == nullptr)
         return;
 
     auto wTotal = this->left + this->right + this->width;
@@ -68,8 +68,8 @@ void terminal::PlacementBox::RestoreLayout()
     this->item->RestoreLayout();
 
     util::dbg.WriteLine("PlacementBox [%]: fitting [%] to x=%, y=%, w=% (proposed %), h=% (proposed %)",
-                        this,
-                        this->item,
+                        this->GetName(),
+                        this->item->GetName(),
                         location.GetX(),
                         location.GetY(),
                         this->item->GetBounds().GetWidth(),

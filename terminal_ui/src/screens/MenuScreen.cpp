@@ -31,26 +31,31 @@ terminal::Screen *screens::CreateMenuScreen()
     auto s = new terminal::Screen();
 
     selector = new terminal::Selector();
-    selector->SetSize(40, 6);
     selector->AddOption("Start Game", OPTION_START_GAME);
     selector->AddOption("Run Tests", OPTION_RUN_TESTS);
     selector->AddOption("Exit", OPTION_EXIT);
     selector->OnKey().Register(HandleOptionClicked);
+    selector->SetSize(40, 10);
+    selector->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
 
     titleBox = new terminal::TextView("Galaxy At War");
-    titleBox->SetSize(40, 2);
+    titleBox->SetSize(40, 5);
+    titleBox->SetCenterHorizontal(true);
+    titleBox->SetCenterVertical(true);
+    titleBox->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
 
     auto centerLayout = new terminal::LinearContainer();
     centerLayout->SetOrientation(terminal::LinearContainer::Orientation::TopToBottom);
-    centerLayout->SetSize(42, 10);
+    centerLayout->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
     centerLayout->Add(titleBox);
-    centerLayout->Add(selector);
+    // centerLayout->Add(selector);
 
     auto box = new terminal::PlacementBox();
     box->SetHorizontalPartition(0.3f, 0.4f, 0.3f);
     box->SetVerticalPartition(0.05f, 0.75f, 0.2f);
     box->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
     box->Add(centerLayout);
+    // box->Add(selector);
 
     s->Add(box);
 

@@ -42,10 +42,10 @@ void Start()
     screens::Start = screens::CreateStartScreen();
     screens::Menu = screens::CreateMenuScreen();
 
-    w.AddScreen(screens::Start);
     w.AddScreen(screens::Menu);
+    w.AddScreen(screens::Start);
 
-    screens::Start->Show();
+    screens::Menu->Show();
 
     w.Start('q');
 
