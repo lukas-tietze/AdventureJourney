@@ -1,5 +1,6 @@
 #include "terminal/controls/containers/ContainerBase.hpp"
 #include "geometry/Rectangle.hpp"
+#include "data/Io.hpp"
 
 terminal::ContainerBase::ContainerBase() : ControlBase(),
                                            controls(0),
@@ -64,7 +65,10 @@ void terminal::ContainerBase::HandleMouse(MouseInput &input)
     if (input.handled)
         return;
 
-    auto click = util::Point(input.cx, input.cy);
+    auto click = util::Point(input.x, input.y);
+
+    input.x += this->GetBounds().GetX();
+    input.y += this->GetBounds().GetY();
 
     if (this->focusedControlIndex >= 0 &&
         this->controls[this->focusedControlIndex]->GetBounds().Contains(click))
@@ -109,6 +113,12 @@ void terminal::ContainerBase::Render(Canvas &canvas)
     this->terminal::ControlBase::Render(canvas);
 
     auto subCanvas = canvas.GetSubCanvas(this->GetBounds());
+
+    util::dbg.WriteLine("ContainerBase [%]: Creatign SubCanvas to render components. Bounds: %, canvas origin: %, canvas size: %",
+                        this->GetName(),
+                        this->GetBounds(),
+                        subCanvas.GetOrigin(),
+                        subCanvas.GetSize());
 
     for (auto i = this->controls.begin(), end = this->controls.end(); i != end; i++)
     {

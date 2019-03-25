@@ -19,7 +19,7 @@ terminal::ControlBase::ControlBase() : bounds(0, 0, 0, 0),
                                        minimumSize(0, 0),
                                        maximumSize(std::numeric_limits<int>::max(), std::numeric_limits<int>::max()),
                                        autoSizeMode(AutoSizeMode::None),
-                                       borderEnabled(false)                                       
+                                       borderEnabled(false)
 {
     // this->name = util::Format("% [%]", typeid(*this).name(), this);
     this->name = util::Format("%", this);
@@ -303,10 +303,10 @@ void terminal::ControlBase::HandleMouse(MouseInput &m)
     MouseEventArgs args;
     args.handled = false;
     args.action = m.action;
-    args.absoluteX = m.cx;
-    args.absoluteY = m.cy;
-    args.relativeX = m.cx - this->GetBounds().GetX();
-    args.relativeY = m.cy - this->GetBounds().GetY();
+    args.absoluteX = m.screenX;
+    args.absoluteY = m.screenY;
+    args.relativeX = m.x;
+    args.relativeY = m.y;
     args.sender = this;
 
     this->onMouse(args);

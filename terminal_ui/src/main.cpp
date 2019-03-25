@@ -37,20 +37,9 @@ void QuitAfterError()
 
 void Start()
 {
-    terminal::Window w;
+    tui::ScreenCollection screens;
 
-    screens::Start = screens::CreateStartScreen();
-    screens::Menu = screens::CreateMenuScreen();
-
-    w.AddScreen(screens::Menu);
-    w.AddScreen(screens::Start);
-
-    screens::Menu->Show();
-
-    w.Start('q');
-
-    delete screens::Start;
-    delete screens::Menu;
+    screens.Start();
 }
 
 void HandleSignal(int sig)

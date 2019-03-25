@@ -671,7 +671,7 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::KeyInput &va
 
 std::ostream &terminal::operator<<(std::ostream &s, const terminal::MouseInput &value)
 {
-    s << value.action << " [" << value.cx << ", " << value.cy << "] (" << (value.handled ? "handled" : "unhandled") << ")";
+    s << value.action << " [" << value.x << ", " << value.y << "] (" << (value.handled ? "handled" : "unhandled") << ")";
 
     return s;
 }

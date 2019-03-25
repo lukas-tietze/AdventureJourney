@@ -41,11 +41,12 @@ terminal::Canvas terminal::Canvas::GetSubCanvas(const util::Rectangle &r)
     Canvas copy;
 
     auto intersection = util::Rectangle(0, 0, this->size).Intersect(r);
+    intersection = r;
 
     copy.view = this->view;
     copy.size = intersection.GetSize();
-    copy.clippedArea = intersection;
-    copy.origin = copy.origin + r.GetLocation();
+    copy.clippedArea = util::Rectangle(0, 0, intersection.GetSize());
+    copy.origin = this->origin + r.GetLocation();
 
     return copy;
 }
@@ -143,7 +144,7 @@ terminal::Canvas &terminal::Canvas::DrawBox(const Rectangle &r, char horizontal,
                        r.BottomLeft() - util::Point(0, 1)})
     {
         if (this->clippedArea.Contains(point))
-            this->view->Print(corner, point.GetX(), point.GetY());
+            this->view->Print(corner, this->X(point.GetX()), this->Y(point.GetY()));
     }
 
     return *this;
@@ -299,14 +300,14 @@ const util::Rectangle &terminal::Canvas::GetClippedArea() const
 
 terminal::Canvas &terminal::Canvas::SetOrigin(const Point &p)
 {
-    this->origin = p;
+    // this->origin = p;
 
     return *this;
 }
 
 terminal::Canvas &terminal::Canvas::SetOrigin(int x, int y)
 {
-    this->origin = util::Point(x, y);
+    // this->origin = util::Point(x, y);
 
     return *this;
 }

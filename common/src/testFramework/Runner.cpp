@@ -1,6 +1,14 @@
 #include <thread>
+#include <csignal>
 
 #include "Test.hpp"
+
+namespace
+{
+void BindSignalHandlers()
+{
+}
+} // namespace
 
 void RunTestThread(test::TestCollection tests, const test::TestConfig config, uint start)
 {

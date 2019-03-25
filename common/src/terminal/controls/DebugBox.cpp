@@ -19,7 +19,7 @@ void terminal::DebugBox::HandleMouse(terminal::MouseInput &action)
     if (action.handled)
         return;
 
-    this->SetText(util::Format("{%} [%/%]", action.action, action.cx, action.cy));
+    this->SetText(util::Format("{%} (%/%) absolute: (%/%)", action.action, action.x, action.y, action.screenX, action.screenY));
 
     action.handled = true;
 }
@@ -93,6 +93,8 @@ void terminal::DebugBox::SetColor(colorId_t color)
 
 void terminal::DebugBox::Render(Canvas &c)
 {
+    this->ControlBase::Render(c);
+
     c.SetActiveColorPair(this->color);
     c.DrawBox(this->GetBounds(), '-', '|', '+');
     int y0 = this->GetBounds().GetMinY();

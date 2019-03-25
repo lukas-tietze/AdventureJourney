@@ -13,6 +13,10 @@ struct KeyInput
 {
     int key;
     Key specialKey;
+    // int screenX;
+    // int screenY;
+    // int x;
+    // int y;
     bool handled;
 };
 
@@ -20,8 +24,10 @@ std::ostream &operator<<(std::ostream &, const KeyInput &);
 
 struct MouseInput
 {
-    int cx;
-    int cy;
+    int screenX;
+    int screenY;
+    int x;
+    int y;
     MouseAction action;
     bool handled;
 };

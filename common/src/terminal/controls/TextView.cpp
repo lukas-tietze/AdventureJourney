@@ -199,7 +199,7 @@ bool terminal::TextView::IsTrimLinesEnabled() const
 
 void terminal::TextView::Render(terminal::Canvas &c)
 {
-    c.DrawBox(this->GetBounds(), '-', '|', '+');
+    this->ControlBase::Render(c);
 
     const size_t vh = this->GetBounds().GetHeight() - 2;
     const size_t vw = this->GetBounds().GetWidth() - 2;

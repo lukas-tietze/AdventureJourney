@@ -34,6 +34,8 @@ void terminal::Window::Start(int escapeKey)
 
 void terminal::Window::Start()
 {
+    auto mouseX = 0;
+    auto mouseY = 0;
     auto view = View::GetInstance();
     auto canvas = Canvas();
 
@@ -54,10 +56,15 @@ void terminal::Window::Start()
             if (getmouse(&mouseEvent) == OK)
             {
                 MouseInput input;
-                input.cx = mouseEvent.x;
-                input.cy = mouseEvent.y;
+                input.x = mouseEvent.x;
+                input.y = mouseEvent.y;
+                input.screenX = mouseEvent.x;
+                input.screenY = mouseEvent.y;
                 input.handled = false;
                 input.action = static_cast<MouseAction>(mouseEvent.bstate);
+
+                mouseX = mouseEvent.x;
+                mouseY = mouseEvent.y;
 
                 this->activeScreen->HandleMouse(input);
             }
@@ -74,9 +81,9 @@ void terminal::Window::Start()
         else
         {
             KeyInput input;
-            input.handled = false;
             input.key = key;
             input.specialKey = static_cast<Key>(key);
+            input.handled = false;
 
             this->activeScreen->HandleKey(input);
 
@@ -93,7 +100,7 @@ void terminal::Window::Start()
 
         canvas.Clear();
         canvas.Reset();
-        
+
         this->activeScreen->Render(canvas);
 
         canvas.Flush();
