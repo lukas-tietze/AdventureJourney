@@ -444,6 +444,33 @@ void terminal::ControlBase::SetBorderEnabled(bool enabled)
     this->Invalidate();
 }
 
+void terminal::ControlBase::SetTextColor(colorPairId_t value)
+{
+    this->textColor = value;
+}
+
+void terminal::ControlBase::SetBackgroundColor(colorPairId_t value)
+{
+    this->backgroundColor = value;
+}
+
+terminal::colorPairId_t terminal::ControlBase::GetTextColor() const
+{
+    return this->textColor;
+}
+
+terminal::colorPairId_t terminal::ControlBase::GetBackgroundColor() const
+{
+    return this->backgroundColor;
+}
+
+void terminal::ControlBase::RestoreDefaultColors()
+{
+    this->backgroundColor = this->Style(ControlStyleColor::ClearColor);
+    this->textColor = this->Style(ControlStyleColor::ControlText);
+    this->border.SetStyle(this->Style(ControlStyleColor::ControlBorder));
+}
+
 terminal::AutoSizeMode terminal::ControlBase::GetAutoSizeMode() const
 {
     return this->autoSizeMode;

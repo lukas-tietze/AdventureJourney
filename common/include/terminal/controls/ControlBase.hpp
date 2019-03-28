@@ -144,6 +144,10 @@ class ControlBase
     ////meta data
     std::string name;
 
+    //colors
+    colorPairId_t textColor;
+    colorPairId_t backgroundColor;
+
     ////Events
     util::Event<MouseEventArgs> onMouse;
     util::Event<KeyEventArgs> onKey;
@@ -199,6 +203,7 @@ class ControlBase
     const util::Rectangle &GetBounds() const;
     const util::Rectangle &GetContentBounds() const;
     const Border &GetBorder() const;
+
     Border &GetBorder();
     bool IsBorderEnabled() const;
     AutoSizeMode GetAutoSizeMode() const;
@@ -218,6 +223,11 @@ class ControlBase
     void SetAutoSizeMode(AutoSizeMode mode);
     void SetBorder(const Border &);
     void SetBorderEnabled(bool);
+    void SetTextColor(colorPairId_t);
+    void SetBackgroundColor(colorPairId_t);
+    colorPairId_t GetTextColor() const;
+    colorPairId_t GetBackgroundColor() const;
+    void RestoreDefaultColors();
     bool Contains(int x, int y) const;
 
     bool IsValid() const;

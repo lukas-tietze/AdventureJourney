@@ -41,9 +41,13 @@ class ScreenCollection
     friend tui::MenuScreen;
 
   private:
-    terminal::Window window;
+    terminal::Window *window;
     StartScreen *start;
     MenuScreen *menu;
+
+    terminal::Border border1;
+    terminal::Border border2;
+    terminal::Border border3;
 
   public:
     ScreenCollection();

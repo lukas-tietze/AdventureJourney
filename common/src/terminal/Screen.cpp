@@ -1,6 +1,7 @@
 #include "terminal/Window.hpp"
 
-terminal::Screen::Screen() : ContainerBase()
+terminal::Screen::Screen() : ContainerBase(),
+                             parent(nullptr)
 {
     this->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
 }

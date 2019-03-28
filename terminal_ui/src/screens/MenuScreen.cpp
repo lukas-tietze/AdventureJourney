@@ -20,13 +20,18 @@ tui::MenuScreen::MenuScreen(ScreenCollection *screens)
     this->selector->OnKey().Register(this, &MenuScreen::HandleOptionClicked);
     this->selector->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
     this->selector->SetName("Menu::Selector");
+    this->selector->SetBorderEnabled(true);
+    this->selector->SetBorder(this->screens->border1);
 
     this->titleBox = new terminal::TextView("Galaxy At War");
     this->titleBox->SetSize(40, 5);
     this->titleBox->SetCenterHorizontal(true);
     this->titleBox->SetCenterVertical(true);
+    this->titleBox->SetHorizontalAlignment(0.2, 0.6, 0.2);
     this->titleBox->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
     this->titleBox->SetName("Menu::TitleBox");
+    this->titleBox->SetBorderEnabled(true);
+    this->titleBox->SetBorder(this->screens->border2);
 
     this->centerLayout = new terminal::LinearContainer();
     this->centerLayout->SetOrientation(terminal::LinearContainer::Orientation::TopToBottom);
@@ -36,6 +41,8 @@ tui::MenuScreen::MenuScreen(ScreenCollection *screens)
     this->centerLayout->Add(titleBox);
     this->centerLayout->Add(selector);
     this->centerLayout->SetName("Menu::CenterLayout");
+    this->centerLayout->SetBorderEnabled(true);
+    this->centerLayout->SetBorder(this->screens->border3);
 
     this->Add(centerLayout);
     this->SetName("MenuScreen");

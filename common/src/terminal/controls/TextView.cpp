@@ -2,11 +2,17 @@
 #include "data/String.hpp"
 #include "data/Io.hpp"
 
-terminal::TextView::TextView() : ControlBase()
+terminal::TextView::TextView() : ControlBase(),
+                                 lines(),
+                                 firstLine(0),
+                                 centerVertical(false),
+                                 centerHorizontal(false),
+                                 scrollAllowed(false),
+                                 trimLines(false)
 {
 }
 
-terminal::TextView::TextView(const std::string &text) : ControlBase()
+terminal::TextView::TextView(const std::string &text) : TextView()
 {
     this->SetText(text);
 }
@@ -201,14 +207,14 @@ void terminal::TextView::Render(terminal::Canvas &c)
 {
     this->ControlBase::Render(c);
 
-    const size_t vh = this->GetBounds().GetHeight() - 2;
-    const size_t vw = this->GetBounds().GetWidth() - 2;
+    const size_t vh = this->GetContentBounds().GetHeight() - 2;
+    const size_t vw = this->GetContentBounds().GetWidth() - 2;
 
     if (this->lines.empty() || vh <= 0 || vw <= 0)
         return;
 
-    int x = this->GetBounds().GetMinX() + 1;
-    int y = this->GetBounds().GetMinY() + 1;
+    int x = this->GetContentBounds().GetMinX() + 1;
+    int y = this->GetContentBounds().GetMinY() + 1;
 
     size_t visibleLines;
 
@@ -222,11 +228,14 @@ void terminal::TextView::Render(terminal::Canvas &c)
         visibleLines = std::min(this->lines.size() - this->firstLine, vh);
     }
 
+    c.SetActiveColorPair(0);
+
     if (visibleLines > 0)
     {
-        if (centerHorizontal)
+        if (this->centerHorizontal)
             for (size_t i = this->firstLine; i < this->firstLine + visibleLines; i++)
                 c.DrawString(x + ((vw - this->lines[i].length()) / 2), y + i, this->lines[i]);
+
         else
             for (size_t i = this->firstLine; i < this->firstLine + visibleLines; i++)
                 c.DrawString(x, y + i, this->lines[i]);
