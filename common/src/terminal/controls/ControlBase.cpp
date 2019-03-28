@@ -12,6 +12,13 @@ int terminal::ControlBase::TabIndexSorter::operator()(const ControlBase &a, cons
 }
 
 terminal::ControlBase::ControlBase() : bounds(0, 0, 0, 0),
+                                       contentBounds(0, 0, 0, 0),
+                                       topWeigth(0),
+                                       bottomWeigth(0),
+                                       leftWeigth(0),
+                                       rightWeigth(0),
+                                       widthWeigth(1),
+                                       heightWeigth(1),
                                        parent(nullptr),
                                        zIndex(0),
                                        hasFocus(false),
@@ -136,9 +143,19 @@ const util::Rectangle &terminal::ControlBase::GetBounds() const
     return this->bounds;
 }
 
+const util::Rectangle &terminal::ControlBase::GetContentBounds() const
+{
+    return this->contentBounds;
+}
+
 const util::Dimension &terminal::ControlBase::GetSize() const
 {
     return this->bounds.GetSize();
+}
+
+const util::Dimension &terminal::ControlBase::GetContentSize() const
+{
+    return this->contentBounds.GetSize();
 }
 
 const util::Point &terminal::ControlBase::GetLocation() const
@@ -146,12 +163,17 @@ const util::Point &terminal::ControlBase::GetLocation() const
     return this->bounds.GetLocation();
 }
 
+const util::Point &terminal::ControlBase::GetContentLocation() const
+{
+    return this->contentBounds.GetLocation();
+}
+
 bool terminal::ControlBase::Contains(int x, int y) const
 {
-    return x >= this->bounds.GetLocation().GetX() &&
-           x <= this->bounds.GetLocation().GetX() + this->bounds.GetSize().GetWidth() &&
-           y >= this->bounds.GetLocation().GetY() &&
-           y <= this->bounds.GetLocation().GetY() + this->bounds.GetSize().GetHeight();
+    return x >= this->contentBounds.GetLocation().GetX() &&
+           x <= this->contentBounds.GetLocation().GetX() + this->contentBounds.GetSize().GetWidth() &&
+           y >= this->contentBounds.GetLocation().GetY() &&
+           y <= this->contentBounds.GetLocation().GetY() + this->contentBounds.GetSize().GetHeight();
 }
 
 bool terminal::ControlBase::ValidateSize(const util::Dimension &size) const
@@ -387,32 +409,18 @@ bool terminal::ControlBase::IsBorderEnabled() const
     return this->borderEnabled;
 }
 
-void terminal::ControlBase::ApplyAutoSize(const util::Dimension &availableSpace)
+void terminal::ControlBase::SetHorizontalAlignment(float l, float c, float r)
 {
-    switch (this->autoSizeMode)
-    {
-    case AutoSizeMode::None:
-        return;
-    case AutoSizeMode::FillHorizontal:
-        this->SetSize(availableSpace.GetWidth(), this->GetSize().GetHeight());
-        this->SetLocation(0, this->GetLocation().GetY());
-        break;
-    case AutoSizeMode::FillVertical:
-        this->SetSize(this->GetSize().GetWidth(), availableSpace.GetHeight());
-        this->SetLocation(this->GetLocation().GetX(), 0);
-        break;
-    case AutoSizeMode::Fill:
-        this->SetSize(availableSpace);
-        this->SetLocation(0, 0);
-        break;
-    case AutoSizeMode::Fit:
-        this->RestoreLayout();
-        break;
-    default:
-        throw util::InvalidCaseException::MakeException(this->autoSizeMode);
-    }
+    this->leftWeigth = l;
+    this->widthWeigth = c;
+    this->rightWeigth = r;
+}
 
-    util::dbg.WriteLine("Applied Autosize to [%]. Mode is %. Proposed size: %. New size is %.", this->GetName(), this->autoSizeMode, availableSpace, this->GetSize());
+void terminal::ControlBase::SetVerticalAlignment(float t, float c, float b)
+{
+    this->topWeigth = t;
+    this->heightWeigth = c;
+    this->bottomWeigth = b;
 }
 
 void terminal::ControlBase::SetAutoSizeMode(AutoSizeMode mode)
@@ -443,7 +451,54 @@ terminal::AutoSizeMode terminal::ControlBase::GetAutoSizeMode() const
 
 void terminal::ControlBase::RestoreLayout()
 {
+    auto wTotal = this->leftWeigth + this->rightWeigth + this->widthWeigth;
+    auto hTotal = this->topWeigth + this->bottomWeigth + this->heightWeigth;
+
+    if (wTotal == 0.f)
+        wTotal = 1.f;
+
+    if (hTotal == 0.f)
+        hTotal = 1.f;
+
+    auto w = this->bounds.GetWidth() * this->widthWeigth / wTotal;
+    auto h = this->bounds.GetHeight() * this->heightWeigth / hTotal;
+
+    this->contentBounds = util::Rectangle((this->bounds.GetWidth() - w) * this->leftWeigth / wTotal,
+                                          (this->bounds.GetHeight() - h) * this->topWeigth / hTotal,
+                                          w,
+                                          h);
+
+    util::dbg.WriteLine("ControlBase [%]: Restored Layout, bounds: %, contentBounds: %",
+                        this->GetName(),
+                        this->bounds,
+                        this->contentBounds);
+
     this->isValid = true;
+}
+
+void terminal::ControlBase::ApplyAutoSize(const util::Rectangle &availableSpace)
+{
+    switch (this->autoSizeMode)
+    {
+    case AutoSizeMode::None:
+        return;
+    case AutoSizeMode::FillHorizontal:
+        this->SetSize(availableSpace.GetWidth(), this->GetSize().GetHeight());
+        this->SetLocation(availableSpace.GetMinX(), this->GetLocation().GetY());
+        break;
+    case AutoSizeMode::FillVertical:
+        this->SetSize(this->GetSize().GetWidth(), availableSpace.GetHeight());
+        this->SetLocation(this->GetLocation().GetX(), availableSpace.GetMinY());
+        break;
+    case AutoSizeMode::Fill:
+        this->SetSize(availableSpace.GetSize());
+        this->SetLocation(availableSpace.GetLocation());
+        break;
+    default:
+        throw util::InvalidCaseException::MakeException(this->autoSizeMode);
+    }
+
+    util::dbg.WriteLine("Applied Autosize to [%]. Mode is %. Proposed size: %. New size is %.", this->GetName(), this->autoSizeMode, availableSpace, this->GetSize());
 }
 
 terminal::colorPairId_t terminal::ControlBase::Style(ControlStyleColor color)

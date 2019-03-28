@@ -112,7 +112,7 @@ void terminal::ContainerBase::Render(Canvas &canvas)
 {
     this->terminal::ControlBase::Render(canvas);
 
-    auto subCanvas = canvas.GetSubCanvas(this->GetBounds());
+    auto subCanvas = canvas.GetSubCanvas(this->GetContentBounds());
 
     util::dbg.WriteLine("ContainerBase [%]: Creatign SubCanvas to render components. Bounds: %, canvas origin: %, canvas size: %",
                         this->GetName(),
@@ -204,11 +204,11 @@ const std::vector<terminal::ControlBase *> &terminal::ContainerBase::GetControls
 
 void terminal::ContainerBase::RestoreLayout()
 {
+    this->ControlBase::RestoreLayout();
+
     for (auto control : this->controls)
     {
-        control->ApplyAutoSize(this->GetSize());
+        control->ApplyAutoSize(this->GetContentBounds());
         control->RestoreLayout();
     }
-
-    this->ControlBase::RestoreLayout();
 }

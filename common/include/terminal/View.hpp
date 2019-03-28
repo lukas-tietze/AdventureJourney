@@ -129,8 +129,12 @@ class View
     util::Color GetColor(colorId_t id) const;
     colorPairId_t GetControlStyle(ControlStyleColor) const;
 
-    size_t GetMaxColors() const;
-    size_t GetMaxColorPairs() const;
+    size_t ColorCount() const;
+    size_t ColorPairCount() const;
+    size_t CustomColorCount() const;
+    size_t CustomColorPairCount() const;
+    size_t SystemColorCount() const;
+    size_t SystemColorPairCount() const;
     bool CanChangeColors() const;
 
     bool BufferColor(colorId_t, const util::Color &);
@@ -183,6 +187,8 @@ class View
     util::Array<util::Color> colors;
     util::Array<ColorPair> colorPairs;
     std::array<colorId_t, static_cast<int>(ControlStyleColor::ClearColor) + 1> controlStyles;
+    size_t systemColorCount;
+    size_t systemColorPairCount;
     int activeColorPair;
     int activeBackgroundColorPair;
 

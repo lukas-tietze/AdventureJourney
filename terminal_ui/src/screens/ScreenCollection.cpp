@@ -20,13 +20,3 @@ void tui::ScreenCollection::Start()
     this->start->Show();
     this->window.Start('q');
 }
-
-tui::StartScreen *tui::ScreenCollection::GetStartScreen()
-{
-    return this->start;
-}
-
-tui::MenuScreen *tui::ScreenCollection::GetMenuScreen()
-{
-    return this->menu;
-}

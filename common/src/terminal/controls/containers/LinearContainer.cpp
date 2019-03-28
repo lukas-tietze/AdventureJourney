@@ -21,6 +21,8 @@ bool terminal::LinearContainer::Remove(ControlBase *item)
 
 void terminal::LinearContainer::RestoreLayout()
 {
+    this->ControlBase::RestoreLayout();
+
     int totalSize;
     int remainingSize;
     int otherDim;
@@ -28,13 +30,13 @@ void terminal::LinearContainer::RestoreLayout()
 
     if (this->orientation == Orientation::TopToBottom || this->orientation == Orientation::BottomToTop)
     {
-        remainingSize = this->GetBounds().GetHeight();
-        otherDim = this->GetBounds().GetWidth();
+        remainingSize = this->GetContentBounds().GetHeight();
+        otherDim = this->GetContentBounds().GetWidth();
     }
     else
     {
-        remainingSize = this->GetBounds().GetWidth();
-        otherDim = this->GetBounds().GetHeight();
+        remainingSize = this->GetContentBounds().GetWidth();
+        otherDim = this->GetContentBounds().GetHeight();
     }
 
     totalSize = remainingSize;
@@ -46,11 +48,11 @@ void terminal::LinearContainer::RestoreLayout()
         {
             auto control = *pos;
             control->SetLocation(0, totalSize - remainingSize);
-            control->ApplyAutoSize(util::Dimension(otherDim, remainingSize));
+            control->ApplyAutoSize(util::Rectangle(0, totalSize - remainingSize, otherDim, remainingSize));
             control->RestoreLayout();
-            remainingSize -= control->GetBounds().GetHeight();
+            remainingSize -= control->GetContentBounds().GetHeight();
 
-            util::dbg.WriteLine("Linear Container [%]: fitted [%] to %", this->GetName(), control->GetName(), control->GetBounds());
+            util::dbg.WriteLine("Linear Container [%]: fitted [%] to %", this->GetName(), control->GetName(), control->GetContentBounds());
         }
 
         break;
@@ -59,11 +61,11 @@ void terminal::LinearContainer::RestoreLayout()
         {
             auto control = *pos;
             control->SetLocation(0, remainingSize);
-            control->ApplyAutoSize(util::Dimension(otherDim, remainingSize));
+            control->ApplyAutoSize(util::Rectangle(0, remainingSize, otherDim, remainingSize));
             control->RestoreLayout();
-            remainingSize -= control->GetBounds().GetHeight();
+            remainingSize -= control->GetContentBounds().GetHeight();
 
-            util::dbg.WriteLine("Linear Container [%]: fitted [%] to %", this->GetName(), control->GetName(), control->GetBounds());
+            util::dbg.WriteLine("Linear Container [%]: fitted [%] to %", this->GetName(), control->GetName(), control->GetContentBounds());
         }
 
         break;
@@ -72,11 +74,11 @@ void terminal::LinearContainer::RestoreLayout()
         {
             auto control = *pos;
             control->SetLocation(totalSize - remainingSize, 0);
-            control->ApplyAutoSize(util::Dimension(remainingSize, otherDim));
+            control->ApplyAutoSize(util::Rectangle(totalSize - remainingSize, 0, remainingSize, otherDim));
             control->RestoreLayout();
-            remainingSize -= control->GetBounds().GetWidth();
+            remainingSize -= control->GetContentBounds().GetWidth();
 
-            util::dbg.WriteLine("Linear Container [%]: fitted [%] to %", this->GetName(), control->GetName(), control->GetBounds());
+            util::dbg.WriteLine("Linear Container [%]: fitted [%] to %", this->GetName(), control->GetName(), control->GetContentBounds());
         }
 
         break;
@@ -85,19 +87,17 @@ void terminal::LinearContainer::RestoreLayout()
         {
             auto control = *pos;
             control->SetLocation(remainingSize, 0);
-            control->ApplyAutoSize(util::Dimension(remainingSize, otherDim));
+            control->ApplyAutoSize(util::Rectangle(remainingSize, 0, remainingSize, otherDim));
             control->RestoreLayout();
-            remainingSize -= control->GetBounds().GetWidth();
+            remainingSize -= control->GetContentBounds().GetWidth();
 
-            util::dbg.WriteLine("Linear Container [%]: fitted [%] to %", this->GetName(), control->GetName(), control->GetBounds());
+            util::dbg.WriteLine("Linear Container [%]: fitted [%] to %", this->GetName(), control->GetName(), control->GetContentBounds());
         }
 
         break;
     default:
         throw util::InvalidCaseException::MakeException(this->orientation);
     }
-
-    this->ControlBase::RestoreLayout();
 }
 
 void terminal::LinearContainer::SetOrientation(Orientation o)

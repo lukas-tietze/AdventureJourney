@@ -34,25 +34,12 @@ struct MouseInput
 
 std::ostream &operator<<(std::ostream &, const MouseInput &);
 
-enum class Alignment
-{
-    Right,
-    Left,
-    Top,
-    Bottom,
-    Fill,
-    Absolute,
-};
-
-std::ostream &operator<<(std::ostream &, Alignment);
-
 enum class AutoSizeMode
 {
     None,
     Fill,
     FillHorizontal,
     FillVertical,
-    Fit,
 };
 
 std::ostream &operator<<(std::ostream &, AutoSizeMode);
@@ -77,6 +64,8 @@ enum class BorderType
     AllCorners = TopLeftCorner | TopRightCorner | BottomRightCorner | BottomLeftCorner,
     All = AllEdges | AllCorners
 };
+
+std::ostream &operator<<(std::ostream &, BorderType);
 
 class Border
 {
@@ -127,7 +116,7 @@ struct KeyEventArgs
 class ControlBase
 {
   private:
-    util::Rectangle bounds;
+    ////generell properties
     util::Dimension minimumSize;
     util::Dimension maximumSize;
     ContainerBase *parent;
@@ -138,12 +127,24 @@ class ControlBase
     bool visible;
     int textStyle;
     bool isValid;
-    AutoSizeMode autoSizeMode;
     Border border;
     bool borderEnabled;
 
+    ////placement
+    util::Rectangle bounds;
+    util::Rectangle contentBounds;
+    AutoSizeMode autoSizeMode;
+    float topWeigth;
+    float bottomWeigth;
+    float leftWeigth;
+    float rightWeigth;
+    float widthWeigth;
+    float heightWeigth;
+
+    ////meta data
     std::string name;
 
+    ////Events
     util::Event<MouseEventArgs> onMouse;
     util::Event<KeyEventArgs> onKey;
 
@@ -192,8 +193,11 @@ class ControlBase
     const util::Dimension &GetMinSize() const;
     const util::Dimension &GetMaxSize() const;
     const util::Dimension &GetSize() const;
+    const util::Dimension &GetContentSize() const;
     const util::Point &GetLocation() const;
+    const util::Point &GetContentLocation() const;
     const util::Rectangle &GetBounds() const;
+    const util::Rectangle &GetContentBounds() const;
     const Border &GetBorder() const;
     Border &GetBorder();
     bool IsBorderEnabled() const;
@@ -209,15 +213,17 @@ class ControlBase
     void SetLocation(int x, int y);
     void SetBounds(int x, int y, int w, int h);
     void SetBounds(const util::Rectangle &);
+    void SetHorizontalAlignment(float, float, float);
+    void SetVerticalAlignment(float, float, float);
     void SetAutoSizeMode(AutoSizeMode mode);
     void SetBorder(const Border &);
     void SetBorderEnabled(bool);
     bool Contains(int x, int y) const;
+
     bool IsValid() const;
     virtual void Invalidate();
     virtual void RestoreLayout();
-
-    virtual void ApplyAutoSize(const util::Dimension &availableSpace);
+    virtual void ApplyAutoSize(const util::Rectangle &);
 
     virtual void HandleZIndexChanged();
     virtual void HandleTabIndexChanged();

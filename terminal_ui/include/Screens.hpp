@@ -11,7 +11,6 @@ class StartScreen : public terminal::Screen
 {
   private:
     terminal::TextView *titleText;
-    terminal::PlacementBox *box;
     ScreenCollection *screens;
 
     void HandleKey(terminal::KeyEventArgs &args);
@@ -27,9 +26,7 @@ class MenuScreen : public terminal::Screen
     ScreenCollection *screens;
     terminal::Selector *selector;
     terminal::TextView *titleBox;
-    terminal::PlacementBox *box;
     terminal::LinearContainer *centerLayout;
-    terminal::PlacementBox *selectorBox;
 
     void HandleOptionClicked(terminal::KeyEventArgs &args);
 
@@ -40,6 +37,9 @@ class MenuScreen : public terminal::Screen
 
 class ScreenCollection
 {
+    friend tui::StartScreen;
+    friend tui::MenuScreen;
+
   private:
     terminal::Window window;
     StartScreen *start;
@@ -50,8 +50,5 @@ class ScreenCollection
     ~ScreenCollection();
 
     void Start();
-
-    StartScreen *GetStartScreen();
-    MenuScreen *GetMenuScreen();
 };
 } // namespace tui

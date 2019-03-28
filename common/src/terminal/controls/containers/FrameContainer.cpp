@@ -157,6 +157,8 @@ bool terminal::FrameContainer::Remove(ControlBase *control)
 
 void terminal::FrameContainer::RestoreLayout()
 {
+    this->ControlBase::RestoreLayout();
+
     int activeControls = 0;
     int order[5];
 
@@ -336,7 +338,7 @@ void terminal::FrameContainer::RestoreLayout()
         util::dbg.WriteLine("FrameContainer [%]: Fitting [%] to % at x=%, y=%, w=%, h=%", this->GetName(), control->GetName(), where, xOff, yOff, maxW, maxH);
 
         control->SetLocation(xOff, yOff);
-        control->ApplyAutoSize(util::Dimension(maxW, maxH));
+        control->ApplyAutoSize(util::Rectangle(xOff, yOff, maxW, maxH));
         control->RestoreLayout();
 
         if (where == Orientation::Center)
@@ -366,8 +368,6 @@ void terminal::FrameContainer::RestoreLayout()
             }
         }
     }
-
-    this->ControlBase::RestoreLayout();
 }
 
 void terminal::FrameContainer::Render(Canvas &c)
