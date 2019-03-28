@@ -391,7 +391,10 @@ void terminal::ControlBase::Invalidate()
 void terminal::ControlBase::Render(Canvas &c)
 {
     if (this->borderEnabled)
+    {
         this->border.Render(this->bounds, c);
+        this->contentBorder.Render(this->contentBounds, c);
+    }
 }
 
 const terminal::Border &terminal::ControlBase::GetBorder() const
@@ -487,13 +490,10 @@ void terminal::ControlBase::RestoreLayout()
     if (hTotal == 0.f)
         hTotal = 1.f;
 
-    auto w = this->bounds.GetWidth() * this->widthWeigth / wTotal;
-    auto h = this->bounds.GetHeight() * this->heightWeigth / hTotal;
-
-    this->contentBounds = util::Rectangle((this->bounds.GetWidth() - w) * this->leftWeigth / wTotal,
-                                          (this->bounds.GetHeight() - h) * this->topWeigth / hTotal,
-                                          w,
-                                          h);
+    this->contentBounds = util::Rectangle(this->bounds.GetWidth() * this->leftWeigth / wTotal,
+                                          this->bounds.GetHeight() * this->topWeigth / hTotal,
+                                          this->bounds.GetWidth() * this->widthWeigth / wTotal,
+                                          this->bounds.GetHeight() * this->heightWeigth / hTotal);
 
     util::dbg.WriteLine("ControlBase [%]: Restored Layout, bounds: %, contentBounds: %",
                         this->GetName(),

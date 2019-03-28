@@ -127,8 +127,12 @@ class ControlBase
     bool visible;
     int textStyle;
     bool isValid;
+
+    ////border
     Border border;
     bool borderEnabled;
+    Border contentBorder;
+    bool contentBorderEnabled;
 
     ////placement
     util::Rectangle bounds;
@@ -222,7 +226,9 @@ class ControlBase
     void SetVerticalAlignment(float, float, float);
     void SetAutoSizeMode(AutoSizeMode mode);
     void SetBorder(const Border &);
+    void SetContentBorder(const Border &);
     void SetBorderEnabled(bool);
+    void SetContentBorderEnabled(bool);
     void SetTextColor(colorPairId_t);
     void SetBackgroundColor(colorPairId_t);
     colorPairId_t GetTextColor() const;
