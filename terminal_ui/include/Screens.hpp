@@ -35,15 +35,27 @@ class MenuScreen : public terminal::Screen
     ~MenuScreen();
 };
 
+class TestScreen : public terminal::Screen
+{
+  private:
+    ScreenCollection *screens;
+
+  public:
+    TestScreen();
+    ~TestScreen();
+};
+
 class ScreenCollection
 {
     friend tui::StartScreen;
     friend tui::MenuScreen;
+    friend tui::TestScreen;
 
   private:
     terminal::Window *window;
     StartScreen *start;
     MenuScreen *menu;
+    TestScreen *test;
 
     terminal::Border border1;
     terminal::Border border2;

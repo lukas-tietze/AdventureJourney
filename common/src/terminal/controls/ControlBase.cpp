@@ -13,12 +13,8 @@ int terminal::ControlBase::TabIndexSorter::operator()(const ControlBase &a, cons
 
 terminal::ControlBase::ControlBase() : bounds(0, 0, 0, 0),
                                        contentBounds(0, 0, 0, 0),
-                                       topWeigth(0),
-                                       bottomWeigth(0),
-                                       leftWeigth(0),
-                                       rightWeigth(0),
-                                       widthWeigth(1),
-                                       heightWeigth(1),
+                                       paddings({0, 0, 0, 0}),
+                                       paddingModes({true, true, true, true}),
                                        parent(nullptr),
                                        zIndex(0),
                                        hasFocus(false),
@@ -412,18 +408,73 @@ bool terminal::ControlBase::IsBorderEnabled() const
     return this->borderEnabled;
 }
 
-void terminal::ControlBase::SetHorizontalAlignment(float l, float c, float r)
+namespace
 {
-    this->leftWeigth = l;
-    this->widthWeigth = c;
-    this->rightWeigth = r;
+constexpr size_t TOP = 0;
+constexpr size_t RIGHT = 1;
+constexpr size_t BOTTOM = 2;
+constexpr size_t LEFT = 3;
+} // namespace
+
+void terminal::ControlBase::SetPadding(float top, float right, float bottom, float left)
+{
+    this->paddings[TOP] = top;
+    this->paddings[RIGHT] = right;
+    this->paddings[BOTTOM] = bottom;
+    this->paddings[LEFT] = left;
+
+    this->paddingModes[TOP] = top < 1.f;
+    this->paddingModes[RIGHT] = right < 1.f;
+    this->paddingModes[BOTTOM] = bottom < 1.f;
+    this->paddingModes[LEFT] = left < 1.f;
 }
 
-void terminal::ControlBase::SetVerticalAlignment(float t, float c, float b)
+void terminal::ControlBase::SetRelativeLeftPadding(float value)
 {
-    this->topWeigth = t;
-    this->heightWeigth = c;
-    this->bottomWeigth = b;
+    this->paddings[LEFT] = value;
+    this->paddingModes[LEFT] = true;
+}
+
+void terminal::ControlBase::SetAbsoluteLeftPadding(int value)
+{
+    this->paddings[LEFT] = value;
+    this->paddingModes[LEFT] = false;
+}
+
+void terminal::ControlBase::SetRelativeRightPadding(float value)
+{
+    this->paddings[RIGHT] = value;
+    this->paddingModes[RIGHT] = true;
+}
+
+void terminal::ControlBase::SetAbsoluteRightPadding(int value)
+{
+    this->paddings[RIGHT] = value;
+    this->paddingModes[RIGHT] = false;
+}
+
+void terminal::ControlBase::SetRelativeTopPadding(float value)
+{
+    this->paddings[TOP] = value;
+    this->paddingModes[TOP] = true;
+}
+
+void terminal::ControlBase::SetAbsoluteTopPadding(int value)
+{
+    this->paddings[TOP] = value;
+    this->paddingModes[TOP] = false;
+}
+
+void terminal::ControlBase::SetRelativeBottomPadding(float value)
+{
+    this->paddings[BOTTOM] = value;
+    this->paddingModes[BOTTOM] = true;
+}
+
+void terminal::ControlBase::SetAbsoluteBottomPadding(int value)
+{
+    this->paddings[BOTTOM] = value;
+    this->paddingModes[BOTTOM] = false;
 }
 
 void terminal::ControlBase::SetAutoSizeMode(AutoSizeMode mode)
@@ -479,21 +530,28 @@ terminal::AutoSizeMode terminal::ControlBase::GetAutoSizeMode() const
     return this->autoSizeMode;
 }
 
+namespace
+{
+void Partition(float w0, float w1, bool m0, bool m1, int size, int &outOffset, int &outSize)
+{
+    outOffset = static_cast<int>(m0 ? w0 * size : w0);
+    outSize = size - outOffset - static_cast<int>(m1 ? w1 * size : w1);
+}
+} // namespace
+
 void terminal::ControlBase::RestoreLayout()
 {
-    auto wTotal = this->leftWeigth + this->rightWeigth + this->widthWeigth;
-    auto hTotal = this->topWeigth + this->bottomWeigth + this->heightWeigth;
+    int x, y, w, h;
 
-    if (wTotal == 0.f)
-        wTotal = 1.f;
+    Partition(this->paddings[TOP], this->paddings[BOTTOM],
+              this->paddings[TOP], this->paddings[BOTTOM],
+              this->GetBounds().GetWidth(), y, h);
 
-    if (hTotal == 0.f)
-        hTotal = 1.f;
+    Partition(this->paddings[LEFT], this->paddings[RIGHT],
+              this->paddings[LEFT], this->paddings[RIGHT],
+              this->GetBounds().GetHeight(), x, w);
 
-    this->contentBounds = util::Rectangle(this->bounds.GetWidth() * this->leftWeigth / wTotal,
-                                          this->bounds.GetHeight() * this->topWeigth / hTotal,
-                                          this->bounds.GetWidth() * this->widthWeigth / wTotal,
-                                          this->bounds.GetHeight() * this->heightWeigth / hTotal);
+    this->contentBounds = util::Rectangle(x, y, w, h);
 
     util::dbg.WriteLine("ControlBase [%]: Restored Layout, bounds: %, contentBounds: %",
                         this->GetName(),

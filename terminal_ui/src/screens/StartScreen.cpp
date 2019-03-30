@@ -9,12 +9,11 @@ tui::StartScreen::StartScreen(ScreenCollection *screens)
     this->titleText->SetBorderEnabled(true);
     this->titleText->SetCenterVertical(true);
     this->titleText->SetCenterHorizontal(true);
-    this->titleText->SetHorizontalAlignment(0.3f, 0.4f, 0.3f);
-    this->titleText->SetVerticalAlignment(0.05f, 0.8f, 0.15f);
+    this->titleText->SetPadding(0.3f, 0.05f, 0.3f, 0.f);
     this->titleText->SetName("Start::TitleText");
     this->titleText->SetBorderEnabled(true);
     this->titleText->SetBorder(this->screens->border1);
-    
+
     this->Add(titleText);
     this->OnKey().Register(this, &StartScreen::HandleKey);
     this->SetName("StartScreen");

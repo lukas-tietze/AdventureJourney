@@ -139,8 +139,12 @@ class FormatException : public util::Exception
 namespace
 {
 /*
- * Formatoptionen:
- * %{[index:]options} => %{[(0-9)+:(optionslist...)]}
+ * Format:
+ *      %{[index:]options} => %{[(0-9)+:(optionslist...)]}
+ * Optionen:
+ *      hex,
+ *      bin,
+ *      oct,
  */
 template <class T>
 size_t WriteWithFormat(const std::string &format, std::stringstream &buf, size_t pos, const T &arg)

@@ -138,12 +138,8 @@ class ControlBase
     util::Rectangle bounds;
     util::Rectangle contentBounds;
     AutoSizeMode autoSizeMode;
-    float topWeigth;
-    float bottomWeigth;
-    float leftWeigth;
-    float rightWeigth;
-    float widthWeigth;
-    float heightWeigth;
+    float paddings[4];
+    bool paddingModes[4];
 
     ////meta data
     std::string name;
@@ -222,8 +218,6 @@ class ControlBase
     void SetLocation(int x, int y);
     void SetBounds(int x, int y, int w, int h);
     void SetBounds(const util::Rectangle &);
-    void SetHorizontalAlignment(float, float, float);
-    void SetVerticalAlignment(float, float, float);
     void SetAutoSizeMode(AutoSizeMode mode);
     void SetBorder(const Border &);
     void SetContentBorder(const Border &);
@@ -235,6 +229,21 @@ class ControlBase
     colorPairId_t GetBackgroundColor() const;
     void RestoreDefaultColors();
     bool Contains(int x, int y) const;
+
+    void SetPadding(float, float, float, float);
+
+    void SetRelativeLeftPadding(float);
+    void SetAbsoluteLeftPadding(int);
+    void SetRelativeRightPadding(float);
+    void SetAbsoluteRightPadding(int);
+    void SetRelativeTopPadding(float);
+    void SetAbsoluteTopPadding(int);
+    void SetRelativeBottomPadding(float);
+    void SetAbsoluteBottomPadding(int);
+    void SetRelativeWidthPadding(float);
+    void SetAbsoluteWidthPadding(int);
+    void SetRelativeHeightPadding(float);
+    void SetAbsoluteHeightPadding(int);
 
     bool IsValid() const;
     virtual void Invalidate();

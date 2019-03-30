@@ -15,8 +15,7 @@ tui::MenuScreen::MenuScreen(ScreenCollection *screens)
     this->selector->AddOption("Start Game", OPTION_START_GAME);
     this->selector->AddOption("Run Tests", OPTION_RUN_TESTS);
     this->selector->AddOption("Exit", OPTION_EXIT);
-    this->selector->SetVerticalAlignment(0, 1, 0);
-    this->selector->SetHorizontalAlignment(1, 1, 1);
+    this->selector->SetPadding(0.05f, 0.2f, 0.f, 0.2f);
     this->selector->OnKey().Register(this, &MenuScreen::HandleOptionClicked);
     this->selector->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
     this->selector->SetName("Menu::Selector");
@@ -27,7 +26,7 @@ tui::MenuScreen::MenuScreen(ScreenCollection *screens)
     this->titleBox->SetSize(40, 5);
     this->titleBox->SetCenterHorizontal(true);
     this->titleBox->SetCenterVertical(true);
-    this->titleBox->SetHorizontalAlignment(0.2, 0.6, 0.2);
+    this->titleBox->SetPadding(0, 0, 0, 0);
     this->titleBox->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
     this->titleBox->SetName("Menu::TitleBox");
     this->titleBox->SetBorderEnabled(true);
@@ -36,8 +35,7 @@ tui::MenuScreen::MenuScreen(ScreenCollection *screens)
     this->centerLayout = new terminal::LinearContainer();
     this->centerLayout->SetOrientation(terminal::LinearContainer::Orientation::TopToBottom);
     this->centerLayout->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
-    this->centerLayout->SetHorizontalAlignment(0.3f, 0.4f, 0.3f);
-    this->centerLayout->SetVerticalAlignment(0.05f, 0.75f, 0.2f);
+    this->centerLayout->SetPadding(0, 0, 0, 0);
     this->centerLayout->Add(titleBox);
     this->centerLayout->Add(selector);
     this->centerLayout->SetName("Menu::CenterLayout");
@@ -59,8 +57,10 @@ void tui::MenuScreen::HandleOptionClicked(terminal::KeyEventArgs &args)
     case OPTION_START_GAME:
         break;
     case OPTION_RUN_TESTS:
+        this->screens->test->Show();
         break;
     case OPTION_EXIT:
+        this->screens->window->Quit();
         break;
     default:
         break;
