@@ -9,7 +9,7 @@ tui::StartScreen::StartScreen(ScreenCollection *screens)
     this->titleText->SetBorderEnabled(true);
     this->titleText->SetCenterVertical(true);
     this->titleText->SetCenterHorizontal(true);
-    this->titleText->SetPadding(0.3f, 0.05f, 0.3f, 0.f);
+    this->titleText->SetPadding(0.3f, 0.f, 0.3f, 0.f);
     this->titleText->SetName("Start::TitleText");
     this->titleText->SetBorderEnabled(true);
     this->titleText->SetBorder(this->screens->border1);

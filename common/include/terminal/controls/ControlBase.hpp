@@ -227,7 +227,6 @@ class ControlBase
     void SetBackgroundColor(colorPairId_t);
     colorPairId_t GetTextColor() const;
     colorPairId_t GetBackgroundColor() const;
-    void RestoreDefaultColors();
     bool Contains(int x, int y) const;
 
     void SetPadding(float, float, float, float);
@@ -249,6 +248,7 @@ class ControlBase
     virtual void Invalidate();
     virtual void RestoreLayout();
     virtual void ApplyAutoSize(const util::Rectangle &);
+    virtual void UpdateColors();
 
     virtual void HandleZIndexChanged();
     virtual void HandleTabIndexChanged();

@@ -7,6 +7,36 @@ terminal::Selector::Selector() : ControlBase(),
 {
 }
 
+void terminal::Selector::SetCenterText(bool value)
+{
+    this->centerText = value;
+}
+
+bool terminal::Selector::IsTextCentered() const
+{
+    return this->centerText;
+}
+
+void terminal::Selector::SetMarker(char marker)
+{
+    this->marker = marker;
+}
+
+void terminal::Selector::ResetMarker()
+{
+    this->marker = '>';
+}
+
+void terminal::Selector::DisableMarker()
+{
+    this->marker = ' ';
+}
+
+char terminal::Selector::GetMarker() const
+{
+    return this->marker;
+}
+
 void terminal::Selector::AddOption(const std::string &name, int marker)
 {
     this->items.push_back({name, marker});
@@ -22,6 +52,37 @@ bool terminal::Selector::RemoveOption(const std::string &name)
             break;
         }
     }
+
+    this->Invalidate();
+}
+
+bool terminal::Selector::RemoveOption(int marker)
+{
+    for (auto pos = this->items.begin(), end = this->items.end(); pos != end; ++pos)
+    {
+        if (pos->marker == marker)
+        {
+            this->items.erase(pos);
+            break;
+        }
+    }
+
+    this->Invalidate();
+}
+
+bool terminal::Selector::ClearOptions()
+{
+    this->items.clear();
+    this->Invalidate();
+}
+
+void terminal::Selector::UpdateColors()
+{
+    this->ControlBase::UpdateColors();
+
+    this->markerStyle = this->Style(ControlStyleColor::SelectedOption);
+    this->selectedOptionForeground = this->Style(ControlStyleColor::ControlText);
+    this->selectedOptionBackground = this->Style(ControlStyleColor::ControlText);
 }
 
 void terminal::Selector::HandleKey(KeyInput &k)
@@ -40,24 +101,32 @@ void terminal::Selector::Render(Canvas &c)
 {
     this->ControlBase::Render(c);
 
-    int x0 = this->GetBounds().GetX();
-    int y0 = this->GetBounds().GetY();
+    int x0 = this->GetContentBounds().GetX();
+    int y0 = this->GetContentBounds().GetY();
 
     c.SetActiveColorPair(this->Style(ControlStyleColor::UnselectedOption));
 
-    for (size_t i = 0; i < this->items.size() && i < this->GetBounds().GetHeight(); i++)
+    for (size_t i = 0; i < this->items.size() && i < this->GetContentBounds().GetHeight(); i++)
     {
         if (i == this->selectedItem)
         {
-            c.SetActiveColorPair(this->Style(ControlStyleColor::SelectedOption));
-            c.DrawString(x0, y0 + i, "> ");
-            c.DrawString(x0 + 2, y0 + i, this->items[i].text);
-            c.SetActiveColorPair(this->Style(ControlStyleColor::UnselectedOption));
+            c.SetActiveColorPair(this->markerStyle);
+            c.DrawChar(x0, y0 + i, this->marker);
+            c.SetActiveColorPair(this->selectedOptionForeground);
+
+            if (this->centerText)
+                c.DrawString(x0 + (this->GetContentBounds().GetWidth() - this->items[i].text.length()) / 2, y0 + i, this->items[i].text);
+            else
+                c.DrawString(x0 + 2, y0 + i, this->items[i].text);
+
+            // c.SetActiveColorPair(this->GetTextColor());
         }
         else
         {
-            c.DrawString(x0, y0 + i, "  ");
-            c.DrawString(x0 + 2, y0 + i, this->items[i].text);
+            if (this->centerText)
+                c.DrawString(x0 + (this->GetContentBounds().GetWidth() - this->items[i].text.length()) / 2, y0 + i, this->items[i].text);
+            else
+                c.DrawString(x0 + 2, y0 + i, this->items[i].text);
         }
     }
 }

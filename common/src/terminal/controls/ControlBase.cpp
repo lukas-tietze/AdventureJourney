@@ -26,6 +26,7 @@ terminal::ControlBase::ControlBase() : bounds(0, 0, 0, 0),
 {
     // this->name = util::Format("% [%]", typeid(*this).name(), this);
     this->name = util::Format("%", this);
+    this->UpdateColors();
 }
 
 terminal::ControlBase::~ControlBase()
@@ -389,7 +390,7 @@ void terminal::ControlBase::Render(Canvas &c)
     if (this->borderEnabled)
     {
         this->border.Render(this->bounds, c);
-        this->contentBorder.Render(this->contentBounds, c);
+        // this->contentBorder.Render(this->contentBounds, c);
     }
 }
 
@@ -518,7 +519,7 @@ terminal::colorPairId_t terminal::ControlBase::GetBackgroundColor() const
     return this->backgroundColor;
 }
 
-void terminal::ControlBase::RestoreDefaultColors()
+void terminal::ControlBase::UpdateColors()
 {
     this->backgroundColor = this->Style(ControlStyleColor::ClearColor);
     this->textColor = this->Style(ControlStyleColor::ControlText);
@@ -544,12 +545,12 @@ void terminal::ControlBase::RestoreLayout()
     int x, y, w, h;
 
     Partition(this->paddings[TOP], this->paddings[BOTTOM],
-              this->paddings[TOP], this->paddings[BOTTOM],
-              this->GetBounds().GetWidth(), y, h);
+              this->paddingModes[TOP], this->paddingModes[BOTTOM],
+              this->GetBounds().GetHeight(), y, h);
 
     Partition(this->paddings[LEFT], this->paddings[RIGHT],
-              this->paddings[LEFT], this->paddings[RIGHT],
-              this->GetBounds().GetHeight(), x, w);
+              this->paddingModes[LEFT], this->paddingModes[RIGHT],
+              this->GetBounds().GetWidth(), x, w);
 
     this->contentBounds = util::Rectangle(x, y, w, h);
 
