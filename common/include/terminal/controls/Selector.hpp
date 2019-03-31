@@ -31,8 +31,10 @@ class Selector : public ControlBase
 
     char marker;
     bool centerText;
+    char seperatorChar;
 
     colorPairId_t markerStyle;
+    colorPairId_t seperatorStyle;
     colorPairId_t selectedOptionForeground;
     colorPairId_t selectedOptionBackground;
 
@@ -54,6 +56,17 @@ class Selector : public ControlBase
     virtual void HandleKey(KeyInput &);
     virtual void HandleMouse(MouseInput &);
     virtual void Render(Canvas &);
+
+    char GetSeperatorChar() const;
+    void SetSeperatorChar(char);
+    colorPairId_t GetMarkerStyle() const;
+    void SetMarkerStyle(colorPairId_t);
+    colorPairId_t GetSeperatorStyle() const;
+    void SetSeperatorStyle(colorPairId_t);
+    colorPairId_t GetSelectedOptionForeground() const;
+    void SetSelectedOptionForeground(colorPairId_t);
+    colorPairId_t GetSelectedOptionBackground() const;
+    void SetSelectedOptionBackground(colorPairId_t);
 
     void SetCenterText(bool);
     bool IsTextCentered() const;

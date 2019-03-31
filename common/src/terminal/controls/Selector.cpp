@@ -187,3 +187,53 @@ int terminal::Selector::GetSelectedMarker() const
 {
     return this->selectableItems.empty() ? 0 : this->selectableItems[this->selectedItem].marker;
 }
+
+char terminal::Selector::GetSeperatorChar() const
+{
+    return this->seperatorChar;
+}
+
+void terminal::Selector::SetSeperatorChar(char value)
+{
+    this->seperatorChar = value;
+}
+
+terminal::colorPairId_t terminal::Selector::GetMarkerStyle() const
+{
+    return this->markerStyle;
+}
+
+void terminal::Selector::SetMarkerStyle(colorPairId_t value)
+{
+    this->markerStyle = value;
+}
+
+terminal::colorPairId_t terminal::Selector::GetSeperatorStyle() const
+{
+    return this->seperatorStyle;
+}
+
+void terminal::Selector::SetSeperatorStyle(colorPairId_t value)
+{
+    this->seperatorStyle = value;
+}
+
+terminal::colorPairId_t terminal::Selector::GetSelectedOptionForeground() const
+{
+    return this->selectedOptionForeground;
+}
+
+void terminal::Selector::SetSelectedOptionForeground(colorPairId_t value)
+{
+    this->selectedOptionForeground = value;
+}
+
+terminal::colorPairId_t terminal::Selector::GetSelectedOptionBackground() const
+{
+    return this->selectedOptionBackground;
+}
+
+void terminal::Selector::SetSelectedOptionBackground(colorPairId_t value)
+{
+    this->selectedOptionBackground = value;
+}
