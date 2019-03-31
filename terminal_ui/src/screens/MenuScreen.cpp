@@ -12,12 +12,19 @@ tui::MenuScreen::MenuScreen(ScreenCollection *screens)
     this->screens = screens;
 
     this->selector = new terminal::Selector();
-    this->selector->AddOption("Start Game", OPTION_START_GAME);
-    this->selector->AddOption("Run Tests", OPTION_RUN_TESTS);
-    this->selector->AddOption("Exit", OPTION_EXIT);
+    this->selector->AddOption("New Game");
+    this->selector->AddOption("Load Game");
+    this->selector->AddSeperator();
+    this->selector->AddOption("Options");
+    this->selector->AddOption("Manage Content");
+    this->selector->AddOption("Manage Profile");
+    this->selector->AddSeperator();
+    this->selector->AddOption("Run Tests");
+    this->selector->AddOption("Exit");
+
     this->selector->SetPadding(0.05f, 0.2f, 0.f, 0.2f);
     this->selector->OnKey().Register(this, &MenuScreen::HandleOptionClicked);
-    this->selector->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
+    this->selector->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
     this->selector->SetName("Menu::Selector");
     this->selector->SetBorderEnabled(true);
     this->selector->SetBorder(this->screens->border1);
@@ -27,7 +34,7 @@ tui::MenuScreen::MenuScreen(ScreenCollection *screens)
     this->titleBox->SetSize(40, 5);
     this->titleBox->SetCenterHorizontal(true);
     this->titleBox->SetCenterVertical(true);
-    this->titleBox->SetPadding(0.3f, 0.3f, 0.3f, 0.3f);
+    this->titleBox->SetPadding(0.f, 0.f, 0.f, 0.f);
     this->titleBox->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
     this->titleBox->SetName("Menu::TitleBox");
     this->titleBox->SetBorderEnabled(true);
@@ -36,7 +43,7 @@ tui::MenuScreen::MenuScreen(ScreenCollection *screens)
     this->centerLayout = new terminal::LinearContainer();
     this->centerLayout->SetOrientation(terminal::LinearContainer::Orientation::TopToBottom);
     this->centerLayout->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
-    this->centerLayout->SetPadding(0.2, 0.35f, 0.f, 0.35f);
+    this->centerLayout->SetPadding(0.2f, 0.35f, 0.1f, 0.35f);
     this->centerLayout->Add(titleBox);
     this->centerLayout->Add(selector);
     this->centerLayout->SetName("Menu::CenterLayout");

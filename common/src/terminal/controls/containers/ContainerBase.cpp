@@ -67,11 +67,11 @@ void terminal::ContainerBase::HandleMouse(MouseInput &input)
 
     auto click = util::Point(input.x, input.y);
 
-    input.x += this->GetBounds().GetX();
-    input.y += this->GetBounds().GetY();
+    input.x -= this->GetContentBounds().GetX();
+    input.y -= this->GetContentBounds().GetY();
 
     if (this->focusedControlIndex >= 0 &&
-        this->controls[this->focusedControlIndex]->GetBounds().Contains(click))
+        this->controls[this->focusedControlIndex]->Contains(input.x, input.y))
     {
         this->controls[focusedControlIndex]->HandleMouse(input);
     }
@@ -83,7 +83,7 @@ void terminal::ContainerBase::HandleMouse(MouseInput &input)
         {
             const auto &control = this->controls[i];
 
-            if (control->GetBounds().Contains(click))
+            if (control->Contains(input.x, input.y))
             {
                 this->SwitchFocus(i);
                 control->HandleMouse(input);
@@ -113,12 +113,6 @@ void terminal::ContainerBase::Render(Canvas &canvas)
     this->terminal::ControlBase::Render(canvas);
 
     auto subCanvas = canvas.GetSubCanvas(this->GetContentBounds());
-
-    util::dbg.WriteLine("ContainerBase [%]: Creatign SubCanvas to render components. Bounds: %, canvas origin: %, canvas size: %",
-                        this->GetName(),
-                        this->GetBounds(),
-                        subCanvas.GetOrigin(),
-                        subCanvas.GetSize());
 
     for (auto i = this->controls.begin(), end = this->controls.end(); i != end; i++)
     {
@@ -161,6 +155,13 @@ void terminal::ContainerBase::SwitchFocus(int next)
     {
         this->controls[this->focusedControlIndex]->HandleFocusLost();
     }
+
+    util::dbg.WriteLine("ContainerBase [%]: switching focus from % (%) to % (%)",
+                        this->GetName(),
+                        this->focusedControlIndex,
+                        this->focusedControlIndex > 0 ? this->controls[this->focusedControlIndex]->GetName() : "-",
+                        next,
+                        next > 0 ? this->controls[next]->GetName() : "-");
 
     this->focusedControlIndex = next;
     terminal::View::GetInstance()->SetCursorMode(terminal::CursorMode::Invisible);

@@ -24,7 +24,8 @@ class Selector : public ControlBase
         int marker;
     };
 
-    std::vector<Item> items;
+    std::vector<Item> selectableItems;
+    std::vector<size_t> items;
     size_t selectedItem;
     util::Event<OptionSelectedEventArgs> onOptionSelected;
 
@@ -39,6 +40,7 @@ class Selector : public ControlBase
     Selector();
 
     void AddOption(const std::string &, int marker = 0);
+    void AddSeperator(char placeholder = '-');
     bool RemoveOption(const std::string &);
     bool RemoveOption(int);
     bool ClearOptions();

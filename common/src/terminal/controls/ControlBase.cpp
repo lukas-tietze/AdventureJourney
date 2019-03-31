@@ -535,8 +535,8 @@ namespace
 {
 void Partition(float w0, float w1, bool m0, bool m1, int size, int &outOffset, int &outSize)
 {
-    outOffset = static_cast<int>(m0 ? w0 * size : w0);
-    outSize = size - outOffset - static_cast<int>(m1 ? w1 * size : w1);
+    outOffset = static_cast<int>(m0 ? w0 * size + 0.5f : w0);
+    outSize = size - outOffset - static_cast<int>(m1 ? w1 * size + 0.5f : w1);
 }
 } // namespace
 
@@ -552,7 +552,7 @@ void terminal::ControlBase::RestoreLayout()
               this->paddingModes[LEFT], this->paddingModes[RIGHT],
               this->GetBounds().GetWidth(), x, w);
 
-    this->contentBounds = util::Rectangle(x, y, w, h);
+    this->contentBounds = util::Rectangle(this->GetLocation() + util::Point(x, y), w, h);
 
     util::dbg.WriteLine("ControlBase [%]: Restored Layout, bounds: %, contentBounds: %",
                         this->GetName(),
@@ -583,6 +583,8 @@ void terminal::ControlBase::ApplyAutoSize(const util::Rectangle &availableSpace)
     default:
         throw util::InvalidCaseException::MakeException(this->autoSizeMode);
     }
+
+    this->contentBounds = this->bounds;
 
     util::dbg.WriteLine("Applied Autosize to [%]. Mode is %. Proposed size: %. New size is %.", this->GetName(), this->autoSizeMode, availableSpace, this->GetSize());
 }
