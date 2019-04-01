@@ -228,9 +228,9 @@ class ControlBase
     colorPairId_t GetBackgroundColor() const;
     bool Contains(int x, int y) const;
 
-    void RequestFocus();
+    bool RequestFocus();
 
-    bool SetPadding(float, float, float, float);
+    void SetPadding(float, float, float, float);
 
     void SetRelativeLeftPadding(float);
     void SetAbsoluteLeftPadding(int);

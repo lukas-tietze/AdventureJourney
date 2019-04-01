@@ -2,13 +2,13 @@
 
 namespace
 {
-constexpr int OPTION_NEW_GAME;
-constexpr int OPTION_LOAD_GAME;
-constexpr int OPTION_OPTIONS;
-constexpr int OPTION_MANAGE_CONTENT;
-constexpr int OPTION_MANAGE_PROFILE;
-constexpr int OPTION_RUN_TESTS;
-constexpr int OPTION_EXIT;
+constexpr int OPTION_NEW_GAME = 0;
+constexpr int OPTION_LOAD_GAME = 1;
+constexpr int OPTION_OPTIONS = 2;
+constexpr int OPTION_MANAGE_CONTENT = 3;
+constexpr int OPTION_MANAGE_PROFILE = 4;
+constexpr int OPTION_RUN_TESTS = 5;
+constexpr int OPTION_EXIT = 6;
 } // namespace
 
 tui::MenuScreen::MenuScreen(ScreenCollection *screens)
@@ -67,6 +67,7 @@ void tui::MenuScreen::HandleOptionClicked(terminal::KeyEventArgs &args)
     switch (this->selector->GetSelectedMarker())
     {
     case OPTION_NEW_GAME:
+        this->screens->gameConfig->Show();
         break;
     case OPTION_LOAD_GAME:
         break;

@@ -5,7 +5,46 @@
 
 namespace tui
 {
-class ScreenCollection;
+class StartScreen;
+class MenuScreen;
+class TestScreen;
+class GameConfigScreen;
+
+class ScreenCollection
+{
+  private:
+    friend StartScreen;
+    friend MenuScreen;
+    friend TestScreen;
+    friend GameConfigScreen;
+
+    terminal::Window *window;
+    StartScreen *start;
+    MenuScreen *menu;
+    TestScreen *test;
+    GameConfigScreen *gameConfig;
+
+    terminal::Border border1;
+    terminal::Border border2;
+    terminal::Border border3;
+
+  public:
+    ScreenCollection();
+    ~ScreenCollection();
+
+    void Start();
+};
+
+class GameConfigScreen : public terminal::Screen
+{
+  private:
+    terminal::Picker *galaxySizePicker;
+    terminal::LinearContainer *layout;
+
+  public:
+    GameConfigScreen();
+    ~GameConfigScreen();
+};
 
 class StartScreen : public terminal::Screen
 {
@@ -43,28 +82,5 @@ class TestScreen : public terminal::Screen
   public:
     TestScreen();
     ~TestScreen();
-};
-
-class ScreenCollection
-{
-    friend tui::StartScreen;
-    friend tui::MenuScreen;
-    friend tui::TestScreen;
-
-  private:
-    terminal::Window *window;
-    StartScreen *start;
-    MenuScreen *menu;
-    TestScreen *test;
-
-    terminal::Border border1;
-    terminal::Border border2;
-    terminal::Border border3;
-
-  public:
-    ScreenCollection();
-    ~ScreenCollection();
-
-    void Start();
 };
 } // namespace tui
