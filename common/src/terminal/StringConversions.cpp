@@ -588,8 +588,11 @@ std::ostream &terminal::operator<<(std::ostream &s, terminal::AutoSizeMode value
     case terminal::AutoSizeMode::Fill:
         s << "Fill";
         break;
-    case terminal::AutoSizeMode::Fit:
-        s << "Fit";
+    case terminal::AutoSizeMode::FillHorizontal:
+        s << "FillHorizontal";
+        break;
+    case terminal::AutoSizeMode::FillVertical:
+        s << "FillVertical";
         break;
     default:
         throw util::InvalidCaseException::MakeException(value);
@@ -598,30 +601,55 @@ std::ostream &terminal::operator<<(std::ostream &s, terminal::AutoSizeMode value
     return s;
 }
 
-std::ostream &terminal::operator<<(std::ostream &s, terminal::Alignment value)
+std::ostream &terminal::operator<<(std::ostream &s, terminal::BorderType value)
 {
     switch (value)
     {
-    case terminal::Alignment::Right:
-        s << "Right";
+    case terminal::BorderType::TopEdge:
+        s << "TopEdge";
         break;
-    case terminal::Alignment::Left:
-        s << "Left";
+    case terminal::BorderType::RightEdge:
+        s << "RightEdge";
         break;
-    case terminal::Alignment::Top:
-        s << "Top";
+    case terminal::BorderType::BottomEdge:
+        s << "BottomEdge";
         break;
-    case terminal::Alignment::Bottom:
-        s << "Bottom";
+    case terminal::BorderType::LeftEdge:
+        s << "LeftEdge";
         break;
-    case terminal::Alignment::Fill:
-        s << "Fill";
+    case terminal::BorderType::TopLeftCorner:
+        s << "TopLeftCorner";
         break;
-    case terminal::Alignment::Absolute:
-        s << "Absolute";
+    case terminal::BorderType::TopRightCorner:
+        s << "TopRightCorner";
         break;
-    default:
-        throw util::InvalidCaseException::MakeException(value);
+    case terminal::BorderType::BottomRightCorner:
+        s << "BottomRightCorner";
+        break;
+    case terminal::BorderType::BottomLeftCorner:
+        s << "BottomLeftCorner";
+        break;
+    case terminal::BorderType::TopLine:
+        s << "TopLine";
+        break;
+    case terminal::BorderType::BottomLine:
+        s << "BottomLine";
+        break;
+    case terminal::BorderType::LeftLine:
+        s << "LeftLine";
+        break;
+    case terminal::BorderType::RightLine:
+        s << "RightLine";
+        break;
+    case terminal::BorderType::AllEdges:
+        s << "AllEdges";
+        break;
+    case terminal::BorderType::AllCorners:
+        s << "AllCorners";
+        break;
+    case terminal::BorderType::All:
+        s << "All";
+        break;
     }
 
     return s;
@@ -665,7 +693,7 @@ std::ostream &terminal::operator<<(std::ostream &s, const terminal::KeyInput &va
 
 std::ostream &terminal::operator<<(std::ostream &s, const terminal::MouseInput &value)
 {
-    s << value.action << " [" << value.cx << ", " << value.cy << "] (" << (value.handled ? "handled" : "unhandled") << ")";
+    s << value.action << " [" << value.x << ", " << value.y << "] (" << (value.handled ? "handled" : "unhandled") << ")";
 
     return s;
 }

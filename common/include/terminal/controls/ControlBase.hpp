@@ -13,6 +13,10 @@ struct KeyInput
 {
     int key;
     Key specialKey;
+    // int screenX;
+    // int screenY;
+    // int x;
+    // int y;
     bool handled;
 };
 
@@ -20,71 +24,69 @@ std::ostream &operator<<(std::ostream &, const KeyInput &);
 
 struct MouseInput
 {
-    int cx;
-    int cy;
+    int screenX;
+    int screenY;
+    int x;
+    int y;
     MouseAction action;
     bool handled;
 };
 
 std::ostream &operator<<(std::ostream &, const MouseInput &);
 
-enum class Alignment
-{
-    Right,
-    Left,
-    Top,
-    Bottom,
-    Fill,
-    Absolute,
-};
-
-std::ostream &operator<<(std::ostream &, Alignment);
-
 enum class AutoSizeMode
 {
     None,
     Fill,
-    Fit,
+    FillHorizontal,
+    FillVertical,
 };
 
 std::ostream &operator<<(std::ostream &, AutoSizeMode);
 
+enum class BorderType
+{
+    TopEdge = BIT(0),
+    RightEdge = BIT(1),
+    BottomEdge = BIT(2),
+    LeftEdge = BIT(3),
+    TopLeftCorner = BIT(4),
+    TopRightCorner = BIT(5),
+    BottomRightCorner = BIT(6),
+    BottomLeftCorner = BIT(7),
+
+    TopLine = TopLeftCorner | TopEdge | TopRightCorner,
+    BottomLine = BottomLeftCorner | BottomEdge | BottomRightCorner,
+    LeftLine = TopLeftCorner | LeftEdge | BottomLeftCorner,
+    RightLine = TopRightCorner | RightEdge | BottomRightCorner,
+
+    AllEdges = TopEdge | RightEdge | BottomEdge | LeftEdge,
+    AllCorners = TopLeftCorner | TopRightCorner | BottomRightCorner | BottomLeftCorner,
+    All = AllEdges | AllCorners
+};
+
+std::ostream &operator<<(std::ostream &, BorderType);
+
 class Border
 {
   private:
-    uint8_t sizes[4];
-    int styles[4];
-    char values[4]; //TODO
+    colorPairId_t styles[8];
+    int values[8];
+    bool enabled[8];
 
   public:
     Border();
 
-    void SetSize(uint8_t size);
-    void SetStyle(int style);
+    void SetStyle(colorPairId_t);
+    void SetStyle(BorderType, colorPairId_t);
+    colorPairId_t GetStyle(BorderType) const;
 
-    void SetTopSize(uint8_t size);
-    void SetTopStyle(int style);
+    void SetChar(BorderType, int);
+    int GetChar(BorderType) const;
 
-    void SetRightSize(uint8_t size);
-    void SetRightStyle(int style);
-
-    void SetBottomSize(uint8_t size);
-    void SetBottomStyle(int style);
-
-    void SetLeftSize(uint8_t size);
-    void SetLeftStyle(int style);
-
-    uint8_t GetTopSize();
-    int GetTopStyle();
-
-    uint8_t GetRightSize();
-    int GetRightStyle();
-
-    uint8_t GetBottomSize();
-    int GetBottomStyle();
-
-    uint8_t GetLeftSize();
-    int GetLeftStyle();
+    void SetEnabled(bool);
+    void SetEnabled(BorderType, bool);
+    bool IsEnabled(BorderType) const;
 
     void Render(const util::Rectangle &bounds, Canvas &);
 };
@@ -114,7 +116,7 @@ struct KeyEventArgs
 class ControlBase
 {
   private:
-    util::Rectangle bounds;
+    ////generell properties
     util::Dimension minimumSize;
     util::Dimension maximumSize;
     ContainerBase *parent;
@@ -125,10 +127,28 @@ class ControlBase
     bool visible;
     int textStyle;
     bool isValid;
-    AutoSizeMode autoSizeMode;
+
+    ////border
     Border border;
     bool borderEnabled;
+    Border contentBorder;
+    bool contentBorderEnabled;
 
+    ////placement
+    util::Rectangle bounds;
+    util::Rectangle contentBounds;
+    AutoSizeMode autoSizeMode;
+    float paddings[4];
+    bool paddingModes[4];
+
+    ////meta data
+    std::string name;
+
+    //colors
+    colorPairId_t textColor;
+    colorPairId_t backgroundColor;
+
+    ////Events
     util::Event<MouseEventArgs> onMouse;
     util::Event<KeyEventArgs> onKey;
 
@@ -173,15 +193,21 @@ class ControlBase
     void SetVisibility(bool visible);
     int GetTabIndex() const;
     void SetTabIndex(int);
+    const std::string &GetName() const;
     const util::Dimension &GetMinSize() const;
     const util::Dimension &GetMaxSize() const;
     const util::Dimension &GetSize() const;
+    const util::Dimension &GetContentSize() const;
     const util::Point &GetLocation() const;
+    const util::Point &GetContentLocation() const;
     const util::Rectangle &GetBounds() const;
+    const util::Rectangle &GetContentBounds() const;
     const Border &GetBorder() const;
+
     Border &GetBorder();
     bool IsBorderEnabled() const;
     AutoSizeMode GetAutoSizeMode() const;
+    void SetName(const std::string &);
     void SetSize(const util::Dimension &);
     void SetSize(int w, int h);
     void SetMinSize(const util::Dimension &);
@@ -194,13 +220,35 @@ class ControlBase
     void SetBounds(const util::Rectangle &);
     void SetAutoSizeMode(AutoSizeMode mode);
     void SetBorder(const Border &);
+    void SetContentBorder(const Border &);
     void SetBorderEnabled(bool);
+    void SetContentBorderEnabled(bool);
+    void SetTextColor(colorPairId_t);
+    void SetBackgroundColor(colorPairId_t);
+    colorPairId_t GetTextColor() const;
+    colorPairId_t GetBackgroundColor() const;
     bool Contains(int x, int y) const;
+
+    void SetPadding(float, float, float, float);
+
+    void SetRelativeLeftPadding(float);
+    void SetAbsoluteLeftPadding(int);
+    void SetRelativeRightPadding(float);
+    void SetAbsoluteRightPadding(int);
+    void SetRelativeTopPadding(float);
+    void SetAbsoluteTopPadding(int);
+    void SetRelativeBottomPadding(float);
+    void SetAbsoluteBottomPadding(int);
+    void SetRelativeWidthPadding(float);
+    void SetAbsoluteWidthPadding(int);
+    void SetRelativeHeightPadding(float);
+    void SetAbsoluteHeightPadding(int);
+
     bool IsValid() const;
     virtual void Invalidate();
     virtual void RestoreLayout();
-
-    virtual void ApplyAutoSize(const util::Dimension &availableSpace);
+    virtual void ApplyAutoSize(const util::Rectangle &);
+    virtual void UpdateColors();
 
     virtual void HandleZIndexChanged();
     virtual void HandleTabIndexChanged();

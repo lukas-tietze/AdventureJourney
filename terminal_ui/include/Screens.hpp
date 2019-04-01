@@ -1,12 +1,70 @@
 #pragma once
 
-#include "terminal/Window.hpp"
+#include "terminal/Screen.hpp"
+#include "Terminal.hpp"
 
-namespace screens
+namespace tui
 {
-extern terminal::Screen *Start;
-extern terminal::Screen *Menu;
+class ScreenCollection;
 
-terminal::Screen *CreateStartScreen();
-terminal::Screen *CreateMenuScreen();
-} // namespace screens
+class StartScreen : public terminal::Screen
+{
+  private:
+    terminal::TextView *titleText;
+    ScreenCollection *screens;
+
+    void HandleKey(terminal::KeyEventArgs &args);
+
+  public:
+    StartScreen(ScreenCollection *);
+    ~StartScreen();
+};
+
+class MenuScreen : public terminal::Screen
+{
+  private:
+    ScreenCollection *screens;
+    terminal::Selector *selector;
+    terminal::TextView *titleBox;
+    terminal::LinearContainer *centerLayout;
+
+    void HandleOptionClicked(terminal::KeyEventArgs &args);
+
+  public:
+    MenuScreen(ScreenCollection *);
+    ~MenuScreen();
+};
+
+class TestScreen : public terminal::Screen
+{
+  private:
+    ScreenCollection *screens;
+
+  public:
+    TestScreen();
+    ~TestScreen();
+};
+
+class ScreenCollection
+{
+    friend tui::StartScreen;
+    friend tui::MenuScreen;
+    friend tui::TestScreen;
+
+  private:
+    terminal::Window *window;
+    StartScreen *start;
+    MenuScreen *menu;
+    TestScreen *test;
+
+    terminal::Border border1;
+    terminal::Border border2;
+    terminal::Border border3;
+
+  public:
+    ScreenCollection();
+    ~ScreenCollection();
+
+    void Start();
+};
+} // namespace tui

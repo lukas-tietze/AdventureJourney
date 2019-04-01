@@ -2,18 +2,40 @@
     "$schema": "http://json-schema.org/schema#",
     "title": "resource set",
     "description": "schema for resource sets.",
-    "type": "array",
-    "items": {
-        "type": "object",
-        "properties": {
-            "id": {
-                "type": [
-                    "string",
-                    "integer"
-                ]
-            },
-            "amount": {
-                "type": "integer"
+    "type": "object",
+    "properties": {
+        "resources": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": [
+                            "string",
+                            "integer"
+                        ]
+                    },
+                    "amount": {
+                        "type": "integer"
+                    }
+                }
+            }
+        },
+        "development": {
+            "type": "object",
+            "properties": {
+                "industry": {
+                    "type": "number"
+                },
+                "science": {
+                    "type": "number"
+                },
+                "growth": {
+                    "type": "number"
+                },
+                "military": {
+                    "type": "number"
+                }
             }
         }
     }

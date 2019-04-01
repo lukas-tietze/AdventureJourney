@@ -1,7 +1,9 @@
 #include "terminal/Window.hpp"
 
-terminal::Screen::Screen() : ContainerBase()
+terminal::Screen::Screen() : ContainerBase(),
+                             parent(nullptr)
 {
+    this->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
 }
 
 void terminal::Screen::AttachToWindow(Window *newParent)
@@ -78,3 +80,4 @@ util::Event<terminal::ScreenEventArgs> &terminal::Screen::OnAttached()
 {
     return this->onAttached;
 }
+>>>>>>> 22261fe29f9e532c95175d031a6493fc39c368f5

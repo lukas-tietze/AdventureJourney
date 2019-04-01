@@ -53,6 +53,10 @@ class Channel
     std::FILE *file;
     bool active;
 
+    bool showTime;
+
+    static const std::string TimeFormat;
+
   public:
     Channel();
     Channel(const Channel &copyFrom);
@@ -64,6 +68,7 @@ class Channel
     bool IsOpen() const;
     void Close();
     void SetActive(bool active);
+    void SetShowTime(bool showTime);
 
     const std::FILE *GetTarget() const;
     std::FILE *GetTarget();
@@ -81,13 +86,15 @@ class Channel
     template <class TFirst, class... TArgs>
     int Write(const std::string &format, const TFirst &first, const TArgs &... args)
     {
-        return std::fprintf(this->file, "%s\n", util::Format(format, first, args...).c_str());
+        return this->showTime
+                   ? std::fprintf(this->file, "[%s] %s", util::FormatLocalTime(TimeFormat).c_str(), util::Format(format, first, args...).c_str())
+                   : std::fprintf(this->file, "%s", util::Format(format, first, args...).c_str());
     }
 
     template <class TFirst, class... TArgs>
     int WriteLine(const std::string &format, const TFirst &first, const TArgs &... args)
     {
-        auto res = std::fprintf(this->file, "%s\n", util::Format(format, first, args...).c_str());
+        auto res = this->Write(format, first, args...) + std::fprintf(this->file, "\n");
 
         std::fflush(this->file);
 
@@ -100,16 +107,15 @@ class Channel
         std::stringstream s;
         s << arg;
 
-        return std::fprintf(this->file, "%s", s.str().c_str());
+        return this->showTime
+                   ? std::fprintf(this->file, "[%s] %s", util::FormatLocalTime(TimeFormat).c_str(), s.str().c_str())
+                   : std::fprintf(this->file, "%s", s.str().c_str());
     }
 
     template <class T>
     int WriteLine(const T &arg)
     {
-        std::stringstream s;
-        s << arg;
-
-        auto res = std::fprintf(this->file, "%s\n", s.str().c_str());
+        auto res = this->Write(arg) + std::fprintf(this->file, "\n");
 
         std::fflush(this->file);
 

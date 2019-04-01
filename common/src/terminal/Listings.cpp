@@ -7,19 +7,29 @@ std::initializer_list<terminal::AutoSizeMode> util::ListValues<terminal::AutoSiz
     return {
         terminal::AutoSizeMode::None,
         terminal::AutoSizeMode::Fill,
-        terminal::AutoSizeMode::Fit,
+        terminal::AutoSizeMode::FillVertical,
+        terminal::AutoSizeMode::FillHorizontal,
     };
 }
 
 template <>
-std::initializer_list<terminal::Alignment> util::ListValues<terminal::Alignment>()
+std::initializer_list<terminal::BorderType> util::ListValues<terminal::BorderType>()
 {
     return {
-        terminal::Alignment::Right,
-        terminal::Alignment::Left,
-        terminal::Alignment::Top,
-        terminal::Alignment::Bottom,
-        terminal::Alignment::Fill,
-        terminal::Alignment::Absolute,
+        terminal::BorderType::TopEdge,
+        terminal::BorderType::RightEdge,
+        terminal::BorderType::BottomEdge,
+        terminal::BorderType::LeftEdge,
+        terminal::BorderType::TopLeftCorner,
+        terminal::BorderType::TopRightCorner,
+        terminal::BorderType::BottomRightCorner,
+        terminal::BorderType::BottomLeftCorner,
+        terminal::BorderType::TopLine,
+        terminal::BorderType::BottomLine,
+        terminal::BorderType::LeftLine,
+        terminal::BorderType::RightLine,
+        terminal::BorderType::AllEdges,
+        terminal::BorderType::AllCorners,
+        terminal::BorderType::All,
     };
 }

@@ -46,6 +46,10 @@ int main(int argc, char **argv)
     tests.push_back(test::TestRun(new test::SimpleTest("strip", &test::stringTest::Strip)));
     tests.push_back(test::TestRun(new test::SimpleTest("strip front", &test::stringTest::StripFront)));
     tests.push_back(test::TestRun(new test::SimpleTest("strip back", &test::stringTest::StripBack)));
+    tests.push_back(test::TestRun(new test::SimpleTest("strip inplace", &test::stringTest::StripInplace)));
+    tests.push_back(test::TestRun(new test::SimpleTest("strip front inplace", &test::stringTest::StripFrontInplace)));
+    tests.push_back(test::TestRun(new test::SimpleTest("strip back inplace", &test::stringTest::StripBackInplace)));
+    tests.push_back(test::TestRun(new test::SimpleTest("justification", &test::stringTest::Justification)));
     tests.push_back(test::TestRun(new test::SimpleTest("collect rope", &test::dataTest::collectionTest::TestCollectRope)));
     tests.push_back(test::TestRun(new test::SimpleTest("array", &test::dataTest::collectionTest::TestArray)));
     tests.push_back(test::TestRun(new test::SimpleTest("list", &test::dataTest::collectionTest::TestList)));

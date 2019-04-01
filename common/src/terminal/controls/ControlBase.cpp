@@ -12,14 +12,21 @@ int terminal::ControlBase::TabIndexSorter::operator()(const ControlBase &a, cons
 }
 
 terminal::ControlBase::ControlBase() : bounds(0, 0, 0, 0),
+                                       contentBounds(0, 0, 0, 0),
+                                       paddings({0, 0, 0, 0}),
+                                       paddingModes({true, true, true, true}),
                                        parent(nullptr),
                                        zIndex(0),
                                        hasFocus(false),
                                        visible(true),
                                        minimumSize(0, 0),
                                        maximumSize(std::numeric_limits<int>::max(), std::numeric_limits<int>::max()),
-                                       autoSizeMode(AutoSizeMode::None)
+                                       autoSizeMode(AutoSizeMode::None),
+                                       borderEnabled(false)
 {
+    // this->name = util::Format("% [%]", typeid(*this).name(), this);
+    this->name = util::Format("%", this);
+    this->UpdateColors();
 }
 
 terminal::ControlBase::~ControlBase()
@@ -41,6 +48,17 @@ bool terminal::ControlBase::HasParent() const
     return this->parent != nullptr;
 }
 
+void terminal::ControlBase::SetName(const std::string &name)
+{
+    this->name = name;
+    this->Invalidate();
+}
+
+const std::string &terminal::ControlBase::GetName() const
+{
+    return this->name;
+}
+
 void terminal::ControlBase::SetSizeCore(const util::Dimension &size)
 {
     this->bounds.SetWidth(util::Crop(size.GetWidth(), this->minimumSize.GetWidth(), this->maximumSize.GetWidth()));
@@ -49,15 +67,19 @@ void terminal::ControlBase::SetSizeCore(const util::Dimension &size)
 
 void terminal::ControlBase::SetLocationCore(const util::Point &location)
 {
-    util::dbg.WriteLine("Setting location of [%]. (%)->(%)", this, this->bounds.GetLocation(), location);
+    util::dbg.WriteLine("Setting location of [%]. (%)->(%)", this->GetName(), this->bounds.GetLocation(), location);
 
     this->bounds.SetLocation(location);
+
+    this->Invalidate();
 }
 
 void terminal::ControlBase::SetBoundsCore(const util::Rectangle &bounds)
 {
     this->SetLocationCore(bounds.GetLocation());
     this->SetSizeCore(bounds.GetSize());
+
+    this->Invalidate();
 }
 
 void terminal::ControlBase::SetBounds(int x, int y, int w, int h)
@@ -118,9 +140,19 @@ const util::Rectangle &terminal::ControlBase::GetBounds() const
     return this->bounds;
 }
 
+const util::Rectangle &terminal::ControlBase::GetContentBounds() const
+{
+    return this->contentBounds;
+}
+
 const util::Dimension &terminal::ControlBase::GetSize() const
 {
     return this->bounds.GetSize();
+}
+
+const util::Dimension &terminal::ControlBase::GetContentSize() const
+{
+    return this->contentBounds.GetSize();
 }
 
 const util::Point &terminal::ControlBase::GetLocation() const
@@ -128,12 +160,17 @@ const util::Point &terminal::ControlBase::GetLocation() const
     return this->bounds.GetLocation();
 }
 
+const util::Point &terminal::ControlBase::GetContentLocation() const
+{
+    return this->contentBounds.GetLocation();
+}
+
 bool terminal::ControlBase::Contains(int x, int y) const
 {
-    return x >= this->bounds.GetLocation().GetX() &&
-           x <= this->bounds.GetLocation().GetX() + this->bounds.GetSize().GetWidth() &&
-           y >= this->bounds.GetLocation().GetY() &&
-           y <= this->bounds.GetLocation().GetY() + this->bounds.GetSize().GetHeight();
+    return x >= this->contentBounds.GetLocation().GetX() &&
+           x <= this->contentBounds.GetLocation().GetX() + this->contentBounds.GetSize().GetWidth() &&
+           y >= this->contentBounds.GetLocation().GetY() &&
+           y <= this->contentBounds.GetLocation().GetY() + this->contentBounds.GetSize().GetHeight();
 }
 
 bool terminal::ControlBase::ValidateSize(const util::Dimension &size) const
@@ -185,6 +222,8 @@ void terminal::ControlBase::SetText(const std::string &text)
 void terminal::ControlBase::SetTextCore(const std::string &text)
 {
     this->text = text;
+
+    this->Invalidate();
 }
 
 bool terminal::ControlBase::IsVisible() const
@@ -195,6 +234,8 @@ bool terminal::ControlBase::IsVisible() const
 void terminal::ControlBase::SetVisibility(bool visible)
 {
     this->visible = visible;
+
+    this->Invalidate();
 }
 
 int terminal::ControlBase::GetTabIndex() const
@@ -205,6 +246,8 @@ int terminal::ControlBase::GetTabIndex() const
 void terminal::ControlBase::SetTabIndex(int tabIndex)
 {
     this->tabIndex = tabIndex;
+
+    this->Invalidate();
 }
 
 const util::Dimension &terminal::ControlBase::GetMinSize() const
@@ -231,6 +274,8 @@ void terminal::ControlBase::SetMinSize(const util::Dimension &size)
     {
         this->SetSizeCore(this->bounds.GetSize().Crop(this->minimumSize, this->maximumSize));
     }
+
+    this->Invalidate();
 }
 
 void terminal::ControlBase::SetMaxSize(int w, int h)
@@ -241,6 +286,8 @@ void terminal::ControlBase::SetMaxSize(int w, int h)
 void terminal::ControlBase::SetMaxSize(const util::Dimension &size)
 {
     this->maximumSize = size;
+
+    this->Invalidate();
 }
 
 void terminal::ControlBase::HandleFocusAquired()
@@ -275,10 +322,10 @@ void terminal::ControlBase::HandleMouse(MouseInput &m)
     MouseEventArgs args;
     args.handled = false;
     args.action = m.action;
-    args.absoluteX = m.cx;
-    args.absoluteY = m.cy;
-    args.relativeX = m.cx - this->GetBounds().GetX();
-    args.relativeY = m.cy - this->GetBounds().GetY();
+    args.absoluteX = m.screenX;
+    args.absoluteY = m.screenY;
+    args.relativeX = m.x;
+    args.relativeY = m.y;
     args.sender = this;
 
     this->onMouse(args);
@@ -341,7 +388,10 @@ void terminal::ControlBase::Invalidate()
 void terminal::ControlBase::Render(Canvas &c)
 {
     if (this->borderEnabled)
+    {
         this->border.Render(this->bounds, c);
+        // this->contentBorder.Render(this->contentBounds, c);
+    }
 }
 
 const terminal::Border &terminal::ControlBase::GetBorder() const
@@ -359,38 +409,121 @@ bool terminal::ControlBase::IsBorderEnabled() const
     return this->borderEnabled;
 }
 
-void terminal::ControlBase::ApplyAutoSize(const util::Dimension &availableSpace)
+namespace
 {
-    switch (this->autoSizeMode)
-    {
-    case AutoSizeMode::None:
-        return;
-    case AutoSizeMode::Fill:
-        this->SetSize(availableSpace);
-        break;
-    case AutoSizeMode::Fit:
-        this->RestoreLayout();
-        break;
-    default:
-        throw util::InvalidCaseException::MakeException(this->autoSizeMode);
-    }
+constexpr size_t TOP = 0;
+constexpr size_t RIGHT = 1;
+constexpr size_t BOTTOM = 2;
+constexpr size_t LEFT = 3;
+} // namespace
 
-    util::dbg.WriteLine("Applied Autosize to [%]. Mode is %. Proposed size: %. New size is %.", static_cast<void *>(this), this->autoSizeMode, availableSpace, this->GetSize());
+void terminal::ControlBase::SetPadding(float top, float right, float bottom, float left)
+{
+    this->paddings[TOP] = top;
+    this->paddings[RIGHT] = right;
+    this->paddings[BOTTOM] = bottom;
+    this->paddings[LEFT] = left;
+
+    this->paddingModes[TOP] = top < 1.f;
+    this->paddingModes[RIGHT] = right < 1.f;
+    this->paddingModes[BOTTOM] = bottom < 1.f;
+    this->paddingModes[LEFT] = left < 1.f;
+}
+
+void terminal::ControlBase::SetRelativeLeftPadding(float value)
+{
+    this->paddings[LEFT] = value;
+    this->paddingModes[LEFT] = true;
+}
+
+void terminal::ControlBase::SetAbsoluteLeftPadding(int value)
+{
+    this->paddings[LEFT] = value;
+    this->paddingModes[LEFT] = false;
+}
+
+void terminal::ControlBase::SetRelativeRightPadding(float value)
+{
+    this->paddings[RIGHT] = value;
+    this->paddingModes[RIGHT] = true;
+}
+
+void terminal::ControlBase::SetAbsoluteRightPadding(int value)
+{
+    this->paddings[RIGHT] = value;
+    this->paddingModes[RIGHT] = false;
+}
+
+void terminal::ControlBase::SetRelativeTopPadding(float value)
+{
+    this->paddings[TOP] = value;
+    this->paddingModes[TOP] = true;
+}
+
+void terminal::ControlBase::SetAbsoluteTopPadding(int value)
+{
+    this->paddings[TOP] = value;
+    this->paddingModes[TOP] = false;
+}
+
+void terminal::ControlBase::SetRelativeBottomPadding(float value)
+{
+    this->paddings[BOTTOM] = value;
+    this->paddingModes[BOTTOM] = true;
+}
+
+void terminal::ControlBase::SetAbsoluteBottomPadding(int value)
+{
+    this->paddings[BOTTOM] = value;
+    this->paddingModes[BOTTOM] = false;
 }
 
 void terminal::ControlBase::SetAutoSizeMode(AutoSizeMode mode)
 {
     this->autoSizeMode = mode;
+
+    this->Invalidate();
 }
 
 void terminal::ControlBase::SetBorder(const Border &b)
 {
     this->border = b;
+
+    this->Invalidate();
 }
 
 void terminal::ControlBase::SetBorderEnabled(bool enabled)
 {
     this->borderEnabled = enabled;
+
+    this->Invalidate();
+}
+
+void terminal::ControlBase::SetTextColor(colorPairId_t value)
+{
+    this->textColor = value;
+}
+
+void terminal::ControlBase::SetBackgroundColor(colorPairId_t value)
+{
+    this->backgroundColor = value;
+}
+
+terminal::colorPairId_t terminal::ControlBase::GetTextColor() const
+{
+    return this->textColor;
+}
+
+terminal::colorPairId_t terminal::ControlBase::GetBackgroundColor() const
+{
+    return this->backgroundColor;
+}
+
+void terminal::ControlBase::UpdateColors()
+{
+    this->backgroundColor = this->Style(ControlStyleColor::ClearColor);
+    this->textColor = this->Style(ControlStyleColor::ControlText);
+    this->border.SetStyle(this->Style(ControlStyleColor::ControlBorder));
 }
 
 terminal::AutoSizeMode terminal::ControlBase::GetAutoSizeMode() const
@@ -398,8 +531,62 @@ terminal::AutoSizeMode terminal::ControlBase::GetAutoSizeMode() const
     return this->autoSizeMode;
 }
 
+namespace
+{
+void Partition(float w0, float w1, bool m0, bool m1, int size, int &outOffset, int &outSize)
+{
+    outOffset = static_cast<int>(m0 ? w0 * size + 0.5f : w0);
+    outSize = size - outOffset - static_cast<int>(m1 ? w1 * size + 0.5f : w1);
+}
+} // namespace
+
 void terminal::ControlBase::RestoreLayout()
 {
+    int x, y, w, h;
+
+    Partition(this->paddings[TOP], this->paddings[BOTTOM],
+              this->paddingModes[TOP], this->paddingModes[BOTTOM],
+              this->GetBounds().GetHeight(), y, h);
+
+    Partition(this->paddings[LEFT], this->paddings[RIGHT],
+              this->paddingModes[LEFT], this->paddingModes[RIGHT],
+              this->GetBounds().GetWidth(), x, w);
+
+    this->contentBounds = util::Rectangle(this->GetLocation() + util::Point(x, y), w, h);
+
+    util::dbg.WriteLine("ControlBase [%]: Restored Layout, bounds: %, contentBounds: %",
+                        this->GetName(),
+                        this->bounds,
+                        this->contentBounds);
+
+    this->isValid = true;
+}
+
+void terminal::ControlBase::ApplyAutoSize(const util::Rectangle &availableSpace)
+{
+    switch (this->autoSizeMode)
+    {
+    case AutoSizeMode::None:
+        return;
+    case AutoSizeMode::FillHorizontal:
+        this->SetSize(availableSpace.GetWidth(), this->GetSize().GetHeight());
+        this->SetLocation(availableSpace.GetMinX(), this->GetLocation().GetY());
+        break;
+    case AutoSizeMode::FillVertical:
+        this->SetSize(this->GetSize().GetWidth(), availableSpace.GetHeight());
+        this->SetLocation(this->GetLocation().GetX(), availableSpace.GetMinY());
+        break;
+    case AutoSizeMode::Fill:
+        this->SetSize(availableSpace.GetSize());
+        this->SetLocation(availableSpace.GetLocation());
+        break;
+    default:
+        throw util::InvalidCaseException::MakeException(this->autoSizeMode);
+    }
+
+    this->contentBounds = this->bounds;
+
+    util::dbg.WriteLine("Applied Autosize to [%]. Mode is %. Proposed size: %. New size is %.", this->GetName(), this->autoSizeMode, availableSpace, this->GetSize());
 }
 
 terminal::colorPairId_t terminal::ControlBase::Style(ControlStyleColor color)

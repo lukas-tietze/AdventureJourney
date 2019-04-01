@@ -34,6 +34,8 @@ void terminal::Window::Start(int escapeKey)
 
 void terminal::Window::Start()
 {
+    auto mouseX = 0;
+    auto mouseY = 0;
     auto view = View::GetInstance();
     auto canvas = Canvas();
 
@@ -54,10 +56,15 @@ void terminal::Window::Start()
             if (getmouse(&mouseEvent) == OK)
             {
                 MouseInput input;
-                input.cx = mouseEvent.x;
-                input.cy = mouseEvent.y;
+                input.x = mouseEvent.x;
+                input.y = mouseEvent.y;
+                input.screenX = mouseEvent.x;
+                input.screenY = mouseEvent.y;
                 input.handled = false;
                 input.action = static_cast<MouseAction>(mouseEvent.bstate);
+
+                mouseX = mouseEvent.x;
+                mouseY = mouseEvent.y;
 
                 this->activeScreen->HandleMouse(input);
             }
@@ -74,9 +81,9 @@ void terminal::Window::Start()
         else
         {
             KeyInput input;
-            input.handled = false;
             input.key = key;
             input.specialKey = static_cast<Key>(key);
+            input.handled = false;
 
             this->activeScreen->HandleKey(input);
 
@@ -92,8 +99,7 @@ void terminal::Window::Start()
             this->activeScreen->RestoreLayout();
 
         canvas.Clear();
-        canvas.DisableClip();
-        canvas.SetOrigin(0, 0);
+        canvas.Reset();
 
         this->activeScreen->Render(canvas);
 
@@ -108,10 +114,12 @@ void terminal::Window::Quit()
 
 void terminal::Window::AddScreen(Screen *s)
 {
-    if (std::find(this->screens.begin(), this->screens.end(), s) != this->screens.end())
+    if (std::find(this->screens.begin(), this->screens.end(), s) == this->screens.end())
     {
         s->AttachToWindow(this);
         this->screens.push_back(s);
+
+        util::dbg.WriteLine("Window [%]: added screen [%].", this, s);
     }
 }
 
@@ -123,6 +131,8 @@ void terminal::Window::RemoveScreen(Screen *s)
     {
         (*pos)->DetachFromWindow();
         this->screens.erase(pos);
+
+        util::dbg.WriteLine("Window [%]: removed screen [%].", this, s);
     }
 
     if (this->activeScreen == s)
@@ -152,5 +162,19 @@ void terminal::Window::SetActiveScreen(Screen *s)
         this->activeScreen->Invalidate();
         this->activeScreen->SetSize(view->GetSize());
         this->activeScreen->RestoreLayout();
+
+        util::dbg.WriteLine("Window [%]: [%] is now the active screen.", this, *pos);
     }
+    else
+    {
+        util::dbg.WriteLine("Window [%]: could not change active screen, screen [%] is unknown.", this, s);
+    }
+}
+
+void terminal::Window::Blank()
+{
+    this->activeScreen->HandleHide();
+    this->activeScreen = this->emptyScreen;
+
+    util::dbg.WriteLine("Window [%]: blanking screen.", this);
 }

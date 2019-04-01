@@ -1,12 +1,5 @@
 #include "terminal/controls/containers/PlacementBox.hpp"
-
-namespace
-{
-constexpr int TOP = 0;
-constexpr int RIGHT = 1;
-constexpr int BOTTOM = 2;
-constexpr int LEFT = 3;
-} // namespace
+#include "data/Io.hpp"
 
 terminal::PlacementBox::PlacementBox() : ContainerBase(),
                                          top(0.f),
@@ -41,7 +34,7 @@ bool terminal::PlacementBox::Remove(ControlBase *item)
 
 void terminal::PlacementBox::RestoreLayout()
 {
-    if (this->IsValid() || this->item == nullptr)
+    if (this->item == nullptr)
         return;
 
     auto wTotal = this->left + this->right + this->width;
@@ -55,15 +48,28 @@ void terminal::PlacementBox::RestoreLayout()
 
     auto w = this->GetSize().GetWidth();
     auto h = this->GetSize().GetHeight();
+    auto maxSize = util::Dimension(w * this->width / wTotal, h * this->height / hTotal);
 
-    this->item->ApplyAutoSize(util::Dimension(w * this->width / wTotal, h * this->height / hTotal));
+    this->item->ApplyAutoSize(util::Rectangle(0, 0, maxSize));
 
     auto rw = w - this->item->GetSize().GetWidth();
     auto rh = h - this->item->GetSize().GetHeight();
+    auto location = util::Point(rw * this->left / wTotal, rh * this->top / hTotal);
 
-    this->item->SetLocation(this->GetLocation() + util::Point(w * (this->left + this->right) / wTotal, h * (this->top + this->bottom) / hTotal));
+    this->item->SetLocation(location);
+    this->item->RestoreLayout();
 
-    this->ContainerBase::RestoreLayout();
+    util::dbg.WriteLine("PlacementBox [%]: fitting [%] to x=%, y=%, w=% (proposed %), h=% (proposed %)",
+                        this->GetName(),
+                        this->item->GetName(),
+                        location.GetX(),
+                        location.GetY(),
+                        this->item->GetBounds().GetWidth(),
+                        maxSize.GetWidth(),
+                        this->item->GetBounds().GetHeight(),
+                        maxSize.GetHeight());
+
+    this->ControlBase::RestoreLayout();
 }
 
 void terminal::PlacementBox::SetTop(float f)

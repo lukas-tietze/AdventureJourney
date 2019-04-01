@@ -59,3 +59,11 @@ void assert::IsFalse(bool x, const std::string &msg)
         throw AssertException("Value is not false!", msg);
     }
 }
+
+void assert::AreEqual(const char *x, const std::string &y, const std::string &msg)
+{
+    if (std::strcmp(x, y.c_str()) != 0)
+    {
+        throw AssertException("Expected <" + util::ToString(x) + ">, got <" + util::ToString(y) + ">!", msg);
+    }
+}

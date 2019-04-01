@@ -276,14 +276,34 @@ void terminal::View::Flush()
     refresh();
 }
 
-size_t terminal::View::GetMaxColors() const
+size_t terminal::View::ColorCount() const
 {
     return this->colors.Length();
 }
 
-size_t terminal::View::GetMaxColorPairs() const
+size_t terminal::View::ColorPairCount() const
 {
     return this->colorPairs.Length();
+}
+
+size_t terminal::View::CustomColorCount() const
+{
+    return this->colors.Length() - this->systemColorCount;
+}
+
+size_t terminal::View::CustomColorPairCount() const
+{
+    return this->colorPairs.Length() - this->systemColorPairCount;
+}
+
+size_t terminal::View::SystemColorCount() const
+{
+    return this->systemColorCount;
+}
+
+size_t terminal::View::SystemColorPairCount() const
+{
+    return this->systemColorPairCount;
 }
 
 bool terminal::View::CanChangeColors() const
@@ -520,6 +540,9 @@ void terminal::View::RestoreDefaultColors()
 
     if (colors >= 8 && colorPairs >= 8)
     {
+        this->systemColorCount = 8;
+        this->systemColorPairCount = 8;
+
         c[0] = util::colors::Black;
         c[1] = util::colors::White;
         c[2] = util::colors::Red1;

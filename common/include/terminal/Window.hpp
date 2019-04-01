@@ -24,6 +24,7 @@ class Window
     void AddScreen(Screen *);
     void RemoveScreen(Screen *);
     void SetActiveScreen(Screen *);
+    void Blank();
 
     void Start(int);
     void Start();

@@ -37,18 +37,9 @@ void QuitAfterError()
 
 void Start()
 {
-    terminal::Window w;
+    tui::ScreenCollection screens;
 
-    screens::Start = screens::CreateStartScreen();
-    screens::Menu = screens::CreateMenuScreen();
-
-    w.AddScreen(screens::Start);
-    w.AddScreen(screens::Menu);
-
-    w.Start('q');
-
-    delete screens::Start;
-    delete screens::Menu;
+    screens.Start();
 }
 
 void HandleSignal(int sig)
@@ -93,6 +84,10 @@ void RerouteChannels()
     util::err.SetTarget(std::fopen("debugfiles/err.txt", "w"));
     util::out.SetTarget(std::fopen("debugfiles/out.txt", "w"));
     util::dbg.SetTarget(std::fopen("debugfiles/dbg.txt", "w"));
+
+    util::err.SetShowTime(true);
+    util::out.SetShowTime(true);
+    util::dbg.SetShowTime(true);
 }
 
 void CreateSignalListeners()

@@ -3,19 +3,29 @@
 #include "data/Io.hpp"
 #include "Exception.hpp"
 
+const std::string util::Channel::TimeFormat = "%Y-%m-%d %H:%M:%S";
+
 util::Channel::Channel() : file(stdout),
-                           active(true)
+                           active(true),
+                           showTime(false)
 {
 }
 
 util::Channel::Channel(const Channel &copyFrom) : file(copyFrom.file),
-                                                  active(copyFrom.active)
+                                                  active(copyFrom.active),
+                                                  showTime(false)
 {
 }
 
 util::Channel::Channel(std::FILE *target) : file(target),
-                                            active(true)
+                                            active(true),
+                                            showTime(false)
 {
+}
+
+void util::Channel::SetShowTime(bool show)
+{
+    this->showTime = show;
 }
 
 util::Channel &util::Channel::operator=(const Channel &copyFrom)

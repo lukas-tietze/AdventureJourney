@@ -49,3 +49,6 @@ doc/*
 #config file for build
 compile.cfg
 debugfiles
+
+#systemfiles
+.vscode/ipch

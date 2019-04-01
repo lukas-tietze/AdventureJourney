@@ -9,12 +9,18 @@ class Canvas
   private:
     View *view;
     util::Dimension size;
-    util::Rectangle clippedArea;
     util::Point origin;
+    util::Rectangle clippedArea;
+
+    int X(int);
+    int Y(int);
 
   public:
     Canvas();
     Canvas(const Canvas &);
+
+    terminal::Canvas GetSubCanvas(int x, int y, int w, int h);
+    terminal::Canvas GetSubCanvas(const util::Rectangle &);
 
     terminal::Canvas &DrawVerticalLine(int x, int y, int length, char c);
     terminal::Canvas &DrawVerticalLine(const util::Point &, int length, char c);
@@ -26,12 +32,13 @@ class Canvas
     terminal::Canvas &DrawBox(const util::Rectangle &, char c);
     terminal::Canvas &DrawString(int x, int y, const std::string &);
     terminal::Canvas &DrawString(const util::Point &, const std::string &);
-    terminal::Canvas &DrawString(int x, int y, const std::string &, terminal::OutputAttribute attributes);
-    terminal::Canvas &DrawString(const util::Point &, const std::string &, terminal::OutputAttribute attributes);
+    terminal::Canvas &DrawChar(int x, int y, int value);
+    terminal::Canvas &DrawChar(const util::Point &, int value);
     terminal::Canvas &Fill(int x, int y, int width, int height, char c);
     terminal::Canvas &Fill(const util::Rectangle &, char c);
     terminal::Canvas &Clear(char c);
     terminal::Canvas &Clear();
+    terminal::Canvas &Reset();
 
     const util::Dimension &GetSize() const;
     const util::Point &GetOrigin() const;

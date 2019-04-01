@@ -1,145 +1,124 @@
+#include "data/Io.hpp"
 #include "terminal/controls/ControlBase.hpp"
 
-terminal::Border::Border()
+namespace
 {
-    this->styles[0] = 0;
-    this->styles[1] = 0;
-    this->styles[2] = 0;
-    this->styles[3] = 0;
+constexpr size_t TOP = 0;
+constexpr size_t RIGHT = 1;
+constexpr size_t BOTTOM = 2;
+constexpr size_t LEFT = 3;
+constexpr size_t TOP_LEFT = 4;
+constexpr size_t TOP_RIGHT = 5;
+constexpr size_t BOTTOM_RIGHT = 6;
+constexpr size_t BOTTOM_LEFT = 7;
+}; // namespace
 
-    this->sizes[0] = 1;
-    this->sizes[1] = 1;
-    this->sizes[2] = 1;
-    this->sizes[3] = 1;
+terminal::Border::Border() : values({'-', '|', '-', '|', '+', '+', '+', '+'}),
+                             styles({1, 1, 1, 1, 1, 1, 1, 1})
+{
+    // for (int i = 0; i < 8; i++)
+    //     this->styles[i] = 0;
 }
 
-void terminal::Border::SetSize(uint8_t size)
+void terminal::Border::SetStyle(colorPairId_t value)
 {
-    this->sizes[0] = size;
-    this->sizes[1] = size;
-    this->sizes[2] = size;
-    this->sizes[3] = size;
+    util::dbg.WriteLine("Border [%]: Setting all styles to %", this, value);
+
+    for (size_t i = 0; i < 8; i++)
+        this->styles[i] = value;
 }
 
-void terminal::Border::SetStyle(int style)
+void terminal::Border::SetStyle(BorderType type, colorPairId_t value)
 {
-    this->styles[0] = style;
-    this->styles[1] = style;
-    this->styles[2] = style;
-    this->styles[3] = style;
+    util::dbg.WriteLine("Border [%]: Setting style of % to %", this, type, value);
+
+    for (size_t i = 0; i < 8; i++)
+        if (static_cast<size_t>(type) & i != 0)
+            this->styles[(i)] = value;
 }
 
-void terminal::Border::SetTopSize(uint8_t size)
+terminal::colorPairId_t terminal::Border::GetStyle(BorderType type) const
 {
-    this->sizes[0] = size;
+    return this->styles[static_cast<size_t>(type)];
 }
 
-void terminal::Border::SetTopStyle(int style)
+void terminal::Border::SetChar(BorderType type, int value)
 {
-    this->styles[0] = style;
+    for (size_t i = 0; i < 8; i++)
+        if (static_cast<size_t>(type) & i != 0)
+            this->values[(i)] = value;
 }
 
-void terminal::Border::SetRightSize(uint8_t size)
+int terminal::Border::GetChar(BorderType type) const
 {
-    this->sizes[1] = size;
+    return this->styles[static_cast<size_t>(type)];
 }
 
-void terminal::Border::SetRightStyle(int style)
+void terminal::Border::SetEnabled(bool enabled)
 {
-    this->styles[1] = style;
+    for (size_t i = 0; i < 8; i++)
+        this->enabled[(i)] = enabled;
 }
 
-void terminal::Border::SetBottomSize(uint8_t size)
+void terminal::Border::SetEnabled(BorderType type, bool enabled)
 {
-    this->sizes[2] = size;
+    for (size_t i = 0; i < 8; i++)
+        if (static_cast<size_t>(type) & i != 0)
+            this->enabled[(i)] = enabled;
 }
 
-void terminal::Border::SetBottomStyle(int style)
+bool terminal::Border::IsEnabled(BorderType type) const
 {
-    this->styles[2] = style;
+    return this->enabled[static_cast<size_t>(type)];
 }
 
-void terminal::Border::SetLeftSize(uint8_t size)
+void terminal::Border::Render(const util::Rectangle &bounds, terminal::Canvas &c)
 {
-    this->sizes[3] = size;
-}
-
-void terminal::Border::SetLeftStyle(int style)
-{
-    this->styles[3] = style;
-}
-
-uint8_t terminal::Border::GetTopSize()
-{
-    return this->sizes[0];
-}
-
-int terminal::Border::GetTopStyle()
-{
-    return this->styles[0];
-}
-
-uint8_t terminal::Border::GetRightSize()
-{
-    return this->sizes[1];
-}
-
-int terminal::Border::GetRightStyle()
-{
-    return this->styles[1];
-}
-
-uint8_t terminal::Border::GetBottomSize()
-{
-    return this->sizes[2];
-}
-
-int terminal::Border::GetBottomStyle()
-{
-    return this->styles[2];
-}
-
-uint8_t terminal::Border::GetLeftSize()
-{
-    return this->sizes[1];
-}
-
-int terminal::Border::GetLeftStyle()
-{
-    return this->styles[1];
-}
-
-void terminal::Border::Render(const util::Rectangle &bounds, Canvas &c)
-{
-    if (this->sizes[0] > 0)
+    if (this->enabled[TOP])
     {
-        c.SetActiveColorPair(this->styles[0]);
-
-        for (int w = 0; w < this->sizes[0]; w++)
-            c.DrawHorizontalLine(bounds.GetMinX(), bounds.GetMinY() + w, bounds.GetWidth(), '-');
+        c.SetActiveColorPair(this->styles[TOP]);
+        c.DrawHorizontalLine(bounds.GetMinX() + 1, bounds.GetMinY(), bounds.GetWidth() - 2, this->values[TOP]);
     }
 
-    if (this->sizes[1] > 0)
+    if (this->enabled[RIGHT])
     {
-        c.SetActiveColorPair(this->styles[1]);
-
-        for (int w = 0; w < this->sizes[1]; w++)
-            c.DrawVerticalLine(bounds.GetMaxX() - w, bounds.GetMinY(), bounds.GetHeight(), '|');
+        c.SetActiveColorPair(this->styles[RIGHT]);
+        c.DrawVerticalLine(bounds.GetMaxX() - 1, bounds.GetMinY() + 1, bounds.GetHeight() - 2, this->values[RIGHT]);
     }
 
-    if (this->sizes[2] > 0)
+    if (this->enabled[BOTTOM])
     {
-        c.SetActiveColorPair(this->styles[2]);
-
-        for (int w = 0; w < this->sizes[2]; w++)
-            c.DrawHorizontalLine(bounds.GetMinX(), bounds.GetMaxY() - w, bounds.GetWidth(), '-');
+        c.SetActiveColorPair(this->styles[BOTTOM]);
+        c.DrawHorizontalLine(bounds.GetMinX() + 1, bounds.GetMaxY() - 1, bounds.GetWidth() - 2, this->values[BOTTOM]);
     }
 
-    if (this->sizes[3] > 0)
+    if (this->enabled[LEFT])
     {
-        c.SetActiveColorPair(this->styles[3]);
+        c.SetActiveColorPair(this->styles[LEFT]);
+        c.DrawVerticalLine(bounds.GetMinX(), bounds.GetMinY() + 1, bounds.GetHeight() - 2, this->values[LEFT]);
+    }
 
-        for (int w = 0; w < this->sizes[3]; w++)
-            c.DrawVerticalLine(bounds.GetMaxX() + w, bounds.GetMinY(), bounds.GetHeight(), '|');
+    if (this->enabled[TOP_LEFT])
+    {
+        c.SetActiveColorPair(this->styles[TOP_LEFT]);
+        c.DrawChar(bounds.GetMinX(), bounds.GetMinY(), this->values[TOP_LEFT]);
+    }
+
+    if (this->enabled[TOP_RIGHT])
+    {
+        c.SetActiveColorPair(this->styles[TOP_RIGHT]);
+        c.DrawChar(bounds.GetMaxX() - 1, bounds.GetMinY(), this->values[TOP_RIGHT]);
+    }
+
+    if (this->enabled[BOTTOM_RIGHT])
+    {
+        c.SetActiveColorPair(this->styles[BOTTOM_RIGHT]);
+        c.DrawChar(bounds.GetMaxX() - 1, bounds.GetMaxY() - 1, this->values[BOTTOM_RIGHT]);
+    }
+
+    if (this->enabled[BOTTOM_LEFT])
+    {
+        c.SetActiveColorPair(this->styles[BOTTOM_LEFT]);
+        c.DrawChar(bounds.GetMinX(), bounds.GetMaxY() - 1, this->values[BOTTOM_LEFT]);
     }
 }

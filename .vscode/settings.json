@@ -85,5 +85,6 @@
         "*.ipp": "cpp"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled",
-    "python.promptToInstallJupyter": false
+    "python.promptToInstallJupyter": false,
+    "cSpell.enabled": false
 }
