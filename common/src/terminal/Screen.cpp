@@ -80,4 +80,3 @@ util::Event<terminal::ScreenEventArgs> &terminal::Screen::OnAttached()
 {
     return this->onAttached;
 }
->>>>>>> 22261fe29f9e532c95175d031a6493fc39c368f5

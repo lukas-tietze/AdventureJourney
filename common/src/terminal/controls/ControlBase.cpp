@@ -290,6 +290,11 @@ void terminal::ControlBase::SetMaxSize(const util::Dimension &size)
     this->Invalidate();
 }
 
+bool terminal::ControlBase::RequestFocus()
+{
+    return this->parent->RequestFocus(this);
+}
+
 void terminal::ControlBase::HandleFocusAquired()
 {
 }

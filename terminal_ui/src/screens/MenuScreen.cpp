@@ -2,9 +2,13 @@
 
 namespace
 {
-const int OPTION_START_GAME = 1;
-const int OPTION_RUN_TESTS = 0;
-const int OPTION_EXIT = 2;
+constexpr int OPTION_NEW_GAME;
+constexpr int OPTION_LOAD_GAME;
+constexpr int OPTION_OPTIONS;
+constexpr int OPTION_MANAGE_CONTENT;
+constexpr int OPTION_MANAGE_PROFILE;
+constexpr int OPTION_RUN_TESTS;
+constexpr int OPTION_EXIT;
 } // namespace
 
 tui::MenuScreen::MenuScreen(ScreenCollection *screens)
@@ -12,15 +16,15 @@ tui::MenuScreen::MenuScreen(ScreenCollection *screens)
     this->screens = screens;
 
     this->selector = new terminal::Selector();
-    this->selector->AddOption("New Game");
-    this->selector->AddOption("Load Game");
+    this->selector->AddOption("New Game", OPTION_NEW_GAME);
+    this->selector->AddOption("Load Game", OPTION_LOAD_GAME);
     this->selector->AddSeperator();
-    this->selector->AddOption("Options");
-    this->selector->AddOption("Manage Content");
-    this->selector->AddOption("Manage Profile");
+    this->selector->AddOption("Options", OPTION_OPTIONS);
+    this->selector->AddOption("Manage Content", OPTION_MANAGE_CONTENT);
+    this->selector->AddOption("Manage Profile", OPTION_MANAGE_PROFILE);
     this->selector->AddSeperator();
-    this->selector->AddOption("Run Tests");
-    this->selector->AddOption("Exit");
+    this->selector->AddOption("Run Tests", OPTION_RUN_TESTS);
+    this->selector->AddOption("Exit", OPTION_EXIT);
 
     this->selector->SetPadding(0.05f, 0.2f, 0.f, 0.2f);
     this->selector->OnKey().Register(this, &MenuScreen::HandleOptionClicked);
@@ -62,13 +66,19 @@ void tui::MenuScreen::HandleOptionClicked(terminal::KeyEventArgs &args)
 {
     switch (this->selector->GetSelectedMarker())
     {
-    case OPTION_START_GAME:
+    case OPTION_NEW_GAME:
+        break;
+    case OPTION_LOAD_GAME:
+        break;
+    case OPTION_OPTIONS:
+        break;
+    case OPTION_MANAGE_CONTENT:
+        break;
+    case OPTION_MANAGE_PROFILE:
         break;
     case OPTION_RUN_TESTS:
-        this->screens->test->Show();
         break;
     case OPTION_EXIT:
-        this->screens->window->Quit();
         break;
     default:
         break;

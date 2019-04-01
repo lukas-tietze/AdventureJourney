@@ -203,7 +203,6 @@ class ControlBase
     const util::Rectangle &GetBounds() const;
     const util::Rectangle &GetContentBounds() const;
     const Border &GetBorder() const;
-
     Border &GetBorder();
     bool IsBorderEnabled() const;
     AutoSizeMode GetAutoSizeMode() const;
@@ -229,7 +228,9 @@ class ControlBase
     colorPairId_t GetBackgroundColor() const;
     bool Contains(int x, int y) const;
 
-    void SetPadding(float, float, float, float);
+    void RequestFocus();
+
+    bool SetPadding(float, float, float, float);
 
     void SetRelativeLeftPadding(float);
     void SetAbsoluteLeftPadding(int);

@@ -38,6 +38,7 @@ class ContainerBase : public ControlBase
     ControlBase *GetFocusedControl();
     const ControlBase *GetFocusedControl() const;
     size_t GetFocusedControlIndex() const;
+    bool RequestFocus(ControlBase *);
 
     virtual void RestoreLayout();
 };

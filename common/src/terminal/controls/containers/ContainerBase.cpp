@@ -193,6 +193,24 @@ size_t terminal::ContainerBase::GetFocusedControlIndex() const
     return this->focusedControlIndex;
 }
 
+bool terminal::ContainerBase::RequestFocus(ControlBase *control)
+{
+    size_t i;
+
+    for (i = 0; i < this->controls.size(); i++)
+        if (this->controls[i] == control)
+            break;
+
+    if (i < this->controls.size())
+    {
+        this->SwitchFocus(i);
+
+        return true;
+    }
+
+    return false;
+}
+
 std::vector<terminal::ControlBase *> &terminal::ContainerBase::GetControls()
 {
     return this->controls;
