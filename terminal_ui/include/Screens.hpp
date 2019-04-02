@@ -39,13 +39,18 @@ class GameConfigScreen : public terminal::Screen
 {
   private:
     ScreenCollection *screens;
+    terminal::LinearContainer *layout;
     terminal::LinearContainer *leftLayout;
     terminal::LinearContainer *rightLayout;
 
-    terminal::Picker *galaxySizePicker;
-    terminal::Picker *galaxyAgePicker;
-    terminal::Picker *civilisationCountPicker;
-    terminal::Picker *difficultyPicker;
+    terminal::Picker<int> *galaxySizePicker;
+    terminal::TextView *galaxySizeLabel;
+    terminal::Picker<int> *galaxyAgePicker;
+    terminal::TextView *galaxyAgeLabel;
+    terminal::Picker<int> *civilisationCountPicker;
+    terminal::TextView *civilisationCountLabel;
+    terminal::Picker<int> *difficultyPicker;
+    terminal::TextView *difficultyLabel;
 
   public:
     GameConfigScreen(ScreenCollection *);
