@@ -63,7 +63,7 @@ tui::MenuScreen::~MenuScreen()
 
 void tui::MenuScreen::HandleOptionClicked(terminal::KeyEventArgs &args)
 {
-    if (args.key == '\n')
+    if (args.key == '\n' || args.key == '\t' || args.key == 'a')
         switch (this->selector->GetSelectedMarker())
         {
         case OPTION_NEW_GAME:

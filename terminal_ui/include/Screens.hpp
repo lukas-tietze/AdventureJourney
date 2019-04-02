@@ -38,11 +38,17 @@ class ScreenCollection
 class GameConfigScreen : public terminal::Screen
 {
   private:
+    ScreenCollection *screens;
+    terminal::LinearContainer *leftLayout;
+    terminal::LinearContainer *rightLayout;
+
     terminal::Picker *galaxySizePicker;
-    terminal::LinearContainer *layout;
+    terminal::Picker *galaxyAgePicker;
+    terminal::Picker *civilisationCountPicker;
+    terminal::Picker *difficultyPicker;
 
   public:
-    GameConfigScreen();
+    GameConfigScreen(ScreenCollection *);
     ~GameConfigScreen();
 };
 

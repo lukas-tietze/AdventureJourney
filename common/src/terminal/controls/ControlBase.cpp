@@ -135,6 +135,59 @@ void terminal::ControlBase::SetSize(int w, int h)
     }
 }
 
+namespace
+{
+constexpr int RELATIVE_WIDTH = 0;
+constexpr int RELATIVE_HEIGHT = 1;
+} // namespace
+
+void terminal::ControlBase::SetRelativeWidth(float w)
+{
+    this->relativeSizes[RELATIVE_WIDTH] = w;
+    this->useRelativeSizes[RELATIVE_WIDTH] = true;
+}
+
+void terminal::ControlBase::SetRelativeHeight(float h)
+{
+    this->relativeSizes[RELATIVE_HEIGHT] = h;
+    this->useRelativeSizes[RELATIVE_HEIGHT] = true;
+}
+
+void terminal::ControlBase::SetRelativeSize(float w, float h)
+{
+    this->relativeSizes[RELATIVE_WIDTH] = w;
+    this->useRelativeSizes[RELATIVE_WIDTH] = true;
+
+    this->relativeSizes[RELATIVE_HEIGHT] = h;
+    this->useRelativeSizes[RELATIVE_HEIGHT] = true;
+}
+
+void terminal::ControlBase::UnsetRelativeWidth()
+{
+    this->useRelativeSizes[RELATIVE_WIDTH] = false;
+}
+
+void terminal::ControlBase::UnsetRelativeHeight()
+{
+    this->useRelativeSizes[RELATIVE_HEIGHT] = false;
+}
+
+void terminal::ControlBase::UnsetRelativeSiez()
+{
+    this->useRelativeSizes[RELATIVE_WIDTH] = false;
+    this->useRelativeSizes[RELATIVE_HEIGHT] = false;
+}
+
+bool terminal::ControlBase::IsRelativeWidthSet() const
+{
+    return this->useRelativeSizes[RELATIVE_WIDTH];
+}
+
+bool terminal::ControlBase::IsRelativeHeightSet() const
+{
+    return this->useRelativeSizes[RELATIVE_HEIGHT];
+}
+
 const util::Rectangle &terminal::ControlBase::GetBounds() const
 {
     return this->bounds;
@@ -569,16 +622,25 @@ void terminal::ControlBase::RestoreLayout()
 
 void terminal::ControlBase::ApplyAutoSize(const util::Rectangle &availableSpace)
 {
+    auto proposedWidth = this->useRelativeSizes[RELATIVE_WIDTH]
+                             ? availableSpace.GetWidth() * this->relativeSizes[RELATIVE_WIDTH]
+                             : this->bounds.GetWidth();
+
+    auto proposedHeight = this->useRelativeSizes[RELATIVE_HEIGHT]
+                              ? availableSpace.GetHeight() * this->relativeSizes[RELATIVE_HEIGHT]
+                              : this->bounds.GetHeight();
+
     switch (this->autoSizeMode)
     {
     case AutoSizeMode::None:
+        this->SetSize(proposedWidth, proposedHeight);
         return;
     case AutoSizeMode::FillHorizontal:
-        this->SetSize(availableSpace.GetWidth(), this->GetSize().GetHeight());
+        this->SetSize(availableSpace.GetWidth(), proposedHeight);
         this->SetLocation(availableSpace.GetMinX(), this->GetLocation().GetY());
         break;
     case AutoSizeMode::FillVertical:
-        this->SetSize(this->GetSize().GetWidth(), availableSpace.GetHeight());
+        this->SetSize(proposedWidth, availableSpace.GetHeight());
         this->SetLocation(this->GetLocation().GetX(), availableSpace.GetMinY());
         break;
     case AutoSizeMode::Fill:

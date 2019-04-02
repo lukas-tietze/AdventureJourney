@@ -16,6 +16,7 @@ class TextView : public ControlBase
     bool centerHorizontal;
     bool scrollAllowed;
     bool trimLines;
+    bool multiLine;
 
     void PrepareLines();
     void PrepareText();
@@ -36,6 +37,9 @@ class TextView : public ControlBase
 
     void SetTrimLinesEnabeld(bool);
     bool IsTrimLinesEnabled() const;
+
+    void SetMultiLineEnabled(bool);
+    bool IsMultiLineEnabled() const;
 
     virtual void HandleKey(KeyInput &);
     virtual void HandleMouse(MouseInput &);

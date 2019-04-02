@@ -138,6 +138,8 @@ class ControlBase
     util::Rectangle bounds;
     util::Rectangle contentBounds;
     AutoSizeMode autoSizeMode;
+    float relativeSizes[2];
+    bool useRelativeSizes[2];
     float paddings[4];
     bool paddingModes[4];
 
@@ -227,6 +229,15 @@ class ControlBase
     colorPairId_t GetTextColor() const;
     colorPairId_t GetBackgroundColor() const;
     bool Contains(int x, int y) const;
+
+    void SetRelativeWidth(float);
+    void SetRelativeHeight(float);
+    void SetRelativeSize(float, float);
+    void UnsetRelativeWidth();
+    void UnsetRelativeHeight();
+    void UnsetRelativeSiez();
+    bool IsRelativeWidthSet() const;
+    bool IsRelativeHeightSet() const;
 
     bool RequestFocus();
 

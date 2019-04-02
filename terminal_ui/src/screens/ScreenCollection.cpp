@@ -45,13 +45,14 @@ void tui::ScreenCollection::Start()
     if (this->window != nullptr)
         delete this->window;
 
-    this->window = new terminal::Window();
-
     this->start = new tui::StartScreen(this);
     this->menu = new tui::MenuScreen(this);
+    this->gameConfig = new tui::GameConfigScreen(this);
 
+    this->window = new terminal::Window();
     this->window->AddScreen(this->start);
     this->window->AddScreen(this->menu);
+    this->window->AddScreen(this->gameConfig);
 
     this->start->Show();
     this->window->Start('q');

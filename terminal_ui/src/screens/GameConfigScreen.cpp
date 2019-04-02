@@ -1,6 +1,7 @@
 #include "Screens.hpp"
 
-tui::GameConfigScreen::GameConfigScreen() : terminal::Screen()
+tui::GameConfigScreen::GameConfigScreen(ScreenCollection *screens) : terminal::Screen(),
+                                                                     screens(screens)
 {
     this->galaxySizePicker = new terminal::Picker();
     this->galaxySizePicker->SetName("GalaxySizePicker");

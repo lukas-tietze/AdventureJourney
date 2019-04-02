@@ -96,6 +96,11 @@ void terminal::Selector::UpdateColors()
 
 void terminal::Selector::HandleKey(KeyInput &k)
 {
+    this->ControlBase::HandleKey(k);
+
+    if (k.handled)
+        return;
+
     if (k.specialKey == Key::Up && this->selectedItem > 0)
     {
         this->selectedItem--;

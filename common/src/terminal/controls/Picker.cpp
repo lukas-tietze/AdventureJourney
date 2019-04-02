@@ -115,7 +115,7 @@ void terminal::Picker::Render(Canvas &c)
         if (this->selectedOption > 0 || this->circleOptions)
             c.DrawChar(x, y + h / 2, '<');
 
-        if (this->selectedOption < this->options.size() || this->circleOptions)
+        if (this->selectedOption < this->options.size() - 1 || this->circleOptions)
             c.DrawChar(x + w - 1, y + h / 2, '>');
 
         maxLen = w - 2;
@@ -125,7 +125,7 @@ void terminal::Picker::Render(Canvas &c)
         if (this->selectedOption > 0 || this->circleOptions)
             c.DrawChar(x + w / 2, y, '^');
 
-        if (this->selectedOption < this->options.size() || this->circleOptions)
+        if (this->selectedOption < this->options.size() - 1 || this->circleOptions)
             c.DrawChar(x + w / 2, y + h - 1, 'v');
 
         maxLen = w;

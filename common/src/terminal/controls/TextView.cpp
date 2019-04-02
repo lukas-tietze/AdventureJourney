@@ -67,100 +67,26 @@ void terminal::TextView::HandleTextChanged()
     this->Invalidate();
 }
 
-void terminal::TextView::PrepareText()
-{
-    auto tabCount = 0;
-    auto start = this->GetText().c_str();
-    auto end = start + this->GetText().length();
-
-    for (auto i = start; i != end; i++)
-        if (*i == '\t')
-            tabCount++;
-
-    if (tabCount == 0)
-        return;
-
-    std::string res;
-
-    res.reserve(this->GetText().length());
-
-    for (auto i = start; i != end; i++)
-        if (*i == '\t')
-            res.append("    ");
-        else
-            res.push_back(*i);
-
-    this->SetTextCore(res);
-}
-
-void terminal::TextView::PrepareLines()
-{
-    this->lines.clear();
-
-    const auto &text = this->GetText();
-    const size_t maxLineLength = this->GetBounds().GetWidth() - 2;
-    size_t pos = 0;
-
-    while (pos < text.length())
-    {
-        size_t next = 0;
-        bool lineBreakFound = false;
-
-        for (auto i = pos; i < text.length() && i < pos + maxLineLength; i++)
-        {
-            if (text[i] == '\n')
-            {
-                this->lines.push_back(text.substr(pos, i - pos));
-                pos = i + 1;
-                lineBreakFound = true;
-                break;
-            }
-        }
-
-        if (lineBreakFound)
-            break;
-
-        if (pos + maxLineLength >= text.length())
-        {
-            this->lines.push_back(text.substr(pos));
-
-            break;
-        }
-        else
-        {
-            auto next = pos + maxLineLength;
-
-            // Zum Ende des letzten Wortes gehen
-            while (next > pos && !std::isspace(text[next]))
-            {
-                next--;
-            }
-
-            if (next > pos)
-            {
-                this->lines.push_back(text.substr(pos, next - pos));
-
-                pos = next + 1;
-            }
-            else
-            {
-                this->lines.push_back(text.substr(pos, maxLineLength));
-                pos += maxLineLength;
-            }
-        }
-    }
-}
-
 void terminal::TextView::RestoreLayout()
 {
+    this->ControlBase::RestoreLayout();
+
     this->lines.clear();
 
-    util::Justify(this->GetText(), this->GetBounds().GetWidth() - 2, this->lines);
+    if (this->multiLine)
+    {
+        util::Justify(this->GetText(), this->GetContentBounds().GetWidth(), this->lines);
 
-    for (auto &line : this->lines)
-        util::StripInplace(line);
+        for (auto &line : this->lines)
+            util::StripInplace(line);
+    }
+    else
+    {
+        auto lineBreak = this->GetText().find('\n');
+        auto len = lineBreak == std::string::npos ? this->GetText().length() : lineBreak;
 
-    this->ControlBase::RestoreLayout();
+        this->lines.push_back(this->GetText().substr(0, util::Min(static_cast<size_t>(this->GetContentBounds().GetWidth()), len)));
+    }
 }
 
 void terminal::TextView::SetCenterHorizontal(bool value)
@@ -201,6 +127,18 @@ void terminal::TextView::SetTrimLinesEnabeld(bool value)
 bool terminal::TextView::IsTrimLinesEnabled() const
 {
     return this->trimLines;
+}
+
+void terminal::TextView::SetMultiLineEnabled(bool value)
+{
+    this->multiLine = value;
+
+    this->Invalidate();
+}
+
+bool terminal::TextView::IsMultiLineEnabled() const
+{
+    return this->multiLine;
 }
 
 void terminal::TextView::Render(terminal::Canvas &c)
