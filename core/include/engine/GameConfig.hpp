@@ -10,15 +10,29 @@ enum class GalaxyAge
 {
 };
 
+enum class GalaxyType
+{
+};
+
 enum class Difficulty
 {
 };
 
-enum class PopulationCount
+enum class CivilisationCount
+{
+};
+
+enum class PlayerCivilisation
 {
 };
 
 struct GameConfig
 {
+    GalaxySize size;
+    GalaxyAge age;
+    Difficulty difficulty;
+    CivilisationCount civilisationCount;
+
+    float resources;
 };
 } // namespace logic
