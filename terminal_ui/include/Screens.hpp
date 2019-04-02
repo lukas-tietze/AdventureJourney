@@ -67,7 +67,7 @@ class MenuScreen : public terminal::Screen
     terminal::TextView *titleBox;
     terminal::LinearContainer *centerLayout;
 
-    void HandleOptionClicked(terminal::KeyEventArgs &args);
+    void HandleOptionClicked(terminal::KeyEventArgs &);
 
   public:
     MenuScreen(ScreenCollection *);

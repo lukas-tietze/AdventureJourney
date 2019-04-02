@@ -25,7 +25,6 @@ tui::MenuScreen::MenuScreen(ScreenCollection *screens)
     this->selector->AddSeperator();
     this->selector->AddOption("Run Tests", OPTION_RUN_TESTS);
     this->selector->AddOption("Exit", OPTION_EXIT);
-
     this->selector->SetPadding(0.05f, 0.2f, 0.f, 0.2f);
     this->selector->OnKey().Register(this, &MenuScreen::HandleOptionClicked);
     this->selector->SetAutoSizeMode(terminal::AutoSizeMode::Fill);
@@ -64,24 +63,25 @@ tui::MenuScreen::~MenuScreen()
 
 void tui::MenuScreen::HandleOptionClicked(terminal::KeyEventArgs &args)
 {
-    switch (this->selector->GetSelectedMarker())
-    {
-    case OPTION_NEW_GAME:
-        this->screens->gameConfig->Show();
-        break;
-    case OPTION_LOAD_GAME:
-        break;
-    case OPTION_OPTIONS:
-        break;
-    case OPTION_MANAGE_CONTENT:
-        break;
-    case OPTION_MANAGE_PROFILE:
-        break;
-    case OPTION_RUN_TESTS:
-        break;
-    case OPTION_EXIT:
-        break;
-    default:
-        break;
-    }
+    if (args.key == '\n')
+        switch (this->selector->GetSelectedMarker())
+        {
+        case OPTION_NEW_GAME:
+            this->screens->gameConfig->Show();
+            break;
+        case OPTION_LOAD_GAME:
+            break;
+        case OPTION_OPTIONS:
+            break;
+        case OPTION_MANAGE_CONTENT:
+            break;
+        case OPTION_MANAGE_PROFILE:
+            break;
+        case OPTION_RUN_TESTS:
+            break;
+        case OPTION_EXIT:
+            break;
+        default:
+            break;
+        }
 }
