@@ -4,6 +4,7 @@
 
 #include "terminal/controls/ControlBase.hpp"
 #include "data/String.hpp"
+#include "data/EnumHelper.hpp"
 #include "Event.hpp"
 
 namespace terminal
@@ -48,6 +49,14 @@ class Picker : public ControlBase
     {
     }
 
+    bool AutoFillEnumOptions()
+    {
+        this->options.clear();
+
+        for (auto value : util::ListValues<TData>())
+            this->options.push_back(Option(value, util::ToString(value), true, 0, false));
+    }
+
     void AddOption(const TData &value)
     {
         this->options.push_back(Option(value, "", false, 0, false));
@@ -76,25 +85,11 @@ class Picker : public ControlBase
         this->Invalidate();
     }
 
-    bool RemoveOption(const std::string &text)
+    bool RemoveOption(const TData &value)
     {
         for (auto pos = this->options.begin(), end = this->options.end(); pos != end; ++pos)
         {
-            if (pos->value == text)
-            {
-                this->options.erase(pos);
-                this->Invalidate();
-
-                break;
-            }
-        }
-    }
-
-    bool RemoveOption(int marker)
-    {
-        for (auto pos = this->options.begin(), end = this->options.end(); pos != end; ++pos)
-        {
-            if (pos->marker == marker)
+            if (pos->value == value)
             {
                 this->options.erase(pos);
                 this->Invalidate();
