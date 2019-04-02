@@ -5,11 +5,22 @@
 #include <cstdio>
 #include <ncurses.h>
 
+#include "data/String.hpp"
+#include "data/Io.hpp"
+
 namespace
 {
+int i = 0;
+
+int &GetI()
+{
+    return i;
+}
 } // namespace
 
 int main()
 {
-    std::printf("%i", std::isspace('\n') ? 1 : 0);
+    util::Channel out;
+
+    out.WriteLine("&i=%, &GetI=%", &i, &GetI());
 }
