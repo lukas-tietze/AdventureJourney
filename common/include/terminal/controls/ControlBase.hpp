@@ -116,7 +116,7 @@ struct KeyEventArgs
 class ControlBase
 {
   private:
-    ////generell properties
+    ////general properties
     util::Dimension minimumSize;
     util::Dimension maximumSize;
     ContainerBase *parent;
@@ -149,10 +149,20 @@ class ControlBase
     //colors
     colorPairId_t textColor;
     colorPairId_t backgroundColor;
+    bool fillPadding;
+    bool useBackground;
 
     ////Events
     util::Event<MouseEventArgs> onMouse;
     util::Event<KeyEventArgs> onKey;
+
+    ////Constants
+    static constexpr size_t RELATIVE_WIDTH = 0;
+    static constexpr size_t RELATIVE_HEIGHT = 1;
+    static constexpr size_t TOP = 0;
+    static constexpr size_t RIGHT = 1;
+    static constexpr size_t BOTTOM = 2;
+    static constexpr size_t LEFT = 3;
 
   protected:
     void SetBoundsCore(const util::Rectangle &);
@@ -167,7 +177,6 @@ class ControlBase
 
     bool ValidateSize(const util::Dimension &) const;
 
-    virtual void Update();
     colorPairId_t Style(ControlStyleColor);
 
   public:
@@ -228,6 +237,10 @@ class ControlBase
     void SetBackgroundColor(colorPairId_t);
     colorPairId_t GetTextColor() const;
     colorPairId_t GetBackgroundColor() const;
+    bool IsFillPaddingSet() const;
+    void SetFillPadding(bool);
+    bool IsUseBackgroundSet() const;
+    void SetUseBackground(bool);
     bool Contains(int x, int y) const;
 
     void SetRelativeWidth(float);

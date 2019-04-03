@@ -2,20 +2,22 @@
 #include "terminal/controls/ControlBase.hpp"
 
 template <>
-std::initializer_list<terminal::AutoSizeMode> util::ListValues<terminal::AutoSizeMode>()
+const std::initializer_list<terminal::AutoSizeMode> &util::ListValues<terminal::AutoSizeMode>()
 {
-    return {
+    static const std::initializer_list<terminal::AutoSizeMode> res = {
         terminal::AutoSizeMode::None,
         terminal::AutoSizeMode::Fill,
         terminal::AutoSizeMode::FillVertical,
         terminal::AutoSizeMode::FillHorizontal,
     };
+
+    return res;
 }
 
 template <>
-std::initializer_list<terminal::BorderType> util::ListValues<terminal::BorderType>()
+const std::initializer_list<terminal::BorderType> &util::ListValues<terminal::BorderType>()
 {
-    return {
+    static const std::initializer_list<terminal::BorderType> res = {
         terminal::BorderType::TopEdge,
         terminal::BorderType::RightEdge,
         terminal::BorderType::BottomEdge,
@@ -32,4 +34,6 @@ std::initializer_list<terminal::BorderType> util::ListValues<terminal::BorderTyp
         terminal::BorderType::AllCorners,
         terminal::BorderType::All,
     };
+
+    return res;
 }
