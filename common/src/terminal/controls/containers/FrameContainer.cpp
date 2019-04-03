@@ -6,11 +6,11 @@
 
 namespace
 {
-constexpr int BOTTOM = static_cast<int>(terminal::FrameContainer::Orientation::Bottom);
-constexpr int TOP = static_cast<int>(terminal::FrameContainer::Orientation::Top);
-constexpr int LEFT = static_cast<int>(terminal::FrameContainer::Orientation::Left);
-constexpr int RIGHT = static_cast<int>(terminal::FrameContainer::Orientation::Right);
-constexpr int CENTER = static_cast<int>(terminal::FrameContainer::Orientation::Center);
+constexpr int BOTTOM_FRAME = static_cast<int>(terminal::FrameContainer::Orientation::Bottom);
+constexpr int TOP_FRAME = static_cast<int>(terminal::FrameContainer::Orientation::Top);
+constexpr int LEFT_FRAME = static_cast<int>(terminal::FrameContainer::Orientation::Left);
+constexpr int RIGHT_FRAME = static_cast<int>(terminal::FrameContainer::Orientation::Right);
+constexpr int CENTER_FRAME = static_cast<int>(terminal::FrameContainer::Orientation::Center);
 
 struct OrderSorter
 {
@@ -204,13 +204,13 @@ void terminal::FrameContainer::RestoreLayout()
         {
             maxH = this->GetSize().GetHeight();
 
-            if (sizes[BOTTOM] != -1)
-                maxH -= sizes[BOTTOM];
+            if (sizes[BOTTOM_FRAME] != -1)
+                maxH -= sizes[BOTTOM_FRAME];
 
-            if (sizes[TOP] != -1)
+            if (sizes[TOP_FRAME] != -1)
             {
-                maxH -= sizes[TOP];
-                yOff = sizes[TOP];
+                maxH -= sizes[TOP_FRAME];
+                yOff = sizes[TOP_FRAME];
             }
         }
 
@@ -218,13 +218,13 @@ void terminal::FrameContainer::RestoreLayout()
         {
             maxW = this->GetSize().GetWidth();
 
-            if (sizes[RIGHT] != -1)
-                maxW -= sizes[RIGHT];
+            if (sizes[RIGHT_FRAME] != -1)
+                maxW -= sizes[RIGHT_FRAME];
 
-            if (sizes[LEFT] != -1)
+            if (sizes[LEFT_FRAME] != -1)
             {
-                maxW -= sizes[LEFT];
-                xOff = sizes[LEFT];
+                maxW -= sizes[LEFT_FRAME];
+                xOff = sizes[LEFT_FRAME];
             }
         }
 
@@ -233,31 +233,31 @@ void terminal::FrameContainer::RestoreLayout()
         case Orientation::Left:
             if (centerSet)
                 maxW = centerArea.GetX();
-            else if (sizes[RIGHT] >= 0)
-                maxW = this->GetBounds().GetWidth() - sizes[RIGHT];
+            else if (sizes[RIGHT_FRAME] >= 0)
+                maxW = this->GetBounds().GetWidth() - sizes[RIGHT_FRAME];
             else
                 maxW = this->GetBounds().GetWidth();
 
-            if (this->minSizes[LEFT] >= 0 && maxW < this->minSizes[LEFT])
-                maxW = this->minSizes[LEFT];
+            if (this->minSizes[LEFT_FRAME] >= 0 && maxW < this->minSizes[LEFT_FRAME])
+                maxW = this->minSizes[LEFT_FRAME];
 
-            if (this->maxSizes[LEFT] >= 0 && maxW > this->maxSizes[LEFT])
-                maxW = this->maxSizes[LEFT];
+            if (this->maxSizes[LEFT_FRAME] >= 0 && maxW > this->maxSizes[LEFT_FRAME])
+                maxW = this->maxSizes[LEFT_FRAME];
 
             break;
         case Orientation::Right:
             if (centerSet)
                 maxW = this->GetBounds().GetWidth() - centerArea.GetMaxX();
-            else if (sizes[LEFT] >= 0)
-                maxW = this->GetBounds().GetWidth() - sizes[LEFT];
+            else if (sizes[LEFT_FRAME] >= 0)
+                maxW = this->GetBounds().GetWidth() - sizes[LEFT_FRAME];
             else
                 maxW = this->GetBounds().GetWidth();
 
-            if (this->minSizes[RIGHT] >= 0 && maxW < this->minSizes[RIGHT])
-                maxW = this->minSizes[RIGHT];
+            if (this->minSizes[RIGHT_FRAME] >= 0 && maxW < this->minSizes[RIGHT_FRAME])
+                maxW = this->minSizes[RIGHT_FRAME];
 
-            if (this->maxSizes[RIGHT] >= 0 && maxW > this->maxSizes[RIGHT])
-                maxW = this->maxSizes[RIGHT];
+            if (this->maxSizes[RIGHT_FRAME] >= 0 && maxW > this->maxSizes[RIGHT_FRAME])
+                maxW = this->maxSizes[RIGHT_FRAME];
 
             xOff = this->GetBounds().GetWidth() - maxW;
 
@@ -265,31 +265,31 @@ void terminal::FrameContainer::RestoreLayout()
         case Orientation::Top:
             if (centerSet)
                 maxH = centerArea.GetY();
-            else if (sizes[BOTTOM] >= 0)
-                maxH = this->GetBounds().GetHeight() - sizes[BOTTOM];
+            else if (sizes[BOTTOM_FRAME] >= 0)
+                maxH = this->GetBounds().GetHeight() - sizes[BOTTOM_FRAME];
             else
                 maxH = this->GetBounds().GetHeight();
 
-            if (this->minSizes[TOP] >= 0 && maxH < this->minSizes[TOP])
-                maxH = this->minSizes[TOP];
+            if (this->minSizes[TOP_FRAME] >= 0 && maxH < this->minSizes[TOP_FRAME])
+                maxH = this->minSizes[TOP_FRAME];
 
-            if (this->maxSizes[TOP] >= 0 && maxH > this->maxSizes[TOP])
-                maxH = this->maxSizes[TOP];
+            if (this->maxSizes[TOP_FRAME] >= 0 && maxH > this->maxSizes[TOP_FRAME])
+                maxH = this->maxSizes[TOP_FRAME];
 
             break;
         case Orientation::Bottom:
             if (centerSet)
                 maxH = this->GetBounds().GetHeight() - centerArea.GetMaxY();
-            else if (sizes[TOP] >= 0)
-                maxH = this->GetBounds().GetHeight() - sizes[TOP];
+            else if (sizes[TOP_FRAME] >= 0)
+                maxH = this->GetBounds().GetHeight() - sizes[TOP_FRAME];
             else
                 maxH = this->GetBounds().GetHeight();
 
-            if (this->minSizes[BOTTOM] >= 0 && maxH < this->minSizes[BOTTOM])
-                maxH = this->minSizes[BOTTOM];
+            if (this->minSizes[BOTTOM_FRAME] >= 0 && maxH < this->minSizes[BOTTOM_FRAME])
+                maxH = this->minSizes[BOTTOM_FRAME];
 
-            if (this->maxSizes[BOTTOM] >= 0 && maxH > this->maxSizes[BOTTOM])
-                maxH = this->maxSizes[BOTTOM];
+            if (this->maxSizes[BOTTOM_FRAME] >= 0 && maxH > this->maxSizes[BOTTOM_FRAME])
+                maxH = this->maxSizes[BOTTOM_FRAME];
 
             yOff = this->GetBounds().GetHeight() - maxH;
 
@@ -298,37 +298,37 @@ void terminal::FrameContainer::RestoreLayout()
             maxW = this->GetBounds().GetWidth();
             maxH = this->GetBounds().GetHeight();
 
-            if (sizes[LEFT] >= 0)
+            if (sizes[LEFT_FRAME] >= 0)
             {
-                xOff = sizes[LEFT];
-                maxW -= sizes[LEFT];
+                xOff = sizes[LEFT_FRAME];
+                maxW -= sizes[LEFT_FRAME];
             }
-            else if (this->minSizes[LEFT] >= 0)
+            else if (this->minSizes[LEFT_FRAME] >= 0)
             {
-                xOff = this->minSizes[LEFT];
-                maxW -= this->minSizes[LEFT];
-            }
-
-            if (sizes[RIGHT] >= 0)
-                maxW -= sizes[RIGHT];
-            else if (this->minSizes[RIGHT] >= 0)
-                maxW -= this->minSizes[RIGHT];
-
-            if (sizes[TOP] >= 0)
-            {
-                yOff = sizes[TOP];
-                maxH -= sizes[TOP];
-            }
-            else if (this->minSizes[TOP] >= 0)
-            {
-                yOff = this->minSizes[TOP];
-                maxH -= this->minSizes[TOP];
+                xOff = this->minSizes[LEFT_FRAME];
+                maxW -= this->minSizes[LEFT_FRAME];
             }
 
-            if (sizes[BOTTOM] >= 0)
-                maxH -= sizes[BOTTOM];
-            else if (this->minSizes[BOTTOM] >= 0)
-                maxH -= this->minSizes[BOTTOM];
+            if (sizes[RIGHT_FRAME] >= 0)
+                maxW -= sizes[RIGHT_FRAME];
+            else if (this->minSizes[RIGHT_FRAME] >= 0)
+                maxW -= this->minSizes[RIGHT_FRAME];
+
+            if (sizes[TOP_FRAME] >= 0)
+            {
+                yOff = sizes[TOP_FRAME];
+                maxH -= sizes[TOP_FRAME];
+            }
+            else if (this->minSizes[TOP_FRAME] >= 0)
+            {
+                yOff = this->minSizes[TOP_FRAME];
+                maxH -= this->minSizes[TOP_FRAME];
+            }
+
+            if (sizes[BOTTOM_FRAME] >= 0)
+                maxH -= sizes[BOTTOM_FRAME];
+            else if (this->minSizes[BOTTOM_FRAME] >= 0)
+                maxH -= this->minSizes[BOTTOM_FRAME];
 
             break;
         default:
