@@ -194,6 +194,17 @@ size_t PrepareFormat(const std::string &format, std::stringstream &buf, size_t p
 template <class T>
 size_t WriteArray(const std::string &format, std::stringstream &buf, size_t pos, const T &arg)
 {
+    auto end = format.find(']', pos);
+
+    if (end == std::string::npos)
+        throw util::FormatException("Array specifier has no closing ']'-bracket!");
+
+    return end;
+}
+
+template <class T>
+size_t WriteArray(const std::string &format, std::stringstream &buf, size_t pos, const T *&arg)
+{
     auto start = pos;
     auto end = format.find(']', pos);
 
@@ -276,12 +287,12 @@ void FormatInternal(const std::string &format, std::stringstream &buf, size_t po
             if (format[pos + 1] == '{')
                 pos = PrepareFormat(format, buf, pos + 1);
 
-            // if (format[pos + 1] == '[')
-            //     pos = WriteArray(format, buf, pos + 1, firstArg);
+            if (format[pos + 1] == '[')
+                pos = WriteArray(format, buf, pos + 1, firstArg);
             // else if (format[pos + 1] == '<')
             //     pos = WriteIterable(format, buf, pos + 1, firstArg);
-            // else
-            buf << firstArg;
+            else
+                buf << firstArg;
 
             FormatInternal(format, buf, pos + 1, args...);
 

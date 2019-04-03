@@ -10,17 +10,24 @@
 
 namespace
 {
-int i = 0;
+util::Channel out;
 
-int &GetI()
+template <class T>
+void Foo(T &)
 {
-    return i;
+    out.WriteLine("I am not a pointer");
+}
+
+template <class T>
+void Foo(T *)
+{
+    out.WriteLine("I am a pointer");
 }
 } // namespace
 
 int main()
 {
-    util::Channel out;
+    int i = 0;
 
-    out.WriteLine("&i=%, &GetI=%", &i, &GetI());
+    Foo(&i);
 }
