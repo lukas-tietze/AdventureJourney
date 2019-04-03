@@ -15,9 +15,15 @@ class ParsingException : public util::Exception
 };
 
 template <class T>
-std::initializer_list<T> ListValues()
+const std::initializer_list<T> &ListValues()
 {
     return std::initializer_list<T>{};
+}
+
+template <class T>
+const std::string &GetEnumDescription(T value)
+{
+    return "";
 }
 
 template <class T>
@@ -27,7 +33,7 @@ bool TryDeserialize(const std::string &value, T &buf)
 
     if (items.empty())
     {
-        for(const auto &item : util::ListValues<T>())
+        for (const auto &item : util::ListValues<T>())
         {
             items.push_back(std::make_tuple(item, util::ToString(item)));
         }
@@ -54,5 +60,27 @@ T Deserialize(const std::string &value)
         return res;
 
     throw ParsingException(typeid(T), value);
+}
+
+template <class T>
+struct EnumInfo
+{
+    T value;
+    std::string stringRepresentation;
+    std::string description;
+    int integerRepresentation;
+};
+
+template <class T>
+EnumInfo<T> CreateEnumInfo(T value)
+{
+    EnumInfo<T> res;
+
+    res.value = value;
+    res.stringRepresentation = util::ToString(value);
+    res.description = util::GetEnumDescription(value);
+    res.integerRepresentation = static_cast<int>(value);
+
+    return res;
 }
 } // namespace util
