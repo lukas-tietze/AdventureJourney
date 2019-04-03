@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "terminal/controls/ControlBase.hpp"
+#include "terminal/DataBinderBase.hpp"
 #include "Event.hpp"
 
 namespace terminal
@@ -15,7 +16,7 @@ struct OptionSelectedEventArgs
     bool handled;
 };
 
-class Selector : public ControlBase
+class Selector : public ControlBase //, public DataBinderBase<TData>
 {
   private:
     struct Item

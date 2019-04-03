@@ -22,5 +22,6 @@ int main()
 {
     util::Channel out;
 
-    out.WriteLine("&i=%, &GetI=%", &i, &GetI());
+    for (int i = 0; i < 100; i++)
+        out.WriteLine(COLOR_PAIR(i));
 }

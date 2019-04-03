@@ -3,9 +3,9 @@
 tui::GameConfigScreen::GameConfigScreen(ScreenCollection *screens) : terminal::Screen(),
                                                                      screens(screens)
 {
-    this->galaxySizePicker = new terminal::Picker<int>();
+    this->galaxySizePicker = new terminal::Picker<>();
     this->galaxySizePicker->SetName("GalaxySizePicker");
-    this->galaxySizePicker->SetSize(0, 3);
+    this->galaxySizePicker->SetSize(0, 2);
     this->galaxySizePicker->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
     this->galaxySizePicker->AddOption(0, "Very Small");
     this->galaxySizePicker->AddOption(0, "Small");
@@ -14,13 +14,13 @@ tui::GameConfigScreen::GameConfigScreen(ScreenCollection *screens) : terminal::S
     this->galaxySizePicker->AddOption(0, "Very Large");
 
     this->galaxySizeLabel = new terminal::TextView("Galaxy Size");
-    this->galaxySizeLabel->SetSize(0, 3);
+    this->galaxySizeLabel->SetSize(0, 2);
     this->galaxySizeLabel->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
     this->galaxySizeLabel->SetName("GalaxySizeLabel");
     this->galaxySizeLabel->SetMultiLineEnabled(false);
 
-    this->galaxyAgePicker = new terminal::Picker<int>();
-    this->galaxyAgePicker->SetSize(0, 3);
+    this->galaxyAgePicker = new terminal::Picker<>();
+    this->galaxyAgePicker->SetSize(0, 2);
     this->galaxyAgePicker->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
     this->galaxyAgePicker->SetName("GalaxyAgePicker");
     this->galaxyAgePicker->AddOption(0, "Young");
@@ -30,13 +30,13 @@ tui::GameConfigScreen::GameConfigScreen(ScreenCollection *screens) : terminal::S
     this->galaxyAgePicker->AddOption(0, "Ancient");
 
     this->galaxyAgeLabel = new terminal::TextView("Galaxy Age");
-    this->galaxyAgeLabel->SetSize(0, 3);
+    this->galaxyAgeLabel->SetSize(0, 2);
     this->galaxyAgeLabel->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
     this->galaxyAgeLabel->SetName("GalaxyAgeLabel");
     this->galaxyAgeLabel->SetMultiLineEnabled(false);
 
-    this->civilisationCountPicker = new terminal::Picker<int>();
-    this->civilisationCountPicker->SetSize(0, 3);
+    this->civilisationCountPicker = new terminal::Picker<>();
+    this->civilisationCountPicker->SetSize(0, 2);
     this->civilisationCountPicker->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
     this->civilisationCountPicker->SetName("CivilisationCountPicker");
     this->civilisationCountPicker->AddOption(0, "Few (1~3)");
@@ -45,13 +45,13 @@ tui::GameConfigScreen::GameConfigScreen(ScreenCollection *screens) : terminal::S
     this->civilisationCountPicker->AddOption(0, "Too Many (11~20)");
 
     this->civilisationCountLabel = new terminal::TextView("Number of Civilisations");
-    this->civilisationCountLabel->SetSize(0, 3);
+    this->civilisationCountLabel->SetSize(0, 2);
     this->civilisationCountLabel->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
     this->civilisationCountLabel->SetName("CivilisationCountLabel");
     this->civilisationCountLabel->SetMultiLineEnabled(false);
 
-    this->difficultyPicker = new terminal::Picker<int>();
-    this->difficultyPicker->SetSize(0, 3);
+    this->difficultyPicker = new terminal::Picker<>();
+    this->difficultyPicker->SetSize(0, 2);
     this->difficultyPicker->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
     this->difficultyPicker->SetName("DifficultyPicker");
     this->difficultyPicker->AddOption(0, "Beginner");
@@ -61,7 +61,7 @@ tui::GameConfigScreen::GameConfigScreen(ScreenCollection *screens) : terminal::S
     this->difficultyPicker->AddOption(0, "Veteran");
 
     this->difficultyLabel = new terminal::TextView("Difficulty");
-    this->difficultyLabel->SetSize(0, 3);
+    this->difficultyLabel->SetSize(0, 2);
     this->difficultyLabel->SetAutoSizeMode(terminal::AutoSizeMode::FillHorizontal);
     this->difficultyLabel->SetName("DifficultyLabel");
     this->difficultyLabel->SetMultiLineEnabled(false);

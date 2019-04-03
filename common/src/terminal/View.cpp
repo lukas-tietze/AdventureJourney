@@ -22,24 +22,13 @@ terminal::View::View(int width, int height) : width(width),
                                               colors(COLORS),
                                               colorPairs(COLOR_PAIRS)
 {
-    // this->BufferColor(COLOR_BLACK, util::colors::BasicBlack);
-    // this->BufferColor(COLOR_BLUE, util::colors::BasicBlue);
-    // this->BufferColor(COLOR_CYAN, util::colors::BasicCyan);
-    // this->BufferColor(COLOR_GREEN, util::colors::BasicGreen);
-    // this->BufferColor(COLOR_MAGENTA, util::colors::BasicMagenta);
-    // this->BufferColor(COLOR_RED, util::colors::BasicRed);
-    // this->BufferColor(COLOR_WHITE, util::colors::BasicWhite);
-    // this->BufferColor(COLOR_YELLOW, util::colors::BasicYellow);
-
-    this->BufferColorPair(0, COLOR_WHITE, COLOR_BLACK);
-    this->SetActiveColorPair(0);
-    this->SetBackgroundColorPair(0);
-    this->RestoreDefaultColors();
-
     this->colorsSupported = has_colors();
     this->cursorModeSupported = curs_set(static_cast<int>(terminal::CursorMode::Invisible)) != ERR;
     this->cursorMode = terminal::CursorMode::Invisible;
 
+    this->RestoreDefaultColors();
+    this->SetActiveColorPair(0);
+    this->SetBackgroundColorPair(0);
     this->Flush();
 }
 
@@ -579,6 +568,6 @@ void terminal::View::RestoreDefaultColors()
 
     for (size_t i = 0; i < colorPairs; i++)
     {
-        init_pair(i + 1, std::get<0>(p[i]), std::get<1>(p[i]));
+        init_pair(i, std::get<0>(p[i]), std::get<1>(p[i]));
     }
 }

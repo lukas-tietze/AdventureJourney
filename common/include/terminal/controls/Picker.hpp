@@ -3,6 +3,7 @@
 #include <vector>
 
 #include "terminal/controls/ControlBase.hpp"
+#include "terminal/DataBinderBase.hpp"
 #include "data/String.hpp"
 #include "data/EnumHelper.hpp"
 #include "Event.hpp"
@@ -10,7 +11,7 @@
 namespace terminal
 {
 template <class TData = int>
-class Picker : public ControlBase
+class Picker : public ControlBase, public DataBinderBase<TData>
 {
   private:
     struct Option
@@ -34,7 +35,16 @@ class Picker : public ControlBase
     bool circleOptions;
     bool horizontalMode;
     size_t selectedOption;
-    TData *boundData;
+
+    void HandleValueChanged()
+    {
+        this->HandleDataChanged();
+    }
+
+    TData &GetSelectedValue()
+    {
+        return this->options[this->selectedOption].value;
+    }
 
   public:
     Picker() : ControlBase(),
@@ -104,16 +114,6 @@ class Picker : public ControlBase
         this->options.clear();
 
         this->Invalidate();
-    }
-
-    void BindValue(TData *target)
-    {
-        this->boundData = target;
-    }
-
-    void UnbindValue()
-    {
-        this->boundData = nullptr;
     }
 
     void SetCircleOptions(bool value)
