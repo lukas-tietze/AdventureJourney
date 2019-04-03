@@ -97,7 +97,7 @@ bool ParseIntegral(const std::string &text, NumT &target)
 {
     try
     {
-        target = (NumT)std::stol(text);
+        target = static_cast<NumT>(std::stol(text));
     }
     catch (const std::invalid_argument &e)
     {
@@ -116,7 +116,7 @@ bool ParseFloat(const std::string &text, NumT &target)
 {
     try
     {
-        target = (NumT)std::stod(text);
+        target = static_cast<NumT>(std::stod(text));
     }
     catch (const std::invalid_argument &e)
     {
@@ -136,25 +136,103 @@ class FormatException : public util::Exception
     FormatException(const std::string &what);
 };
 
+void SetupStreamByPrintfFormat(std::iostream &, const std::string &);
+
 namespace
 {
-/*
- * Format:
- *      %{[index:]options} => %{[(0-9)+:(optionslist...)]}
- * Optionen:
- *      hex,
- *      bin,
- *      oct,
- */
-template <class T>
-size_t WriteWithFormat(const std::string &format, std::stringstream &buf, size_t pos, const T &arg)
+struct ArrayAccess
+{
+    size_t start;
+    size_t end;
+    size_t step;
+};
+
+ArrayAccess ComputeArrayAccess(const std::string &format)
+{
+    ArrayAccess res;
+
+    size_t endSep = format.find(':');
+    size_t stepSep = format.find(':', endSep);
+
+    if (endSep == std::string::npos)
+        throw util::FormatException("Array specifier has seperator ':'!");
+
+    if (endSep == 0)
+        res.start = 0;
+    else if (!util::ParseIntegral(format.substr(0, endSep - 1), res.start))
+        throw util::FormatException("Illegal value for array start");
+
+    if (stepSep == std::string::npos)
+    {
+        if (!util::ParseIntegral(format.substr(endSep + 1), res.end))
+            throw util::FormatException("Illegal value for array end");
+    }
+    else
+    {
+        if (!util::ParseIntegral(format.substr(endSep + 1, stepSep - endSep - 1), res.end))
+            throw util::FormatException("Illegal value for array end");
+
+        if (!util::ParseIntegral(format.substr(stepSep + 1), res.step))
+            throw util::FormatException("Illegal value for array step");
+    }
+
+    return res;
+}
+
+size_t PrepareFormat(const std::string &format, std::stringstream &buf, size_t pos)
 {
     auto end = format.find('}', pos);
 
-    buf << arg;
-
     if (end == std::string::npos)
         throw util::FormatException("Format specifier has no closing '}'-bracket!");
+
+    SetupStreamByPrintfFormat(buf, format.substr(pos + 1, end - pos - 1));
+
+    return end;
+}
+
+template <class T>
+size_t WriteArray(const std::string &format, std::stringstream &buf, size_t pos, const T &arg)
+{
+    auto start = pos;
+    auto end = format.find(']', pos);
+
+    if (end == std::string::npos)
+        throw util::FormatException("Array specifier has no closing ']'-bracket!");
+
+    const auto access = ComputeArrayAccess(format.substr(start + 1, end - start - 1));
+
+    for (size_t i = access.start; i < access.end; i += access.step)
+        buf << arg[i];
+
+    return end;
+}
+
+template <class T>
+size_t WriteIterable(const std::string &format, std::stringstream &buf, size_t pos, const T &arg)
+{
+    auto start = pos;
+    auto end = format.find('>', pos);
+
+    if (end == std::string::npos)
+        throw util::FormatException("Iterable specifier has no closing '>'-bracket!");
+
+    const auto access = ComputeArrayAccess(format.substr(start + 1, end - start - 1));
+
+    auto it = arg.begin();
+    auto itEnd = arg.end();
+    size_t i = 0;
+
+    for (; i < access.start; i++)
+        ++it;
+
+    while (i < access.end)
+    {
+        if ((i - access.start) % access.step == 0)
+            buf << *it;
+
+        i++;
+    }
 
     return end;
 }
@@ -196,13 +274,14 @@ void FormatInternal(const std::string &format, std::stringstream &buf, size_t po
         if (format[pos] == '%')
         {
             if (format[pos + 1] == '{')
-            {
-                pos = WriteWithFormat(format, buf, pos + 1, firstArg);
-            }
-            else
-            {
-                buf << firstArg;
-            }
+                pos = PrepareFormat(format, buf, pos + 1);
+
+            // if (format[pos + 1] == '[')
+            //     pos = WriteArray(format, buf, pos + 1, firstArg);
+            // else if (format[pos + 1] == '<')
+            //     pos = WriteIterable(format, buf, pos + 1, firstArg);
+            // else
+            buf << firstArg;
 
             FormatInternal(format, buf, pos + 1, args...);
 
