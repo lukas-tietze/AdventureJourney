@@ -34,8 +34,6 @@ find_package(Threads REQUIRED)
 
 Set(CURSES_NEED_NCURSES TRUE)
 find_package(Curses REQUIRED)
-
-find_package(OpenGL)
  
 #workaround https://gitlab.kitware.com/cmake/cmake/issues/17297
 set(_Boost_STACKTRACE_BASIC_HEADERS     "boost/stacktrace.hpp")
@@ -44,9 +42,16 @@ set(_Boost_STACKTRACE_ADDR2LINE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_NOOP_HEADERS      "boost/stacktrace.hpp")
 find_package(Boost 1.65.0 COMPONENTS stacktrace_backtrace filesystem)
 
+#external includes
 include_directories(${CURSES_INCLUDE_DIRS})
-include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
+
+#libs/submodules
+include_directories(libs/glad/include)
+include_directories(submodules/glfw/include)
+include_directories(submodules/glm/)
+
+#projects
 include_directories(common/include)
 include_directories(core/include)
 include_directories(playground)
@@ -135,21 +140,21 @@ endif()
 # GUI - Grafische UI mittels OpenGl
 #--------------------------------------------------------
 if(COMPILE_GUI)
-    if(OPENGL_FOUND)
-        project(Gui)
-        add_subdirectory("libs/glfw")
-        include_directories("libs/glfw/include")
-        configure_file(gui/include/config.in.hpp gui/include/config.hpp)
-        add_executable(Gui gui/src/main.cpp ${GUI_SRC})
-        target_link_libraries(Gui Common Core Threads::Threads ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} glfw ${GLFW_LIBRARIES})
+    project(Gui)
+    
+    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    add_subdirectory("submodules/glfw") 
 
-        #Tests dazu
-        project(GuiTests)
-        add_executable(GuiTests gui/test/main.cpp ${GUI_TESTS})
-        target_link_libraries(GuiTests Common Core Threads::Threads ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} glfw ${GLFW_LIBRARIES})
-    else()
-        message(STATUS "Can't build GUI, OpenGl is missing!")
-    endif()
+    configure_file(gui/include/config.in.hpp gui/include/config.hpp)
+    add_executable(Gui gui/src/main.cpp libs/glad/src/glad.c ${GUI_SRC})
+    target_link_libraries(Gui Common Core Threads::Threads glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} )
+
+    #Tests dazu
+    project(GuiTests)
+    add_executable(GuiTests gui/test/main.cpp libs/glad/src/glad.c ${GUI_TESTS})
+    target_link_libraries(GuiTests Common Core Threads::Threads ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} glfw ${GLFW_LIBRARIES})
 else()
     message(STATUS "Skipping VulkanGui")
 endif()

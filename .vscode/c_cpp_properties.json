@@ -6,11 +6,12 @@
                 "${workspaceFolder}/",
                 "${workspaceFolder}/common/include/",
                 "${workspaceFolder}/terminal_ui/include/",
-                "${workspaceFolder}/vulkan_gui/include",
+                "${workspaceFolder}/gui/include",
                 "${workspaceFolder}/core/include",
                 "${workspaceFolder}/playground",
-                "${workspaceFolder}/glm/",
-                "${workspaceFolder}/glfw/include"
+                "${workspaceFolder}/libs/glad/include",
+                "${workspaceFolder}/submodules/glm/",
+                "${workspaceFolder}/submodules/glfw/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
