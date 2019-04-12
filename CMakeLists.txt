@@ -35,11 +35,7 @@ find_package(Threads REQUIRED)
 Set(CURSES_NEED_NCURSES TRUE)
 find_package(Curses REQUIRED)
 
-find_package(glfw3)
-
-find_package(glm)
-
-find_package(Vulkan)
+find_package(OpenGL)
  
 #workaround https://gitlab.kitware.com/cmake/cmake/issues/17297
 set(_Boost_STACKTRACE_BASIC_HEADERS     "boost/stacktrace.hpp")
@@ -49,30 +45,18 @@ set(_Boost_STACKTRACE_NOOP_HEADERS      "boost/stacktrace.hpp")
 find_package(Boost 1.65.0 COMPONENTS stacktrace_backtrace filesystem)
 
 include_directories(${CURSES_INCLUDE_DIRS})
-include_directories(${Vulkan_INCLUDE_DIRS})
+include_directories(${OPENGL_INCLUDE_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
 include_directories(common/include)
 include_directories(core/include)
 include_directories(playground)
 include_directories(terminal_ui/include)
-include_directories(vulkan_gui/include)
+include_directories(gui/include)
 include_directories(.)
 
 add_definitions(-DBOOST_FILESYSTEM_NO_DEPRECATED)
 add_definitions(-DBOOST_STACKTRACE_LINK)
 add_definitions(-DBOOST_STACKTRACE_USE_BACKTRACE)
-
-if(glfw3_FOUND)
-include_directories(${Glfw_INCLUDE_DIRS})
-else()
-    message(STATUS "Could not find glfw3!")
-endif()
-
-if(glm_FOUND)
-    include_directories(${GLM_INCLUDE_DIRS})
-else()
-    message(STATUS "Could not find glm!")
-endif()
 
 #Common
 file(GLOB_RECURSE COMMON_SRC "common/src/**/*.cpp")
@@ -83,9 +67,9 @@ file(GLOB_RECURSE CORE_TESTS "core/test/**/*.cpp")
 #Terminal
 file(GLOB_RECURSE TUI_SRC "terminal_ui/src/**/*.cpp")
 file(GLOB_RECURSE TUI_TESTS "terminal_ui/test/**/*.cpp")
-#Vulkan
-file(GLOB_RECURSE GUI_SRC "vulkan_gui/src/**/*.cpp")
-file(GLOB_RECURSE GUI_TESTS "vulkan_gui/test/**/*.cpp")
+#Gui
+file(GLOB_RECURSE GUI_SRC "gui/src/**/*.cpp")
+file(GLOB_RECURSE GUI_TESTS "gui/test/**/*.cpp")
 
 #--------------------------------------------------------
 # Library - enthält Utils und Wrapper, die in verschiedenen Projekten genutzt werden könnten.
@@ -148,29 +132,23 @@ else()
     message(STATUS "Skipping TerminalUi")
 endif()
 #--------------------------------------------------------
-# Vulkan GUI - Grafische UI mittels Vulkan
+# GUI - Grafische UI mittels OpenGl
 #--------------------------------------------------------
 if(COMPILE_GUI)
-    if(glfw3_FOUND)
-        if(glm_FOUND)
-            if(Vulkan_FOUND)
-                project(VulkanGui)
-                configure_file(vulkan_gui/include/config.in.hpp vulkan_gui/include/config.hpp)
-                add_executable(VulkanGui vulkan_gui/src/main.cpp ${GUI_SRC})
-                target_link_libraries(VulkanGui Common Core Threads::Threads ${Vulkan_LIBRARIES} ${Boost_LIBRARIES} glfw ${glm_LIBRARIES})
+    if(OPENGL_FOUND)
+        project(Gui)
+        add_subdirectory("libs/glfw")
+        include_directories("libs/glfw/include")
+        configure_file(gui/include/config.in.hpp gui/include/config.hpp)
+        add_executable(Gui gui/src/main.cpp ${GUI_SRC})
+        target_link_libraries(Gui Common Core Threads::Threads ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} glfw ${GLFW_LIBRARIES})
 
-                #Tests dazu
-                project(VulkanGuiTests)
-                add_executable(VulkanGuiTests vulkan_gui/test/main.cpp ${GUI_TESTS})
-                target_link_libraries(VulkanGuiTests Common Core ${Vulkan_LIBRARIES} glfw ${glm_LIBRARIES} Threads::Threads)
-            else()
-                message(STATUS "Can't build GUI, vulkan is missing!")
-            endif()
-        else()
-            message(STATUS "Can't build GUI, glm is missing!")
-        endif()
+        #Tests dazu
+        project(GuiTests)
+        add_executable(GuiTests gui/test/main.cpp ${GUI_TESTS})
+        target_link_libraries(GuiTests Common Core Threads::Threads ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} glfw ${GLFW_LIBRARIES})
     else()
-        message(STATUS "Can't build GUI, glfw3 is missing!")
+        message(STATUS "Can't build GUI, OpenGl is missing!")
     endif()
 else()
     message(STATUS "Skipping VulkanGui")
