@@ -36,9 +36,6 @@ void HandleKeyboard(GLFWwindow *win, int key, int scancode, int action, int mods
 void HandleMouseButton(GLFWwindow *win, int button, int action, int mods);
 void HandleCursor(GLFWwindow *win, double x, double y);
 
-//Stuff???
-void *GetProcAddressWrapper(const char *name, void *user_ptr);
-
 template <unsigned int NUM_BUFFS = 16>
 class GlWatch
 {

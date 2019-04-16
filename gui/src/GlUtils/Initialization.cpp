@@ -26,7 +26,6 @@ double lastUpdateTime = 0;
 unsigned long frameCount = 0;
 double cpuTime = 0;
 double gpuTime = 0;
-double timePassed = 0;
 
 std::string windowTitle;
 
@@ -75,7 +74,14 @@ void glutil::HandleCursor(GLFWwindow *win, double x, double y)
     mouseY = y;
 }
 
-bool glutil::Init(CreateInfo info)
+namespace
+{
+void *GetProcAddressWrapper(const char *name, void *user_ptr)
+{
+    return reinterpret_cast<void *>(glfwGetProcAddress(name));
+}
+
+bool InitGlfw(const glutil::CreateInfo &info)
 {
     if (!glfwInit())
         return false;
@@ -111,14 +117,14 @@ bool glutil::Init(CreateInfo info)
     /* initialize glad (our opengl loader) */
     if (!gladLoadGL(GetProcAddressWrapper, nullptr))
     {
-        // warn("failed to intialize glad");
+        util::err.WriteLine("failed to intialize glad!");
         return false;
     }
 
     /* just make sure we got a >= 4.3 context */
     if (!GLAD_GL_VERSION_4_3)
     {
-        // warn("did not get a GL >= 4.3 context!");
+        util::out.WriteLine("Did not get a GL >= 4.3 context!");
         return false;
     }
 
@@ -133,16 +139,33 @@ bool glutil::Init(CreateInfo info)
     glfwGetFramebufferSize(win, &w, &h);
     glfwSetCursorPos(win, w / 2, h / 2);
 
-    watch[0] = new GlWatch<>();
-    watch[1] = new GlWatch<>();
+    return true;
+}
+
+bool InitGlState(const glutil::CreateInfo &info)
+{
+    glClearColor(0.7f, 0.4f, 0.4f, 1.0f);
+}
+
+bool InitData(const glutil::CreateInfo &info)
+{
+    watch[0] = new glutil::GlWatch<>();
+    watch[1] = new glutil::GlWatch<>();
     cpuTime = 0;
     gpuTime = 0;
     frameCount = 0;
-    timePassed = 1000;
 
     windowTitle = info.windowTitle;
 
     return true;
+}
+} // namespace
+
+bool glutil::Init(CreateInfo info)
+{
+    return InitGlfw(info) && 
+    InitGlState(info) &&
+    InitData(info);
 }
 
 bool glutil::DestroyGlContext()
@@ -158,6 +181,8 @@ bool glutil::DestroyGlContext()
 
 void glutil::UpdateTitle()
 {
+    auto timePassed = totalTime - lastUpdateTime;
+
     glfwSetWindowTitle(win, util::Format("% [fps: %, cpu: %, gpu: %]",
                                          windowTitle,
                                          frameCount / timePassed,
@@ -190,9 +215,10 @@ void glutil::Loop()
             lastUpdateTime = totalTime;
             cpuTime = 0;
             gpuTime = 0;
-            timePassed = 0;
             frameCount = 0;
         }
+
+        glClear(GL_COLOR_BUFFER_BIT);
 
         gpuTime += watch[1]->get_gpu_time_in_ms() -
                    watch[0]->get_gpu_time_in_ms();
@@ -203,9 +229,4 @@ void glutil::Loop()
         glfwSwapBuffers(win);
         glfwPollEvents();
     }
-}
-
-void *glutil::GetProcAddressWrapper(const char *name, void *user_ptr)
-{
-    return reinterpret_cast<void *>(glfwGetProcAddress(name));
 }
