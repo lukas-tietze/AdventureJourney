@@ -241,7 +241,7 @@ void glutil::Loop()
             frameCount = 0;
         }
 
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         gpuTime += watch[1]->get_gpu_time_in_ms() -
                    watch[0]->get_gpu_time_in_ms();

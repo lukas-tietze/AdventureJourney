@@ -99,6 +99,18 @@ void ShowScreen(Screen *);
 void ShowBlankScreen();
 void SetBlankColor(float r, float g, float b, float a = 1.f);
 
+GLuint LoadShader(const std::string &path, GLenum type);
+GLuint CreateProgram(GLuint vs, GLuint fs);
+GLuint CreateProgram(const std::string &vsSrc, const std::string &fsSrc);
+bool CheckShader(GLuint shader);
+bool CheckProgram(GLuint prog);
+GLenum HandleGlError();
+
+extern const glm::vec3 AXIS_X;
+extern const glm::vec3 AXIS_Y;
+extern const glm::vec3 AXIS_Z;
+extern const glm::vec3 ORIGIN;
+
 template <unsigned int NUM_BUFFS = 16>
 class GlWatch
 {
