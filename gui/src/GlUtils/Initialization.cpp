@@ -1,21 +1,30 @@
 #include "GlUtils.hpp"
 #include "data/Io.hpp"
+#include <cstring>
 
 const glutil::CreateInfo glutil::DefaultCreateInfo = {
     ""};
 
 namespace
 {
+//window:
+GLFWwindow *win = nullptr;
 int w = 0;
 int h = 0;
+
+//mouse
 int mouseX = 0;
 int mouseY = 0;
 int mouseDeltaX = 0;
 int mouseDeltaY = 0;
 float scrollX = 0;
 float scrollY = 0;
-bool keyState[GLFW_KEY_LAST];
 bool mouseState[GLFW_MOUSE_BUTTON_LAST];
+bool lastMouseState[GLFW_MOUSE_BUTTON_LAST];
+
+//keys
+bool keyState[GLFW_KEY_LAST];
+bool lastKeyState[GLFW_KEY_LAST];
 
 glutil::GlWatch<> *watch[2];
 
@@ -29,22 +38,22 @@ double gpuTime = 0;
 
 std::string windowTitle;
 
-GLFWwindow *win = nullptr;
-} // namespace
+glutil::Screen *activeScreen;
+glutil::BlankScreen *blankScreen;
 
-void glutil::HandleResize(GLFWwindow *win, int w, int h)
+void HandleResize(GLFWwindow *win, int w, int h)
 {
     w = w;
     h = h;
 }
 
-void glutil::HandleScroll(GLFWwindow *win, double xoffset, double yoffset)
+void HandleScroll(GLFWwindow *win, double xoffset, double yoffset)
 {
     scrollX = static_cast<float>(xoffset);
     scrollY = static_cast<float>(yoffset);
 }
 
-void glutil::HandleKeyboard(GLFWwindow *win, int key, int /*scancode*/, int action, int mods)
+void HandleKeyboard(GLFWwindow *win, int key, int /*scancode*/, int action, int mods)
 {
     if (key < 0 || key > GLFW_KEY_LAST)
     {
@@ -55,7 +64,7 @@ void glutil::HandleKeyboard(GLFWwindow *win, int key, int /*scancode*/, int acti
     keyState[key] = action == GLFW_PRESS;
 }
 
-void glutil::HandleMouseButton(GLFWwindow *win, int button, int action, int mods)
+void HandleMouseButton(GLFWwindow *win, int button, int action, int mods)
 {
     if (button < 0 || button > GLFW_MOUSE_BUTTON_LAST)
     {
@@ -66,7 +75,7 @@ void glutil::HandleMouseButton(GLFWwindow *win, int button, int action, int mods
     mouseState[button] = action == GLFW_PRESS;
 }
 
-void glutil::HandleCursor(GLFWwindow *win, double x, double y)
+void HandleCursor(GLFWwindow *win, double x, double y)
 {
     mouseDeltaX = x - mouseX;
     mouseDeltaY = y - mouseY;
@@ -74,6 +83,7 @@ void glutil::HandleCursor(GLFWwindow *win, double x, double y)
     mouseY = y;
 }
 
+} // namespace
 namespace
 {
 void *GetProcAddressWrapper(const char *name, void *user_ptr)
@@ -105,11 +115,11 @@ bool InitGlfw(const glutil::CreateInfo &info)
         return false;
 
     /* register our callbacks */
-    glfwSetFramebufferSizeCallback(win, glutil::HandleResize);
-    glfwSetKeyCallback(win, glutil::HandleKeyboard);
-    glfwSetMouseButtonCallback(win, glutil::HandleMouseButton);
-    glfwSetScrollCallback(win, glutil::HandleScroll);
-    glfwSetCursorPosCallback(win, glutil::HandleCursor);
+    glfwSetFramebufferSizeCallback(win, HandleResize);
+    glfwSetKeyCallback(win, HandleKeyboard);
+    glfwSetMouseButtonCallback(win, HandleMouseButton);
+    glfwSetScrollCallback(win, HandleScroll);
+    glfwSetCursorPosCallback(win, HandleCursor);
 
     /* make the context the current context (of the current thread) */
     glfwMakeContextCurrent(win);
@@ -157,15 +167,18 @@ bool InitData(const glutil::CreateInfo &info)
 
     windowTitle = info.windowTitle;
 
+    blankScreen = new glutil::BlankScreen();
+    activeScreen = blankScreen;
+
     return true;
 }
 } // namespace
 
 bool glutil::Init(CreateInfo info)
 {
-    return InitGlfw(info) && 
-    InitGlState(info) &&
-    InitData(info);
+    return InitGlfw(info) &&
+           InitGlState(info) &&
+           InitData(info);
 }
 
 bool glutil::DestroyGlContext()
@@ -196,6 +209,16 @@ void glutil::Quit()
     glfwSetWindowShouldClose(win, true);
 }
 
+namespace
+{
+void ResetEventBuffers()
+{
+    std::memcpy(lastKeyState, keyState, sizeof(bool) * GLFW_KEY_LAST);
+    std::memcpy(lastMouseState, mouseState, sizeof(bool) * GLFW_MOUSE_BUTTON_LAST);
+    //TODO: Clear Event queue
+}
+} // namespace
+
 void glutil::Loop()
 {
     auto timeStamp = glfwGetTime();
@@ -223,10 +246,95 @@ void glutil::Loop()
         gpuTime += watch[1]->get_gpu_time_in_ms() -
                    watch[0]->get_gpu_time_in_ms();
 
+        activeScreen->Render();
+
         cpuTime += watch[1]->get_cpu_time_in_ms() -
                    watch[0]->get_cpu_time_in_ms();
 
         glfwSwapBuffers(win);
         glfwPollEvents();
+
+        activeScreen->Update(delta);
+
+        ResetEventBuffers();
     }
+}
+
+//-----------------------------------------------------------------------------------------
+//Screens
+//-----------------------------------------------------------------------------------------
+void glutil::ShowScreen(Screen *s)
+{
+    if (s == nullptr)
+        return;
+
+    if (activeScreen != nullptr)
+        activeScreen->OnHide();
+
+    activeScreen = s;
+    s->OnShow();
+}
+
+void glutil::ShowBlankScreen()
+{
+    ShowScreen(blankScreen);
+}
+
+void glutil::SetBlankColor(float r, float g, float b, float a)
+{
+    blankScreen->SetClearColor(r, g, b, a);
+}
+
+//-----------------------------------------------------------------------------------------
+//Screens
+//-----------------------------------------------------------------------------------------
+
+bool glutil::HasNextEvent()
+{
+    return true;
+}
+
+const glutil::Event &glutil::QueryNextEvent()
+{
+    return glutil::Event();
+}
+
+bool glutil::IsKeyDown(int key)
+{
+    return keyState[key];
+}
+
+bool glutil::IsKeyUp(int key)
+{
+    return !keyState[key];
+}
+
+bool glutil::WasKeyPressed(int key)
+{
+    return keyState[key] && !lastKeyState[key];
+}
+
+bool glutil::WasKeyReleased(int key)
+{
+    return !keyState[key] && lastKeyState[key];
+}
+
+bool glutil::IsButtonDown(int button)
+{
+    return mouseState[button];
+}
+
+bool glutil::IsButtonUp(int button)
+{
+    return !mouseState[button];
+}
+
+bool glutil::WasButtonPressed(int button)
+{
+    return mouseState[button] && !lastMouseState[button];
+}
+
+bool glutil::WasButtonReleased(int button)
+{
+    return !mouseState[button] && lastMouseState[button];
 }

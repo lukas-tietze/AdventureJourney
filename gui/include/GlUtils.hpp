@@ -29,12 +29,75 @@ void Quit();
 bool DestroyGlContext();
 void UpdateTitle();
 
-//Handlers
-void HandleResize(GLFWwindow *win, int w, int h);
-void HandleScroll(GLFWwindow *win, double xoffset, double yoffset);
-void HandleKeyboard(GLFWwindow *win, int key, int scancode, int action, int mods);
-void HandleMouseButton(GLFWwindow *win, int button, int action, int mods);
-void HandleCursor(GLFWwindow *win, double x, double y);
+//Events
+enum class EventType
+{
+    Scroll,
+    Key,
+    MouseButton,
+    MouseMove,
+    WindowResize,
+};
+
+struct Event
+{
+    EventType type;
+    bool handled;
+
+    union {
+        struct
+        {
+            int key;
+            int mods;
+            bool handled;
+        } keyEvent;
+
+        struct
+        {
+            int button;
+        } mouseEvent;
+    };
+};
+
+//States
+bool HasNextEvent();
+const Event &QueryNextEvent();
+bool IsKeyDown(int key);
+bool IsKeyUp(int key);
+bool WasKeyPressed(int key);
+bool WasKeyReleased(int key);
+bool IsButtonDown(int button);
+bool IsButtonUp(int button);
+bool WasButtonPressed(int button);
+bool WasButtonReleased(int button);
+
+class Screen
+{
+  public:
+    virtual ~Screen();
+    virtual void Render();
+    virtual void Update(double);
+
+    virtual void OnShow();
+    virtual void OnHide();
+
+    void Show();
+};
+
+class BlankScreen : public glutil::Screen
+{
+  private:
+    float clearColor[4];
+
+  public:
+    void Render();
+
+    void SetClearColor(float r, float g, float b, float a = 1.f);
+};
+
+void ShowScreen(Screen *);
+void ShowBlankScreen();
+void SetBlankColor(float r, float g, float b, float a = 1.f);
 
 template <unsigned int NUM_BUFFS = 16>
 class GlWatch
