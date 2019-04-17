@@ -35,7 +35,7 @@ GLuint glutil::CreateProgram(GLuint vsId, GLuint fsId)
     return pId;
 }
 
-GLuint CreateProgram(const std::string &vsSrc, const std::string &fsSrc)
+GLuint glutil::CreateProgram(const std::string &vsSrc, const std::string &fsSrc)
 {
     auto vsId = glutil::LoadShader(vsSrc, GL_VERTEX_SHADER);
     auto fsId = glutil::LoadShader(fsSrc, GL_FRAGMENT_SHADER);
@@ -67,7 +67,7 @@ bool glutil::CheckShader(GLuint shader)
     return isCompiled == GL_TRUE;
 }
 
-bool CheckProgram(GLuint prog)
+bool glutil::CheckProgram(GLuint prog)
 {
     GLint isLinked = 0;
     glGetProgramiv(prog, GL_LINK_STATUS, &isLinked);

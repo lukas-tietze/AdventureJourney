@@ -1,8 +1,12 @@
+#include "GlScreens.hpp"
+
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtx/transform.hpp"
 
-#include "GlScreens.hpp"
+#include "data/Io.hpp"
 
 namespace
 {
@@ -94,9 +98,9 @@ void gui::DummyScreen::Update(double delta)
 
     this->modelViewProjectionMat = glm::perspective(glm::radians(60.f), 1.f, 0.1f, 100.f) *
                                    glm::lookAt(this->eyePos, glutil::ORIGIN, glutil::AXIS_Y) *
-                                   glm::rotate(static_cast<float>(this->rotation), glutil::AXIS_Y);
+                                   glm::rotate(this->rotation, glutil::AXIS_Y);
 
-    if (glutil::IsKeyDown(GLFW_KEY_ESCAPE))
+    if (glutil::IsKeyDown(GLFW_KEY_ESCAPE) || glutil::IsKeyDown(GLFW_KEY_Q))
         glutil::Quit();
     if (glutil::IsKeyDown(GLFW_KEY_W))
         this->eyePos[0] += delta * 0.8;
@@ -110,8 +114,10 @@ void gui::DummyScreen::Update(double delta)
 
 void gui::DummyScreen::OnShow()
 {
+    util::out.WriteLine("OnShow() of [%] called!", this);
 }
 
 void gui::DummyScreen::OnHide()
 {
+    util::out.WriteLine("OnHide() of [%] called!", this);
 }
