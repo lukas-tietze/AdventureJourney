@@ -10,7 +10,6 @@ out vec4 vclr;
 
 void main()
 {
-
 	gl_Position = MVP * pos;
 
 	vclr = vec4(clr.r / 255.0,

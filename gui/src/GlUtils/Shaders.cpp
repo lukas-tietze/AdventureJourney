@@ -55,14 +55,21 @@ bool glutil::CheckShader(GLuint shader)
     GLint isCompiled = 0;
     glGetShaderiv(shader, GL_COMPILE_STATUS, &isCompiled);
 
-    GLint maxLength = 0;
-    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLength);
+    GLint maxLen = 0;
+    glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &maxLen);
 
     std::string errorLog;
-    errorLog.resize(static_cast<size_t>(maxLength));
-    glGetShaderInfoLog(shader, maxLength, &maxLength, &errorLog[0]);
+    errorLog.resize(static_cast<size_t>(maxLen));
+    glGetShaderInfoLog(shader, maxLen, &maxLen, &errorLog[0]);
 
-    //TODO Debugausgaben
+    if (isCompiled == GL_FALSE)
+    {
+        util::dbg.WriteLine("Failed to compile shader [%]!\nMessage:%", shader, errorLog);
+    }
+    else if (maxLen > 0)
+    {
+        util::dbg.WriteLine("Compiled shader [%] with warnings!\nMessage:%", shader, errorLog);
+    }
 
     return isCompiled == GL_TRUE;
 }
@@ -75,12 +82,19 @@ bool glutil::CheckProgram(GLuint prog)
     GLint maxLen = 0;
     glGetProgramiv(prog, GL_INFO_LOG_LENGTH, &maxLen);
 
-    // The maxLength includes the NULL character
+    // The maxLen includes the NULL character
     std::string errorLog;
     errorLog.resize(static_cast<size_t>(maxLen));
     glGetProgramInfoLog(prog, maxLen, &maxLen, &errorLog[0]);
 
-    //TODO Debugausgaben!
+    if (isLinked == GL_FALSE)
+    {
+        util::dbg.WriteLine("Failed to link program [%]!\nMessage:%", prog, errorLog);
+    }
+    else if (maxLen > 0)
+    {
+        util::dbg.WriteLine("Linked program [%] with warnings!\nMessage:%", prog, errorLog);
+    }
 
     return isLinked == GL_TRUE;
 }

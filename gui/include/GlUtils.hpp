@@ -84,20 +84,8 @@ class Screen
     void Show();
 };
 
-class BlankScreen : public glutil::Screen
-{
-  private:
-    float clearColor[4];
-
-  public:
-    void Render();
-
-    void SetClearColor(float r, float g, float b, float a = 1.f);
-};
-
-void ShowScreen(Screen *);
-void ShowBlankScreen();
-void SetBlankColor(float r, float g, float b, float a = 1.f);
+void RequestNextScreen(Screen *);
+void RequestBlankScreen();
 
 GLuint LoadShader(const std::string &path, GLenum type);
 GLuint CreateProgram(GLuint vs, GLuint fs);
