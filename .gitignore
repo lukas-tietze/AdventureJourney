@@ -27,7 +27,7 @@
 *.lib
 
 #submodules
-submodules/
+# submodules/
 
 # Executables
 *.exe
