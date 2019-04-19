@@ -14,6 +14,7 @@ include(compile.cfg OPTIONAl)
 include(ExternalData) 
 
 set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGLM_ENABLE_EXPERIMENTAL")
 
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
     message("Creating release build")

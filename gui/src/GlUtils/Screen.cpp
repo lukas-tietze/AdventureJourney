@@ -22,5 +22,5 @@ void glutil::Screen::OnHide()
 
 void glutil::Screen::Show()
 {
-    glutil::ShowScreen(this);
+    glutil::RequestNextScreen(this);
 }

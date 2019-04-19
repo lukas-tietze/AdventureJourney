@@ -39,7 +39,8 @@ double gpuTime = 0;
 std::string windowTitle;
 
 glutil::Screen *activeScreen;
-glutil::BlankScreen *blankScreen;
+glutil::Screen *nextScreen;
+glutil::Screen *blankScreen;
 
 void HandleResize(GLFWwindow *win, int w, int h)
 {
@@ -167,8 +168,8 @@ bool InitData(const glutil::CreateInfo &info)
 
     windowTitle = info.windowTitle;
 
-    blankScreen = new glutil::BlankScreen();
-    activeScreen = blankScreen;
+    blankScreen = new glutil::Screen();
+    nextScreen = activeScreen = blankScreen;
 
     return true;
 }
@@ -217,6 +218,20 @@ void ResetEventBuffers()
     std::memcpy(lastMouseState, mouseState, sizeof(bool) * GLFW_MOUSE_BUTTON_LAST);
     //TODO: Clear Event queue
 }
+
+void SwapScreen()
+{
+    if (activeScreen == nextScreen)
+        return;
+
+    if (activeScreen != nullptr)
+        activeScreen->OnHide();
+
+    activeScreen = nextScreen;
+    activeScreen->OnShow();
+
+    util::dbg.WriteLine("Now showing [%] (blank=%)", activeScreen, activeScreen == blankScreen);
+}
 } // namespace
 
 void glutil::Loop()
@@ -241,20 +256,23 @@ void glutil::Loop()
             frameCount = 0;
         }
 
+        SwapScreen();
+
+        glfwPollEvents();
+
+        activeScreen->Update(delta);
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        activeScreen->Render();
 
         gpuTime += watch[1]->get_gpu_time_in_ms() -
                    watch[0]->get_gpu_time_in_ms();
-
-        activeScreen->Render();
 
         cpuTime += watch[1]->get_cpu_time_in_ms() -
                    watch[0]->get_cpu_time_in_ms();
 
         glfwSwapBuffers(win);
-        glfwPollEvents();
-
-        activeScreen->Update(delta);
 
         ResetEventBuffers();
     }
@@ -263,26 +281,15 @@ void glutil::Loop()
 //-----------------------------------------------------------------------------------------
 //Screens
 //-----------------------------------------------------------------------------------------
-void glutil::ShowScreen(Screen *s)
+void glutil::RequestNextScreen(Screen *s)
 {
-    if (s == nullptr)
-        return;
-
-    if (activeScreen != nullptr)
-        activeScreen->OnHide();
-
-    activeScreen = s;
-    s->OnShow();
+    if (s != nullptr)
+        nextScreen = s;
 }
 
-void glutil::ShowBlankScreen()
+void glutil::RequestBlankScreen()
 {
-    ShowScreen(blankScreen);
-}
-
-void glutil::SetBlankColor(float r, float g, float b, float a)
-{
-    blankScreen->SetClearColor(r, g, b, a);
+    nextScreen = blankScreen;
 }
 
 //-----------------------------------------------------------------------------------------
