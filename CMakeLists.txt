@@ -22,28 +22,27 @@ if(CMAKE_BUILD_TYPE STREQUAL "Release")
 else()
     message("Creating debug build")
     option(DEBUG "Debug build" ON)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wswitch-default -Wswitch-enum -g")
+
+    if(CMAKE_COMPILER_IS_GNUCXX)
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wswitch-default -Wswitch-enum -g")
+    endif()
 endif()
 
 set(CMAKE_BUILD_TYPE Debug)
 
 enable_language(CXX)
 
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
-
 Set(CURSES_NEED_NCURSES TRUE)
-find_package(Curses REQUIRED)
+find_package(Curses)
  
 #workaround https://gitlab.kitware.com/cmake/cmake/issues/17297
 set(_Boost_STACKTRACE_BASIC_HEADERS     "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_BACKTRACE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_ADDR2LINE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_NOOP_HEADERS      "boost/stacktrace.hpp")
-find_package(Boost 1.65.0 COMPONENTS stacktrace_backtrace filesystem)
+find_package(Boost 1.65.0 COMPONENTS stacktrace_backtrace filesystem chrono thread REQUIRED)
 
 #external includes
-include_directories(${CURSES_INCLUDE_DIRS})
 include_directories(${Boost_INCLUDE_DIRS})
 
 #libs/submodules
@@ -89,7 +88,7 @@ target_link_libraries(Common ${CURSES_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_L
 if(COMPILE_TESTS)
     project(CommonTests)
     add_executable(CommonTests common/test/main.cpp ${COMMON_TESTS})
-    target_link_libraries(CommonTests ${Boost_LIBRARIES} Common Threads::Threads)
+    target_link_libraries(CommonTests ${Boost_LIBRARIES} Common)
 else()
     message(STATUS "Skipping CommonTests")
 endif()
@@ -100,7 +99,7 @@ if(COMPILE_PLAYGROUND)
     project (Playground)
     add_executable(Playground playground/main.cpp)
     target_link_libraries(Playground Common)
-    target_link_libraries(Playground Threads::Threads)
+    target_link_libraries(Playground)
 else()
     message(STATUS "Skipping playground")
 endif()
@@ -110,7 +109,7 @@ endif()
 #--------------------------------------------------------
 project(Core)
 add_library(Core STATIC ${CORE_SRC})
-target_link_libraries(Core Common Threads::Threads ${Boost_LIBRARIES})
+target_link_libraries(Core Common ${Boost_LIBRARIES})
 #Tests dazu
 if(COMPILE_TESTS)
     project(CoreTests)
@@ -124,15 +123,21 @@ endif()
 # Terminal UI - Stellt das Spiel in einer einfachen Form im Terminal dar
 #--------------------------------------------------------
 if(COMPILE_TUI)
-    project(TerminalUi)
-    configure_file(terminal_ui/include/config.in.hpp terminal_ui/include/config.hpp)
-    add_executable(TerminalUi terminal_ui/src/main.cpp ${TUI_SRC})
-    target_link_libraries(TerminalUi Common Core ${Boost_LIBRARIES} ${CURSES_LIBRARIES})
-    
-    #Tests dazu
-    project(TerminalUiTests)
-    add_executable(TerminalUiTests terminal_ui/test/main.cpp ${TUI_TESTS})
-    target_link_libraries(TerminalUiTests Common Core Threads::Threads ${CURSES_LIBRARIES})
+    if(CURSES_FOUND)
+        include_directories(${CURSES_INCLUDE_DIRS})
+
+        project(TerminalUi)
+        configure_file(terminal_ui/include/config.in.hpp terminal_ui/include/config.hpp)
+        add_executable(TerminalUi terminal_ui/src/main.cpp ${TUI_SRC})
+        target_link_libraries(TerminalUi Common Core ${Boost_LIBRARIES} ${CURSES_LIBRARIES})
+        
+        #Tests dazu
+        project(TerminalUiTests)
+        add_executable(TerminalUiTests terminal_ui/test/main.cpp ${TUI_TESTS})
+        target_link_libraries(TerminalUiTests Common Core ${CURSES_LIBRARIES})
+    else()
+        message(STATUS "Skipping TerminalUi -> Curses not found")
+    endif()
 else()
     message(STATUS "Skipping TerminalUi")
 endif()
@@ -149,12 +154,12 @@ if(COMPILE_GUI)
 
     configure_file(gui/include/config.in.hpp gui/include/config.hpp)
     add_executable(Gui gui/src/main.cpp libs/glad/src/glad.c ${GUI_SRC})
-    target_link_libraries(Gui Common Core Threads::Threads glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} )
+    target_link_libraries(Gui Common Core glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} )
 
     #Tests dazu
     project(GuiTests)
     add_executable(GuiTests gui/test/main.cpp libs/glad/src/glad.c ${GUI_TESTS})
-    target_link_libraries(GuiTests Common Core Threads::Threads ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} glfw ${GLFW_LIBRARIES})
+    target_link_libraries(GuiTests Common Core ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} glfw ${GLFW_LIBRARIES})
 else()
     message(STATUS "Skipping VulkanGui")
 endif()

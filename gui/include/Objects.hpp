@@ -6,52 +6,87 @@
 
 namespace gui
 {
-class RawSceneObject
+class GeometryBufferAttribute
 {
-  private:
-    std::string tag;
-    id_t id;
+private:
+    int index;
+    int type;
+    int length;
+    int offset;
+    bool normalized;
 
-    size_t vertexCount;
-    size_t indexCount;
-    size_t vertexDataSize;
-    size_t indexDataSize;
-    void *vertices;
-    void *indices;
+public:
+    int GetIndex() const;
+    int GetType() const;
+    int GetLength() const;
+    int GetOffset() const;
+    bool IsNormalized() const;
 };
 
-class AbstracSceneObject
+class Geometry
 {
-  private:
+private:
+    int vertexCount;
+    int indexCount;
+    int vertexDataSize;
+    int indexDataSize;
+    std::vector<GeometryBufferAttribute> attributes;
+    void *vertices;
+    void *indices;
+
+public:
+    Geometry();
+
+    bool LoadFromJson(const std::string &path);
+    bool LoadFromCg2vd(const std::string &path);
+    bool LoadFromData(int vertexCount, int vertexDataSize, void *vertices, int indexCount, int indexDataSize, void *indices, std::vector<GeometryBufferAttribute> attributes);
+
+    int GetVertexCount() const;
+    int GetIndexCount() const;
+    int GetVertexDataSize() const;
+    int GetIndexDataSize() const;
+    const std::vector<GeometryBufferAttribute> &GetAttributes() const;
+};
+
+template <class TData, int bindingTarget>
+class UboOwnerBase
+{
+private:
+    int ubo;
+    bool dirty;
+
+protected:
+    TData data;
+
+public:
+    UboOwnerBase();
+
+    void CreateGlObjects();
+    void DestroyGlObjects();
+    void Bind() const;
+    void Upload() const;
+    void SetDirty();
+};
+
+#include "gui/src/Inline/Objects/UboOwnerBase.inl"
+
+class AbstractSceneObject
+{
+private:
 };
 
 class SceneObjectData
 {
-  private:
+private:
     int indexCount;
     int offset;
     int drawType;
 };
 
-class SceneBufferObject
-{
-  private:
-    int vao;
-    int vbo;
-    int ibo;
-};
-
-class BufferAsset
-{
-    int count;
-    int type;
-    int stride;
-    int offset;
-    bool normalized;
-};
-
 class Scene
 {
-  private:
+private:
+public:
+    bool AddGeometry();
 };
 } // namespace gui
