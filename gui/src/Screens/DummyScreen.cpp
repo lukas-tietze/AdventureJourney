@@ -10,11 +10,13 @@
 
 namespace
 {
+#pragma pack(push, 1)
 struct Vertex
 {
     GLfloat position[3];
     GLubyte color[3];
 };
+#pragma pack(pop)
 
 /*
          *   3-------2
@@ -75,6 +77,8 @@ gui::DummyScreen::DummyScreen() : vao(0),
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(1, 3, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, color));
     glEnableVertexAttribArray(1);
+
+    this->eyePos = glm::vec3(3.f, 3.f, 3.f);
 }
 
 gui::DummyScreen::~DummyScreen()
@@ -97,9 +101,11 @@ void gui::DummyScreen::Update(double delta)
 {
     this->rotation += delta * 0.3;
 
-    this->modelViewProjectionMat = glm::perspective(glm::radians(60.f), 1.f, 0.1f, 100.f) *
-                                   glm::lookAt(this->eyePos, glutil::ORIGIN, glutil::AXIS_Y) *
-                                   glm::rotate(this->rotation, glutil::AXIS_Y);
+    auto projection = glm::perspective(glm::radians(60.f), 1.f, 0.1f, 100.f);
+    auto view = glm::lookAt(this->eyePos, glutil::ORIGIN, glutil::AXIS_Y);
+    auto model = glm::rotate(this->rotation, glutil::AXIS_Y);
+
+    this->modelViewProjectionMat = projection * view * model;
 
     if (glutil::IsKeyDown(GLFW_KEY_ESCAPE) || glutil::IsKeyDown(GLFW_KEY_Q))
         glutil::Quit();
