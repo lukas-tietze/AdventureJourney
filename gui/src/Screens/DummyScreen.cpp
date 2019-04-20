@@ -5,53 +5,8 @@
 #include "glm/glm.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "glm/gtx/transform.hpp"
-
+#include "DummyData.hpp"
 #include "data/Io.hpp"
-
-namespace
-{
-#pragma pack(push, 1)
-struct Vertex
-{
-    GLfloat position[3];
-    GLubyte color[3];
-};
-#pragma pack(pop)
-
-/*
-         *   3-------2
-         *  /|      /|
-         * 7-+-----6 |
-         * | |     | |
-         * | 0-----+-1
-         * |/      |/
-         * 4-------5
-         * */
-Vertex cubeData[8] = {
-    {{-1, -1, -1}, {0, 0, 0}},    //0
-    {{1, -1, -1}, {255, 0, 0}},   //1
-    {{1, 1, -1}, {255, 255, 0}},  //2
-    {{-1, 1, -1}, {0, 255, 0}},   //3
-    {{-1, -1, 1}, {0, 0, 255}},   //4
-    {{1, -1, 1}, {255, 0, 255}},  //5
-    {{1, 1, 1}, {255, 255, 255}}, //6
-    {{-1, 1, 1}, {0, 255, 255}},  //7
-};
-
-GLubyte indices[36] = {
-    0, 2, 1,
-    3, 2, 0,
-    4, 5, 6,
-    7, 4, 6,
-    5, 1, 2,
-    2, 6, 5,
-    0, 4, 7,
-    7, 3, 0,
-    5, 4, 1,
-    0, 1, 4,
-    7, 6, 2,
-    7, 2, 3};
-} // namespace
 
 gui::DummyScreen::DummyScreen() : vao(0),
                                   ibo(0),
@@ -70,12 +25,12 @@ gui::DummyScreen::DummyScreen() : vao(0),
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 
-    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(Vertex), cubeData, GL_STATIC_DRAW);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 36 * sizeof(GLubyte), indices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(gui::models::Vertex_XYZ_RGB), gui::models::cubeData, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, 36 * sizeof(GLubyte), gui::models::cubeIndices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, position));
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(gui::models::Vertex_XYZ_RGB), (void *)offsetof(gui::models::Vertex_XYZ_RGB, position));
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(Vertex), (void *)offsetof(Vertex, color));
+    glVertexAttribPointer(1, 3, GL_UNSIGNED_BYTE, GL_FALSE, sizeof(gui::models::Vertex_XYZ_RGB), (void *)offsetof(gui::models::Vertex_XYZ_RGB, color));
     glEnableVertexAttribArray(1);
 
     this->eyePos = glm::vec3(3.f, 3.f, 3.f);
@@ -117,12 +72,4 @@ void gui::DummyScreen::Update(double delta)
         this->eyePos[1] += delta * 0.8;
     if (glutil::IsKeyDown(GLFW_KEY_D))
         this->eyePos[1] -= delta * 0.8;
-}
-
-void gui::DummyScreen::OnShow()
-{
-}
-
-void gui::DummyScreen::OnHide()
-{
 }

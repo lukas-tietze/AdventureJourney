@@ -5,7 +5,7 @@ int main()
 {
     glutil::Init();
 
-    auto screen = new gui::DummyScreen();
+    auto screen = new gui::DummyObjectScreen();
 
     screen->Show();
 

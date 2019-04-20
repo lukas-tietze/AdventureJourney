@@ -1,6 +1,9 @@
 #pragma once
 
+#include <vector>
+
 #include "GlUtils.hpp"
+#include "Objects.hpp"
 #include "glm/glm.hpp"
 
 namespace gui
@@ -23,8 +26,22 @@ class DummyScreen : public glutil::Screen
 
     void Render();
     void Update(double);
+};
 
-    void OnShow();
-    void OnHide();
+class DummyObjectScreen : public glutil::Screen
+{
+  private:
+    std::vector<glutil::SceneObject *> objects;
+
+    GLuint pId;
+
+    glutil::Camera camera;
+
+  public:
+    DummyObjectScreen();
+    ~DummyObjectScreen();
+
+    void Render();
+    void Update(double);
 };
 } // namespace gui

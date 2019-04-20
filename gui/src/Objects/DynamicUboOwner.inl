@@ -2,7 +2,7 @@
 #include "glad/glad.h"
 
 template <class TData>
-gui::DynamicUboOwner<TData>::DynamicUboOwner() : ubo(0),
+glutil::DynamicUboOwner<TData>::DynamicUboOwner() : ubo(0),
                                                  dirty(true),
                                                  data(),
                                                  bufferSize(0)
@@ -10,7 +10,7 @@ gui::DynamicUboOwner<TData>::DynamicUboOwner() : ubo(0),
 }
 
 template <class TData>
-void gui::DynamicUboOwner<TData>::CreateGlObjects()
+void glutil::DynamicUboOwner<TData>::CreateGlObjects()
 {
     glGenBuffers(1, &this->ubo);
     glBindBuffer(GL_UNIFORM_BUFFER, this->ubo);
@@ -18,26 +18,26 @@ void gui::DynamicUboOwner<TData>::CreateGlObjects()
 }
 
 template <class TData>
-void gui::DynamicUboOwner<TData>::DestroyGlObjects()
+void glutil::DynamicUboOwner<TData>::DestroyGlObjects()
 {
     glDeleteBuffers(1, &this->ubo);
     this->ubo = 0;
 }
 
 template <class TData>
-void gui::DynamicUboOwner<TData>::Bind() const
+void glutil::DynamicUboOwner<TData>::Bind() const
 {
     glBindBufferBase(GL_UNIFORM_BUFFER, this->bindingTarget, this->ubo);
 }
 
 template <class TData>
-void gui::DynamicUboOwner<TData>::SetBindingTarget(int target)
+void glutil::DynamicUboOwner<TData>::SetBindingTarget(int target)
 {
     this->bindingTarget = target;
 }
 
 template <class TData>
-void gui::DynamicUboOwner<TData>::Upload() const
+void glutil::DynamicUboOwner<TData>::Upload() const
 {
     if (this->dirty)
     {
@@ -56,7 +56,7 @@ void gui::DynamicUboOwner<TData>::Upload() const
 }
 
 template <class TData>
-void gui::DynamicUboOwner<TData>::SetDirty()
+void glutil::DynamicUboOwner<TData>::SetDirty()
 {
     this->dirty = true;
 }

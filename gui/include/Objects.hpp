@@ -5,7 +5,7 @@
 #include <map>
 #include "glm/glm.hpp"
 
-namespace gui
+namespace glutil
 {
 template <class TData>
 class StaticUboOwner
@@ -61,43 +61,19 @@ class GeometryBufferAttribute
   private:
     int index;
     int type;
-    int length;
+    int count;
     int offset;
     bool normalized;
 
   public:
+    GeometryBufferAttribute();
+    GeometryBufferAttribute(int index, int count, int type, bool normalized, int offset);
+
     int GetIndex() const;
     int GetType() const;
-    int GetLength() const;
+    int GetCount() const;
     int GetOffset() const;
     bool IsNormalized() const;
-};
-
-class SceneObjectUboData
-{
-    glm::mat4 modelMatrix;
-};
-
-class SceneObject : StaticUboOwner<SceneObjectUboData>
-{
-  private:
-    int indexCount;
-    int offset;
-    int drawMode;
-    int indexType;
-
-  public:
-    SceneObject(const Geometry &);
-
-    void Render();
-};
-
-class Geometry
-{
-  private:
-    int vao;
-    int vbo;
-    int ibo;
 };
 
 class Mesh
@@ -105,8 +81,8 @@ class Mesh
   private:
     int vertexCount;
     int indexCount;
-    int vertexDataSize;
-    int indexDataSize;
+    int vertexSize;
+    int indexSize;
     std::vector<GeometryBufferAttribute> attributes;
     void *vertices;
     void *indices;
@@ -116,15 +92,62 @@ class Mesh
 
     bool LoadFromJson(const std::string &path);
     bool LoadFromCg2vd(const std::string &path);
-    bool LoadFromData(int vertexCount, int vertexDataSize, void *vertices, int indexCount, int indexDataSize, void *indices, std::vector<GeometryBufferAttribute> attributes);
+    bool LoadFromData(int vertexCount, int vertexSize, void *vertices, int indexCount, int indexSize, void *indices, std::vector<GeometryBufferAttribute> attributes);
 
-    bool IsCompatibleToBuffer();
+    //  bool IsCompatibleToBuffer();
 
     int GetVertexCount() const;
     int GetIndexCount() const;
+    int GetVertexSize() const;
+    int GetIndexSize() const;
     int GetVertexDataSize() const;
     int GetIndexDataSize() const;
+    const void *GetVertexData() const;
+    const void *GetIndexData() const;
     const std::vector<GeometryBufferAttribute> &GetAttributes() const;
+};
+
+class Geometry
+{
+  private:
+    GLuint vao;
+    GLuint vbo;
+    GLuint ibo;
+
+  public:
+    Geometry(const Mesh &);
+    Geometry(const std::vector<Mesh *> &);
+    Geometry(const Mesh *, size_t count);
+
+    ~Geometry();
+
+    void Bind();
+};
+
+struct SceneObjectUboData
+{
+    glm::mat4 modelMatrix;
+};
+
+class SceneObject : StaticUboOwner<SceneObjectUboData>
+{
+  private:
+    int bufferOffset;
+    int indexCount;
+    int offset;
+    int drawMode;
+    int indexType;
+    Geometry *geometry;
+    bool geometryManaged;
+
+  public:
+    SceneObject(Geometry *data, int indexCount, int offset, int drawMode, int indexType);
+    SceneObject(const Mesh &, int indexType = GL_UNSIGNED_SHORT, int drawMode = GL_TRIANGLES);
+    ~SceneObject();
+
+    const glm::mat4 &GetModelMatrix() const;
+
+    void Render();
 };
 
 class Camera
@@ -138,12 +161,19 @@ class Camera
     float far;
     float aspectRation;
 
+    glm::mat4 viewMat;
+    bool viewDirty;
+    glm::mat4 projectionMat;
+    bool projectionDirty;
+    glm::mat4 viewProjectionMat;
+
   public:
     Camera();
 
     void SetPosition(glm::vec3 const &pos);
     void SetUp(glm::vec3 const &up);
     void SetViewDirection(glm::vec3 const &direction);
+
     void MoveBy(glm::vec3 const &dist);
     void Rotate(float degrees, glm::vec3 const &axis);
 
@@ -154,7 +184,21 @@ class Camera
     void SetAspectRation(int w, int h);
     void SetAspectRation(float ratio);
 
-    void Flush(glm::mat4 &projectionBuf, glm::mat4 &viewBuf);
+    void UpdateMatrices();
+
+    const glm::mat4 &GetViewProjectionMatrix() const;
+    const glm::mat4 &GetViewProjectionMatrix();
+    const glm::mat4 &GetViewMatrix() const;
+    const glm::mat4 &GetViewMatrix();
+    const glm::mat4 &GetProjectionMatrix() const;
+    const glm::mat4 &GetProjectionMatrix();
+    const glm::vec3 &GetPosition() const;
+    const glm::vec3 &GetUp() const;
+    const glm::vec3 &GetViewDirection() const;
+    float GetFov() const;
+    float GetNear() const;
+    float GetFar() const;
+    float GetAspectRation() const;
 };
 
 struct SceneUboData
@@ -177,4 +221,4 @@ class Scene : public StaticUboOwner<SceneUboData>
 
     void Render();
 };
-} // namespace gui
+} // namespace glutil

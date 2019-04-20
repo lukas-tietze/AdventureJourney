@@ -62,7 +62,7 @@ void HandleKeyboard(GLFWwindow *win, int key, int /*scancode*/, int action, int 
         return;
     }
 
-    keyState[key] = action == GLFW_PRESS;
+    keyState[key] = action != GLFW_RELEASE;
 }
 
 void HandleMouseButton(GLFWwindow *win, int button, int action, int mods)
@@ -73,7 +73,7 @@ void HandleMouseButton(GLFWwindow *win, int button, int action, int mods)
         return;
     }
 
-    mouseState[button] = action == GLFW_PRESS;
+    mouseState[button] = action == GLFW_RELEASE;
 }
 
 void HandleCursor(GLFWwindow *win, double x, double y)

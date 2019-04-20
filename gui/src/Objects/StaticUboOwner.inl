@@ -2,14 +2,14 @@
 #include "glad/glad.h"
 
 template <class TData>
-gui::StaticUboOwner<TData>::StaticUboOwner() : ubo(0),
+glutil::StaticUboOwner<TData>::StaticUboOwner() : ubo(0),
                                            dirty(true),
                                            data()
 {
 }
 
 template <class TData>
-void gui::StaticUboOwner<TData>::CreateGlObjects()
+void glutil::StaticUboOwner<TData>::CreateGlObjects()
 {
     glGenBuffers(1, &this->ubo);
     glBindBuffer(GL_UNIFORM_BUFFER, this->ubo);
@@ -17,26 +17,26 @@ void gui::StaticUboOwner<TData>::CreateGlObjects()
 }
 
 template <class TData>
-void gui::StaticUboOwner<TData>::DestroyGlObjects()
+void glutil::StaticUboOwner<TData>::DestroyGlObjects()
 {
     glDeleteBuffers(1, &this->ubo);
     this->ubo = 0;
 }
 
 template <class TData>
-void gui::StaticUboOwner<TData>::Bind() const
+void glutil::StaticUboOwner<TData>::Bind() const
 {
     glBindBufferBase(GL_UNIFORM_BUFFER, this->bindingTarget, this->ubo);
 }
 
 template <class TData>
-void gui::StaticUboOwner<TData>::SetBindingTarget(int target)
+void glutil::StaticUboOwner<TData>::SetBindingTarget(int target)
 {
     this->bindingTarget = target;
 }
 
 template <class TData>
-void gui::StaticUboOwner<TData>::Upload() const
+void glutil::StaticUboOwner<TData>::Upload() const
 {
     if (this->dirty)
     {
@@ -48,7 +48,7 @@ void gui::StaticUboOwner<TData>::Upload() const
 }
 
 template <class TData>
-void gui::StaticUboOwner<TData>::SetDirty()
+void glutil::StaticUboOwner<TData>::SetDirty()
 {
     this->dirty = true;
 }
