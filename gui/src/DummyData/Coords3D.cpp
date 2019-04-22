@@ -28,7 +28,7 @@ void BuildMesh()
 }
 } // namespace
 
-const glutil::Mesh &gui::models::CoordMesh()
+const glutil::Mesh &gui::models::Coord3dMesh()
 {
     if (!meshReady)
         BuildMesh();

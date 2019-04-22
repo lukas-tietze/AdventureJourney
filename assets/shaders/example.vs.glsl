@@ -2,15 +2,26 @@
 // Attributes
 layout(location = 0) in vec4 pos;
 layout(location = 1) in vec4 clr;
-// Uniforms
-layout(location = 0) uniform mat4 MVP;
-
 // Output varyings
 out vec4 vclr;
 
+layout(std140, binding = 0) uniform objectDataBlock
+{
+    mat4 model;
+    mat3 normal;
+} object;
+
+layout(std140, binding = 1) uniform cameraDataBlock
+{
+    mat4 view;
+    mat4 invView;
+    mat4 projection;
+    mat4 invProjection;
+} camera;
+
 void main()
 {
-	gl_Position = MVP * pos;
+	gl_Position = camera.projection * camera.view * object.model * pos;
 
 	vclr = vec4(clr.r / 255.0,
                 clr.g / 255.0,

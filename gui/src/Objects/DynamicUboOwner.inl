@@ -37,9 +37,9 @@ void glutil::DynamicUboOwner<TData>::SetBindingTarget(int target)
 }
 
 template <class TData>
-void glutil::DynamicUboOwner<TData>::Upload() const
+void glutil::DynamicUboOwner<TData>::Upload(bool force)
 {
-    if (this->dirty)
+    if (this->dirty || force)
     {
         if (this->bufferSize != this->data.size())
         {
@@ -51,6 +51,7 @@ void glutil::DynamicUboOwner<TData>::Upload() const
             glBindBuffer(GL_UNIFORM_BUFFER, this->ubo);
             glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(TData) * this->data.size(), this->data.data());
         }
+        
         this->dirty = false;
     }
 }

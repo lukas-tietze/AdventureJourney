@@ -2,9 +2,10 @@
 #include "glad/glad.h"
 
 template <class TData>
-glutil::StaticUboOwner<TData>::StaticUboOwner() : ubo(0),
-                                           dirty(true),
-                                           data()
+glutil::StaticUboOwner<TData>::StaticUboOwner() : ubo(static_cast<GLuint>(0)),
+                                                  bindingTarget(static_cast<GLuint>(0)),
+                                                  dirty(true),
+                                                  data()
 {
 }
 
@@ -36,9 +37,9 @@ void glutil::StaticUboOwner<TData>::SetBindingTarget(int target)
 }
 
 template <class TData>
-void glutil::StaticUboOwner<TData>::Upload() const
+void glutil::StaticUboOwner<TData>::Upload(bool force)
 {
-    if (this->dirty)
+    if (this->dirty || force)
     {
         glBindBuffer(GL_UNIFORM_BUFFER, this->ubo);
         glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(TData), &this->data);

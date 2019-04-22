@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include "glad/glad.h"
 #include "glm/glm.hpp"
 
 namespace glutil
@@ -11,8 +12,8 @@ template <class TData>
 class StaticUboOwner
 {
   private:
-    int ubo;
-    int bindingTarget;
+    GLuint ubo;
+    GLuint bindingTarget;
     bool dirty;
 
   protected:
@@ -25,7 +26,7 @@ class StaticUboOwner
     void DestroyGlObjects();
     void Bind() const;
     void SetBindingTarget(int);
-    void Upload() const;
+    void Upload(bool force = false);
     void SetDirty();
 };
 
@@ -50,7 +51,7 @@ class DynamicUboOwner
     void DestroyGlObjects();
     void Bind() const;
     void SetBindingTarget(int);
-    void Upload() const;
+    void Upload(bool force = false);
     void SetDirty();
 };
 
@@ -86,13 +87,17 @@ class Mesh
     std::vector<GeometryBufferAttribute> attributes;
     void *vertices;
     void *indices;
+    bool dataManaged;
 
   public:
     Mesh();
+    ~Mesh();
 
     bool LoadFromJson(const std::string &path);
     bool LoadFromCg2vd(const std::string &path);
-    bool LoadFromData(int vertexCount, int vertexSize, void *vertices, int indexCount, int indexSize, void *indices, std::vector<GeometryBufferAttribute> attributes);
+    bool LoadFromData(int vertexCount, int vertexSize, void *vertices, int indexCount, int indexSize, void *indices, std::vector<GeometryBufferAttribute> attributes, bool managaData = false);
+
+    void Discard();
 
     //  bool IsCompatibleToBuffer();
 
@@ -127,9 +132,10 @@ class Geometry
 struct SceneObjectUboData
 {
     glm::mat4 modelMatrix;
+    glm::mat3 normalMatrix;
 };
 
-class SceneObject : StaticUboOwner<SceneObjectUboData>
+class SceneObject : public StaticUboOwner<SceneObjectUboData>
 {
   private:
     int bufferOffset;
@@ -146,11 +152,20 @@ class SceneObject : StaticUboOwner<SceneObjectUboData>
     ~SceneObject();
 
     const glm::mat4 &GetModelMatrix() const;
+    void SetModelMatrix(const glm::mat4 &);
 
     void Render();
 };
 
-class Camera
+struct CameraUboData
+{
+    glm::mat4 viewMat;
+    glm::mat4 inverseViewMat;
+    glm::mat4 projectionMat;
+    glm::mat4 inverseProjectionMat;
+};
+
+class Camera : public StaticUboOwner<CameraUboData>
 {
   private:
     glm::vec3 position;
@@ -161,11 +176,8 @@ class Camera
     float far;
     float aspectRation;
 
-    glm::mat4 viewMat;
     bool viewDirty;
-    glm::mat4 projectionMat;
     bool projectionDirty;
-    glm::mat4 viewProjectionMat;
 
   public:
     Camera();
@@ -186,12 +198,8 @@ class Camera
 
     void UpdateMatrices();
 
-    const glm::mat4 &GetViewProjectionMatrix() const;
-    const glm::mat4 &GetViewProjectionMatrix();
     const glm::mat4 &GetViewMatrix() const;
-    const glm::mat4 &GetViewMatrix();
     const glm::mat4 &GetProjectionMatrix() const;
-    const glm::mat4 &GetProjectionMatrix();
     const glm::vec3 &GetPosition() const;
     const glm::vec3 &GetUp() const;
     const glm::vec3 &GetViewDirection() const;
@@ -203,11 +211,6 @@ class Camera
 
 struct SceneUboData
 {
-    glm::mat4 viewMat;
-    glm::mat4 inverseViewMat;
-    glm::mat4 projectionMat;
-    glm::mat4 inverseProjectionMat;
-    glm::mat4 normalMat;
 };
 
 class Scene : public StaticUboOwner<SceneUboData>

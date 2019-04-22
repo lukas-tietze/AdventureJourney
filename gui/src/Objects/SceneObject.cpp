@@ -1,5 +1,7 @@
 #include "Objects.hpp"
 #include "data/Io.hpp"
+#include "glm/gtx/transform.hpp"
+#include "glm/gtc/matrix_inverse.hpp"
 
 glutil::SceneObject::SceneObject(Geometry *geometry, int indexCount, int offset, int drawMode, int indexType) : indexCount(indexCount),
                                                                                                                 offset(offset),
@@ -38,6 +40,13 @@ glutil::SceneObject::~SceneObject()
 const glm::mat4 &glutil::SceneObject::GetModelMatrix() const
 {
     return this->data.modelMatrix;
+}
+
+void glutil::SceneObject::SetModelMatrix(const glm::mat4 &mat)
+{
+    this->data.modelMatrix = mat;
+    this->data.normalMatrix = glm::inverseTranspose(glm::mat3(mat));
+    this->SetDirty();
 }
 
 void glutil::SceneObject::Render()

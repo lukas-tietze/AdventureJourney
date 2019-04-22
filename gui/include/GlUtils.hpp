@@ -16,12 +16,22 @@ struct CreateInfo
 
 extern const CreateInfo DefaultCreateInfo;
 
-//Data
+//Data Getters
 int GetWindowWidth();
 int GetWindowHeight();
+float GetAspectRatio();
+int GetMouseX();
+int GetMouseY();
+int GetMouseDeltaX();
+int GetMouseDeltaY();
+int GetScrollX();
+int GetScrollY();
 GLFWwindow *GetWindow();
 bool HasWindow();
+
+//Setters
 void SetCustomTitle(const std::string &);
+void SetCursorGameMode(bool);
 
 //Lifecycle
 bool Init(CreateInfo = DefaultCreateInfo);
@@ -65,12 +75,17 @@ bool HasNextEvent();
 const Event &QueryNextEvent();
 bool IsKeyDown(int key);
 bool IsKeyUp(int key);
+bool IsModifierDown(int modifier);
+bool IsModifierUp(int modifier);
 bool WasKeyPressed(int key);
 bool WasKeyReleased(int key);
 bool IsButtonDown(int button);
 bool IsButtonUp(int button);
 bool WasButtonPressed(int button);
 bool WasButtonReleased(int button);
+bool WasWindowResized();
+bool WasMouseMoved();
+bool WasScrolled();
 
 class Screen
 {

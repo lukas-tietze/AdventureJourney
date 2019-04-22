@@ -6,21 +6,17 @@ glutil::Mesh::Mesh() : vertexCount(0),
                        indexSize(0),
                        attributes(0),
                        vertices(nullptr),
-                       indices(nullptr)
+                       indices(nullptr),
+                       dataManaged(false)
 {
 }
 
-bool glutil::Mesh::LoadFromJson(const std::string &path)
+glutil::Mesh::~Mesh()
 {
-    return false;
+    this->Discard();
 }
 
-bool glutil::Mesh::LoadFromCg2vd(const std::string &path)
-{
-    return false;
-}
-
-bool glutil::Mesh::LoadFromData(int vertexCount, int vertexSize, void *vertices, int indexCount, int indexSize, void *indices, std::vector<GeometryBufferAttribute> attributes)
+bool glutil::Mesh::LoadFromData(int vertexCount, int vertexSize, void *vertices, int indexCount, int indexSize, void *indices, std::vector<GeometryBufferAttribute> attributes, bool managaData)
 {
     this->vertexCount = vertexCount;
     this->indexCount = indexCount;
@@ -29,9 +25,28 @@ bool glutil::Mesh::LoadFromData(int vertexCount, int vertexSize, void *vertices,
     this->attributes = attributes;
     this->vertices = vertices;
     this->indices = indices;
+    this->dataManaged = managaData;
 
     return true;
 }
+
+void glutil::Mesh::Discard()
+{
+    this->vertexCount = 0;
+    this->indexCount = 0;
+    this->vertexSize = 0;
+    this->indexSize = 0;
+    this->attributes.clear();
+
+    if (this->dataManaged)
+    {
+        delete[] this->vertices;
+        delete[] this->indices;
+    }
+
+    this->vertices = nullptr;
+    this->indices = nullptr;
+};
 
 int glutil::Mesh::GetVertexCount() const
 {

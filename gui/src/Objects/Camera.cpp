@@ -6,15 +6,12 @@
 glutil::Camera::Camera() : position(3.f, 3.f, 3.f),
                            up(glutil::AXIS_Y),
                            direction(glutil::AXIS_X),
-                           fov(60.f),
+                           fov(glm::radians(75.f)),
                            near(0.1f),
                            far(100.f),
                            aspectRation(1.f),
-                           viewMat(true),
                            viewDirty(true),
-                           projectionMat(1.f),
-                           projectionDirty(1.f),
-                           viewProjectionMat(1.f)
+                           projectionDirty(1.f)
 {
 }
 
@@ -44,97 +41,95 @@ void glutil::Camera::MoveBy(glm::vec3 const &dist)
 
 void glutil::Camera::Rotate(float degrees, glm::vec3 const &axis)
 {
-    this->direction = glm::rotate(this->direction, glm::radians(degrees), axis);
-    this->viewDirty = true;
+    if (degrees != 0)
+    {
+        this->direction = glm::rotate(this->direction, glm::radians(degrees), axis);
+        this->viewDirty = true;
+    }
 }
 
 void glutil::Camera::SetFov(float fov)
 {
-    this->fov = fov;
-    this->projectionDirty = true;
+    if (this->fov != fov)
+    {
+        this->fov = fov;
+        this->projectionDirty = true;
+    }
 }
 
 void glutil::Camera::SetNear(float near)
 {
-    this->near = near;
-    this->projectionDirty = true;
+    if (this->near != near)
+    {
+        this->near = near;
+        this->projectionDirty = true;
+    }
 }
 
 void glutil::Camera::SetFar(float far)
 {
-    this->far = far;
-    this->projectionDirty = true;
+    if (this->far != far)
+    {
+        this->far = far;
+        this->projectionDirty = true;
+    }
 }
 
 void glutil::Camera::SetRange(float near, float far)
 {
-    this->near = near;
-    this->far = far;
-    this->projectionDirty = true;
+    if (this->near != near || this->far != far)
+    {
+        this->near = near;
+        this->far = far;
+        this->projectionDirty = true;
+    }
 }
 
 void glutil::Camera::SetAspectRation(int w, int h)
 {
-    this->aspectRation = static_cast<float>(w) / static_cast<float>(h);
-    this->projectionDirty = true;
+    if (this->aspectRation != static_cast<float>(w) / static_cast<float>(h))
+    {
+        this->aspectRation = static_cast<float>(w) / static_cast<float>(h);
+        this->projectionDirty = true;
+    }
 }
 
 void glutil::Camera::SetAspectRation(float ratio)
 {
-    this->aspectRation = ratio;
-    this->projectionDirty = true;
+    if (this->aspectRation != ratio)
+    {
+        this->aspectRation = ratio;
+        this->projectionDirty = true;
+    }
 }
 
 void glutil::Camera::UpdateMatrices()
 {
     if (this->viewDirty)
-        this->viewMat = glm::lookAt(this->position, this->position + this->direction, this->up);
+    {
+        this->data.viewMat = glm::lookAt(this->position, this->position + this->direction, this->up);
+        this->data.inverseViewMat = glm::inverse(this->data.viewMat);
+        this->viewDirty = false;
+        this->SetDirty();
+    }
 
     if (this->projectionDirty)
-        this->projectionMat = glm::perspective(this->fov, this->aspectRation, this->near, this->far);
-
-    if (this->viewDirty || this->projectionDirty)
     {
-        this->viewProjectionMat = this->projectionMat * this->viewMat;
-        this->viewDirty = false;
         this->projectionDirty = false;
+        this->data.projectionMat = glm::perspective(this->fov, this->aspectRation, this->near, this->far);
+        this->data.inverseProjectionMat = glm::inverse(this->data.projectionMat);
+        this->SetDirty();
     }
-}
-
-const glm::mat4 &glutil::Camera::GetViewProjectionMatrix() const
-{
-    return this->viewProjectionMat;
 }
 
 const glm::mat4 &glutil::Camera::GetProjectionMatrix() const
 {
-    return this->projectionMat;
+    return this->data.projectionMat;
 }
 
 const glm::mat4 &glutil::Camera::GetViewMatrix() const
 {
-    return this->viewMat;
-}
-
-const glm::mat4 &glutil::Camera::GetViewProjectionMatrix()
-{
-    this->UpdateMatrices();
-
-    return this->viewProjectionMat;
-}
-
-const glm::mat4 &glutil::Camera::GetProjectionMatrix()
-{
-    this->UpdateMatrices();
-
-    return this->projectionMat;
-}
-
-const glm::mat4 &glutil::Camera::GetViewMatrix()
-{
-    this->UpdateMatrices();
-
-    return this->viewMat;
+    return this->data.viewMat;
 }
 
 const glm::vec3 &glutil::Camera::GetPosition() const

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "glad/glad.h"
+#include "Objects.hpp"
 
 namespace gui
 {
@@ -19,10 +20,8 @@ struct Vertex_XYZ_RGB
 };
 #pragma pack(pop)
 
-extern Vertex_XYZ_RGB cubeData[8];
-extern GLubyte cubeIndices[36];
-
-extern Vertex_XYZ_RGB coordData[6];
-extern GLubyte coordIndices[6];
+const glutil::Mesh &CubeMesh();
+const glutil::Mesh &CoordMesh();
+const glutil::Mesh &Coord3dMesh();
 } // namespace models
 } // namespace gui
