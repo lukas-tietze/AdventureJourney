@@ -77,58 +77,15 @@ uint32_t HexToNumber(const char *);
 bool IsHexChar(char);
 
 template <class T>
-std::string ToString(const T &arg)
-{
-    std::stringstream s;
-
-    s << arg;
-
-    return s.str();
-}
-
+std::string ToString(const T &arg);
 template <class T>
-T Parse(const std::string &value)
-{
-    return T();
-}
-
+T Parse(const std::string &value);
 template <typename NumT>
-bool ParseIntegral(const std::string &text, NumT &target)
-{
-    try
-    {
-        target = static_cast<NumT>(std::stol(text));
-    }
-    catch (const std::invalid_argument &e)
-    {
-        return false;
-    }
-    catch (const std::out_of_range &e)
-    {
-        return false;
-    }
-
-    return true;
-}
-
+bool ParseIntegral(const std::string &text, NumT &target);
 template <typename NumT>
-bool ParseFloat(const std::string &text, NumT &target)
-{
-    try
-    {
-        target = static_cast<NumT>(std::stod(text));
-    }
-    catch (const std::invalid_argument &e)
-    {
-        return false;
-    }
-    catch (const std::out_of_range &e)
-    {
-        return false;
-    }
+bool ParseFloat(const std::string &text, NumT &target);
 
-    return true;
-}
+#include "common/src/data/StringUtils/Conversions.inl"
 
 class FormatException : public util::Exception
 {
@@ -138,267 +95,18 @@ class FormatException : public util::Exception
 
 void SetupStreamByPrintfFormat(std::iostream &, const std::string &);
 
-namespace
-{
-struct ArrayAccess
-{
-    size_t start;
-    size_t end;
-    size_t step;
-};
-
-ArrayAccess ComputeArrayAccess(const std::string &format)
-{
-    ArrayAccess res;
-
-    size_t endSep = format.find(':');
-    size_t stepSep = format.find(':', endSep);
-
-    if (endSep == std::string::npos)
-        throw util::FormatException("Array specifier has seperator ':'!");
-
-    if (endSep == 0)
-        res.start = 0;
-    else if (!util::ParseIntegral(format.substr(0, endSep - 1), res.start))
-        throw util::FormatException("Illegal value for array start");
-
-    if (stepSep == std::string::npos)
-    {
-        if (!util::ParseIntegral(format.substr(endSep + 1), res.end))
-            throw util::FormatException("Illegal value for array end");
-    }
-    else
-    {
-        if (!util::ParseIntegral(format.substr(endSep + 1, stepSep - endSep - 1), res.end))
-            throw util::FormatException("Illegal value for array end");
-
-        if (!util::ParseIntegral(format.substr(stepSep + 1), res.step))
-            throw util::FormatException("Illegal value for array step");
-    }
-
-    return res;
-}
-
-size_t PrepareFormat(const std::string &format, std::stringstream &buf, size_t pos)
-{
-    auto end = format.find('}', pos);
-
-    if (end == std::string::npos)
-        throw util::FormatException("Format specifier has no closing '}'-bracket!");
-
-    SetupStreamByPrintfFormat(buf, format.substr(pos + 1, end - pos - 1));
-
-    return end;
-}
-
-template <class T>
-size_t WriteArray(const std::string &format, std::stringstream &buf, size_t pos, const T &arg)
-{
-    auto end = format.find(']', pos);
-
-    if (end == std::string::npos)
-        throw util::FormatException("Array specifier has no closing ']'-bracket!");
-
-    return end;
-}
-
-template <class T>
-size_t WriteArray(const std::string &format, std::stringstream &buf, size_t pos, const T *&arg)
-{
-    auto start = pos;
-    auto end = format.find(']', pos);
-
-    if (end == std::string::npos)
-        throw util::FormatException("Array specifier has no closing ']'-bracket!");
-
-    const auto access = ComputeArrayAccess(format.substr(start + 1, end - start - 1));
-
-    for (size_t i = access.start; i < access.end; i += access.step)
-        buf << arg[i];
-
-    return end;
-}
-
-template <class T>
-size_t WriteIterable(const std::string &format, std::stringstream &buf, size_t pos, const T &arg)
-{
-    auto start = pos;
-    auto end = format.find('>', pos);
-
-    if (end == std::string::npos)
-        throw util::FormatException("Iterable specifier has no closing '>'-bracket!");
-
-    const auto access = ComputeArrayAccess(format.substr(start + 1, end - start - 1));
-
-    auto it = arg.begin();
-    auto itEnd = arg.end();
-    size_t i = 0;
-
-    for (; i < access.start; i++)
-        ++it;
-
-    while (i < access.end)
-    {
-        if ((i - access.start) % access.step == 0)
-            buf << *it;
-
-        i++;
-    }
-
-    return end;
-}
-
-void FormatInternal(const std::string &format, std::stringstream &buf, size_t pos)
-{
-    while (pos < format.length() - 1)
-    {
-        if (format[pos] == '%')
-        {
-            throw FormatException("Format placeholder without too few arguments!");
-        }
-        else if (format[pos] == '\\')
-        {
-            buf << format[pos + 1];
-            pos += 2;
-        }
-        else
-        {
-            buf << format[pos];
-            pos++;
-        }
-    }
-
-    if (pos < format.length())
-    {
-        if (format.back() == '%')
-            throw FormatException("Format placeholder without too few arguments!");
-        else
-            buf << format.back();
-    }
-}
-
 template <class TFirst, class... TArgs>
-void FormatInternal(const std::string &format, std::stringstream &buf, size_t pos, const TFirst &firstArg, const TArgs &... args)
-{
-    while (pos < format.length() - 1)
-    {
-        if (format[pos] == '%')
-        {
-            if (format[pos + 1] == '{')
-                pos = PrepareFormat(format, buf, pos + 1);
+std::string Format(const std::string &format, const TFirst &firstArg, const TArgs &... args);
 
-            if (format[pos + 1] == '[')
-                pos = WriteArray(format, buf, pos + 1, firstArg);
-            // else if (format[pos + 1] == '<')
-            //     pos = WriteIterable(format, buf, pos + 1, firstArg);
-            else
-                buf << firstArg;
-
-            FormatInternal(format, buf, pos + 1, args...);
-
-            return;
-        }
-        else if (format[pos] == '\\')
-        {
-            buf << format[pos + 1];
-            pos += 2;
-        }
-        else
-        {
-            buf << format[pos];
-            pos++;
-        }
-    }
-
-    if (pos < format.length())
-    {
-        if (format.back() == '%')
-            buf << firstArg;
-        else
-            buf << format.back();
-    }
-}
-} // namespace
-
-template <class TFirst, class... TArgs>
-std::string Format(const std::string &format, const TFirst &firstArg, const TArgs &... args)
-{
-    if (format.empty())
-    {
-        return std::string("");
-    }
-
-    std::stringstream buf;
-
-    FormatInternal(format, buf, 0, firstArg, args...);
-
-    return buf.str();
-}
-
-namespace
-{
-template <class TIterator>
-void PrintSequence(std::ostream &s, TIterator pos, TIterator end)
-{
-    s << '{';
-
-    if (pos != end)
-        s << ' ' << *pos;
-
-    while (++pos != end)
-        s << ", " << *pos;
-
-    s << " }";
-}
-
-template <class TIterator>
-void PrintSequenceOfPairs(std::ostream &s, TIterator pos, TIterator end)
-{
-    s << '{';
-
-    if (pos != end)
-        s << ' ' << pos->first << "=>" << pos->second;
-
-    while (++pos != end)
-        s << ", " << pos->first << "=>" << pos->second;
-
-    s << " }";
-}
-
-// template<int pos, class ...Ts>
-// void PrintTuple(std::ostream &, const std::tuple<Ts...> &tuple)
-// {
-//     std::get<pos>
-// }
-} // namespace
+#include "common/src/data/StringUtils/Format.inl"
 
 template <class T>
-std::ostream &operator<<(std::ostream &s, const std::vector<T> &vector)
-{
-    PrintSequence(s, vector.begin(), vector.end());
-
-    return s;
-}
-
+std::ostream &operator<<(std::ostream &s, const std::vector<T> &vector);
 template <class T>
-std::ostream &operator<<(std::ostream &s, const std::list<T> &list)
-{
-    PrintSequence(s, list.begin(), list.end());
-
-    return s;
-}
-
+std::ostream &operator<<(std::ostream &s, const std::list<T> &list);
 template <class TKey, class TValue>
-std::ostream &operator<<(std::ostream &s, const std::map<TKey, TValue> &map)
-{
-    PrintSequenceOfPairs(s, map.begin(), map.end());
+std::ostream &operator<<(std::ostream &s, const std::map<TKey, TValue> &map);
 
-    return s;
-}
+#include "common/src/data/StringUtils/StreamOperators.inl"
 
-// template <class... Ts>
-// std::ostream &operator<<(std::ostream &s, const std::tuple<Ts...> &)
-// {
-
-// }
 } // namespace util
