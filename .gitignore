@@ -55,3 +55,6 @@ debugfiles
 
 #systemfiles
 .vscode/ipch
+.vs
+*.vcxproj.filters
+*.vcxproj.user

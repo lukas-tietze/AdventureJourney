@@ -1,3 +1,1 @@
-/* #undef DEBUG */
-
-#pragma once
+#define DEBUG
