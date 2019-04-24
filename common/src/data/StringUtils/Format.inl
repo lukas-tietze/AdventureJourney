@@ -48,7 +48,7 @@ size_t PrepareFormat(const std::string &format, std::stringstream &buf, size_t p
     if (end == std::string::npos)
         throw util::FormatException("Format specifier has no closing '}'-bracket!");
 
-    SetupStreamByPrintfFormat(buf, format.substr(pos + 1, end - pos - 1));
+    util::SetupStreamByPrintfFormat(buf, format.substr(pos + 1, end - pos - 1));
 
     return end;
 }
@@ -116,7 +116,7 @@ void FormatInternal(const std::string &format, std::stringstream &buf, size_t po
     {
         if (format[pos] == '%')
         {
-            throw FormatException("Format placeholder without too few arguments!");
+            throw util::FormatException("Format placeholder without too few arguments!");
         }
         else if (format[pos] == '\\')
         {
@@ -133,7 +133,7 @@ void FormatInternal(const std::string &format, std::stringstream &buf, size_t po
     if (pos < format.length())
     {
         if (format.back() == '%')
-            throw FormatException("Format placeholder without too few arguments!");
+            throw util::FormatException("Format placeholder without too few arguments!");
         else
             buf << format.back();
     }

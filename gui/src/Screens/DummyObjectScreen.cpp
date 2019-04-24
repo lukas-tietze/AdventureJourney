@@ -1,5 +1,6 @@
 #include "GlScreens.hpp"
 #include "DummyData.hpp"
+#include "data/Io.hpp"
 #include "glm/gtx/transform.hpp"
 
 gui::DummyObjectScreen::DummyObjectScreen()
@@ -10,21 +11,33 @@ gui::DummyObjectScreen::DummyObjectScreen()
     this->camera.SetBindingTarget(1);
     this->camera.CreateGlObjects();
 
+    glutil::Mesh deerMesh, suzanneMesh;
+
     glEnable(GL_DEPTH_TEST);
 
     pId = glutil::CreateProgram("assets/shaders/example.vs.glsl",
                                 "assets/shaders/example.fs.glsl");
 
-    glutil::SceneObject *objects[2];
+    // this->objects.push_back(new glutil::SceneObject(gui::models::CubeMesh()));
+    // this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(1.f, 0.5f, 1.5f)));
 
-    objects[0] = new glutil::SceneObject(gui::models::CubeMesh(), GL_UNSIGNED_BYTE);
-    objects[0]->SetModelMatrix(glm::translate(glm::vec3(1.f, 0.5f, 1.5f)));
+    this->objects.push_back(new glutil::SceneObject(gui::models::CoordMesh()));
+    this->objects.back()->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
 
-    objects[1] = new glutil::SceneObject(gui::models::CoordMesh(), GL_UNSIGNED_BYTE, GL_LINES);
-    objects[1]->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
+    // this->objects.push_back(new glutil::SceneObject(gui::models::Coord3dMesh()));
+    // this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(-1.f, -1.f, 1.f)));
 
-    this->objects.push_back(objects[0]);
-    this->objects.push_back(objects[1]);
+    // if (deerMesh.LoadFromCg2vd("assets/models/dummies/deer.cg2vd"))
+    // {
+    //     this->objects.push_back(new glutil::SceneObject(deerMesh));
+    //     this->objects.back()->SetModelMatrix(glm::scale(glm::vec3(3.f, 3.f, 3.f)));
+    // }
+
+    if (suzanneMesh.LoadFromCg2vd("assets/models/dummies/suzanne.cg2vd"))
+    {
+        this->objects.push_back(new glutil::SceneObject(suzanneMesh));
+        this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(1.f, -1.f, 1.f)));
+    }
 
     for (auto object : this->objects)
     {
@@ -89,9 +102,9 @@ void gui::DummyObjectScreen::Update(double delta)
     auto viewCross = glm::cross(viewFlat, this->camera.GetUp());
     viewCross.y = 0;
 
-    this->objects[0]->SetModelMatrix(glm::rotate(this->objects[0]->GetModelMatrix(), (float)delta, glutil::AXIS_X));
-    this->objects[0]->SetModelMatrix(glm::rotate(this->objects[0]->GetModelMatrix(), (float)delta, glutil::AXIS_Y));
-    this->objects[0]->SetModelMatrix(glm::rotate(this->objects[0]->GetModelMatrix(), (float)delta, glutil::AXIS_Z));
+    // this->objects[0]->SetModelMatrix(glm::rotate(this->objects[0]->GetModelMatrix(), (float)delta, glutil::AXIS_X));
+    // this->objects[0]->SetModelMatrix(glm::rotate(this->objects[0]->GetModelMatrix(), (float)delta, glutil::AXIS_Y));
+    // this->objects[0]->SetModelMatrix(glm::rotate(this->objects[0]->GetModelMatrix(), (float)delta, glutil::AXIS_Z));
 
     this->camera.MoveBy(viewFlat * (float)(delta * x) +
                         this->camera.GetUp() * (float)(delta * y) +

@@ -18,7 +18,7 @@ using util::ToString;
 namespace
 {
 bool running = true;
-char *DebugLocation = "debugfiles/backtrace.dump";
+constexpr char DebugLocation[] = "debugfiles/backtrace.dump";
 
 void Quit()
 {

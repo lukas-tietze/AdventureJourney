@@ -1,5 +1,7 @@
 #include "Objects.hpp"
 
+#include "data/Io.hpp"
+
 #include <cstdlib>
 #include <cstdint>
 #include <cstdio>
@@ -8,32 +10,33 @@
 #include <cassert>
 #include <climits>
 #include <vector>
+
 namespace
 {
 enum CG2VDTypeID : uint32_t
 {
-    CG2_BYTE = 0x1400,               // == GL_BYTE
-    CG2_UBYTE = 0x1401,              // == GL_UNSIGNED_BYTE
-    CG2_SHORT = 0x1402,              // == GL_SHORT
-    CG2_USHORT = 0x1403,             // == GL_UNSIGNED_SHORT
-    CG2_INT = 0x1404,                // == GL_INT
-    CG2_UINT = 0x1405,               // == GL_UNSIGNED_INT
-    CG2_HALF_FLOAT = 0x140B,         // == GL_HALF_FLOAT
-    CG2_FLOAT = 0x1406,              // == GL_FLOAT
-    CG2_DOUBLE = 0x140A,             // == GL_DOUBLE
-    CG2_INT_2_10_10_10_REV = 0x8D9F, // == GL_INT_2_10_10_10_REV
-    CG2_UINT_2_10_10_10_REV = 0x8368 // == GL_UNSIGNED_INT_2_10_10_10_REV
+    CG2_BYTE = GL_BYTE,
+    CG2_UBYTE = GL_UNSIGNED_BYTE,
+    CG2_SHORT = GL_SHORT,
+    CG2_USHORT = GL_UNSIGNED_SHORT,
+    CG2_INT = GL_INT,
+    CG2_UINT = GL_UNSIGNED_INT,
+    CG2_HALF_FLOAT = GL_HALF_FLOAT,
+    CG2_FLOAT = GL_FLOAT,
+    CG2_DOUBLE = GL_DOUBLE,
+    CG2_INT_2_10_10_10_REV = GL_INT_2_10_10_10_REV,
+    CG2_UINT_2_10_10_10_REV = GL_UNSIGNED_INT_2_10_10_10_REV,
 };
 
 enum CG2VDPrimitiveID : uint32_t
 {
-    CG2_POINTS = 0x0000,         // == GL_POINTS
-    CG2_LINES = 0x0001,          // == GL_LINES
-    CG2_LINE_LOOP = 0x0002,      // == GL_LINE_LOOP
-    CG2_LINE_STRIP = 0x0003,     // == GL_LINE_STRIP
-    CG2_TRIANGLES = 0x0004,      // == GL_TRIANGLES
-    CG2_TRIANGLE_STRIP = 0x0005, // == GL_TRIANGLE_STRIP
-    CG2_TRIANGLE_FAN = 0x0006    // == GL_TRIANGLE_FAN
+    CG2_POINTS = GL_POINTS,
+    CG2_LINES = GL_LINES,
+    CG2_LINE_LOOP = GL_LINE_LOOP,
+    CG2_LINE_STRIP = GL_LINE_STRIP,
+    CG2_TRIANGLES = GL_TRIANGLES,
+    CG2_TRIANGLE_STRIP = GL_TRIANGLE_STRIP,
+    CG2_TRIANGLE_FAN = GL_TRIANGLE_FAN,
 };
 
 enum CG2VDAttributeID : uint32_t
@@ -56,6 +59,14 @@ void Attribute_set(CG2VDAttribute &am, const uint32_t id, const CG2VDTypeID type
 
 struct CG2VDAttribute
 {
+    uint32_t internal_attrib_size; // Ignore this !!!
+    uint32_t attrib_id;            // id of this attribute.
+    uint32_t type;                 // datatype of this attribute (one of CG2VDTypeID)
+    uint32_t count;                // number of elements this attribute has (one of [1,4])
+    uint32_t normalized;           // is the attribute normalized
+    uint32_t as_integer;           // is this attribute ment to be an integer
+    uint32_t offset;               // offset from the beginning of the vertex in bytes
+
     CG2VDAttribute()
     {
         Attribute_set(*this,
@@ -64,21 +75,13 @@ struct CG2VDAttribute
                       0, 0, 0, 0);
 
         internal_attrib_size = sizeof(internal_attrib_size) +
-                               sizeof(attib_id) +
+                               sizeof(attrib_id) +
                                sizeof(type) +
                                sizeof(count) +
                                sizeof(normalized) +
                                sizeof(as_integer) +
                                sizeof(offset);
     }
-
-    uint32_t internal_attrib_size; // Ignore this !!!
-    uint32_t attib_id;             // id of this attribute.
-    uint32_t type;                 // datatype of this attribute (one of CG2VDTypeID)
-    uint32_t count;                // number of elements this attribute has (one of [1,4])
-    uint32_t normalized;           // is the attribute normalized
-    uint32_t as_integer;           // is this attribute ment to be an integer
-    uint32_t offset;               // offset from the beginning of the vertex in bytes
 };
 
 struct CG2VDMeta
@@ -179,7 +182,7 @@ void Attribute_set(CG2VDAttribute &am,
                    const uint32_t as_integer,
                    const uint32_t offset)
 {
-    am.attib_id = id;
+    am.attrib_id = id;
     am.type = type;
     am.count = count;
     am.normalized = normalized;
@@ -193,7 +196,7 @@ void Attribute_read(CG2VDAttribute &am, FILE *f)
 
     VD_READ_VAR(am.internal_attrib_size, f);
     total_size = to_read = am.internal_attrib_size - sizeof(am.internal_attrib_size);
-    to_read -= VD_READ_VAR(am.attib_id, f);
+    to_read -= VD_READ_VAR(am.attrib_id, f);
     to_read -= VD_READ_VAR(am.type, f);
     to_read -= VD_READ_VAR(am.count, f);
     to_read -= VD_READ_VAR(am.normalized, f);
@@ -323,4 +326,43 @@ uint32_t Attribute_size(const CG2VDAttribute &am)
 
 bool glutil::Mesh::LoadFromCg2vd(const std::string &path)
 {
+    CG2VertexData data;
+    if (!data.read(path))
+        return false;
+
+    this->vertexCount = data.meta_data.num_vertices;
+    this->vertexSize = data.meta_data.vertex_size;
+    this->vertices = data.vertex_data;
+    this->indexCount = data.meta_data.num_indices;
+    this->indexType = data.meta_data.index_type;
+    this->indexSize = this->CalculateIndexSize(this->indexType);
+    this->indices = data.index_data;
+    this->dataManaged = true;
+    this->drawMode = data.meta_data.primitive;
+
+    util::dbg.WriteLine("Loaded Mesh [%] from Cg2vd-file \"%\": vertexCount=%, vertexSize=%, indexCount=%, indexType=%, indexSize=%, drawMode=%, attributes=%",
+                        this,
+                        path,
+                        this->vertexCount,
+                        this->vertexSize,
+                        this->indexCount,
+                        this->indexType,
+                        this->indexSize,
+                        this->drawMode,
+                        data.meta_data.attributes.size());
+
+    for (const auto &attrib : data.meta_data.attributes)
+    {
+        util::dbg.WriteLine("Loaded Attribute % for Mesh [%]: count=%, type=%, normalized=%, offset=%",
+                            attrib.attrib_id,
+                            this,
+                            attrib.count,
+                            attrib.type,
+                            attrib.normalized,
+                            attrib.offset);
+                            
+        this->attributes.push_back(GeometryBufferAttribute(attrib.attrib_id, attrib.count, attrib.type, attrib.normalized, attrib.offset));
+    }
+
+    return true;
 }

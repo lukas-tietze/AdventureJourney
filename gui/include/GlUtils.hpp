@@ -108,12 +108,39 @@ GLuint CreateProgram(GLuint vs, GLuint fs);
 GLuint CreateProgram(const std::string &vsSrc, const std::string &fsSrc);
 bool CheckShader(GLuint shader);
 bool CheckProgram(GLuint prog);
-GLenum HandleGlError();
+void PrintGlError(GLenum error);
+int HandleGlErrors();
 
 extern const glm::vec3 AXIS_X;
 extern const glm::vec3 AXIS_Y;
 extern const glm::vec3 AXIS_Z;
 extern const glm::vec3 ORIGIN;
+
+enum class DrawMode : uint32_t
+{
+    CG2_POINTS = GL_POINTS,
+    CG2_LINES = GL_LINES,
+    CG2_LINE_LOOP = GL_LINE_LOOP,
+    CG2_LINE_STRIP = GL_LINE_STRIP,
+    CG2_TRIANGLES = GL_TRIANGLES,
+    CG2_TRIANGLE_STRIP = GL_TRIANGLE_STRIP,
+    CG2_TRIANGLE_FAN = GL_TRIANGLE_FAN,
+};
+
+enum class DataType : uint32_t
+{
+    CG2_BYTE = GL_BYTE,
+    CG2_UBYTE = GL_UNSIGNED_BYTE,
+    CG2_SHORT = GL_SHORT,
+    CG2_USHORT = GL_UNSIGNED_SHORT,
+    CG2_INT = GL_INT,
+    CG2_UINT = GL_UNSIGNED_INT,
+    CG2_HALF_FLOAT = GL_HALF_FLOAT,
+    CG2_FLOAT = GL_FLOAT,
+    CG2_DOUBLE = GL_DOUBLE,
+    CG2_INT_2_10_10_10_REV = GL_INT_2_10_10_10_REV,
+    CG2_UINT_2_10_10_10_REV = GL_UNSIGNED_INT_2_10_10_10_REV,
+};
 
 template <unsigned int NUM_BUFFS = 16>
 class GlWatch
@@ -123,45 +150,13 @@ class GlWatch
     GLuint next;
 
   public:
-    GlWatch()
-    {
-        next = 0;
-        glGenQueries(NUM_BUFFS, query);
-        for (unsigned int i = 0; i < NUM_BUFFS; i++)
-            cpu_time[i] = 0;
-    }
-    ~GlWatch()
-    {
-        glDeleteQueries(NUM_BUFFS, query);
-        for (unsigned int i = 0; i < NUM_BUFFS; i++)
-            query[i] = 0;
-    }
+    GlWatch();
+    ~GlWatch();
 
-    void take()
-    {
-        glQueryCounter(query[next], GL_TIMESTAMP);
-        glGetInteger64v(GL_TIMESTAMP, cpu_time + next);
-        next = (next + 1) % NUM_BUFFS;
-    }
-
-    /**
-	 * @brief get_time_in_ms will query and return the oldest gpu timestamp!
-	 * @return time in ms
-	 */
-    double get_gpu_time_in_ms()
-    {
-        GLuint64 time_ns = 0;
-        glGetQueryObjectui64v(query[(next) % NUM_BUFFS], GL_QUERY_RESULT, &time_ns);
-        return static_cast<double>(time_ns) / 1000000.0;
-    }
-
-    /**
-	 * @brief get_time_in_ms will return the oldest cpu timestamp!
-	 * @return time in ms
-	 */
-    double get_cpu_time_in_ms()
-    {
-        return static_cast<double>(cpu_time[next]) / 1000000.0;
-    }
+    void take();
+    double get_gpu_time_in_ms();
+    double get_cpu_time_in_ms();
 };
 } // namespace glutil
+
+#include "gui/src/GlUtils/GlWatch.inl"

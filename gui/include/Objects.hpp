@@ -81,13 +81,17 @@ class Mesh
 {
   private:
     int vertexCount;
-    int indexCount;
     int vertexSize;
-    int indexSize;
-    std::vector<GeometryBufferAttribute> attributes;
     void *vertices;
+    int indexCount;
+    int indexSize;
+    int indexType;
     void *indices;
+    std::vector<GeometryBufferAttribute> attributes;
+    int drawMode;
     bool dataManaged;
+
+    int CalculateIndexSize(int);
 
   public:
     Mesh();
@@ -95,24 +99,27 @@ class Mesh
 
     bool LoadFromJson(const std::string &path);
     bool LoadFromCg2vd(const std::string &path);
-    bool LoadFromData(int vertexCount, int vertexSize, void *vertices, int indexCount, int indexSize, void *indices, std::vector<GeometryBufferAttribute> attributes, bool managaData = false);
-
-    void Discard();
-
-    //  bool IsCompatibleToBuffer();
+    bool LoadFromData(int vertexCount, int vertexSize, void *vertices,
+                      int indexCount, int indexType, void *indices,
+                      std::vector<GeometryBufferAttribute> attributes,
+                      int drawMode, bool managaData = false);
 
     int GetVertexCount() const;
-    int GetIndexCount() const;
     int GetVertexSize() const;
-    int GetIndexSize() const;
     int GetVertexDataSize() const;
-    int GetIndexDataSize() const;
     const void *GetVertexData() const;
+    int GetIndexCount() const;
+    int GetIndexSize() const;
+    int GetIndexType() const;
+    int GetIndexDataSize() const;
+    int GetDrawMode() const;
     const void *GetIndexData() const;
     const std::vector<GeometryBufferAttribute> &GetAttributes() const;
 };
 
-class Geometry
+class SceneObject;
+
+class GeometryBuffer
 {
   private:
     GLuint vao;
@@ -120,11 +127,11 @@ class Geometry
     GLuint ibo;
 
   public:
-    Geometry(const Mesh &);
-    Geometry(const std::vector<Mesh *> &);
-    Geometry(const Mesh *, size_t count);
+    GeometryBuffer();
+    GeometryBuffer(const Mesh &);
+    ~GeometryBuffer();
 
-    ~Geometry();
+    bool Buffer(const Mesh &, SceneObject &out);
 
     void Bind();
 };
@@ -143,12 +150,13 @@ class SceneObject : public StaticUboOwner<SceneObjectUboData>
     int offset;
     int drawMode;
     int indexType;
-    Geometry *geometry;
+
+    GeometryBuffer *geometry;
     bool geometryManaged;
 
   public:
-    SceneObject(Geometry *data, int indexCount, int offset, int drawMode, int indexType);
-    SceneObject(const Mesh &, int indexType = GL_UNSIGNED_SHORT, int drawMode = GL_TRIANGLES);
+    SceneObject(GeometryBuffer *data, int bufferOffset, int indexCount, int offset, int drawMode, int indexType, bool manageGeometryBuffer = false);
+    SceneObject(const Mesh &);
     ~SceneObject();
 
     const glm::mat4 &GetModelMatrix() const;
@@ -216,7 +224,7 @@ struct SceneUboData
 class Scene : public StaticUboOwner<SceneUboData>
 {
   private:
-    std::map<int, Geometry *> geometry;
+    std::map<int, GeometryBuffer *> geometry;
     Camera camera;
 
   public:

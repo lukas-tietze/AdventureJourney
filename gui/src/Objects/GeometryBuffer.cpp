@@ -1,7 +1,13 @@
 #include "Objects.hpp"
 #include "data/Io.hpp"
 
-glutil::Geometry::Geometry(const Mesh &mesh)
+glutil::GeometryBuffer::GeometryBuffer() : vao(0),
+                                           vbo(0),
+                                           ibo(0)
+{
+}
+
+glutil::GeometryBuffer::GeometryBuffer(const Mesh &mesh)
 {
     glGenVertexArrays(1, &this->vao);
     glBindVertexArray(this->vao);
@@ -13,7 +19,7 @@ glutil::Geometry::Geometry(const Mesh &mesh)
     glBufferData(GL_ARRAY_BUFFER, mesh.GetVertexDataSize(), mesh.GetVertexData(), GL_STATIC_DRAW);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.GetIndexDataSize(), mesh.GetIndexData(), GL_STATIC_DRAW);
 
-    util::dbg.WriteLine("Created Geometry [%]: vertices: %*%=%Bytes, indices: %*%=%Bytes, vao=%, vbo=%, ibo=%",
+    util::dbg.WriteLine("Created GeometryBuffer [%]: vertices: %*%=%Bytes, indices: %*%=%Bytes, vao=%, vbo=%, ibo=%",
                         this,
                         mesh.GetVertexCount(),
                         mesh.GetVertexSize(),
@@ -35,7 +41,7 @@ glutil::Geometry::Geometry(const Mesh &mesh)
                               (void *)attribute.GetOffset());
         glEnableVertexAttribArray(attribute.GetIndex());
 
-        util::dbg.WriteLine("Created Atribute % for Geometry [%]: count=% type=%, normalized=%, stride=%, offset=%",
+        util::dbg.WriteLine("Created Atribute % for GeometryBuffer [%]: count=% type=%, normalized=%, stride=%, offset=%",
                             attribute.GetIndex(),
                             this,
                             attribute.GetCount(),
@@ -46,29 +52,28 @@ glutil::Geometry::Geometry(const Mesh &mesh)
     }
 }
 
-glutil::Geometry::Geometry(const std::vector<Mesh *> &meshes)
+glutil::GeometryBuffer::~GeometryBuffer()
 {
-}
+    util::dbg.WriteLine("Destroying geometry buffer [%]", this);
 
-glutil::Geometry::Geometry(const Mesh *, size_t count)
-{
-}
-
-glutil::Geometry::~Geometry()
-{
+    util::dbg.WriteLine("Deleting vao % of geometry buffer [%]", this->vao, this);
     glDeleteVertexArrays(1, &this->vao);
     this->vao = 0;
 
+    util::dbg.WriteLine("Deleting vbo % of geometry buffer [%]", this->vbo, this);
     glDeleteBuffers(1, &this->vbo);
     this->vbo = 0;
 
+    util::dbg.WriteLine("Deleting ibo % of geometry buffer [%]", this->ibo, this);
     glDeleteBuffers(1, &this->ibo);
     this->ibo = 0;
 }
 
-void glutil::Geometry::Bind()
+bool glutil::GeometryBuffer::Buffer(const glutil::Mesh &, glutil::SceneObject &)
+{
+}
+
+void glutil::GeometryBuffer::Bind()
 {
     glBindVertexArray(this->vao);
-    glEnableVertexAttribArray(0);
-    glEnableVertexAttribArray(1);
 }

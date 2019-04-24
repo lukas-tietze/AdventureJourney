@@ -3,38 +3,49 @@
 #include "glm/gtx/transform.hpp"
 #include "glm/gtc/matrix_inverse.hpp"
 
-glutil::SceneObject::SceneObject(Geometry *geometry, int indexCount, int offset, int drawMode, int indexType) : indexCount(indexCount),
-                                                                                                                offset(offset),
-                                                                                                                drawMode(drawMode),
-                                                                                                                indexType(indexType),
-                                                                                                                geometry(geometry),
-                                                                                                                geometryManaged(false)
+glutil::SceneObject::SceneObject(GeometryBuffer *data, int bufferOffset, int indexCount, int offset, int drawMode, int indexType, bool manageGeometryBuffer) : bufferOffset(bufferOffset),
+                                                                                                                                                               indexCount(indexCount),
+                                                                                                                                                               offset(offset),
+                                                                                                                                                               drawMode(drawMode),
+                                                                                                                                                               indexType(indexType),
+                                                                                                                                                               geometry(geometry),
+                                                                                                                                                               geometryManaged(manageGeometryBuffer)
 {
-    util::dbg.WriteLine("Created Scene Object: indexCount: %, offset: %, drawMode %, indexType: %",
+    util::dbg.WriteLine("Created Scene Object [%] from data: buffer=%, bufferOffset=%, indexCount=%, offset=%, drawMode=%, indexType=%, manageBuffer=%",
+                        this,
+                        data,
+                        bufferOffset,
                         indexCount,
                         offset,
                         drawMode,
-                        indexType);
+                        indexType,
+                        manageGeometryBuffer);
 }
 
-glutil::SceneObject::SceneObject(const Mesh &mesh, int indexType, int drawMode) : indexCount(mesh.GetIndexCount()),
-                                                                                  offset(0),
-                                                                                  drawMode(drawMode),
-                                                                                  indexType(indexType),
-                                                                                  geometry(new Geometry(mesh)),
-                                                                                  geometryManaged(true)
+glutil::SceneObject::SceneObject(const Mesh &mesh) : bufferOffset(0),
+                                                     indexCount(mesh.GetIndexCount()),
+                                                     offset(0),
+                                                     drawMode(mesh.GetDrawMode()),
+                                                     indexType(mesh.GetIndexType()),
+                                                     geometry(new GeometryBuffer(mesh)),
+                                                     geometryManaged(true)
 {
-    util::dbg.WriteLine("Created Scene Object: indexCount: %, offset: %, drawMode %, indexType: %",
-                        indexCount,
-                        offset,
+    util::dbg.WriteLine("Created Scene Object [%] from mesh [%]: drawMode=%, indexType=%",
+                        this,
+                        &mesh,
                         drawMode,
                         indexType);
 }
 
 glutil::SceneObject::~SceneObject()
 {
+    util::dbg.WriteLine("Destroying Scene Object [%]", this);
+
     if (this->geometryManaged)
+    {
+        util::dbg.WriteLine("Deleting geometry buffer of scene object [%]", this);
         delete this->geometry;
+    }
 }
 
 const glm::mat4 &glutil::SceneObject::GetModelMatrix() const
