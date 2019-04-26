@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <ios>
 
 #include "data/Json.hpp"
 
@@ -49,7 +50,7 @@ json::FormattedPrinter::FormattedPrinter(std::iostream *stream, const std::strin
 {
     if (this->out == nullptr)
     {
-        this->out = new std::stringstream(std::iostream::openmode::_S_out);
+        this->out = new std::stringstream(std::ios_base::openmode::out);
     }
     else
     {

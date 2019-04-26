@@ -2,8 +2,9 @@
 
 namespace
 {
-int ReadHex(std::iostream &stream, const std::string &format)
+int ReadHex(std::iostream &stream, const std::string &format, int i)
 {
+	return i;
 }
 } // namespace
 

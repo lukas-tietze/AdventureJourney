@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Defs.hpp"
+
 #include <stdexcept>
 #include <string>
 #include <sstream>

@@ -8,7 +8,7 @@ namespace
 const std::string CreateTokenizerStateInfo(const json::Tokenizer &t)
 {
     auto pos = t.GetPos();
-    auto len = std::min(t.GetLength() - pos - 1, 20);
+    auto len = std::min(static_cast<int>(t.GetLength() - pos - 1), 20);
     auto cut = std::string(t.GetData() + pos, len);
 
     return util::Format(" At %i %s%s%s",

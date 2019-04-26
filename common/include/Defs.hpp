@@ -5,7 +5,7 @@
 typedef uint32_t uint;
 typedef uint64_t ulong;
 typedef float math_t;
-typedef __id_t id_t;
+typedef uint32_t id_t;
 
 #define BIT(i) (1 << i)
 

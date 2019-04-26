@@ -3,6 +3,8 @@
 #--------------------------------------------------------
 cmake_minimum_required (VERSION 3.7)
 
+cmake_policy(SET CMP0074 NEW)
+
 set(COMPILE_GUI on)
 set(COMPILE_TESTS on)
 set(COMPILE_PLAYGROUND on)
@@ -33,15 +35,16 @@ set(CMAKE_BUILD_TYPE Debug)
 
 enable_language(CXX)
 
-Set(CURSES_NEED_NCURSES TRUE)
-find_package(Curses)
+# Set(CURSES_NEED_NCURSES TRUE)
+# find_package(Curses)
  
 #workaround https://gitlab.kitware.com/cmake/cmake/issues/17297
 set(_Boost_STACKTRACE_BASIC_HEADERS     "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_BACKTRACE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_ADDR2LINE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_NOOP_HEADERS      "boost/stacktrace.hpp")
-find_package(Boost 1.65.0 COMPONENTS stacktrace_backtrace filesystem chrono thread REQUIRED)
+# find_package(Boost 1.70.0 COMPONENTS stacktrace_backtrace filesystem chrono thread REQUIRED)
+find_package(Boost 1.70.0)
 
 #external includes
 include_directories(${Boost_INCLUDE_DIRS})

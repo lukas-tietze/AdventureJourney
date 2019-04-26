@@ -5,7 +5,7 @@ DEBUG_DIR=$(BUILD_DIR)/debug/
 RELEASE_OPTIONS=-DCMAKE_BUILD_TYPE=Release
 RELEASE_DIR=$(BUILD_DIR)/release
 
-all: debug
+all: cmake
 
 $(BUILD_DIR):
 	-mkdir $(BUILD_DIR)
@@ -21,6 +21,9 @@ $(DEBUG_DIR)/Makefile: $(DEBUG_DIR)
 
 $(RELEASE_DIR)/Makefile: $(RELEASE_DIR)
 	cd $(RELEASE_DIR) && cmake $(RELEASE_OPTIONS) $(BASE_DIR)
+
+cmake:
+	cd $(DEBUG_DIR) && cmake $(DEBUG_OPTIONS) $(BASE_DIR)
 
 debug: $(DEBUG_DIR)/Makefile
 	cd $(DEBUG_DIR) && make
