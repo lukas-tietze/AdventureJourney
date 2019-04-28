@@ -277,9 +277,6 @@ void glutil::Loop()
 
         activeScreen->Render();
 
-        if (HandleGlErrors() > 0)
-            Quit();
-
         gpuTime += watch[1]->get_gpu_time_in_ms() -
                    watch[0]->get_gpu_time_in_ms();
 

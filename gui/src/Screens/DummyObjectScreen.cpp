@@ -11,38 +11,28 @@ gui::DummyObjectScreen::DummyObjectScreen()
     this->camera.SetBindingTarget(1);
     this->camera.CreateGlObjects();
 
-    glutil::Mesh deerMesh, suzanneMesh;
-
     glEnable(GL_DEPTH_TEST);
 
-    pId = glutil::CreateProgram("assets/shaders/example.vs.glsl",
-                                "assets/shaders/example.fs.glsl");
+    pId = glutil::CreateProgram("assets/shaders/passthrough.vs.glsl",
+                                "assets/shaders/passthrough.fs.glsl");
 
-    // this->objects.push_back(new glutil::SceneObject(gui::models::CubeMesh()));
-    // this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(1.f, 0.5f, 1.5f)));
+    if (!pId)
+        util::err.WriteLine("Failed to load program!");
+
+    this->objects.push_back(new glutil::SceneObject(gui::models::CubeMesh()));
+    this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(1.f, 0.5f, 1.5f)));
 
     this->objects.push_back(new glutil::SceneObject(gui::models::CoordMesh()));
     this->objects.back()->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
 
-    // this->objects.push_back(new glutil::SceneObject(gui::models::Coord3dMesh()));
-    // this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(-1.f, -1.f, 1.f)));
-
-    // if (deerMesh.LoadFromCg2vd("assets/models/dummies/deer.cg2vd"))
-    // {
-    //     this->objects.push_back(new glutil::SceneObject(deerMesh));
-    //     this->objects.back()->SetModelMatrix(glm::scale(glm::vec3(3.f, 3.f, 3.f)));
-    // }
-
-    if (suzanneMesh.LoadFromCg2vd("assets/models/dummies/suzanne.cg2vd"))
-    {
-        this->objects.push_back(new glutil::SceneObject(suzanneMesh));
-        this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(1.f, -1.f, 1.f)));
-    }
+    this->objects.push_back(new glutil::SceneObject(gui::models::Coord3dMesh()));
+    this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(-1.f, -1.f, 1.f)));
 
     for (auto object : this->objects)
     {
         object->SetBindingTarget(0);
         object->CreateGlObjects();
+        glutil::ThrowOnGlError();
     }
 
     glutil::SetCursorGameMode(true);

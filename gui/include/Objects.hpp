@@ -217,6 +217,40 @@ class Camera : public StaticUboOwner<CameraUboData>
     float GetAspectRation() const;
 };
 
+enum class TextureFormat
+{
+    FromFileExtension,
+    JPEG,
+    PNG,
+    BMP,
+    Binary,
+};
+
+class Texture
+{
+  private:
+    int format;
+    int internalFormat;
+    int target;
+    int textureUnit;
+    int width;
+    int height;
+    int tex;
+
+  public:
+    Texture();
+    ~Texture();
+
+    bool LoadData(const std::string &path, TextureFormat format = TextureFormat::FromFileExtension);
+
+    void SetFormat(int);
+    void SetInternalFormat(int);
+    void SetTarget(int);
+    void SetTextureUnit(int);
+    void SetWidth(int);
+    void SetHeight(int);
+};
+
 struct SceneUboData
 {
 };

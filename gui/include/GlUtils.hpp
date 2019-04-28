@@ -4,6 +4,7 @@
 #include "GLFW/glfw3.h"
 #include "glm/glm.hpp"
 #include "GlmToStringConversions.hpp"
+#include "Exception.hpp"
 
 #include <string>
 
@@ -108,8 +109,15 @@ GLuint CreateProgram(GLuint vs, GLuint fs);
 GLuint CreateProgram(const std::string &vsSrc, const std::string &fsSrc);
 bool CheckShader(GLuint shader);
 bool CheckProgram(GLuint prog);
-void PrintGlError(GLenum error);
-int HandleGlErrors();
+
+class GlErrorException : public util::Exception
+{
+  public:
+    GlErrorException(GLenum error);
+};
+
+const std::string &GetGlErrorMessage(GLenum error);
+void ThrowOnGlError();
 
 extern const glm::vec3 AXIS_X;
 extern const glm::vec3 AXIS_Y;

@@ -15,6 +15,10 @@ GLuint glutil::LoadShader(const std::string &path, GLenum type)
         glDeleteShader(sId);
         sId = 0;
     }
+    else
+    {
+        util::dbg.WriteLine("Created shader % (%) from %.", sId, type, path);
+    }
 
     return sId;
 }
@@ -30,6 +34,10 @@ GLuint glutil::CreateProgram(GLuint vsId, GLuint fsId)
     {
         glDeleteProgram(pId);
         pId = 0;
+    }
+    else
+    {
+        util::dbg.WriteLine("Linked program % from vs % and fs %.", pId, vsId, fsId);
     }
 
     return pId;

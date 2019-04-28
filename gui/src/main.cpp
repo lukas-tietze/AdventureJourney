@@ -1,5 +1,9 @@
 #include "GlUtils.hpp"
 #include "GlScreens.hpp"
+#include "Exception.hpp"
+#include "data/Io.hpp"
+
+#include <stdexcept>
 
 int main()
 {
@@ -9,9 +13,24 @@ int main()
 
     screen->Show();
 
-    glutil::Loop();
+    try
+    {
+        glutil::Loop();
+    }
+    catch (util::Exception &e)
+    {
+        util::err.WriteLine("Exception occurred. Message: %\nStacktrace: %", e.GetMessage(), e.GetStacktrace());
+    }
+    catch (std::exception &e)
+    {
+        util::err.WriteLine("Exception occurred. Message: %", e.what());
+    }
+    catch (...)
+    {
+        util::err.WriteLine("unknown exception occurred.");
+    }
 
     delete screen;
-    
+
     glutil::DestroyGlContext();
 }
