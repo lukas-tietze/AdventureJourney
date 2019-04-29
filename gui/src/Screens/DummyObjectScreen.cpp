@@ -2,6 +2,7 @@
 #include "DummyData.hpp"
 #include "data/Io.hpp"
 #include "glm/gtx/transform.hpp"
+#include "data/Random.hpp"
 
 gui::DummyObjectScreen::DummyObjectScreen()
 {
@@ -19,14 +20,35 @@ gui::DummyObjectScreen::DummyObjectScreen()
     if (!pId)
         util::err.WriteLine("Failed to load program!");
 
-    this->objects.push_back(new glutil::SceneObject(gui::models::CubeMesh()));
-    this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(1.f, 0.5f, 1.5f)));
-
     this->objects.push_back(new glutil::SceneObject(gui::models::CoordMesh()));
     this->objects.back()->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
 
-    this->objects.push_back(new glutil::SceneObject(gui::models::Coord3dMesh()));
-    this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(-1.f, -1.f, 1.f)));
+    auto cubeMesh = gui::models::CubeMesh();
+    auto cubeGeometry = new glutil::GeometryBuffer(cubeMesh);
+    auto rnd = util::Random();
+
+    for (int i = 0; i < 30; i++)
+    {
+        auto translate = glm::vec3(rnd.Next(-5.f, 5.f),
+                                   rnd.Next(-5.f, 5.f),
+                                   rnd.Next(-5.f, 5.f));
+
+        auto scale = glm::vec3(rnd.Next(0.1f, 0.5f),
+                               rnd.Next(0.1f, 0.5f),
+                               rnd.Next(0.1f, 0.5f));
+
+        auto rotateAxis = glm::vec3(rnd.Next(0.0f, 1.0f),
+                                    rnd.Next(0.0f, 1.0f),
+                                    rnd.Next(0.0f, 1.0f));
+
+        auto rotateDeg = rnd.Next(0.f, 360.f);
+
+        this->objects.push_back(new glutil::SceneObject(cubeGeometry, cubeMesh));
+        this->objects.back()->SetModelMatrix(glm::translate(translate) * glm::rotate(rotateDeg, rotateAxis) * glm::scale(scale));
+    }
+
+    // this->objects.push_back(new glutil::SceneObject(gui::models::Coord3dMesh()));
+    // this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(-1.f, -1.f, 1.f)));
 
     for (auto object : this->objects)
     {
@@ -101,5 +123,11 @@ void gui::DummyObjectScreen::Update(double delta)
                         viewCross * (float)(delta * z));
     this->camera.Rotate(glutil::GetMouseDeltaX() * delta * -10.f, glutil::AXIS_Y);
     this->camera.Rotate(glutil::GetMouseDeltaY() * delta * -10.f, viewCross);
+
+    if(glutil::WasWindowResized())
+    {
+        this->camera.SetAspectRation(glutil::GetAspectRatio());
+    }
+
     this->camera.UpdateMatrices();
 }

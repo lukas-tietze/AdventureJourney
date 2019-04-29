@@ -49,10 +49,10 @@ glutil::Screen *activeScreen;
 glutil::Screen *nextScreen;
 glutil::Screen *blankScreen;
 
-void HandleResize(GLFWwindow *win, int w, int h)
+void HandleResize(GLFWwindow *win, int newWidth, int newHeight)
 {
-    w = w;
-    h = h;
+    w = newWidth;
+    h = newHeight;
     resized = true;
 }
 
@@ -121,7 +121,8 @@ bool InitGlfw(const glutil::CreateInfo &info)
         return false;
 
     /* register our callbacks */
-    glfwSetFramebufferSizeCallback(win, HandleResize);
+    // glfwSetFramebufferSizeCallback(win, HandleResize);
+    glfwSetWindowSizeCallback(win, HandleResize);
     glfwSetKeyCallback(win, HandleKeyboard);
     glfwSetMouseButtonCallback(win, HandleMouseButton);
     glfwSetScrollCallback(win, HandleScroll);
@@ -282,6 +283,9 @@ void glutil::Loop()
 
         cpuTime += watch[1]->get_cpu_time_in_ms() -
                    watch[0]->get_cpu_time_in_ms();
+
+        if (resized)
+            glViewport(0, 0, w, h);
 
         glfwSwapBuffers(win);
 

@@ -22,6 +22,41 @@ glutil::SceneObject::SceneObject(GeometryBuffer *data, int bufferOffset, int ind
                         manageGeometryBuffer);
 }
 
+glutil::SceneObject::SceneObject(GeometryBuffer *geometry, const Mesh &mesh) : bufferOffset(0),
+                                                                               indexCount(mesh.GetIndexCount()),
+                                                                               offset(0),
+                                                                               drawMode(mesh.GetDrawMode()),
+                                                                               indexType(mesh.GetIndexType()),
+                                                                               geometry(geometry),
+                                                                               geometryManaged(false)
+{
+}
+
+glutil::SceneObject::SceneObject(const SceneObject &copy) : bufferOffset(copy.bufferOffset),
+                                                            indexCount(copy.indexCount),
+                                                            offset(copy.offset),
+                                                            drawMode(copy.drawMode),
+                                                            indexType(copy.indexType),
+                                                            geometry(copy.geometry),
+                                                            geometryManaged(false)
+{
+}
+
+glutil::SceneObject::SceneObject(SceneObject &&transferFrom) : bufferOffset(transferFrom.bufferOffset),
+                                                               indexCount(transferFrom.indexCount),
+                                                               offset(transferFrom.offset),
+                                                               drawMode(transferFrom.drawMode),
+                                                               indexType(transferFrom.indexType),
+                                                               geometry(transferFrom.geometry),
+                                                               geometryManaged(transferFrom.geometryManaged)
+{
+    if (transferFrom.geometryManaged)
+    {
+        transferFrom.geometry = nullptr;
+        transferFrom.geometryManaged = false;
+    }
+}
+
 glutil::SceneObject::SceneObject(const Mesh &mesh) : bufferOffset(0),
                                                      indexCount(mesh.GetIndexCount()),
                                                      offset(0),

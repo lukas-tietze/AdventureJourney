@@ -1,5 +1,6 @@
 #include "Objects.hpp"
 #include "data/Io.hpp"
+#include <cstring>
 
 glutil::Mesh::Mesh() : vertexCount(0),
                        indexCount(0),
@@ -12,6 +13,16 @@ glutil::Mesh::Mesh() : vertexCount(0),
                        drawMode(0),
                        dataManaged(false)
 {
+}
+
+glutil::Mesh::Mesh(const Mesh &mesh)
+{
+    this->CopyFrom(mesh);
+}
+
+glutil::Mesh::Mesh(Mesh &&mesh)
+{
+    this->TransferFrom(mesh);
 }
 
 glutil::Mesh::~Mesh()
@@ -37,6 +48,45 @@ glutil::Mesh::~Mesh()
     }
 
     this->drawMode = 0;
+}
+
+void glutil::Mesh::CopyFrom(const Mesh &mesh)
+{
+    this->vertexCount = mesh.vertexCount;
+    this->indexCount = mesh.indexCount;
+    this->vertexSize = mesh.vertexSize;
+    this->indexSize = mesh.indexSize;
+    this->indexType = mesh.indexType;
+    this->attributes = mesh.attributes;
+    this->drawMode = mesh.drawMode;
+
+    if (mesh.dataManaged)
+    {
+        this->vertices = new unsigned char[mesh.GetVertexDataSize()];
+        this->indices = new unsigned char[mesh.GetIndexDataSize()];
+        this->dataManaged = true;
+
+        std::memcpy(this->vertices, mesh.vertices, mesh.GetVertexDataSize());
+        std::memcpy(this->indices, mesh.indices, mesh.GetIndexDataSize());
+    }
+}
+
+void glutil::Mesh::TransferFrom(Mesh &mesh)
+{
+    this->vertexCount = mesh.vertexCount;
+    this->indexCount = mesh.indexCount;
+    this->vertexSize = mesh.vertexSize;
+    this->indexSize = mesh.indexSize;
+    this->indexType = mesh.indexType;
+    this->attributes = mesh.attributes;
+    this->drawMode = mesh.drawMode;
+    this->vertices = mesh.vertices;
+    this->indices = mesh.vertices;
+    this->dataManaged = mesh.dataManaged;
+
+    mesh.vertices = nullptr;
+    mesh.indices = nullptr;
+    mesh.dataManaged = false;
 }
 
 int glutil::Mesh::CalculateIndexSize(int type)
@@ -144,4 +194,14 @@ int glutil::Mesh::GetDrawMode() const
 const std::vector<glutil::GeometryBufferAttribute> &glutil::Mesh::GetAttributes() const
 {
     return this->attributes;
+}
+
+const glutil::Mesh &glutil::Mesh::operator=(const Mesh &mesh)
+{
+    this->CopyFrom(mesh);
+}
+
+glutil::Mesh &glutil::Mesh::operator=(Mesh &&mesh)
+{
+    this->TransferFrom(mesh);
 }

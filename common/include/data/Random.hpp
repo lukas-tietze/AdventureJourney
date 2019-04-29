@@ -147,7 +147,10 @@ class RandomProvider
     {
     }
 
-    result_t Next();
+    result_t Next()
+    {
+        return this->distribution(this->engine);
+    }
 };
 
 class Random : public RandomProvider<std::uniform_real_distribution<double>, std::default_random_engine>
@@ -160,8 +163,8 @@ class Random : public RandomProvider<std::uniform_real_distribution<double>, std
     template <class T = double>
     T Next(T min, T max)
     {
-        return static_cast<T>(this->RandomProvider::Next() * (static_cast<Random::result_t>(max) - static_cast<Random::result_t>(min)) + 
-                    static_cast<Random::result_t>(min));
+        return static_cast<T>(this->RandomProvider::Next() * (static_cast<Random::result_t>(max) - static_cast<Random::result_t>(min)) +
+                              static_cast<Random::result_t>(min));
     }
 
     template <class T = double>

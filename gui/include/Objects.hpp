@@ -93,8 +93,13 @@ class Mesh
 
     int CalculateIndexSize(int);
 
+    void CopyFrom(const Mesh &);
+    void TransferFrom(Mesh &);
+
   public:
     Mesh();
+    Mesh(const Mesh &);
+    Mesh(Mesh &&);
     ~Mesh();
 
     bool LoadFromJson(const std::string &path);
@@ -115,6 +120,9 @@ class Mesh
     int GetDrawMode() const;
     const void *GetIndexData() const;
     const std::vector<GeometryBufferAttribute> &GetAttributes() const;
+
+    const Mesh &operator=(const Mesh &);
+    Mesh &operator=(Mesh &&);
 };
 
 class SceneObject;
@@ -156,6 +164,9 @@ class SceneObject : public StaticUboOwner<SceneObjectUboData>
 
   public:
     SceneObject(GeometryBuffer *data, int bufferOffset, int indexCount, int offset, int drawMode, int indexType, bool manageGeometryBuffer = false);
+    SceneObject(GeometryBuffer *, const Mesh &);
+    SceneObject(const SceneObject &copy);
+    SceneObject(SceneObject &&copy);
     SceneObject(const Mesh &);
     ~SceneObject();
 
@@ -232,23 +243,27 @@ class Texture
     int format;
     int internalFormat;
     int target;
-    int textureUnit;
     int width;
     int height;
-    int tex;
+    GLuint tex;
+
+    void DestroyGlObjects();
 
   public:
     Texture();
     ~Texture();
 
+    bool LoadDataFromMemory(void *);
+    bool LoadDataFromFunction(int (*func)(float x, float y));
     bool LoadData(const std::string &path, TextureFormat format = TextureFormat::FromFileExtension);
 
     void SetFormat(int);
     void SetInternalFormat(int);
     void SetTarget(int);
-    void SetTextureUnit(int);
     void SetWidth(int);
     void SetHeight(int);
+
+    void Bind(uint textureUnit);
 };
 
 struct SceneUboData
