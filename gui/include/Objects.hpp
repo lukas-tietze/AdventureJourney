@@ -273,7 +273,9 @@ struct SceneUboData
 class Scene : public StaticUboOwner<SceneUboData>
 {
   private:
+    std::map<int, Mesh *> meshes;
     std::map<int, GeometryBuffer *> geometry;
+    std::map<int, SceneObject *> objects;
     Camera camera;
 
   public:
