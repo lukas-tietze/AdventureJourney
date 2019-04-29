@@ -43,7 +43,7 @@ set(_Boost_STACKTRACE_BASIC_HEADERS     "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_BACKTRACE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_ADDR2LINE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_NOOP_HEADERS      "boost/stacktrace.hpp")
-find_package(Boost 1.70.0 COMPONENTS stacktrace_backtrace filesystem chrono thread REQUIRED)
+find_package(Boost 1.70.0 COMPONENTS filesystem chrono thread REQUIRED)
 # find_package(Boost 1.70.0)
 
 #external includes

@@ -22,7 +22,7 @@ $(DEBUG_DIR)/Makefile: $(DEBUG_DIR)
 $(RELEASE_DIR)/Makefile: $(RELEASE_DIR)
 	cd $(RELEASE_DIR) && cmake $(RELEASE_OPTIONS) $(BASE_DIR)
 
-cmake:
+cmake: $(DEBUG_DIR)
 	cd $(DEBUG_DIR) && cmake $(DEBUG_OPTIONS) $(BASE_DIR)
 
 debug: $(DEBUG_DIR)/Makefile

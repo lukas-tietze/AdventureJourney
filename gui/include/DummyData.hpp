@@ -6,8 +6,6 @@
 
 namespace gui
 {
-namespace models
-{
 #pragma pack(push, 1)
 struct Vertex_XYZ
 {
@@ -53,13 +51,21 @@ enum class VertexElements
     Color = BIT(3),
 };
 
+namespace quadrics
+{
+glutil::Mesh Box(VertexElements requiredElements);
+glutil::Mesh Box(int slicesX, int slicesY, int slicesZ, VertexElements requiredElements);
+glutil::Mesh UVSphere(int slices, int stacks, VertexElements requiredElements);
+glutil::Mesh IcoSphere(int subdiv, VertexElements requiredElements);
+glutil::Mesh Cylinder(int slices, int stacks, VertexElements requiredElements);
+glutil::Mesh Disk(int slices, int loops, VertexElements requiredElements);
+glutil::Mesh Cone(int slices, int stacks, VertexElements requiredElements);
+glutil::Mesh Cone(float maxHeight, int slices, int stacks, VertexElements requiredElements);
+} // namespace quadrics
+namespace models
+{
 const glutil::Mesh &CubeMesh();
 const glutil::Mesh &CoordMesh();
 const glutil::Mesh &Coord3dMesh();
-
-glutil::Mesh GenerateCube(VertexElements elements);
-glutil::Mesh GenerateCylinder(int segments, VertexElements elements);
-glutil::Mesh GenerateUvSphere(int u, int v, VertexElements elements);
-glutil::Mesh GenerateIsoSphere(int sub, VertexElements elements);
 } // namespace models
 } // namespace gui
