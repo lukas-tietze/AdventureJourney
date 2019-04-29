@@ -85,8 +85,6 @@ bool ParseIntegral(const std::string &text, NumT &target);
 template <typename NumT>
 bool ParseFloat(const std::string &text, NumT &target);
 
-#include "common/src/data/StringUtils/Conversions.inl"
-
 class FormatException : public util::Exception
 {
   public:
@@ -98,15 +96,14 @@ void SetupStreamByPrintfFormat(std::iostream &, const std::string &);
 template <class TFirst, class... TArgs>
 std::string Format(const std::string &format, const TFirst &firstArg, const TArgs &... args);
 
-#include "common/src/data/StringUtils/Format.inl"
-
 template <class T>
 std::ostream &operator<<(std::ostream &s, const std::vector<T> &vector);
 template <class T>
 std::ostream &operator<<(std::ostream &s, const std::list<T> &list);
 template <class TKey, class TValue>
 std::ostream &operator<<(std::ostream &s, const std::map<TKey, TValue> &map);
-
-#include "common/src/data/StringUtils/StreamOperators.inl"
-
 } // namespace util
+
+#include "common/src/data/StringUtils/Format.inl"
+#include "common/src/data/StringUtils/StreamOperators.inl"
+#include "common/src/data/StringUtils/Conversions.inl"

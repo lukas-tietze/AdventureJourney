@@ -16,7 +16,7 @@ T util::Parse(const std::string &value)
     return T();
 }
 
-template <typename NumT>
+template<class NumT>
 bool util::ParseIntegral(const std::string &text, NumT &target)
 {
     try

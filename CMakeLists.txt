@@ -53,6 +53,7 @@ include_directories(${Boost_INCLUDE_DIRS})
 include_directories(libs/glad/include)
 include_directories(submodules/glfw/include)
 include_directories(submodules/glm/)
+include_directories(submodules/stb)
 
 #projects
 include_directories(common/include)

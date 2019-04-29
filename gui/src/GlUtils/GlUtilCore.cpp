@@ -7,10 +7,15 @@ const glutil::CreateInfo glutil::DefaultCreateInfo = {
 
 namespace
 {
+// Konstanten
+constexpr int W_INIT = 800;
+constexpr int H_INIT = 600;
+
 //window:
 GLFWwindow *win = nullptr;
-int w = 0;
-int h = 0;
+int w = W_INIT;
+int h = H_INIT;
+bool resized = false;
 
 //mouse
 int mouseX = 0;
@@ -25,6 +30,7 @@ bool lastMouseState[GLFW_MOUSE_BUTTON_LAST];
 //keys
 bool keyState[GLFW_KEY_LAST];
 bool lastKeyState[GLFW_KEY_LAST];
+int modifiers;
 
 glutil::GlWatch<> *watch[2];
 
@@ -37,15 +43,17 @@ double cpuTime = 0;
 double gpuTime = 0;
 
 std::string windowTitle;
+bool forceTitleUpdate;
 
 glutil::Screen *activeScreen;
 glutil::Screen *nextScreen;
 glutil::Screen *blankScreen;
 
-void HandleResize(GLFWwindow *win, int w, int h)
+void HandleResize(GLFWwindow *win, int newWidth, int newHeight)
 {
-    w = w;
-    h = h;
+    w = newWidth;
+    h = newHeight;
+    resized = true;
 }
 
 void HandleScroll(GLFWwindow *win, double xoffset, double yoffset)
@@ -62,7 +70,7 @@ void HandleKeyboard(GLFWwindow *win, int key, int /*scancode*/, int action, int 
         return;
     }
 
-    keyState[key] = action == GLFW_PRESS;
+    keyState[key] = action != GLFW_RELEASE;
 }
 
 void HandleMouseButton(GLFWwindow *win, int button, int action, int mods)
@@ -73,7 +81,7 @@ void HandleMouseButton(GLFWwindow *win, int button, int action, int mods)
         return;
     }
 
-    mouseState[button] = action == GLFW_PRESS;
+    mouseState[button] = action == GLFW_RELEASE;
 }
 
 void HandleCursor(GLFWwindow *win, double x, double y)
@@ -84,9 +92,6 @@ void HandleCursor(GLFWwindow *win, double x, double y)
     mouseY = y;
 }
 
-} // namespace
-namespace
-{
 void *GetProcAddressWrapper(const char *name, void *user_ptr)
 {
     return reinterpret_cast<void *>(glfwGetProcAddress(name));
@@ -107,7 +112,7 @@ bool InitGlfw(const glutil::CreateInfo &info)
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     /* create the window and the gl context */
-    win = glfwCreateWindow(800, 800,
+    win = glfwCreateWindow(W_INIT, H_INIT,
                            "CG2 Application",
                            monitor,
                            nullptr);
@@ -116,7 +121,8 @@ bool InitGlfw(const glutil::CreateInfo &info)
         return false;
 
     /* register our callbacks */
-    glfwSetFramebufferSizeCallback(win, HandleResize);
+    // glfwSetFramebufferSizeCallback(win, HandleResize);
+    glfwSetWindowSizeCallback(win, HandleResize);
     glfwSetKeyCallback(win, HandleKeyboard);
     glfwSetMouseButtonCallback(win, HandleMouseButton);
     glfwSetScrollCallback(win, HandleScroll);
@@ -217,6 +223,11 @@ void ResetEventBuffers()
     std::memcpy(lastKeyState, keyState, sizeof(bool) * GLFW_KEY_LAST);
     std::memcpy(lastMouseState, mouseState, sizeof(bool) * GLFW_MOUSE_BUTTON_LAST);
     //TODO: Clear Event queue
+    scrollX = 0;
+    scrollY = 0;
+    mouseDeltaX = 0;
+    mouseDeltaY = 0;
+    resized = false;
 }
 
 void SwapScreen()
@@ -247,13 +258,14 @@ void glutil::Loop()
         totalTime += delta;
         frameCount++;
 
-        if (totalTime - lastUpdateTime > 0.5)
+        if (totalTime - lastUpdateTime > 0.5 || forceTitleUpdate)
         {
             UpdateTitle();
             lastUpdateTime = totalTime;
             cpuTime = 0;
             gpuTime = 0;
             frameCount = 0;
+            forceTitleUpdate = false;
         }
 
         SwapScreen();
@@ -263,7 +275,7 @@ void glutil::Loop()
         activeScreen->Update(delta);
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
+
         activeScreen->Render();
 
         gpuTime += watch[1]->get_gpu_time_in_ms() -
@@ -272,6 +284,9 @@ void glutil::Loop()
         cpuTime += watch[1]->get_cpu_time_in_ms() -
                    watch[0]->get_cpu_time_in_ms();
 
+        if (resized)
+            glViewport(0, 0, w, h);
+
         glfwSwapBuffers(win);
 
         ResetEventBuffers();
@@ -279,7 +294,80 @@ void glutil::Loop()
 }
 
 //-----------------------------------------------------------------------------------------
-//Screens
+// Screens
+//-----------------------------------------------------------------------------------------
+int glutil::GetWindowWidth()
+{
+    return w;
+}
+
+int glutil::GetWindowHeight()
+{
+    return h;
+}
+
+float glutil::GetAspectRatio()
+{
+    return static_cast<float>(w) / static_cast<float>(h);
+}
+
+int glutil::GetMouseX()
+{
+    return mouseX;
+}
+
+int glutil::GetMouseY()
+{
+    return mouseY;
+}
+
+int glutil::GetMouseDeltaX()
+{
+    return mouseDeltaX;
+}
+
+int glutil::GetMouseDeltaY()
+{
+    return mouseDeltaY;
+}
+
+int glutil::GetScrollX()
+{
+    return scrollX;
+}
+
+int glutil::GetScrollY()
+{
+    return scrollY;
+}
+
+GLFWwindow *glutil::GetWindow()
+{
+    return win;
+}
+
+bool glutil::HasWindow()
+{
+    return win != nullptr;
+}
+
+//-----------------------------------------------------------------------------------------
+// Data - Setters
+//-----------------------------------------------------------------------------------------
+void glutil::SetCustomTitle(const std::string &title)
+{
+    //TOOD: evtl. parsen, dann Eingabe als "Mein Titel fps:{FPS}, t:{TCPU}/{TGPU}" oder so.
+    windowTitle = title;
+    forceTitleUpdate = true;
+}
+
+void glutil::SetCursorGameMode(bool gameMode)
+{
+    glfwSetInputMode(win, GLFW_CURSOR, gameMode ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+}
+
+//-----------------------------------------------------------------------------------------
+// Screens
 //-----------------------------------------------------------------------------------------
 void glutil::RequestNextScreen(Screen *s)
 {
@@ -293,7 +381,7 @@ void glutil::RequestBlankScreen()
 }
 
 //-----------------------------------------------------------------------------------------
-//Screens
+// Events
 //-----------------------------------------------------------------------------------------
 
 bool glutil::HasNextEvent()
@@ -314,6 +402,16 @@ bool glutil::IsKeyDown(int key)
 bool glutil::IsKeyUp(int key)
 {
     return !keyState[key];
+}
+
+bool glutil::IsModifierDown(int key)
+{
+    return modifiers & key;
+}
+
+bool glutil::IsModifierUp(int key)
+{
+    return modifiers & ~key;
 }
 
 bool glutil::WasKeyPressed(int key)
@@ -344,4 +442,19 @@ bool glutil::WasButtonPressed(int button)
 bool glutil::WasButtonReleased(int button)
 {
     return !mouseState[button] && lastMouseState[button];
+}
+
+bool glutil::WasWindowResized()
+{
+    return resized;
+}
+
+bool glutil::WasMouseMoved()
+{
+    return mouseDeltaX != 0 || mouseDeltaY != 0;
+}
+
+bool glutil::WasScrolled()
+{
+    return scrollX != 0 || scrollY != 0;
 }

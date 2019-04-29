@@ -11,7 +11,8 @@
                 "${workspaceFolder}/playground",
                 "${workspaceFolder}/libs/glad/include",
                 "${workspaceFolder}/submodules/glm/",
-                "${workspaceFolder}/submodules/glfw/include"
+                "${workspaceFolder}/submodules/glfw/include",
+                "${workspaceFolder}/submodules/stb"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
