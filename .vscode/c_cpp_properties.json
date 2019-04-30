@@ -4,7 +4,9 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/",
-                "${workspaceFolder}/common/include/",
+                "${workspaceFolder}/libCommon/include/",
+                "${workspaceFolder}/libTermUtil/include",
+                "${workspaceFolder}/libGlUtil/include",
                 "${workspaceFolder}/terminal_ui/include/",
                 "${workspaceFolder}/gui/include",
                 "${workspaceFolder}/core/include",

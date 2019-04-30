@@ -35,8 +35,8 @@ set(CMAKE_BUILD_TYPE Debug)
 
 enable_language(CXX)
 
-# Set(CURSES_NEED_NCURSES TRUE)
-# find_package(Curses)
+Set(CURSES_NEED_NCURSES TRUE)
+find_package(Curses)
  
 #workaround https://gitlab.kitware.com/cmake/cmake/issues/17297
 set(_Boost_STACKTRACE_BASIC_HEADERS     "boost/stacktrace.hpp")
@@ -56,7 +56,9 @@ include_directories(submodules/glm/)
 include_directories(submodules/stb)
 
 #projects
-include_directories(common/include)
+include_directories(libCommon/include)
+include_directories(libTermUtil/include)
+include_directories(libGlUtil/include)
 include_directories(core/include)
 include_directories(playground)
 include_directories(terminal_ui/include)

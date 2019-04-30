@@ -1,4 +1,5 @@
 #include <cmath>
+#include <algorithm>
 
 #include "data/Json.hpp"
 #include "data/String.hpp"

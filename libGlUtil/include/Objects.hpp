@@ -191,8 +191,8 @@ class Camera : public StaticUboOwner<CameraUboData>
     glm::vec3 up;
     glm::vec3 direction;
     float fov;
-    float near;
-    float far;
+    float nearPlane;
+    float farPlane;
     float aspectRation;
 
     bool viewDirty;
@@ -209,9 +209,9 @@ class Camera : public StaticUboOwner<CameraUboData>
     void Rotate(float degrees, glm::vec3 const &axis);
 
     void SetFov(float fov);
-    void SetNear(float near);
-    void SetFar(float far);
-    void SetRange(float near, float far);
+    void SetNear(float nearPlane);
+    void SetFar(float farPlane);
+    void SetRange(float nearPlane, float farPlane);
     void SetAspectRation(int w, int h);
     void SetAspectRation(float ratio);
 
