@@ -1,6 +1,6 @@
 #pragma once
 
-#include "terminal/View.hpp"
+#include "View.hpp"
 
 namespace terminal
 {

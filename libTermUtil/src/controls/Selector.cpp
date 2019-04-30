@@ -1,4 +1,4 @@
-#include "terminal/controls/Selector.hpp"
+#include "controls/Selector.hpp"
 #include "data/Io.hpp"
 
 terminal::Selector::Selector() : ControlBase(),

@@ -104,6 +104,6 @@ template <class TKey, class TValue>
 std::ostream &operator<<(std::ostream &s, const std::map<TKey, TValue> &map);
 } // namespace util
 
-#include "common/src/data/StringUtils/Format.inl"
-#include "common/src/data/StringUtils/StreamOperators.inl"
-#include "common/src/data/StringUtils/Conversions.inl"
+#include "libCommon/src/data/StringUtils/Format.inl"
+#include "libCommon/src/data/StringUtils/StreamOperators.inl"
+#include "libCommon/src/data/StringUtils/Conversions.inl"

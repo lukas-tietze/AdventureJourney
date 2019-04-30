@@ -1,7 +1,7 @@
 #pragma once
 
-#include "terminal/controls/ControlBase.hpp"
-#include "terminal/DataBinderBase.hpp"
+#include "controls/ControlBase.hpp"
+#include "DataBinderBase.hpp"
 
 namespace terminal
 {

@@ -2,8 +2,8 @@
 
 #include <vector>
 
-#include "terminal/controls/ControlBase.hpp"
-#include "terminal/DataBinderBase.hpp"
+#include "controls/ControlBase.hpp"
+#include "DataBinderBase.hpp"
 #include "data/String.hpp"
 #include "data/EnumHelper.hpp"
 #include "Event.hpp"

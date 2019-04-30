@@ -1,4 +1,4 @@
-#include "terminal/Size.hpp"
+#include "Size.hpp"
 #include "data/Math.hpp"
 
 terminal::Size::Size() : rel(0.f)

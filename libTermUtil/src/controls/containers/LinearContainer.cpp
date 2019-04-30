@@ -1,4 +1,4 @@
-#include "terminal/controls/containers/LinearContainer.hpp"
+#include "controls/containers/LinearContainer.hpp"
 #include "data/Io.hpp"
 
 terminal::LinearContainer::LinearContainer() : orientation(Orientation::TopToBottom)

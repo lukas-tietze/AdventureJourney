@@ -50,7 +50,7 @@ json::FormattedPrinter::FormattedPrinter(std::iostream *stream, const std::strin
 {
     if (this->out == nullptr)
     {
-        this->out = new std::stringstream(std::ios_base::openmode::out);
+        this->out = new std::stringstream(std::stringstream::out);
     }
     else
     {

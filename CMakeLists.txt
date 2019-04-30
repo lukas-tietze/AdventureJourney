@@ -3,7 +3,7 @@
 #--------------------------------------------------------
 cmake_minimum_required (VERSION 3.7)
 
-cmake_policy(SET CMP0074 NEW)
+# cmake_policy(SET CMP0074 NEW)
 
 set(COMPILE_GUI on)
 set(COMPILE_TESTS on)
@@ -43,72 +43,123 @@ set(_Boost_STACKTRACE_BASIC_HEADERS     "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_BACKTRACE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_ADDR2LINE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_NOOP_HEADERS      "boost/stacktrace.hpp")
-find_package(Boost 1.70.0 COMPONENTS filesystem chrono thread REQUIRED)
+find_package(Boost 1.65.0 COMPONENTS stacktrace_basic filesystem chrono thread REQUIRED)
 # find_package(Boost 1.70.0)
 
 #external includes
 include_directories(${Boost_INCLUDE_DIRS})
 
-#libs/submodules
+#external libs/submodules
 include_directories(libs/glad/include)
 include_directories(submodules/glfw/include)
 include_directories(submodules/glm/)
 include_directories(submodules/stb)
 
-#projects
+#projects - libs
 include_directories(libCommon/include)
 include_directories(libTermUtil/include)
 include_directories(libGlUtil/include)
+
+#projects - exe
 include_directories(core/include)
 include_directories(playground)
 include_directories(terminal_ui/include)
 include_directories(gui/include)
+
+#general (root as include dir)
 include_directories(.)
 
 add_definitions(-DBOOST_FILESYSTEM_NO_DEPRECATED)
 add_definitions(-DBOOST_STACKTRACE_LINK)
 add_definitions(-DBOOST_STACKTRACE_USE_BACKTRACE)
 
-#Common
-file(GLOB_RECURSE COMMON_SRC "common/src/**/*.cpp")
-file(GLOB_RECURSE COMMON_TESTS "common/test/**/*.cpp")
+#LibCommon
+file(GLOB_RECURSE LIB_COMMON_SRC "libCommon/src/**/*.cpp" "libCommon/src/*.cpp")
+file(GLOB_RECURSE LIB_COMMON_TESTS "libCommon/test/**/*.cpp" "libCommon/test/*.cpp")
+#LibCommon
+file(GLOB_RECURSE LIB_TERM_UTIL_SRC "libTermUtil/src/**/*.cpp" "libTermUtil/src/*.cpp")
+file(GLOB_RECURSE LIB_TERM_UTIL_TESTS "libTermUtil/test/**/*.cpp" "libTermUtil/test/*.cpp")
+#LibCommon
+file(GLOB_RECURSE LIB_GL_UTIL_SRC "libGlUtil/src/**/*.cpp" "libGlUtil/src/*.cpp")
+file(GLOB_RECURSE LIB_GL_UTIL_TESTS "libGlUtil/test/**/*.cpp" "libGlUtil/test/*.cpp")
 #Core
-file(GLOB_RECURSE CORE_SRC "core/src/**/*.cpp")
-file(GLOB_RECURSE CORE_TESTS "core/test/**/*.cpp")
+file(GLOB_RECURSE CORE_SRC "core/src/**/*.cpp" "core/src/*.cpp")
+file(GLOB_RECURSE CORE_TESTS "core/test/**/*.cpp" "core/test/*.cpp")
 #Terminal
-file(GLOB_RECURSE TUI_SRC "terminal_ui/src/**/*.cpp")
-file(GLOB_RECURSE TUI_TESTS "terminal_ui/test/**/*.cpp")
+file(GLOB_RECURSE TUI_SRC "terminal_ui/src/**/*.cpp" "terminal_ui/src/*.cpp")
+file(GLOB_RECURSE TUI_TESTS "terminal_ui/test/**/*.cpp" "terminal_ui/test/*.cpp")
 #Gui
-file(GLOB_RECURSE GUI_SRC "gui/src/**/*.cpp")
-file(GLOB_RECURSE GUI_TESTS "gui/test/**/*.cpp")
+file(GLOB_RECURSE GUI_SRC "gui/src/**/*.cpp" "gui/src/*.cpp")
+file(GLOB_RECURSE GUI_TESTS "gui/test/**/*.cpp" "gui/test/*.cpp")
 
 #--------------------------------------------------------
-# Library - enthält Utils und Wrapper, die in verschiedenen Projekten genutzt werden könnten.
+# LibCommon - enthält Utils und Wrapper, die in verschiedenen Projekten genutzt werden könnten.
 #--------------------------------------------------------
-project(Common)
+project(LibCommon)
 
-configure_file(common/include/config.in.hpp common/include/config.hpp)
-add_library(Common STATIC ${COMMON_SRC})
-target_link_libraries(Common ${CURSES_LIBRARIES} ${Boost_LIBRARIES} ${CMAKE_DL_LIBS})
+configure_file(libCommon/include/config.in.hpp libCommon/include/config.hpp)
+add_library(LibCommon STATIC ${LIB_COMMON_SRC})
+target_link_libraries(LibCommon ${Boost_LIBRARIES} ${CMAKE_DL_LIBS})
 
 #Tests dazu
 if(COMPILE_TESTS)
-    project(CommonTests)
-    add_executable(CommonTests common/test/main.cpp ${COMMON_TESTS})
-    target_link_libraries(CommonTests ${Boost_LIBRARIES} Common)
+    project(LibCommonTests)
+    add_executable(LibCommonTests libCommon/test/main.cpp ${LIB_COMMON_TESTS})
+    target_link_libraries(LibCommonTests ${Boost_LIBRARIES} LibCommon)
 else()
-    message(STATUS "Skipping CommonTests")
+    message(STATUS "Skipping LibCommon/Tests")
 endif()
+
+#--------------------------------------------------------
+# LibTermUtil - enthält Wrapper für NCurses-Funktionen
+#--------------------------------------------------------
+project(LibGlUtil)
+
+configure_file(libGlUtil/include/config.in.hpp libGlUtil/include/config.hpp)
+add_library(LibGlUtil STATIC ${LIB_GL_UTIL_SRC})
+target_link_libraries(LibGlUtil LibCommon ${CMAKE_DL_LIBS} )
+
+#Tests dazu
+if(COMPILE_TESTS)
+    project(LibGlUtilTests)
+    add_executable(LibGlUtilTests libGlUtil/test/main.cpp ${LIB_GL_UTIL_TESTS})
+    target_link_libraries(LibGlUtilTests LibGlUtil LibCommon)
+else()
+    message(STATUS "Skipping LibGlUtil/Tests")
+endif()
+
+#--------------------------------------------------------
+# Common Library - enthält Utils und Wrapper, die in verschiedenen Projekten genutzt werden könnten.
+#--------------------------------------------------------
+if(CURSES_FOUND)
+    project(LibTermUtil)
+
+    configure_file(libTermUtil/include/config.in.hpp libTermUtil/include/config.hpp)
+    add_library(LibTermUtil STATIC ${LIB_TERM_UTIL_SRC})
+    target_link_libraries(LibTermUtil ${CURSES_LIBRARIES} LibCommon ${CMAKE_DL_LIBS})
+
+    #Tests dazu
+    if(COMPILE_TESTS)
+        project(LibTermUtilTests)
+        add_executable(LibTermUtilTests libTermUtil/test/main.cpp ${LIB_TERM_UTIL_TESTS})
+        target_link_libraries(LibTermUtilTests ${Boost_LIBRARIES} LibTermUtil)
+    else()
+        message(STATUS "Skipping LibTermUtil/Tests")
+    endif()
+else()
+    message((STATUS "Skipping LibTermUtil (Curses not found)"))
+endif()
+
 #--------------------------------------------------------
 # Playground
 #--------------------------------------------------------
 if(COMPILE_PLAYGROUND)
     project (Playground)
     add_executable(Playground playground/main.cpp)
-    target_link_libraries(Playground Common)
+    target_link_libraries(Playground LibCommon)
     target_link_libraries(Playground)
 else()
-    message(STATUS "Skipping playground")
+    message(STATUS "Skipping playground (project turned off)")
 endif()
 
 #--------------------------------------------------------
@@ -116,14 +167,14 @@ endif()
 #--------------------------------------------------------
 project(Core)
 add_library(Core STATIC ${CORE_SRC})
-target_link_libraries(Core Common ${Boost_LIBRARIES})
+target_link_libraries(Core LibCommon ${Boost_LIBRARIES})
 #Tests dazu
 if(COMPILE_TESTS)
     project(CoreTests)
     add_executable(CoreTests core/test/main.cpp ${CORE_TESTS})
-    target_link_libraries(CoreTests Common Core)
+    target_link_libraries(CoreTests LibCommon Core)
 else()
-    message(STATUS "Skipping CoreTests")
+    message(STATUS "Skipping Core/Tests")
 endif()
 
 #--------------------------------------------------------
@@ -136,17 +187,21 @@ if(COMPILE_TUI)
         project(TerminalUi)
         configure_file(terminal_ui/include/config.in.hpp terminal_ui/include/config.hpp)
         add_executable(TerminalUi terminal_ui/src/main.cpp ${TUI_SRC})
-        target_link_libraries(TerminalUi Common Core ${Boost_LIBRARIES} ${CURSES_LIBRARIES})
+        target_link_libraries(TerminalUi LibCommon LibTermUtil Core ${Boost_LIBRARIES} ${CURSES_LIBRARIES})
         
-        #Tests dazu
-        project(TerminalUiTests)
-        add_executable(TerminalUiTests terminal_ui/test/main.cpp ${TUI_TESTS})
-        target_link_libraries(TerminalUiTests Common Core ${CURSES_LIBRARIES})
+        if(COMPIlE_TESTS)
+            #Tests dazu
+            project(TerminalUiTests)
+            add_executable(TerminalUiTests terminal_ui/test/main.cpp ${TUI_TESTS})
+            target_link_libraries(TerminalUiTests LibCommon LibTermUtil Core ${CURSES_LIBRARIES})
+        else()
+            message(STATUS "Skipping TerminalUi/Tests")
+        endif()
     else()
-        message(STATUS "Skipping TerminalUi -> Curses not found")
+        message(STATUS "Skipping TerminalUi (Curses not found)")
     endif()
 else()
-    message(STATUS "Skipping TerminalUi")
+    message(STATUS "Skipping TerminalUi (project turned off)")
 endif()
 #--------------------------------------------------------
 # GUI - Grafische UI mittels OpenGl
@@ -161,12 +216,16 @@ if(COMPILE_GUI)
 
     configure_file(gui/include/config.in.hpp gui/include/config.hpp)
     add_executable(Gui gui/src/main.cpp libs/glad/src/glad.c ${GUI_SRC})
-    target_link_libraries(Gui Common Core glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} )
+    target_link_libraries(Gui LibCommon LibGlUtil Core glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} )
 
-    #Tests dazu
-    project(GuiTests)
-    add_executable(GuiTests gui/test/main.cpp libs/glad/src/glad.c ${GUI_TESTS})
-    target_link_libraries(GuiTests Common Core ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} glfw ${GLFW_LIBRARIES})
+    if(COMPILE_TESTS)
+        #Tests dazu
+        project(GuiTests)
+        add_executable(GuiTests gui/test/main.cpp libs/glad/src/glad.c ${GUI_TESTS})
+        target_link_libraries(GuiTests LibCommon LibGlUtil Core ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} glfw ${GLFW_LIBRARIES})
+    else()
+        message(STATUS "Skipping Gui/Tests")
+    endif()
 else()
-    message(STATUS "Skipping VulkanGui")
+    message(STATUS "Skipping Gui (project turend off)")
 endif()

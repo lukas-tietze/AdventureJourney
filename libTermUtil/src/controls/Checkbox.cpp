@@ -1,4 +1,4 @@
-#include "terminal/controls/Checkbox.hpp"
+#include "controls/Checkbox.hpp"
 
 terminal::Checkbox::Checkbox() : ControlBase()
 {

@@ -1,4 +1,4 @@
-#include "terminal/controls/Textbox.hpp"
+#include "controls/Textbox.hpp"
 #include "data/String.hpp"
 
 terminal::Textbox::Textbox() : ControlBase(),

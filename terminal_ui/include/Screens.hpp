@@ -1,6 +1,6 @@
 #pragma once
 
-#include "terminal/Screen.hpp"
+#include "Screen.hpp"
 #include "Terminal.hpp"
 
 namespace tui

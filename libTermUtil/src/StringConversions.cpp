@@ -1,9 +1,9 @@
 #include "Exception.hpp"
 
-#include "terminal/Values.hpp"
-#include "terminal/View.hpp"
-#include "terminal/controls/ControlBase.hpp"
-#include "terminal/controls/containers/FrameContainer.hpp"
+#include "Values.hpp"
+#include "View.hpp"
+#include "controls/ControlBase.hpp"
+#include "controls/containers/FrameContainer.hpp"
 
 #pragma region enums
 std::ostream &terminal::operator<<(std::ostream &s, const terminal::InputMode value)

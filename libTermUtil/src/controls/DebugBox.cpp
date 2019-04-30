@@ -1,8 +1,8 @@
 #include <cstring>
 
-#include "terminal/controls/DebugBox.hpp"
+#include "controls/DebugBox.hpp"
 #include "data/String.hpp"
-#include "terminal/Window.hpp"
+#include "Window.hpp"
 #include "data/Io.hpp"
 
 terminal::DebugBox::DebugBox() : ControlBase()

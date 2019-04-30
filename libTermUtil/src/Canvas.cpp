@@ -1,4 +1,4 @@
-#include "terminal/Canvas.hpp"
+#include "Canvas.hpp"
 #include "data/Helper.hpp"
 #include "Geometry.hpp"
 #include "data/Io.hpp"

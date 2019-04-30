@@ -4,8 +4,8 @@
 #include <vector>
 #include <ostream>
 
-#include "terminal/controls/containers/ContainerBase.hpp"
-#include "terminal/Size.hpp"
+#include "controls/containers/ContainerBase.hpp"
+#include "Size.hpp"
 
 namespace terminal
 {

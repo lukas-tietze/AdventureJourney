@@ -1,4 +1,4 @@
-#include "terminal/controls/TextView.hpp"
+#include "controls/TextView.hpp"
 #include "data/String.hpp"
 #include "data/Io.hpp"
 

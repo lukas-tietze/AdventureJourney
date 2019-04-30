@@ -1,7 +1,7 @@
 #include <algorithm>
 
 #include "Test.hpp"
-#include "common/test/TestList.hpp"
+#include "libCommon/test/TestList.hpp"
 #include "data/collection/Array.hpp"
 
 int test::dataTest::collectionTest::TestArray()

@@ -1,4 +1,4 @@
-#include "terminal/View.hpp"
+#include "View.hpp"
 #include "data/String.hpp"
 #include "data/EnumHelper.hpp"
 

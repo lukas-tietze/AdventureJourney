@@ -7,8 +7,8 @@ glutil::Camera::Camera() : position(3.f, 3.f, 3.f),
                            up(glutil::AXIS_Y),
                            direction(glutil::AXIS_X),
                            fov(glm::radians(75.f)),
-                           near(0.1f),
-                           far(100.f),
+                           nearPlane(0.1f),
+                           farPlane(100.f),
                            aspectRation(1.f),
                            viewDirty(true),
                            projectionDirty(1.f)
@@ -57,30 +57,30 @@ void glutil::Camera::SetFov(float fov)
     }
 }
 
-void glutil::Camera::SetNear(float near)
+void glutil::Camera::SetNear(float nearPlane)
 {
-    if (this->near != near)
+    if (this->nearPlane != nearPlane)
     {
-        this->near = near;
+        this->nearPlane = nearPlane;
         this->projectionDirty = true;
     }
 }
 
-void glutil::Camera::SetFar(float far)
+void glutil::Camera::SetFar(float farPlane)
 {
-    if (this->far != far)
+    if (this->farPlane != farPlane)
     {
-        this->far = far;
+        this->farPlane = farPlane;
         this->projectionDirty = true;
     }
 }
 
-void glutil::Camera::SetRange(float near, float far)
+void glutil::Camera::SetRange(float nearPlane, float farPlane)
 {
-    if (this->near != near || this->far != far)
+    if (this->nearPlane != nearPlane || this->farPlane != farPlane)
     {
-        this->near = near;
-        this->far = far;
+        this->nearPlane = nearPlane;
+        this->farPlane = farPlane;
         this->projectionDirty = true;
     }
 }
@@ -116,7 +116,7 @@ void glutil::Camera::UpdateMatrices()
     if (this->projectionDirty)
     {
         this->projectionDirty = false;
-        this->data.projectionMat = glm::perspective(this->fov, this->aspectRation, this->near, this->far);
+        this->data.projectionMat = glm::perspective(this->fov, this->aspectRation, this->nearPlane, this->farPlane);
         this->data.inverseProjectionMat = glm::inverse(this->data.projectionMat);
         this->SetDirty();
     }
@@ -154,12 +154,12 @@ float glutil::Camera::GetFov() const
 
 float glutil::Camera::GetNear() const
 {
-    return this->near;
+    return this->nearPlane;
 }
 
 float glutil::Camera::GetFar() const
 {
-    return this->far;
+    return this->farPlane;
 }
 
 float glutil::Camera::GetAspectRation() const

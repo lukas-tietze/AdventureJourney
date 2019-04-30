@@ -1,5 +1,5 @@
 #include "data/Io.hpp"
-#include "terminal/controls/ControlBase.hpp"
+#include "controls/ControlBase.hpp"
 
 namespace
 {

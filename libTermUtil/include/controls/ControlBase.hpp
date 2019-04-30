@@ -2,8 +2,8 @@
 
 #include <ostream>
 
-#include "terminal/View.hpp"
-#include "terminal/Canvas.hpp"
+#include "View.hpp"
+#include "Canvas.hpp"
 #include "Geometry.hpp"
 #include "Event.hpp"
 

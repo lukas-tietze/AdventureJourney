@@ -1,4 +1,4 @@
-#include "terminal/Values.hpp"
+#include "Values.hpp"
 
 bool terminal::IsSpecialKey(int key)
 {

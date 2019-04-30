@@ -1,5 +1,5 @@
 #include "data/EnumHelper.hpp"
-#include "terminal/controls/ControlBase.hpp"
+#include "controls/ControlBase.hpp"
 
 template <>
 const std::initializer_list<terminal::AutoSizeMode> &util::ListValues<terminal::AutoSizeMode>()

@@ -167,4 +167,4 @@ class GlWatch
 };
 } // namespace glutil
 
-#include "gui/src/GlUtils/GlWatch.inl"
+#include "libGlUtil/src/GlUtils/GlWatch.inl"

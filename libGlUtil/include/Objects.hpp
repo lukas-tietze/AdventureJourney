@@ -30,7 +30,7 @@ class StaticUboOwner
     void SetDirty();
 };
 
-#include "gui/src/Objects/StaticUboOwner.inl"
+#include "libGlUtil/src/Objects/StaticUboOwner.inl"
 
 template <class TData>
 class DynamicUboOwner
@@ -55,7 +55,7 @@ class DynamicUboOwner
     void SetDirty();
 };
 
-#include "gui/src/Objects/DynamicUboOwner.inl"
+#include "libGlUtil/src/Objects/DynamicUboOwner.inl"
 
 class GeometryBufferAttribute
 {

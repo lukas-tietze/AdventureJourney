@@ -2,7 +2,7 @@
 
 namespace
 {
-gui::models::Vertex_XYZ_RGB vertices[6] = {
+gui::Vertex_XYZ_RGB vertices[6] = {
     {{1.f, 0.f, 0.f}, {255, 0, 0}},
     {{-1.f, 0.f, 0.f}, {255, 0, 0}},
     {{0.f, 1.f, 0.f}, {0, 255, 0}},
@@ -19,10 +19,10 @@ bool meshReady = false;
 
 void BuildMesh()
 {
-    mesh.LoadFromData(6, sizeof(gui::models::Vertex_XYZ_RGB), vertices,
+    mesh.LoadFromData(6, sizeof(gui::Vertex_XYZ_RGB), vertices,
                       6, GL_UNSIGNED_BYTE, indices,
-                      {glutil::GeometryBufferAttribute(0, 3, GL_FLOAT, GL_FALSE, offsetof(gui::models::Vertex_XYZ_RGB, position)),
-                       glutil::GeometryBufferAttribute(1, 3, GL_UNSIGNED_BYTE, GL_FALSE, offsetof(gui::models::Vertex_XYZ_RGB, color))},
+                      {glutil::GeometryBufferAttribute(0, 3, GL_FLOAT, GL_FALSE, offsetof(gui::Vertex_XYZ_RGB, position)),
+                       glutil::GeometryBufferAttribute(1, 3, GL_UNSIGNED_BYTE, GL_FALSE, offsetof(gui::Vertex_XYZ_RGB, color))},
                       GL_LINES);
 
     meshReady = true;

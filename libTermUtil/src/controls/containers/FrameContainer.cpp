@@ -1,7 +1,7 @@
 #include <cstring>
 
-#include "terminal/controls/containers/FrameContainer.hpp"
-#include "Exception.hpp"
+#include "controls/containers/FrameContainer.hpp"
+#include "Exception.hpp" 
 #include "data/Io.hpp"
 
 namespace

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "terminal/controls/ControlBase.hpp"
+#include "controls/ControlBase.hpp"
 
 namespace terminal
 {

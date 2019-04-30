@@ -1,4 +1,4 @@
-#include "terminal/controls/NumberPicker.hpp"
+#include "controls/NumberPicker.hpp"
 
 #include <limits>
 #include "data/String.hpp"

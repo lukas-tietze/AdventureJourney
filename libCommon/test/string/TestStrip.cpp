@@ -1,5 +1,5 @@
 #include "Test.hpp"
-#include "common/test/TestList.hpp"
+#include "libCommon/test/TestList.hpp"
 #include "data/String.hpp"
 
 int test::stringTest::Strip()

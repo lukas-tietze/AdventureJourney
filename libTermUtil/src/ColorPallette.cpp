@@ -1,4 +1,4 @@
-#include "terminal/View.hpp"
+#include "View.hpp"
 
 terminal::ColorPallette::ColorPallette() : ColorPallette(COLORS, COLOR_PAIRS)
 {

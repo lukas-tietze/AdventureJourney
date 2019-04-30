@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include "terminal/Screen.hpp"
+#include "Screen.hpp"
 
 namespace terminal
 {

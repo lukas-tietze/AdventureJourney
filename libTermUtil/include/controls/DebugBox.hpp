@@ -2,7 +2,7 @@
 
 #include <string>
 
-#include "terminal/controls/ControlBase.hpp"
+#include "controls/ControlBase.hpp"
 
 namespace terminal
 {

@@ -1,4 +1,4 @@
-#include "terminal/Window.hpp"
+#include "Window.hpp"
 
 terminal::Screen::Screen() : ContainerBase(),
                              parent(nullptr)

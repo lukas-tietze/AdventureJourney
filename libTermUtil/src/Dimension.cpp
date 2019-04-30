@@ -1,4 +1,4 @@
-#include "terminal/Util.hpp"
+#include "Util.hpp"
 
 terminal::Dimension::Dimension(int w, int h)
 {

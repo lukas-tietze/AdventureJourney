@@ -1,4 +1,4 @@
-#include "terminal/controls/Button.hpp"
+#include "controls/Button.hpp"
 
 terminal::Button::Button() : ControlBase()
 {
