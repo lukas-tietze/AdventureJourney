@@ -5,6 +5,7 @@
 #include <map>
 #include "glad/glad.h"
 #include "glm/glm.hpp"
+#include "Defs.hpp"
 
 namespace glutil
 {
@@ -254,7 +255,7 @@ class Texture
     ~Texture();
 
     bool LoadDataFromMemory(void *);
-    bool LoadDataFromFunction(int (*func)(float x, float y));
+    bool LoadDataFromFunction(uint32_t (*func)(float x, float y));
     bool LoadData(const std::string &path, TextureFormat format = TextureFormat::FromFileExtension);
 
     void SetFormat(int);
@@ -263,7 +264,7 @@ class Texture
     void SetWidth(int);
     void SetHeight(int);
 
-    void Bind(uint textureUnit);
+    void Bind(GLuint textureUnit);
 };
 
 struct SceneUboData

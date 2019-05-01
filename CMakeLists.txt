@@ -3,7 +3,11 @@
 #--------------------------------------------------------
 cmake_minimum_required (VERSION 3.7)
 
-# cmake_policy(SET CMP0074 NEW)
+if(WIN32)
+    cmake_policy(SET CMP0074 NEW)
+
+    set(CMAKE_PROJECT_NAME "Project")
+endif()
 
 set(COMPILE_GUI on)
 set(COMPILE_TESTS on)
@@ -11,6 +15,7 @@ set(COMPILE_PLAYGROUND on)
 set(COMPILE_TESTS on)
 set(COMPILE_TUI on)
 set(COMPILE_GUI on)
+set(ENABLE_BACKTRACE off)
 
 include(compile.cfg OPTIONAl)
 include(ExternalData) 
@@ -35,15 +40,30 @@ set(CMAKE_BUILD_TYPE Debug)
 
 enable_language(CXX)
 
-Set(CURSES_NEED_NCURSES TRUE)
-find_package(Curses)
+# Set(CURSES_NEED_NCURSES TRUE)
+# find_package(Curses)
  
 #workaround https://gitlab.kitware.com/cmake/cmake/issues/17297
 set(_Boost_STACKTRACE_BASIC_HEADERS     "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_BACKTRACE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_ADDR2LINE_HEADERS "boost/stacktrace.hpp")
 set(_Boost_STACKTRACE_NOOP_HEADERS      "boost/stacktrace.hpp")
-find_package(Boost 1.65.0 COMPONENTS stacktrace_basic filesystem chrono thread REQUIRED)
+
+add_definitions(-DBOOST_FILESYSTEM_NO_DEPRECATED)
+add_definitions(-DBOOST_STACKTRACE_DYN_LINK)
+# add_definitions(-DBOOST_STACKTRACE_USE_BACKTRACE)
+
+find_package(Boost 1.65.0 COMPONENTS filesystem chrono thread REQUIRED)
+
+if(ENABLE_BACKTRACE)
+    if(MSVC)
+        find_package(Boost 1.65.0 COMPONENTS stacktrace_windbg)
+    else()
+        find_package(Boost 1.65.0 COMPONENTS stacktrace_backtrace)
+    endif()
+else()
+    find_package(Boost 1.65.0 COMPONENTS stacktrace_noop)
+endif()
 # find_package(Boost 1.70.0)
 
 #external includes
@@ -68,10 +88,6 @@ include_directories(gui/include)
 
 #general (root as include dir)
 include_directories(.)
-
-add_definitions(-DBOOST_FILESYSTEM_NO_DEPRECATED)
-add_definitions(-DBOOST_STACKTRACE_LINK)
-add_definitions(-DBOOST_STACKTRACE_USE_BACKTRACE)
 
 #LibCommon
 file(GLOB_RECURSE LIB_COMMON_SRC "libCommon/src/**/*.cpp" "libCommon/src/*.cpp")
@@ -133,6 +149,7 @@ endif()
 #--------------------------------------------------------
 if(CURSES_FOUND)
     project(LibTermUtil)
+    include_directories(${CURSES_INCLUDE_DIRS})
 
     configure_file(libTermUtil/include/config.in.hpp libTermUtil/include/config.hpp)
     add_library(LibTermUtil STATIC ${LIB_TERM_UTIL_SRC})
@@ -147,7 +164,7 @@ if(CURSES_FOUND)
         message(STATUS "Skipping LibTermUtil/Tests")
     endif()
 else()
-    message((STATUS "Skipping LibTermUtil (Curses not found)"))
+    message(STATUS "Skipping LibTermUtil (Curses not found)")
 endif()
 
 #--------------------------------------------------------
@@ -182,9 +199,9 @@ endif()
 #--------------------------------------------------------
 if(COMPILE_TUI)
     if(CURSES_FOUND)
+        project(TerminalUi)
         include_directories(${CURSES_INCLUDE_DIRS})
 
-        project(TerminalUi)
         configure_file(terminal_ui/include/config.in.hpp terminal_ui/include/config.hpp)
         add_executable(TerminalUi terminal_ui/src/main.cpp ${TUI_SRC})
         target_link_libraries(TerminalUi LibCommon LibTermUtil Core ${Boost_LIBRARIES} ${CURSES_LIBRARIES})

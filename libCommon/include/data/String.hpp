@@ -33,8 +33,6 @@ extern JustificationArgs defaultJustificationArgs;
 std::vector<std::string> Justify(const std::string &, int, const JustificationArgs & = defaultJustificationArgs);
 std::vector<std::string> &Justify(const std::string &, int, std::vector<std::string> &, const JustificationArgs & = defaultJustificationArgs);
 
-std::string Format2(const std::string &format, ...);
-
 std::string ToUpper(const std::string &nameBuf);
 std::string ToLower(const std::string &nameBuf);
 std::string &ToUpperInplace(std::string &nameBuf);

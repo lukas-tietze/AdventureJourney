@@ -162,6 +162,8 @@ bool InitGlfw(const glutil::CreateInfo &info)
 bool InitGlState(const glutil::CreateInfo &info)
 {
     glClearColor(0.7f, 0.4f, 0.4f, 1.0f);
+
+	return true;
 }
 
 bool InitData(const glutil::CreateInfo &info)
@@ -197,6 +199,8 @@ bool glutil::DestroyGlContext()
     glfwTerminate();
 
     win = nullptr;
+
+	return true;
 }
 
 void glutil::UpdateTitle()

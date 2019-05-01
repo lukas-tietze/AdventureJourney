@@ -17,6 +17,14 @@ std::string util::Unescape(char c)
         return "\\b";
     case '\a':
         return "\\a";
+    case '\e':
+        return "\\e";
+    case '\f':
+        return "\\f";
+    case '\v':
+        return "\\v";
+    case '\"':
+        return "\\\"";
     default:
         return std::string(1, c);
     }
@@ -24,5 +32,5 @@ std::string util::Unescape(char c)
 
 std::string util::UtfCodePointToNarrowString(uint32_t codePoint)
 {
-    return std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t>().to_bytes(codePoint);
+    return std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(codePoint);
 }

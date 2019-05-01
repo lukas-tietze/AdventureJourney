@@ -235,17 +235,23 @@ class Array
     Array &operator=(const Array<T> &copy)
     {
         this->CopyFrom(copy);
+
+		return *this;
     }
 
     Array &operator=(Array<T> &&initializer)
     {
         this->ReleaseResources();
         this->Swap(initializer);
+
+		return *this;
     }
 
     Array &operator=(const std::initializer_list<T> &list)
     {
         this->CreateFromInitializerList(list);
+
+		return *this;
     }
 
     size_t IndexOf(const T &item)

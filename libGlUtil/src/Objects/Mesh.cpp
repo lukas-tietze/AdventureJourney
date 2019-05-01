@@ -199,9 +199,13 @@ const std::vector<glutil::GeometryBufferAttribute> &glutil::Mesh::GetAttributes(
 const glutil::Mesh &glutil::Mesh::operator=(const Mesh &mesh)
 {
     this->CopyFrom(mesh);
+
+	return *this;
 }
 
 glutil::Mesh &glutil::Mesh::operator=(Mesh &&mesh)
 {
     this->TransferFrom(mesh);
+
+	return *this;
 }

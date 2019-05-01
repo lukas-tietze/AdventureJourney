@@ -1,9 +1,9 @@
+#include <stdexcept>
+
+#include "Exception.hpp"
 #include "GlUtils.hpp"
 #include "GlScreens.hpp"
-#include "Exception.hpp"
 #include "data/Io.hpp"
-
-#include <stdexcept>
 
 int main()
 {
@@ -19,7 +19,7 @@ int main()
     }
     catch (util::Exception &e)
     {
-        util::err.WriteLine("Exception occurred. Message: %\nStacktrace: %", e.GetMessage(), e.GetStacktrace());
+        util::err.WriteLine("Exception occurred. Message: %\nStacktrace: %", e.what(), e.GetStacktrace());
     }
     catch (std::exception &e)
     {

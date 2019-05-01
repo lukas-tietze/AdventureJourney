@@ -30,8 +30,8 @@ class Exception : public std::exception
     Exception(const std::string &);
     Exception(int, const std::string &);
 
-    virtual const char *what() const throw();
-    virtual const std::string &GetMessage() const;
+    const char *what() const throw();
+    const std::string &GetMessage() const;
     int GetErrorCode() const;
     const boost::stacktrace::stacktrace &GetStacktrace() const;
 };

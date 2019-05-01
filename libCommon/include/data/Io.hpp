@@ -74,15 +74,6 @@ class Channel
     std::FILE *GetTarget();
     void SetTarget(std::FILE *);
 
-    int Write2(const char *format, ...);
-    int Write2(const char *format, va_list args);
-    int WriteLine2(const char *format, ...);
-    int WriteLine2(const char *format, va_list args);
-    int Write2(const std::string &format, ...);
-    int Write2(const std::string &format, va_list args);
-    int WriteLine2(const std::string &format, ...);
-    int WriteLine2(const std::string &format, va_list args);
-
     template <class TFirst, class... TArgs>
     int Write(const std::string &format, const TFirst &first, const TArgs &... args)
     {
@@ -160,13 +151,6 @@ class Communicator
     const Channel &GetDebugChannel() const;
     const Channel &GetErrorChannel() const;
 
-    int Write2(CommunicationLevel, const char *, ...);
-    int WriteLine2(CommunicationLevel, const char *, ...);
-    int Write2(CommunicationLevel, const std::string &, ...);
-    int WriteLine2(CommunicationLevel, const std::string &, ...);
-    int Write2(CommunicationLevel, const std::string &);
-    int WriteLine2(CommunicationLevel, const std::string &);
-
     template <class TFirst, class... TArgs>
     int Write(CommunicationLevel importance, const std::string &format, const TFirst &first, const TArgs &... args)
     {
@@ -190,13 +174,6 @@ class Communicator
     {
         return this->SelectChannel(importance).WriteLine(arg);
     }
-
-    Communicator &Message2(const char *, ...);
-    Communicator &Message2(const std::string &, ...);
-    Communicator &Debug2(const char *format, ...);
-    Communicator &Debug2(const std::string &, ...);
-    Communicator &Error2(const char *format, ...);
-    Communicator &Error2(const std::string &, ...);
 
     template <class TFirst, class... TArgs>
     Communicator &Message(const std::string &format, const TFirst &first, const TArgs &... args)

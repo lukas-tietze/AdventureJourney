@@ -19,4 +19,6 @@ int test::stringTest::Justification()
     assert::AreEqual("", res[2]);
     assert::AreEqual("", res[3]);
     assert::AreEqual("c", res[4]);
+
+	return 0;
 }

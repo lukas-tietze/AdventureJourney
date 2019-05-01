@@ -11,4 +11,6 @@ int test::mathTest::TestMax()
     assert::AreEqual(5, util::Max(0, 1, 2, 3, 4, 5));
 
     assert::AreEqual(5.5f, util::Max(5.5f, 1.0f, 2.f, 3.f, 4.f, 5.f));
+
+	return 0;
 }

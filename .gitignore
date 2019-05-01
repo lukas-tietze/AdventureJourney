@@ -52,6 +52,7 @@ doc/*
 #config file for build
 compile.cfg
 debugfiles
+lastBuild.txt
 
 #systemfiles
 .vscode/ipch

@@ -33,11 +33,15 @@ bool glutil::Texture::LoadDataFromMemory(void *data)
     glTexImage2D(this->target, 0, this->internalFormat,
                  this->width, this->height, 0,
                  this->format, GL_UNSIGNED_BYTE, data);
+
+	return true;
 }
 
-bool glutil::Texture::LoadDataFromFunction(int (*func)(float x, float y))
+bool glutil::Texture::LoadDataFromFunction(uint32_t (*func)(float x, float y))
 {
-    auto pixels = new unsigned char[this->width * this->height];
+    auto pixels = new unsigned char[static_cast<size_t>(this->width) * static_cast<size_t>(this->height)];
+
+	return false;
 }
 
 bool glutil::Texture::LoadData(const std::string &path, TextureFormat format)
@@ -50,7 +54,7 @@ bool glutil::Texture::LoadData(const std::string &path, TextureFormat format)
     if (!file)
         return false;
 
-    auto pixels = stbi_load_from_file(file, &this->width, &height, nullptr, this->internalFormat);
+    auto pixels = stbi_load_from_file(file, &this->width, &this->height, nullptr, this->internalFormat);
 
     if (!pixels)
         return false;
@@ -85,7 +89,7 @@ void glutil::Texture::SetHeight(int h)
     this->height = h;
 }
 
-void glutil::Texture::Bind(uint textureUnit)
+void glutil::Texture::Bind(GLuint textureUnit)
 {
     glActiveTexture(textureUnit);
     glBindTexture(this->target, this->tex);

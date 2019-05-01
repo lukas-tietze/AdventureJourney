@@ -40,4 +40,6 @@ int test::colorTest::HsvRgbConversions()
     TestIdentity(42, 0, 255);
     TestIdentity(190, 2, 0);
     TestIdentity(151, 93, 213);
+
+	return 0;
 }

@@ -72,6 +72,7 @@ glutil::GeometryBuffer::~GeometryBuffer()
 
 bool glutil::GeometryBuffer::Buffer(const glutil::Mesh &, glutil::SceneObject &)
 {
+	return false;
 }
 
 void glutil::GeometryBuffer::Bind()

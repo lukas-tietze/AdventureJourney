@@ -152,12 +152,12 @@ util::Color util::Color::FromHSV(double hue, double saturation, double value)
 
 std::string util::Color::AsHex3String() const
 {
-    return util::Format2("#%06x", this->data & ~A_MASK);
+    return util::Format("#%{06x}", this->data & ~A_MASK);
 }
 
 std::string util::Color::AsHex4String() const
 {
-    return util::Format2("#%06x%02x", this->data & ~A_MASK, this->data >> A_SHIFT);
+    return util::Format("#%{06x}%{02x}", this->data & ~A_MASK, this->data >> A_SHIFT);
 }
 
 util::Color util::Color::FromHexString(const std::string &value)

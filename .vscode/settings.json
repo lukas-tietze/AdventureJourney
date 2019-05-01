@@ -82,7 +82,8 @@
         "complex": "cpp",
         "codecvt": "cpp",
         "typeindex": "cpp",
-        "*.ipp": "cpp"
+        "*.ipp": "cpp",
+        "future": "cpp"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled",
     "python.promptToInstallJupyter": false,

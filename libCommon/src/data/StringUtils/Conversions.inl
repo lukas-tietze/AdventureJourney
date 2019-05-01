@@ -23,11 +23,7 @@ bool util::ParseIntegral(const std::string &text, NumT &target)
     {
         target = static_cast<NumT>(std::stol(text));
     }
-    catch (const std::invalid_argument &e)
-    {
-        return false;
-    }
-    catch (const std::out_of_range &e)
+    catch (...)
     {
         return false;
     }
@@ -42,11 +38,7 @@ bool util::ParseFloat(const std::string &text, NumT &target)
     {
         target = static_cast<NumT>(std::stod(text));
     }
-    catch (const std::invalid_argument &e)
-    {
-        return false;
-    }
-    catch (const std::out_of_range &e)
+    catch (...)
     {
         return false;
     }

@@ -65,6 +65,8 @@ int test::geometryTest::TestRectangleCuts()
     assert::AreEqual(Rectangle(3, 5, 8, 8), r.MoveRightEdge(-4));
     assert::AreEqual(Rectangle(3, 9, 12, 4), r.MoveTopEdge(4));
     assert::AreEqual(Rectangle(3, 5, 12, 4), r.MoveBottomEdge(-4));
+
+	return 0;
 }
 
 int test::geometryTest::TestRectangleMoves()
@@ -75,4 +77,6 @@ int test::geometryTest::TestRectangleMoves()
     assert::AreEqual(Rectangle(11, 5, 4, 8), r.GetRightSub(4));
     assert::AreEqual(Rectangle(3, 5, 12, 4), r.GetTopSub(4));
     assert::AreEqual(Rectangle(3, 9, 12, 4), r.GetBottomSub(4));
+
+	return 0;
 }
