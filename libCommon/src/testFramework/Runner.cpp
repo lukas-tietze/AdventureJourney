@@ -1,7 +1,7 @@
-#include <thread>
 #include <csignal>
 
 #include "Test.hpp"
+// #include "boost/thread.hpp"
 
 namespace
 {
@@ -10,27 +10,27 @@ void BindSignalHandlers()
 }
 } // namespace
 
-void RunTestThread(test::TestCollection tests, const test::TestConfig config, uint start)
-{
-    int end = tests.size();
-    int step = end % config.GetThreadCount();
+// void RunTestThread(test::TestCollection tests, const test::TestConfig config, uint start)
+// {
+//     int end = tests.size();
+//     int step = end % config.GetThreadCount();
 
-    for (int i = start; i < end; i += step)
-    {
-        auto test = tests[i];
+//     for (int i = start; i < end; i += step)
+//     {
+//         auto test = tests[i];
 
-        test.Execute();
+//         test.Execute();
 
-        if (!test.IsGood() || !config.IsShowOnlyFailedEnabled())
-        {
-            util::Print(test);
-        }
-    }
-}
+//         if (!test.IsGood() || !config.IsShowOnlyFailedEnabled())
+//         {
+//             util::Print(test);
+//         }
+//     }
+// }
 
 int test::RunTests(test::TestCollection &tests, const test::TestConfig &config)
 {
-    std::vector<std::thread> test_threads;
+    // std::vector<boost::thread> testThreads;
 
     if (!config.IsQuietEnabled())
     {
@@ -47,8 +47,8 @@ int test::RunTests(test::TestCollection &tests, const test::TestConfig &config)
     clock_t start = std::clock();
     uint good = 0;
 
-    if (config.GetThreadCount() == 1)
-    {
+    // if (config.GetThreadCount() == 1)
+    // {
         for (auto &testRun : tests)
         {
             testRun.Execute();
@@ -58,19 +58,19 @@ int test::RunTests(test::TestCollection &tests, const test::TestConfig &config)
 
             util::Print(testRun);
         }
-    }
-    else
-    {
-        for (uint i = 0; i < config.GetThreadCount(); i++)
-        {
-            test_threads.push_back(std::thread(&RunTestThread, tests, config, i));
-        }
+    // }
+    // else
+    // {
+    //     for (uint i = 0; i < config.GetThreadCount(); i++)
+    //     {
+    //         testThreads.push_back(boost::thread(&RunTestThread, tests, config, i));
+    //     }
 
-        for (uint i = 0; i < config.GetThreadCount(); i++)
-        {
-            test_threads[i].join();
-        }
-    }
+    //     for (uint i = 0; i < config.GetThreadCount(); i++)
+    //     {
+    //         testThreads[i].join();
+    //     }
+    // }
 
     clock_t end = std::clock();
     uint failed = tests.size() - good;
