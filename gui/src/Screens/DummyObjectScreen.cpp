@@ -23,19 +23,18 @@ gui::DummyObjectScreen::DummyObjectScreen()
     this->objects.push_back(new glutil::SceneObject(gui::models::CoordMesh()));
     this->objects.back()->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
 
-    auto cubeMesh = gui::models::CubeMesh();
+    const auto &cubeMesh = gui::models::CubeMesh();
     auto cubeGeometry = new glutil::GeometryBuffer(cubeMesh);
     auto rnd = util::Random();
 
     for (int i = 0; i < 30; i++)
     {
-        auto translate = glm::vec3(rnd.Next(-5.f, 5.f),
-                                   rnd.Next(-5.f, 5.f),
-                                   rnd.Next(-5.f, 5.f));
+        auto translateMat = glm::vec3(rnd.Next(-5.f, 5.f),
+                                      rnd.Next(-5.f, 5.f),
+                                      rnd.Next(-5.f, 5.f));
 
-        auto scale = glm::vec3(rnd.Next(0.1f, 0.5f),
-                               rnd.Next(0.1f, 0.5f),
-                               rnd.Next(0.1f, 0.5f));
+        auto scale = rnd.Next(0.1f, 0.5f);
+        auto scaleMat = glm::vec3(scale, scale, scale);
 
         auto rotateAxis = glm::vec3(rnd.Next(0.0f, 1.0f),
                                     rnd.Next(0.0f, 1.0f),
@@ -44,7 +43,7 @@ gui::DummyObjectScreen::DummyObjectScreen()
         auto rotateDeg = rnd.Next(0.f, 360.f);
 
         this->objects.push_back(new glutil::SceneObject(cubeGeometry, cubeMesh));
-        this->objects.back()->SetModelMatrix(glm::translate(translate) * glm::rotate(rotateDeg, rotateAxis) * glm::scale(scale));
+        this->objects.back()->SetModelMatrix(glm::translate(translateMat) * glm::rotate(rotateDeg, rotateAxis) * glm::scale(scaleMat));
     }
 
     // this->objects.push_back(new glutil::SceneObject(gui::models::Coord3dMesh()));
@@ -124,7 +123,7 @@ void gui::DummyObjectScreen::Update(double delta)
     this->camera.Rotate(glutil::GetMouseDeltaX() * delta * -10.f, glutil::AXIS_Y);
     this->camera.Rotate(glutil::GetMouseDeltaY() * delta * -10.f, viewCross);
 
-    if(glutil::WasWindowResized())
+    if (glutil::WasWindowResized())
     {
         this->camera.SetAspectRation(glutil::GetAspectRatio());
     }
