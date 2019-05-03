@@ -132,7 +132,7 @@ bool InitGlfw(const glutil::CreateInfo &info)
     glfwMakeContextCurrent(win);
 
     /* initialize glad (our opengl loader) */
-    if (!gladLoadGL(GetProcAddressWrapper, nullptr))
+    if (!gladLoadGL())
     {
         util::err.WriteLine("failed to intialize glad!");
         return false;

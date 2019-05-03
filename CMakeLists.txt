@@ -230,6 +230,7 @@ if(COMPILE_GUI)
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
     add_subdirectory("submodules/glfw") 
+    # add_subdirectory("libs/glad")
 
     configure_file(gui/include/config.in.hpp gui/include/config.hpp)
     add_executable(Gui gui/src/main.cpp libs/glad/src/glad.c ${GUI_SRC})
