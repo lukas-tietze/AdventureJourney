@@ -14,25 +14,29 @@ make
 
 OS=`uname`
 BUILD_PROG=''
+BUILD_ARGS=''
 BUILD_TARGET=''
 
 PRINT "Detected Os as $OS"
 
 if  [[ $OS == 'CYGWIN_NT-10.0' ]]; then
     BUILD_PROG='MSBuild.exe'
-    BUILD_TARGET='./build/debug/GuiTests.sln'
+    BUILD_TARGET='GuiTests.sln'
+    BUILD_ARGS=''
 elif [[ $OS == 'Linux' ]]; then
     BUILD_PROG='make'
-    BUILD_TARGET='./build/debug/Makefile'
+    BUILD_TARGET=''
+    BUILD_ARGS=''
 else
     PRINT 'Unknown Os, can not determine builder'
-    PRINT 'Exiting'
+    PRINT 'Exiting...'
     exit;
 fi
 
 PRINT "Build program is $BUILD_PROG"
+PRINT "Build args are $BUILD_ARGS"
 PRINT "Build target is $BUILD_TARGET"
 
 # cd ./build/debug && make | tee /dev/tty | grep -P 'warning' > out.file
 
-$BUILD_PROG $BUILD_TARGET | tee lastBuild.txt
+cd './build/debug/' && $BUILD_PROG $BUILD_ARGS $BUILD_TARGET
