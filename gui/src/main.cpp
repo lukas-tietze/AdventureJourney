@@ -7,7 +7,11 @@
 
 int main()
 {
-    glutil::Init();
+    if(!glutil::Init())
+    {
+        util::dbg.WriteLine("Failed to Init GL! Exiting...");
+        return 1;
+    }
 
     auto screen = new gui::DummyObjectScreen();
 
