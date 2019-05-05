@@ -8,38 +8,36 @@
 
 namespace gui
 {
+class DummyObject : public glutil::SceneObject
+{
+  private:
+    glm::vec3 axis;
+    float rotation;
+    glm::vec3 basePos;
+    float pos;
+    float max;
+    float speed;
+    float scale;
+
+  public:
+    DummyObject(glutil::GeometryBuffer *, const glutil::Mesh &);
+
+    void Step(double delta);
+};
+
 class DummyScreen : public glutil::Screen
 {
   private:
-    GLuint vbo;
-    GLuint ibo;
-    GLuint vao;
-    GLuint pId;
-
-    glm::vec3 eyePos;
-    glm::mat4 modelViewProjectionMat;
-    float rotation;
-
-  public:
-    DummyScreen();
-    ~DummyScreen();
-
-    void Render();
-    void Update(double);
-};
-
-class DummyObjectScreen : public glutil::Screen
-{
-  private:
-    std::vector<glutil::SceneObject *> objects;
+    std::vector<gui::DummyObject *> objects;
+    glutil::SceneObject *axis;
 
     GLuint pId;
 
     glutil::Camera camera;
 
   public:
-    DummyObjectScreen();
-    ~DummyObjectScreen();
+    DummyScreen();
+    ~DummyScreen();
 
     void Render();
     void Update(double);

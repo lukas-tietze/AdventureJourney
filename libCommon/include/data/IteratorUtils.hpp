@@ -34,4 +34,10 @@ IteratorPrintWrapper<T> WrapIterable(T begin, T end, std::string seperator = "")
 {
     return IteratorPrintWrapper<T>(begin, end, seperator);
 }
+
+template<class T>
+class MultiIterator
+{
+
+};
 } // namespace util

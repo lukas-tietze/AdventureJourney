@@ -9,7 +9,7 @@ int main()
 {
     glutil::Init();
 
-    auto screen = new gui::DummyObjectScreen();
+    auto screen = new gui::DummyScreen();
 
     screen->Show();
 
