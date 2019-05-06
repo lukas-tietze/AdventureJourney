@@ -13,7 +13,7 @@ int main()
         return 1;
     }
 
-    auto screen = new gui::DummyObjectScreen();
+    auto screen = new gui::DummyScreen();
 
     screen->Show();
 

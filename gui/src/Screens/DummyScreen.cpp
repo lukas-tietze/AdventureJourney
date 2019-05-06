@@ -4,10 +4,10 @@
 #include "glm/gtx/transform.hpp"
 #include "data/Random.hpp"
 
-gui::DummyObjectScreen::DummyObjectScreen()
+gui::DummyScreen::DummyScreen()
 {
     this->camera.SetViewDirection(glm::vec3(-1.f, -1.f, -1.f));
-    this->camera.SetPosition(glm::vec3(2.f, 2.f, 2.f));
+    this->camera.SetPosition(glm::vec3(7.f, 7.f, 7.f));
     this->camera.SetUp(glutil::AXIS_Y);
     this->camera.SetBindingTarget(1);
     this->camera.CreateGlObjects();
@@ -20,31 +20,16 @@ gui::DummyObjectScreen::DummyObjectScreen()
     if (!pId)
         util::err.WriteLine("Failed to load program!");
 
-    this->objects.push_back(new glutil::SceneObject(gui::models::CoordMesh()));
-    this->objects.back()->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
+    this->axis = new glutil::SceneObject(gui::models::CoordMesh());
+    this->axis->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
 
-    const auto &cubeMesh = gui::models::CubeMesh();
+    // const auto &cubeMesh = gui::models::CubeMesh();
+    auto cubeMesh = gui::quadrics::Box();
     auto cubeGeometry = new glutil::GeometryBuffer(cubeMesh);
     auto rnd = util::Random();
 
     for (int i = 0; i < 30; i++)
-    {
-        auto translateMat = glm::vec3(rnd.Next(-5.f, 5.f),
-                                      rnd.Next(-5.f, 5.f),
-                                      rnd.Next(-5.f, 5.f));
-
-        auto scale = rnd.Next(0.1f, 0.5f);
-        auto scaleMat = glm::vec3(scale, scale, scale);
-
-        auto rotateAxis = glm::vec3(rnd.Next(0.0f, 1.0f),
-                                    rnd.Next(0.0f, 1.0f),
-                                    rnd.Next(0.0f, 1.0f));
-
-        auto rotateDeg = rnd.Next(0.f, 360.f);
-
-        this->objects.push_back(new glutil::SceneObject(cubeGeometry, cubeMesh));
-        this->objects.back()->SetModelMatrix(glm::translate(translateMat) * glm::rotate(rotateDeg, rotateAxis) * glm::scale(scaleMat));
-    }
+        this->objects.push_back(new gui::DummyObject(cubeGeometry, cubeMesh));
 
     // this->objects.push_back(new glutil::SceneObject(gui::models::Coord3dMesh()));
     // this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(-1.f, -1.f, 1.f)));
@@ -56,10 +41,14 @@ gui::DummyObjectScreen::DummyObjectScreen()
         glutil::ThrowOnGlError();
     }
 
+    this->axis->SetBindingTarget(0);
+    this->axis->CreateGlObjects();
+    glutil::ThrowOnGlError();
+
     glutil::SetCursorGameMode(true);
 }
 
-gui::DummyObjectScreen::~DummyObjectScreen()
+gui::DummyScreen::~DummyScreen()
 {
     for (auto object : this->objects)
     {
@@ -67,11 +56,14 @@ gui::DummyObjectScreen::~DummyObjectScreen()
         delete object;
     }
 
+    this->axis->DestroyGlObjects();
+    delete this->axis;
+
     this->objects.clear();
     this->camera.DestroyGlObjects();
 }
 
-void gui::DummyObjectScreen::Render()
+void gui::DummyScreen::Render()
 {
     glUseProgram(pId);
 
@@ -84,9 +76,13 @@ void gui::DummyObjectScreen::Render()
         object->Bind();
         object->Render();
     }
+
+    this->axis->Upload();
+    this->axis->Bind();
+    this->axis->Render();
 }
 
-void gui::DummyObjectScreen::Update(double delta)
+void gui::DummyScreen::Update(double delta)
 {
     int x = 0;
     int y = 0;
@@ -113,9 +109,10 @@ void gui::DummyObjectScreen::Update(double delta)
     auto viewCross = glm::cross(viewFlat, this->camera.GetUp());
     viewCross.y = 0;
 
-    // this->objects[0]->SetModelMatrix(glm::rotate(this->objects[0]->GetModelMatrix(), (float)delta, glutil::AXIS_X));
-    // this->objects[0]->SetModelMatrix(glm::rotate(this->objects[0]->GetModelMatrix(), (float)delta, glutil::AXIS_Y));
-    // this->objects[0]->SetModelMatrix(glm::rotate(this->objects[0]->GetModelMatrix(), (float)delta, glutil::AXIS_Z));
+    for (int i = 0; i < this->objects.size(); i++)
+    {
+        this->objects[i]->Step(delta);
+    }
 
     this->camera.MoveBy(viewFlat * static_cast<float>(delta * x) +
                         this->camera.GetUp() * static_cast<float>(delta * y) +

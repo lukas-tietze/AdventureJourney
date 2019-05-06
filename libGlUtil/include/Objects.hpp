@@ -229,7 +229,41 @@ class Camera : public StaticUboOwner<CameraUboData>
     float GetAspectRation() const;
 };
 
-enum class TextureFormat
+struct LigthSourceUboData
+{
+    ////falls w = 1 -> xyz = Richtung
+    ////falls w = 0 -> xyz = Position
+    glm::vec4 position;
+    ////rgb = Color
+    ////a = ambient factor
+    glm::vec4 color;
+};
+
+class LigthSource
+{
+};
+
+class LigthSourceCollection
+{
+};
+
+struct MaterialUboData
+{
+    glm::vec4 ambientColor;
+    glm::vec4 diffuseColor;
+    glm::vec4 specularColor;
+    float shininess;
+};
+
+class Material : StaticUboOwner<MaterialUboData>
+{
+};
+
+class MaterialCollection : DynamicUboOwner<MaterialUboData>
+{
+};
+
+enum class ImageFormat
 {
     FromFileExtension,
     JPEG,
@@ -241,31 +275,72 @@ enum class TextureFormat
 class Texture
 {
   private:
+    template <uint PChannels>
+    class FormatConverter
+    {
+        void *operator()(uint8_t *target, uint32_t value) const;
+    };
+
     int format;
     int internalFormat;
     int target;
-    int width;
-    int height;
+    GLenum dataType;
+    GLsizei width;
+    GLsizei height;
+    GLenum wrapModes[3];
+    GLenum filterModes[2];
+    bool createMipmaps;
+    double maxAnisotropy;
     GLuint tex;
 
     void DestroyGlObjects();
+    void PrepareLoad();
+    void SetTextureParameters();
+    int GetChannelCountFromFormat();
+
+    template <class TBuilder, uint PChannels>
+    bool LoadDataFromBuilderCore(const TBuilder &);
+    template <class TBuilder, uint PChannels>
+    bool LoadCubeMapFromBuilderCore(const TBuilder &);
 
   public:
     Texture();
     ~Texture();
 
     bool LoadDataFromMemory(void *);
-    bool LoadDataFromFunction(uint32_t (*func)(float x, float y));
-    bool LoadData(const std::string &path, TextureFormat format = TextureFormat::FromFileExtension);
+    template <class TBuilder>
+    bool LoadDataFromBuilder(const TBuilder &);
+    bool LoadData(const std::string &path, ImageFormat format = ImageFormat::FromFileExtension);
+    bool LoadCubeMap(const std::string &directory, const std::initializer_list<std::string> &files);
+    bool LoadCubeMap(const std::initializer_list<std::string> &files);
+    bool LoadCubeMap(const std::vector<std::string> &paths);
+    bool LoadCubeMap(const std::string &directory, const std::vector<std::string> &files);
+    bool LoadCubeMapFromMemory(const void **);
+    template <class TBuilder>
+    bool LoadCubeMapFromBuilder(const TBuilder &);
+
+    void Bind(GLuint textureUnit);
 
     void SetFormat(int);
     void SetInternalFormat(int);
+    void SetDataType(int);
     void SetTarget(int);
     void SetWidth(int);
     void SetHeight(int);
-
-    void Bind(GLuint textureUnit);
+    void SetMipmapsEnabled(bool);
+    void SetFilterMode(GLenum);
+    void SetMinFilterMode(GLenum);
+    void SetMagFilterMode(GLenum);
+    void SetWrapMode(GLenum);
+    void SetWrapModeR(GLenum);
+    void SetWrapModeS(GLenum);
+    void SetWrapModeT(GLenum);
+    void SetMaxAnisotropy(double);
+    void SetAnisotropicFilterDisabled();
 };
+
+#include "libGlUtil/src/Objects/Texture.inl"
+#include "libGlUtil/src/Objects/FormatConverter.inl"
 
 struct SceneUboData
 {
