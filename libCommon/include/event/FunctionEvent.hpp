@@ -17,7 +17,7 @@ class FunctionEvent
     void operator-=(EventFunction function);
     void operator()(TArgs &args) const;
 
-    uint Size() const;
+    size_t Size() const;
 
   private:
     std::vector<EventFunction> handler;
@@ -49,7 +49,7 @@ void FunctionEvent<TArgs>::operator()(TArgs &args) const
 }
 
 template <class TArgs>
-uint FunctionEvent<TArgs>::Size() const
+size_t FunctionEvent<TArgs>::Size() const
 {
     return this->handler.size();
 }

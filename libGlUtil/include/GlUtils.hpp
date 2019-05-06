@@ -72,8 +72,7 @@ struct Event
 };
 
 //States
-bool HasNextEvent();
-const Event &QueryNextEvent();
+bool QueryNextEvent(Event &out);
 bool IsKeyDown(int key);
 bool IsKeyUp(int key);
 bool IsModifierDown(int modifier);
@@ -90,7 +89,7 @@ bool WasScrolled();
 
 class Screen
 {
-  public:
+public:
     virtual ~Screen();
     virtual void Render();
     virtual void Update(double);
@@ -112,7 +111,7 @@ bool CheckProgram(GLuint prog);
 
 class GlErrorException : public util::Exception
 {
-  public:
+public:
     GlErrorException(GLenum error);
 };
 
@@ -157,7 +156,7 @@ class GlWatch
     GLint64 cpu_time[NUM_BUFFS];
     GLuint next;
 
-  public:
+public:
     GlWatch();
     ~GlWatch();
 

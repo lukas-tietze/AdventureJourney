@@ -37,7 +37,7 @@ class HandlerEvent
         }
     }
 
-    uint Size() const
+    size_t Size() const
     {
         return this->handler.size();
     }

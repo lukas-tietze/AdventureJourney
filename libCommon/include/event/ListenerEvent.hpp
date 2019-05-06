@@ -51,7 +51,7 @@ class ListenerEvent
         }
     }
 
-    uint Size() const
+    size_t Size() const
     {
         return this->listeners.size();
     }

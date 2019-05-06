@@ -26,9 +26,9 @@ int test::eventTest::FunctionEvents()
     util::FunctionEvent<EventArgs> event;
     EventArgs args = {0, 0, 0};
 
-    assert::AreEqual(0u, event.Size());
+    assert::AreEqual(size_t(0), event.Size());
     event += &EventFunction;
-    assert::AreEqual(1u, event.Size());
+    assert::AreEqual(size_t(1), event.Size());
 
     event(args);
 
@@ -36,9 +36,9 @@ int test::eventTest::FunctionEvents()
     assert::AreEqual(RES_Y, args.y);
     assert::AreEqual(RES_Z, args.z);
 
-    assert::AreEqual(1u, event.Size());
+    assert::AreEqual(size_t(1), event.Size());
     event -= &EventFunction;
-    assert::AreEqual(0u, event.Size());
+    assert::AreEqual(size_t(0), event.Size());
 
     args = {0, 0, 0};
     event(args);
@@ -46,7 +46,7 @@ int test::eventTest::FunctionEvents()
     assert::AreEqual(0, args.x);
     assert::AreEqual(0, args.y);
     assert::AreEqual(0, args.z);
-    assert::AreEqual(0u, event.Size());
+    assert::AreEqual(size_t(0), event.Size());
 
     return 0;
 }

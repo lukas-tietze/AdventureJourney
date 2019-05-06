@@ -11,6 +11,7 @@ const std::string GlErrorMessageInvalidFramebufferOperation = "InvalidFramebuffe
 const std::string GlErrorMessageOutOfMemory = "OutOfMemory: There is not enough memory left to execute the command. The state of the GL is undefined, except for the state of the error flags, after this error is recorded.";
 const std::string GlErrorMessageStackUnderflow = "StackUnderflow: An attempt has been made to perform an operation that would cause an internal stack to underflow.";
 const std::string GlErrorMessageStackOverflow = "StackOverflow: An attempt has been made to perform an operation that would cause an internal stack to overflow.";
+const std::string GlErrorMessageUnknownError = "Unknown Error: GetGlErrorMessage() was called with in unkown error code!";
 } // namespace
 
 const std::string &glutil::GetGlErrorMessage(GLenum error)
@@ -19,35 +20,22 @@ const std::string &glutil::GetGlErrorMessage(GLenum error)
     {
     case GL_NO_ERROR:
         return GlErrorMessageNoError;
-        break;
-
     case GL_INVALID_ENUM:
         return GlErrorMessageInvalidEnum;
-        break;
-
     case GL_INVALID_VALUE:
         return GlErrorMessageInvalidValue;
-        break;
-
     case GL_INVALID_OPERATION:
         return GlErrorMessageInvalidOperation;
-        break;
-
     case GL_INVALID_FRAMEBUFFER_OPERATION:
         return GlErrorMessageInvalidFramebufferOperation;
-        break;
-
     case GL_OUT_OF_MEMORY:
         return GlErrorMessageOutOfMemory;
-        break;
-
     case GL_STACK_UNDERFLOW:
         return GlErrorMessageStackUnderflow;
-        break;
-
     case GL_STACK_OVERFLOW:
         return GlErrorMessageStackOverflow;
-        break;
+    default:
+        return GlErrorMessageUnknownError;
     }
 }
 

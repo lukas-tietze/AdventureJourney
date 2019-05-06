@@ -10,15 +10,15 @@ int test::dataTest::collectionTest::TestArray()
 
     assert::AreEqual((size_t)10, a.Length());
 
-    for (size_t i = 0; i < 10; i++)
+    for (int i = 0; i < 10; i++)
     {
-        a[i] = (int)i;
+        a[i] = i;
     }
 
     ////default iteration
-    for (size_t i = 0; i < 10; i++)
+    for (int i = 0; i < 10; i++)
     {
-        assert::AreEqual((int)i, a[i]);
+        assert::AreEqual(i, a[i]);
     }
 
     int i = 0;
@@ -44,7 +44,7 @@ int test::dataTest::collectionTest::TestArray()
 
     i = 0;
     a = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    
+
     for (auto pos = a.begin(), end = a.end(); pos != end; ++pos)
     {
         assert::AreEqual(i, *pos);

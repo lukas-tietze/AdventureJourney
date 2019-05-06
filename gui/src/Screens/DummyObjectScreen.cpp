@@ -117,11 +117,11 @@ void gui::DummyObjectScreen::Update(double delta)
     // this->objects[0]->SetModelMatrix(glm::rotate(this->objects[0]->GetModelMatrix(), (float)delta, glutil::AXIS_Y));
     // this->objects[0]->SetModelMatrix(glm::rotate(this->objects[0]->GetModelMatrix(), (float)delta, glutil::AXIS_Z));
 
-    this->camera.MoveBy(viewFlat * (float)(delta * x) +
-                        this->camera.GetUp() * (float)(delta * y) +
-                        viewCross * (float)(delta * z));
-    this->camera.Rotate(glutil::GetMouseDeltaX() * delta * -10.f, glutil::AXIS_Y);
-    this->camera.Rotate(glutil::GetMouseDeltaY() * delta * -10.f, viewCross);
+    this->camera.MoveBy(viewFlat * static_cast<float>(delta * x) +
+                        this->camera.GetUp() * static_cast<float>(delta * y) +
+                        viewCross * static_cast<float>(delta * z));
+    this->camera.Rotate(glutil::GetMouseDeltaX() * static_cast<float>(delta) * -10.f, glutil::AXIS_Y);
+    this->camera.Rotate(glutil::GetMouseDeltaY() * static_cast<float>(delta) * -10.f, viewCross);
 
     if (glutil::WasWindowResized())
     {

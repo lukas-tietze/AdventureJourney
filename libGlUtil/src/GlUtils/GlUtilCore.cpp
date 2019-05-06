@@ -1,5 +1,7 @@
 #include "GlUtils.hpp"
 #include "data/Io.hpp"
+
+#include <queue>
 #include <cstring>
 
 const glutil::CreateInfo glutil::DefaultCreateInfo = {
@@ -18,10 +20,10 @@ int h = H_INIT;
 bool resized = false;
 
 //mouse
-int mouseX = 0;
-int mouseY = 0;
-int mouseDeltaX = 0;
-int mouseDeltaY = 0;
+double mouseX = 0;
+double mouseY = 0;
+double mouseDeltaX = 0;
+double mouseDeltaY = 0;
 float scrollX = 0;
 float scrollY = 0;
 bool mouseState[GLFW_MOUSE_BUTTON_LAST];
@@ -31,6 +33,9 @@ bool lastMouseState[GLFW_MOUSE_BUTTON_LAST];
 bool keyState[GLFW_KEY_LAST];
 bool lastKeyState[GLFW_KEY_LAST];
 int modifiers;
+
+//events
+std::queue<glutil::Event> eventQueue;
 
 glutil::GlWatch<> *watch[2];
 
@@ -163,7 +168,7 @@ bool InitGlState(const glutil::CreateInfo &info)
 {
     glClearColor(0.7f, 0.4f, 0.4f, 1.0f);
 
-	return true;
+    return true;
 }
 
 bool InitData(const glutil::CreateInfo &info)
@@ -200,7 +205,7 @@ bool glutil::DestroyGlContext()
 
     win = nullptr;
 
-	return true;
+    return true;
 }
 
 void glutil::UpdateTitle()
@@ -387,15 +392,17 @@ void glutil::RequestBlankScreen()
 //-----------------------------------------------------------------------------------------
 // Events
 //-----------------------------------------------------------------------------------------
-
-bool glutil::HasNextEvent()
+bool glutil::QueryNextEvent(Event &out)
 {
-    return true;
-}
+    if (!eventQueue.empty())
+    {
+        out = eventQueue.front();
+        eventQueue.pop();
 
-const glutil::Event &glutil::QueryNextEvent()
-{
-    return glutil::Event();
+        return true;
+    }
+
+    return false;
 }
 
 bool glutil::IsKeyDown(int key)

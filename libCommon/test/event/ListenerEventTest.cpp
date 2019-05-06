@@ -36,17 +36,17 @@ int test::eventTest::ListenerEvents()
     EventArgs args = {0, 0, 0};
     EventListener *listener = new EventListener(1);
 
-    assert::AreEqual(0u, event.Size());
+    assert::AreEqual(size_t(0), event.Size());
 
     event += listener;
-    assert::AreEqual(1u, event.Size());
+    assert::AreEqual(size_t(1), event.Size());
 
     event(args);
 
     assert::AreEqual(RES_X + listener->id, args.x);
     assert::AreEqual(RES_Y + listener->id, args.y);
     assert::AreEqual(RES_Z + listener->id, args.z);
-    assert::AreEqual(1u, event.Size());
+    assert::AreEqual(size_t(1), event.Size());
 
     event -= listener;
     args = {0, 0, 0};
@@ -55,7 +55,7 @@ int test::eventTest::ListenerEvents()
     assert::AreEqual(0, args.x);
     assert::AreEqual(0, args.y);
     assert::AreEqual(0, args.z);
-    assert::AreEqual(0u, event.Size());
+    assert::AreEqual(size_t(0), event.Size());
 
     event(args);
 

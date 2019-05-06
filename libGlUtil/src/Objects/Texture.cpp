@@ -1,5 +1,8 @@
 #include "Objects.hpp"
 
+#define __STDC_WANT_LIB_EXT1__ 1
+#include <cstdio>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -34,14 +37,14 @@ bool glutil::Texture::LoadDataFromMemory(void *data)
                  this->width, this->height, 0,
                  this->format, GL_UNSIGNED_BYTE, data);
 
-	return true;
+    return true;
 }
 
 bool glutil::Texture::LoadDataFromFunction(uint32_t (*func)(float x, float y))
 {
     auto pixels = new unsigned char[static_cast<size_t>(this->width) * static_cast<size_t>(this->height)];
 
-	return false;
+    return false;
 }
 
 bool glutil::Texture::LoadData(const std::string &path, TextureFormat format)
@@ -49,7 +52,9 @@ bool glutil::Texture::LoadData(const std::string &path, TextureFormat format)
     if (!this->format || !this->internalFormat || !this->target)
         return false;
 
-    auto file = std::fopen(path.c_str(), "r");
+    std::FILE *file;
+
+    file = std::fopen(path.c_str(), "r");
 
     if (!file)
         return false;
@@ -62,6 +67,8 @@ bool glutil::Texture::LoadData(const std::string &path, TextureFormat format)
     this->LoadDataFromMemory(pixels);
 
     stbi_image_free(pixels);
+
+    return true;
 }
 
 void glutil::Texture::SetFormat(int fromat)
