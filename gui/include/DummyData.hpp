@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #include "glad/glad.h"
 #include "Objects.hpp"
 #include "Defs.hpp"
@@ -43,24 +45,22 @@ struct Vertex_XYZ_NRM_RGB_ST
 
 typedef Vertex_XYZ_NRM_RGB_ST Vertex_Full;
 
-enum class VertexElements
-{
-    Position = BIT(0),
-    Normal = BIT(1),
-    Texture = BIT(2),
-    Color = BIT(3),
-};
+std::ostream &operator<<(std::ostream &, const Vertex_XYZ &);
+std::ostream &operator<<(std::ostream &, const Vertex_XYZ_RGB &);
+std::ostream &operator<<(std::ostream &, const Vertex_XYZ_RGB_ST &);
+std::ostream &operator<<(std::ostream &, const Vertex_XYZ_NRM_RGB &);
+std::ostream &operator<<(std::ostream &, const Vertex_XYZ_NRM_RGB_ST &);
 
 namespace quadrics
 {
-glutil::Mesh Box(VertexElements requiredElements);
-glutil::Mesh Box(int slicesX, int slicesY, int slicesZ, VertexElements requiredElements);
-glutil::Mesh UVSphere(int slices, int stacks, VertexElements requiredElements);
-glutil::Mesh IcoSphere(int subdiv, VertexElements requiredElements);
-glutil::Mesh Cylinder(int slices, int stacks, VertexElements requiredElements);
-glutil::Mesh Disk(int slices, int loops, VertexElements requiredElements);
-glutil::Mesh Cone(int slices, int stacks, VertexElements requiredElements);
-glutil::Mesh Cone(float maxHeight, int slices, int stacks, VertexElements requiredElements);
+glutil::Mesh Box(uint32_t color = 0x0f0f0fff);
+glutil::Mesh Box(int slicesX, int slicesY, int slicesZ, uint32_t color = 0x0f0f0fff);
+glutil::Mesh UVSphere(int slices, int stacks, uint32_t color = 0x0f0f0fff);
+glutil::Mesh IcoSphere(int subdiv, uint32_t color = 0x0f0f0fff);
+glutil::Mesh Cylinder(int slices, int stacks, uint32_t color = 0x0f0f0fff);
+glutil::Mesh Disk(int slices, int loops, uint32_t color = 0x0f0f0fff);
+glutil::Mesh Cone(int slices, int stacks, uint32_t color = 0x0f0f0fff);
+glutil::Mesh Cone(float maxHeight, int slices, int stacks, uint32_t color = 0x0f0f0fff);
 } // namespace quadrics
 namespace models
 {
