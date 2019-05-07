@@ -14,39 +14,32 @@ gui::DummyScreen::DummyScreen()
 
     glEnable(GL_DEPTH_TEST);
 
-    pId = glutil::CreateProgram("assets/shaders/passthrough.vs.glsl",
-                                "assets/shaders/passthrough.fs.glsl");
-
-    if (!pId)
-        util::err.WriteLine("Failed to load program!");
+    this->vertexShader.LoadFrom("assets/shaders/passthrough.vs.glsl", GL_VERTEX_SHADER);
+    this->fragmentShader.LoadFrom("assets/shaders/passthrough.fs.glsl", GL_FRAGMENT_SHADER);
+    this->program.AttachShader(&this->vertexShader);
+    this->program.AttachShader(&this->fragmentShader);
+    this->program.Link();
 
     this->axis = new glutil::SceneObject(gui::models::CoordMesh());
     this->axis->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
 
     auto cubeMesh = gui::models::CubeMesh();
-    // auto cubeMesh = gui::quadrics::Box();
-    cubeMesh = gui::quadrics::Box();
+
+    // cubeMesh = gui::quadrics::Box();
     auto cubeGeometry = new glutil::GeometryBuffer(cubeMesh);
     auto rnd = util::Random();
 
     for (int i = 0; i < 1; i++)
         this->objects.push_back(new gui::DummyObject(cubeGeometry, cubeMesh));
 
-    // this->objects.push_back(new glutil::SceneObject(gui::models::Coord3dMesh()));
-    // this->objects.back()->SetModelMatrix(glm::translate(glm::vec3(-1.f, -1.f, 1.f)));
-
     for (auto object : this->objects)
     {
         object->SetBindingTarget(0);
         object->CreateGlObjects();
-        glutil::ThrowOnGlError();
     }
 
     this->axis->SetBindingTarget(0);
     this->axis->CreateGlObjects();
-    glutil::ThrowOnGlError();
-
-    glutil::SetCursorGameMode(true);
 }
 
 gui::DummyScreen::~DummyScreen()
@@ -66,7 +59,7 @@ gui::DummyScreen::~DummyScreen()
 
 void gui::DummyScreen::Render()
 {
-    glUseProgram(pId);
+    this->program.Use();
 
     this->camera.Upload(true);
     this->camera.Bind();
@@ -91,18 +84,42 @@ void gui::DummyScreen::Update(double delta)
 
     if (glutil::IsKeyDown(GLFW_KEY_ESCAPE) || glutil::IsKeyDown(GLFW_KEY_Q))
         glutil::Quit();
+
     if (glutil::IsKeyDown(GLFW_KEY_W))
         x++;
+
     if (glutil::IsKeyDown(GLFW_KEY_S))
         x--;
+
     if (glutil::IsKeyDown(GLFW_KEY_D))
         z++;
+
     if (glutil::IsKeyDown(GLFW_KEY_A))
         z--;
+
     if (glutil::IsKeyDown(GLFW_KEY_SPACE))
         y++;
+
     if (glutil::IsKeyDown(GLFW_KEY_LEFT_SHIFT))
         y--;
+
+    if (glutil::IsKeyDown(GLFW_KEY_F5))
+        this->camera.SetViewDirection(-this->camera.GetViewDirection());
+
+    if (glutil::IsKeyDown(GLFW_KEY_F5))
+        this->program.ReloadAll();
+
+    if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_1))
+    {
+        glutil::SetCursorGameMode(true);
+        this->mouseCaptured = true;
+    }
+
+    if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_2))
+    {
+        glutil::SetCursorGameMode(false);
+        this->mouseCaptured = false;
+    }
 
     auto viewFlat = this->camera.GetViewDirection();
     viewFlat.y = 0;
@@ -118,8 +135,12 @@ void gui::DummyScreen::Update(double delta)
     this->camera.MoveBy(viewFlat * static_cast<float>(delta * x) +
                         this->camera.GetUp() * static_cast<float>(delta * y) +
                         viewCross * static_cast<float>(delta * z));
-    this->camera.Rotate(glutil::GetMouseDeltaX() * static_cast<float>(delta) * -10.f, glutil::AXIS_Y);
-    this->camera.Rotate(glutil::GetMouseDeltaY() * static_cast<float>(delta) * -10.f, viewCross);
+
+    if (this->mouseCaptured)
+    {
+        this->camera.Rotate(static_cast<float>(glutil::GetMouseDeltaX() * -1), glutil::AXIS_Y);
+        this->camera.Rotate(static_cast<float>(glutil::GetMouseDeltaY() * -1), viewCross);
+    }
 
     if (glutil::WasWindowResized())
     {

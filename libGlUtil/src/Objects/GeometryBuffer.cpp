@@ -1,5 +1,6 @@
 #include "Objects.hpp"
 #include "data/Io.hpp"
+#include "GlUtils.hpp"
 
 glutil::GeometryBuffer::GeometryBuffer() : vao(0),
                                            vbo(0),
@@ -15,7 +16,7 @@ glutil::GeometryBuffer::GeometryBuffer(const Mesh &mesh)
     glGenBuffers(1, &this->vbo);
     glBindBuffer(GL_ARRAY_BUFFER, this->vbo);
     glBufferData(GL_ARRAY_BUFFER, mesh.GetVertexDataSize(), mesh.GetVertexData(), GL_STATIC_DRAW);
-    
+
     glGenBuffers(1, &this->ibo);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->ibo);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, mesh.GetIndexDataSize(), mesh.GetIndexData(), GL_STATIC_DRAW);
@@ -72,7 +73,7 @@ glutil::GeometryBuffer::~GeometryBuffer()
 
 bool glutil::GeometryBuffer::Buffer(const glutil::Mesh &, glutil::SceneObject &)
 {
-	return false;
+    return false;
 }
 
 void glutil::GeometryBuffer::Bind()

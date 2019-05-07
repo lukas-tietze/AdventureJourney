@@ -46,3 +46,22 @@ void glutil::ThrowOnGlError()
     if (error != GL_NO_ERROR)
         throw GlErrorException(error);
 }
+
+void glutil::PrintGlError(const std::string &marker)
+{
+    auto error = glGetError();
+
+    if (error != GL_NO_ERROR)
+        util::out.WriteLine("%%", marker, glutil::GetGlErrorMessage(error));
+}
+
+void glutil::PrintAllGlErrors(const std::string &marker)
+{
+    auto error = glGetError();
+
+    while (error != GL_NO_ERROR)
+    {
+        util::out.WriteLine("%%", marker, glutil::GetGlErrorMessage(error));
+        error = glGetError();
+    }
+}

@@ -274,6 +274,8 @@ enum class ImageFormat
 
 class Shader
 {
+    friend std::ostream &operator<<(std::ostream &, const Shader &);
+
 private:
     std::string path;
     GLenum type;
@@ -290,7 +292,7 @@ public:
     ~Shader();
 
     GLuint GetId() const;
-    
+
     bool LoadFrom(const std::string &path, GLenum type);
     bool Reload();
 
@@ -298,10 +300,12 @@ public:
     Shader &operator=(Shader &&);
 };
 
+std::ostream &operator<<(std::ostream &, const Shader &);
+
 class Program
 {
 private:
-    std::vector<const Shader *> shaders;
+    std::vector<Shader *> shaders;
     GLuint id;
 
     void DestroyGlObjects();
@@ -314,10 +318,12 @@ public:
     Program(Program &&);
     ~Program();
 
-    void AttachShader(const Shader *);
-    void DetachShader(const Shader *);
+    void AttachShader(Shader *);
+    void DetachShader(Shader *);
     void Clear();
     bool Link();
+    bool ReloadAll();
+    void Use();
 
     Program &operator=(const Program &);
     Program &operator=(Program &&);
@@ -392,6 +398,18 @@ public:
 
 #include "libGlUtil/src/Objects/Texture.inl"
 #include "libGlUtil/src/Objects/FormatConverter.inl"
+
+class TextOverlay
+{
+};
+
+struct SceneOverlayUboData
+{
+};
+
+class SceneOverlay : public StaticUboOwner<SceneOverlayUboData>
+{
+};
 
 struct SceneUboData
 {

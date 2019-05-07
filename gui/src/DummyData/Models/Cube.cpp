@@ -34,8 +34,8 @@ void BuildMesh()
 {
     mesh.LoadFromData(8, sizeof(gui::Vertex_XYZ_RGB), vertices,
                       36, GL_UNSIGNED_BYTE, indices,
-                      {glutil::GeometryBufferAttribute(0, 3, GL_FLOAT, GL_FALSE, offsetof(gui::Vertex_XYZ_RGB, position)),
-                       glutil::GeometryBufferAttribute(2, 3, GL_UNSIGNED_BYTE, GL_FALSE, offsetof(gui::Vertex_XYZ_RGB, color))},
+                      {glutil::GeometryBufferAttribute(0, 3, GL_FLOAT, false, offsetof(gui::Vertex_XYZ_RGB, position)),
+                       glutil::GeometryBufferAttribute(2, 3, GL_UNSIGNED_BYTE, true, offsetof(gui::Vertex_XYZ_RGB, color))},
                       GL_TRIANGLES);
 
     meshReady = true;

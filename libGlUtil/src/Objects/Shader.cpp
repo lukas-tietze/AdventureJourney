@@ -93,3 +93,10 @@ glutil::Shader &glutil::Shader::operator=(Shader &&shader)
     
     return *this;
 }
+
+std::ostream &glutil::operator<<(std::ostream &s, const Shader &shader)
+{
+    s << "source=" << shader.path << ", type=" << shader.type << ", id=" << shader.id;
+
+    return s;
+}

@@ -51,12 +51,12 @@ void glutil::Program::TransferFrom(Program &program)
     program.id = 0;
 }
 
-void glutil::Program::AttachShader(const Shader *shader)
+void glutil::Program::AttachShader(Shader *shader)
 {
     this->shaders.push_back(shader);
 }
 
-void glutil::Program::DetachShader(const Shader *shader)
+void glutil::Program::DetachShader(Shader *shader)
 {
     auto pos = std::find(this->shaders.begin(), this->shaders.end(), shader);
 
@@ -79,12 +79,27 @@ bool glutil::Program::Link()
         glAttachShader(this->id, shader->GetId());
     }
 
+    glLinkProgram(this->id);
+
     if (!glutil::CheckProgram(this->id))
         return false;
     else
         util::dbg.WriteLine("Linked program % from: {%}.", this->id, util::WrapIterable(this->shaders.begin(), this->shaders.end(), ", "));
 
     return true;
+}
+
+bool glutil::Program::ReloadAll()
+{
+    for (auto shader : this->shaders)
+        shader->Reload();
+
+    return this->Link();
+}
+
+void glutil::Program::Use()
+{
+    glUseProgram(this->id);
 }
 
 glutil::Program &glutil::Program::operator=(const Program &program)

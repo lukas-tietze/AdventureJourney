@@ -10,7 +10,7 @@ namespace gui
 {
 class DummyObject : public glutil::SceneObject
 {
-  private:
+private:
     glm::vec3 axis;
     float rotation;
     glm::vec3 basePos;
@@ -19,7 +19,7 @@ class DummyObject : public glutil::SceneObject
     float speed;
     float scale;
 
-  public:
+public:
     DummyObject(glutil::GeometryBuffer *, const glutil::Mesh &);
 
     void Step(double delta);
@@ -27,15 +27,19 @@ class DummyObject : public glutil::SceneObject
 
 class DummyScreen : public glutil::Screen
 {
-  private:
+private:
     std::vector<gui::DummyObject *> objects;
     glutil::SceneObject *axis;
 
-    GLuint pId;
+    glutil::Shader vertexShader;
+    glutil::Shader fragmentShader;
+    glutil::Program program;
 
     glutil::Camera camera;
 
-  public:
+    bool mouseCaptured;
+
+public:
     DummyScreen();
     ~DummyScreen();
 

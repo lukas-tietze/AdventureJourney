@@ -315,37 +315,37 @@ int glutil::GetWindowHeight()
     return h;
 }
 
-float glutil::GetAspectRatio()
+float glutil::GetAspectRatio() 
 {
     return static_cast<float>(w) / static_cast<float>(h);
 }
 
-int glutil::GetMouseX()
+double glutil::GetMouseX()
 {
     return mouseX;
 }
 
-int glutil::GetMouseY()
+double glutil::GetMouseY()
 {
     return mouseY;
 }
 
-int glutil::GetMouseDeltaX()
+double glutil::GetMouseDeltaX()
 {
     return mouseDeltaX;
 }
 
-int glutil::GetMouseDeltaY()
+double glutil::GetMouseDeltaY()
 {
     return mouseDeltaY;
 }
 
-int glutil::GetScrollX()
+double glutil::GetScrollX()
 {
     return scrollX;
 }
 
-int glutil::GetScrollY()
+double glutil::GetScrollY()
 {
     return scrollY;
 }

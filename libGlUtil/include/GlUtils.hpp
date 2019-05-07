@@ -21,12 +21,12 @@ extern const CreateInfo DefaultCreateInfo;
 int GetWindowWidth();
 int GetWindowHeight();
 float GetAspectRatio();
-int GetMouseX();
-int GetMouseY();
-int GetMouseDeltaX();
-int GetMouseDeltaY();
-int GetScrollX();
-int GetScrollY();
+double GetMouseX();
+double GetMouseY();
+double GetMouseDeltaX();
+double GetMouseDeltaY();
+double GetScrollX();
+double GetScrollY();
 GLFWwindow *GetWindow();
 bool HasWindow();
 
@@ -117,6 +117,8 @@ public:
 
 const std::string &GetGlErrorMessage(GLenum error);
 void ThrowOnGlError();
+void PrintGlError(const std::string &marker = "");
+void PrintAllGlErrors(const std::string &marker = "");
 
 extern const glm::vec3 AXIS_X;
 extern const glm::vec3 AXIS_Y;
