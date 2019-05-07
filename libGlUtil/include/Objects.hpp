@@ -280,13 +280,22 @@ private:
     GLuint id;
 
     void DestroyGlObjects();
+    void CopyFrom(const Shader &);
+    void TransferFrom(Shader &);
 
 public:
     Shader();
+    Shader(const Shader &);
+    Shader(Shader &&);
     ~Shader();
 
+    GLuint GetId() const;
+    
     bool LoadFrom(const std::string &path, GLenum type);
     bool Reload();
+
+    Shader &operator=(const Shader &);
+    Shader &operator=(Shader &&);
 };
 
 class Program
@@ -296,16 +305,22 @@ private:
     GLuint id;
 
     void DestroyGlObjects();
+    void CopyFrom(const Program &);
+    void TransferFrom(Program &);
 
 public:
     Program();
+    Program(const Program &);
+    Program(Program &&);
     ~Program();
 
     void AttachShader(const Shader *);
     void DetachShader(const Shader *);
     void Clear();
-
     bool Link();
+
+    Program &operator=(const Program &);
+    Program &operator=(Program &&);
 };
 
 class Texture
