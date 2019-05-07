@@ -53,14 +53,16 @@ std::ostream &operator<<(std::ostream &, const Vertex_XYZ_NRM_RGB_ST &);
 
 namespace quadrics
 {
-glutil::Mesh Box(uint32_t color = 0x0f0f0fff);
-glutil::Mesh Box(int slicesX, int slicesY, int slicesZ, uint32_t color = 0x0f0f0fff);
-glutil::Mesh UVSphere(int slices, int stacks, uint32_t color = 0x0f0f0fff);
-glutil::Mesh IcoSphere(int subdiv, uint32_t color = 0x0f0f0fff);
-glutil::Mesh Cylinder(int slices, int stacks, uint32_t color = 0x0f0f0fff);
-glutil::Mesh Disk(int slices, int loops, uint32_t color = 0x0f0f0fff);
-glutil::Mesh Cone(int slices, int stacks, uint32_t color = 0x0f0f0fff);
-glutil::Mesh Cone(float maxHeight, int slices, int stacks, uint32_t color = 0x0f0f0fff);
+constexpr uint32_t DEFAULT_COLOR = 0x808080ff;
+
+glutil::Mesh Box(uint32_t color = DEFAULT_COLOR);
+glutil::Mesh Box(int slicesX, int slicesY, int slicesZ, uint32_t color = DEFAULT_COLOR);
+glutil::Mesh UVSphere(int slices, int stacks, uint32_t color = DEFAULT_COLOR);
+glutil::Mesh IcoSphere(int subdiv, uint32_t color = DEFAULT_COLOR);
+glutil::Mesh Cylinder(int slices, int stacks, uint32_t color = DEFAULT_COLOR);
+glutil::Mesh Disk(int slices, int loops, uint32_t color = DEFAULT_COLOR);
+glutil::Mesh Cone(int slices, int stacks, uint32_t color = DEFAULT_COLOR);
+glutil::Mesh Cone(float maxHeight, int slices, int stacks, uint32_t color = DEFAULT_COLOR);
 } // namespace quadrics
 namespace models
 {

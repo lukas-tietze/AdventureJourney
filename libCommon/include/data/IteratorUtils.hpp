@@ -4,29 +4,64 @@
 
 namespace util
 {
+namespace
+{
 template <class T>
+struct DefaultConverter
+{
+    const auto &operator()(const T &t) const
+    {
+        return *t;
+    }
+};
+
+template <class T>
+struct PointerToRefConverter
+{
+    const auto &operator()(const T &t) const
+    {
+        return **t;
+    }
+};
+} // namespace
+
+template <class TIterator, class TConverter>
 class IteratorPrintWrapper
 {
 private:
-    T begin;
-    T end;
+    TIterator begin;
+    TIterator end;
     std::string seperator;
+    TConverter converter;
 
 public:
-    IteratorPrintWrapper(const T &begin, const T &end, const std::string &sep) : begin(begin),
-                                                                                 end(end),
-                                                                                 seperator(sep)
+    IteratorPrintWrapper(const TIterator &begin, const TIterator &end, const std::string &sep) : begin(begin),
+                                                                                                 end(end),
+                                                                                                 converter(),
+                                                                                                 seperator(sep)
     {
     }
 
-    const T &GetBegin() const
+    IteratorPrintWrapper(const TIterator &begin, const TIterator &end, const TConverter &conv, const std::string &sep) : begin(begin),
+                                                                                                                         end(end),
+                                                                                                                         converter(conv),
+                                                                                                                         seperator(sep)
+    {
+    }
+
+    const TIterator &GetBegin() const
     {
         return this->begin;
     }
 
-    const T &GetEnd() const
+    const TIterator &GetEnd() const
     {
         return this->end;
+    }
+
+    const TConverter &GetConverter() const
+    {
+        return this->converter;
     }
 
     const std::string &GetSeperator() const
@@ -35,31 +70,38 @@ public:
     }
 };
 
-template <class T>
-std::ostream &operator<<(std::ostream &s, const IteratorPrintWrapper<T> &wrapper)
+template <class TIterator, class TConverter>
+std::ostream &operator<<(std::ostream &s, const IteratorPrintWrapper<TIterator, TConverter> &wrapper)
 {
     auto pos = wrapper.GetBegin();
     auto end = wrapper.GetEnd();
 
     if (pos != end)
-        s << *pos;
+        s << wrapper.GetConverter()(pos);
 
     ++pos;
 
     for (; pos != end; ++pos)
-        s << wrapper.GetSeperator() << *pos;
+        s << wrapper.GetSeperator() << wrapper.GetConverter()(pos);
 
     return s;
 }
 
-template <class T>
-IteratorPrintWrapper<T> WrapIterable(T begin, T end, const std ::string &seperator = ", ")
+template <class TIterator, class TConverter>
+IteratorPrintWrapper<TIterator, TConverter> WrapConvertIterable(TIterator begin, TIterator end, const TConverter &converter, const std::string &seperator = "")
 {
-    return IteratorPrintWrapper<T>(begin, end, seperator);
+    return IteratorPrintWrapper<TIterator, TConverter>(begin, end, converter, seperator);
 }
 
-template <class T>
-class MultiIterator
+template <class TIterator>
+IteratorPrintWrapper<TIterator, PointerToRefConverter<TIterator>> WrapPointerIterable(TIterator begin, TIterator end, const std::string &seperator = "")
 {
-};
+    return IteratorPrintWrapper<TIterator, PointerToRefConverter<TIterator>>(begin, end, seperator);
+}
+
+template <class TIterator>
+IteratorPrintWrapper<TIterator, DefaultConverter<TIterator>> WrapIterable(TIterator begin, TIterator end, const std::string &seperator = "")
+{
+    return IteratorPrintWrapper<TIterator, DefaultConverter<TIterator>>(begin, end, seperator);
+}
 } // namespace util

@@ -35,6 +35,8 @@ private:
     glutil::Shader fragmentShader;
     glutil::Program program;
 
+    glutil::LigthSourceCollection ligths;
+
     glutil::Camera camera;
 
     bool mouseCaptured;

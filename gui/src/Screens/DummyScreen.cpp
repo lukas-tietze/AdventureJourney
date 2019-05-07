@@ -12,6 +12,8 @@ gui::DummyScreen::DummyScreen()
     this->camera.SetBindingTarget(1);
     this->camera.CreateGlObjects();
 
+    this->ligths.Add();
+
     glEnable(GL_DEPTH_TEST);
 
     this->vertexShader.LoadFrom("assets/shaders/passthrough.vs.glsl", GL_VERTEX_SHADER);
@@ -23,13 +25,12 @@ gui::DummyScreen::DummyScreen()
     this->axis = new glutil::SceneObject(gui::models::CoordMesh());
     this->axis->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
 
-    auto cubeMesh = gui::models::CubeMesh();
-    cubeMesh = gui::quadrics::Box();
+    auto cubeMesh = gui::quadrics::Box();
 
     auto cubeGeometry = new glutil::GeometryBuffer(cubeMesh);
     auto rnd = util::Random();
 
-    for (int i = 0; i < 1; i++)
+    for (int i = 0; i < 30; i++)
         this->objects.push_back(new gui::DummyObject(cubeGeometry, cubeMesh));
 
     for (auto object : this->objects)
@@ -129,7 +130,7 @@ void gui::DummyScreen::Update(double delta)
 
     for (int i = 0; i < this->objects.size(); i++)
     {
-        // this->objects[i]->Step(delta);
+        this->objects[i]->Step(delta);
     }
 
     this->camera.MoveBy(viewFlat * static_cast<float>(delta * x) +
