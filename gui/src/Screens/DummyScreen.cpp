@@ -24,8 +24,8 @@ gui::DummyScreen::DummyScreen()
     this->axis->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
 
     auto cubeMesh = gui::models::CubeMesh();
+    cubeMesh = gui::quadrics::Box();
 
-    // cubeMesh = gui::quadrics::Box();
     auto cubeGeometry = new glutil::GeometryBuffer(cubeMesh);
     auto rnd = util::Random();
 

@@ -38,8 +38,8 @@ struct Vertex_XYZ_NRM_RGB_ST
 {
     GLfloat position[3];
     GLfloat normal[3];
-    GLubyte color[3];
     GLfloat texture[2];
+    GLubyte color[3];
 };
 #pragma pack(pop)
 
