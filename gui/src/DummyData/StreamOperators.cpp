@@ -18,9 +18,9 @@ std::ostream &gui::operator<<(std::ostream &s, const Vertex_XYZ_RGB &v)
       << v.position[2] << "}";
 
     s << ", RGB={"
-      << v.color[0] << ", "
-      << v.color[1] << ", "
-      << v.color[2] << "}";
+      << uint32_t(v.color[0]) << ", "
+      << uint32_t(v.color[1]) << ", "
+      << uint32_t(v.color[2]) << "}";
 
     return s;
 }
@@ -33,9 +33,9 @@ std::ostream &gui::operator<<(std::ostream &s, const Vertex_XYZ_RGB_ST &v)
       << v.position[2] << "}";
 
     s << ", RGB={"
-      << v.color[0] << ", "
-      << v.color[1] << ", "
-      << v.color[2] << "}";
+      << uint32_t(v.color[0]) << ", "
+      << uint32_t(v.color[1]) << ", "
+      << uint32_t(v.color[2]) << "}";
 
     s << ", ST={"
       << v.texture[0] << ", "
@@ -57,9 +57,9 @@ std::ostream &gui::operator<<(std::ostream &s, const Vertex_XYZ_NRM_RGB &v)
       << v.normal[2] << "}";
 
     s << ", RGB={"
-      << v.color[0] << ", "
-      << v.color[1] << ", "
-      << v.color[2] << "}";
+      << uint32_t(v.color[0]) << ", "
+      << uint32_t(v.color[1]) << ", "
+      << uint32_t(v.color[2]) << "}";
 
     return s;
 }
@@ -77,9 +77,9 @@ std::ostream &gui::operator<<(std::ostream &s, const Vertex_XYZ_NRM_RGB_ST &v)
       << v.normal[2] << "}";
 
     s << ", RGB={"
-      << v.color[0] << ", "
-      << v.color[1] << ", "
-      << v.color[2] << "}";
+      << uint32_t(v.color[0]) << ", "
+      << uint32_t(v.color[1]) << ", "
+      << uint32_t(v.color[2]) << "}";
 
     s << ", ST={"
       << v.texture[0] << ", "

@@ -7,15 +7,15 @@ namespace util
 template <class T>
 class IteratorPrintWrapper
 {
-  private:
+private:
     T begin;
     T end;
     std::string seperator;
 
-  public:
-    IteratorPrintWrapper(const T &begin, const T &end, const std::string &) : begin(begin),
-                                                                              end(end),
-                                                                              seperator(seperator)
+public:
+    IteratorPrintWrapper(const T &begin, const T &end, const std::string &sep) : begin(begin),
+                                                                                 end(end),
+                                                                                 seperator(sep)
     {
     }
 
@@ -38,12 +38,22 @@ class IteratorPrintWrapper
 template <class T>
 std::ostream &operator<<(std::ostream &s, const IteratorPrintWrapper<T> &wrapper)
 {
-    for (auto pos = wrapper.GetBegin(); pos != wrapper.GetEnd(); ++pos)
-        s << *pos << wrapper.GetSeperator();
+    auto pos = wrapper.GetBegin();
+    auto end = wrapper.GetEnd();
+
+    if (pos != end)
+        s << *pos;
+
+    ++pos;
+
+    for (; pos != end; ++pos)
+        s << wrapper.GetSeperator() << *pos;
+
+    return s;
 }
 
 template <class T>
-IteratorPrintWrapper<T> WrapIterable(T begin, T end, std::string seperator = "")
+IteratorPrintWrapper<T> WrapIterable(T begin, T end, const std ::string &seperator = ", ")
 {
     return IteratorPrintWrapper<T>(begin, end, seperator);
 }

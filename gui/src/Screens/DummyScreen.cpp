@@ -23,12 +23,13 @@ gui::DummyScreen::DummyScreen()
     this->axis = new glutil::SceneObject(gui::models::CoordMesh());
     this->axis->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
 
-    // const auto &cubeMesh = gui::models::CubeMesh();
-    auto cubeMesh = gui::quadrics::Box();
+    auto cubeMesh = gui::models::CubeMesh();
+    // auto cubeMesh = gui::quadrics::Box();
+    cubeMesh = gui::quadrics::Box();
     auto cubeGeometry = new glutil::GeometryBuffer(cubeMesh);
     auto rnd = util::Random();
 
-    for (int i = 0; i < 30; i++)
+    for (int i = 0; i < 1; i++)
         this->objects.push_back(new gui::DummyObject(cubeGeometry, cubeMesh));
 
     // this->objects.push_back(new glutil::SceneObject(gui::models::Coord3dMesh()));
@@ -111,7 +112,7 @@ void gui::DummyScreen::Update(double delta)
 
     for (int i = 0; i < this->objects.size(); i++)
     {
-        this->objects[i]->Step(delta);
+        // this->objects[i]->Step(delta);
     }
 
     this->camera.MoveBy(viewFlat * static_cast<float>(delta * x) +

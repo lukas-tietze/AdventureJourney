@@ -23,19 +23,6 @@ include(ExternalData)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGLM_ENABLE_EXPERIMENTAL")
 
-if(CMAKE_BUILD_TYPE STREQUAL "Release")
-    message("Creating release build")
-    option(DEBUG "Debug build" OFF)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
-else()
-    message("Creating debug build")
-    option(DEBUG "Debug build" ON)
-
-    if(CMAKE_COMPILER_IS_GNUCXX)
-        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -pedantic -Wextra -Wswitch-default -Wswitch-enum -g")
-    endif()
-endif()
-
 set(CMAKE_BUILD_TYPE Debug)
 
 enable_language(CXX)

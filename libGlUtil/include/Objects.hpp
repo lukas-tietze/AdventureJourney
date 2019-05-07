@@ -12,15 +12,15 @@ namespace glutil
 template <class TData>
 class StaticUboOwner
 {
-  private:
+private:
     GLuint ubo;
     GLuint bindingTarget;
     bool dirty;
 
-  protected:
+protected:
     TData data;
 
-  public:
+public:
     StaticUboOwner();
 
     void CreateGlObjects();
@@ -36,16 +36,16 @@ class StaticUboOwner
 template <class TData>
 class DynamicUboOwner
 {
-  private:
+private:
     int ubo;
     int bindingTarget;
     bool dirty;
     int bufferSize;
 
-  protected:
+protected:
     std::vector<TData> data;
 
-  public:
+public:
     DynamicUboOwner();
 
     void CreateGlObjects();
@@ -60,14 +60,14 @@ class DynamicUboOwner
 
 class GeometryBufferAttribute
 {
-  private:
+private:
     int index;
     int type;
     int count;
     int offset;
     bool normalized;
 
-  public:
+public:
     GeometryBufferAttribute();
     GeometryBufferAttribute(int index, int count, int type, bool normalized, int offset);
 
@@ -80,7 +80,7 @@ class GeometryBufferAttribute
 
 class Mesh
 {
-  private:
+private:
     int vertexCount;
     int vertexSize;
     void *vertices;
@@ -97,7 +97,7 @@ class Mesh
     void CopyFrom(const Mesh &);
     void TransferFrom(Mesh &);
 
-  public:
+public:
     Mesh();
     Mesh(const Mesh &);
     Mesh(Mesh &&);
@@ -130,12 +130,12 @@ class SceneObject;
 
 class GeometryBuffer
 {
-  private:
+private:
     GLuint vao;
     GLuint vbo;
     GLuint ibo;
 
-  public:
+public:
     GeometryBuffer();
     GeometryBuffer(const Mesh &);
     ~GeometryBuffer();
@@ -153,7 +153,7 @@ struct SceneObjectUboData
 
 class SceneObject : public StaticUboOwner<SceneObjectUboData>
 {
-  private:
+private:
     int bufferOffset;
     int indexCount;
     int offset;
@@ -163,7 +163,7 @@ class SceneObject : public StaticUboOwner<SceneObjectUboData>
     GeometryBuffer *geometry;
     bool geometryManaged;
 
-  public:
+public:
     SceneObject(GeometryBuffer *data, int bufferOffset, int indexCount, int offset, int drawMode, int indexType, bool manageGeometryBuffer = false);
     SceneObject(GeometryBuffer *, const Mesh &);
     SceneObject(const SceneObject &copy);
@@ -187,7 +187,7 @@ struct CameraUboData
 
 class Camera : public StaticUboOwner<CameraUboData>
 {
-  private:
+private:
     glm::vec3 position;
     glm::vec3 up;
     glm::vec3 direction;
@@ -199,7 +199,7 @@ class Camera : public StaticUboOwner<CameraUboData>
     bool viewDirty;
     bool projectionDirty;
 
-  public:
+public:
     Camera();
 
     void SetPosition(glm::vec3 const &pos);
@@ -272,9 +272,45 @@ enum class ImageFormat
     Binary,
 };
 
+class Shader
+{
+private:
+    std::string path;
+    GLenum type;
+    GLuint id;
+
+    void DestroyGlObjects();
+
+public:
+    Shader();
+    ~Shader();
+
+    bool LoadFrom(const std::string &path, GLenum type);
+    bool Reload();
+};
+
+class Program
+{
+private:
+    std::vector<const Shader *> shaders;
+    GLuint id;
+
+    void DestroyGlObjects();
+
+public:
+    Program();
+    ~Program();
+
+    void AttachShader(const Shader *);
+    void DetachShader(const Shader *);
+    void Clear();
+
+    bool Link();
+};
+
 class Texture
 {
-  private:
+private:
     template <uint PChannels>
     class FormatConverter
     {
@@ -303,7 +339,7 @@ class Texture
     template <class TBuilder, uint PChannels>
     bool LoadCubeMapFromBuilderCore(const TBuilder &);
 
-  public:
+public:
     Texture();
     ~Texture();
 
@@ -348,13 +384,13 @@ struct SceneUboData
 
 class Scene : public StaticUboOwner<SceneUboData>
 {
-  private:
+private:
     std::map<int, Mesh *> meshes;
     std::map<int, GeometryBuffer *> geometry;
     std::map<int, SceneObject *> objects;
     Camera camera;
 
-  public:
+public:
     bool AddGeometry();
 
     void Render();

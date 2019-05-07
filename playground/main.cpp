@@ -4,6 +4,7 @@
 #include <cstdio>
 #include "data/String.hpp"
 #include "data/Io.hpp"
+#include "glad/glad.h"
 
 namespace
 {

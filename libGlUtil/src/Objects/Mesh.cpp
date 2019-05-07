@@ -62,12 +62,22 @@ void glutil::Mesh::CopyFrom(const Mesh &mesh)
 
     if (mesh.dataManaged)
     {
-        this->vertices = new unsigned char[mesh.GetVertexDataSize()];
-        this->indices = new unsigned char[mesh.GetIndexDataSize()];
+        util::dbg.WriteLine("Created Mesh % from deep copy of %.", this, &mesh);
+
+        this->vertices = new uint8_t[mesh.GetVertexDataSize()];
+        this->indices = new uint8_t[mesh.GetIndexDataSize()];
         this->dataManaged = true;
 
         std::memcpy(this->vertices, mesh.vertices, mesh.GetVertexDataSize());
         std::memcpy(this->indices, mesh.indices, mesh.GetIndexDataSize());
+    }
+    else
+    {
+        util::dbg.WriteLine("Created Mesh % from shallow copy of %.", this, &mesh);
+
+        this->vertices = mesh.vertices;
+        this->indices = mesh.indices;
+        this->dataManaged = false;
     }
 }
 
@@ -84,9 +94,18 @@ void glutil::Mesh::TransferFrom(Mesh &mesh)
     this->indices = mesh.vertices;
     this->dataManaged = mesh.dataManaged;
 
+    mesh.vertexCount = 0;
+    mesh.indexCount = 0;
+    mesh.vertexSize = 0;
+    mesh.indexSize = 0;
+    mesh.indexType = 0;
+    mesh.attributes.clear();
+    mesh.drawMode = 0;
     mesh.vertices = nullptr;
-    mesh.indices = nullptr;
+    mesh.vertices = nullptr;
     mesh.dataManaged = false;
+
+    util::dbg.WriteLine("Created Mesh % from transfer of %.", this, &mesh);
 }
 
 int glutil::Mesh::CalculateIndexSize(int type)
@@ -108,14 +127,26 @@ bool glutil::Mesh::LoadFromData(int vertexCount, int vertexSize, void *vertices,
 {
     this->vertexCount = vertexCount;
     this->vertexSize = vertexSize;
-    this->vertices = vertices;
     this->indexCount = indexCount;
     this->indexType = indexType;
     this->indexSize = this->CalculateIndexSize(indexType);
-    this->indices = indices;
     this->attributes = attributes;
     this->drawMode = drawMode;
     this->dataManaged = managaData;
+
+    if (this->dataManaged)
+    {
+        this->vertices = new uint8_t[this->vertexCount * this->vertexSize];
+        this->indices = new uint8_t[this->indexCount * this->indexSize];
+
+        std::memcpy(this->vertices, vertices, this->vertexCount * this->vertexSize * sizeof(uint8_t));
+        std::memcpy(this->indices, indices, this->indexCount * this->indexSize * sizeof(uint8_t));
+    }
+    else
+    {
+        this->vertices = vertices;
+        this->indices = indices;
+    }
 
     util::dbg.WriteLine("Loaded Mesh [%] from data: vertexCount=%, vertexSize=%, indexCount=%, indexType=%, indexSize=%, drawMode=%, attributes=%",
                         this,
@@ -200,12 +231,12 @@ const glutil::Mesh &glutil::Mesh::operator=(const Mesh &mesh)
 {
     this->CopyFrom(mesh);
 
-	return *this;
+    return *this;
 }
 
 glutil::Mesh &glutil::Mesh::operator=(Mesh &&mesh)
 {
     this->TransferFrom(mesh);
 
-	return *this;
+    return *this;
 }

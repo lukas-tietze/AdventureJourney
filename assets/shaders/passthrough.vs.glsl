@@ -1,7 +1,9 @@
 #version 430 core
 
 layout(location = 0) in vec3 pos;
-layout(location = 1) in vec3 clr;
+layout(location = 1) in vec3 nrm;
+layout(location = 2) in vec3 clr;
+layout(location = 3) in vec2 tex;
 
 layout(std140, binding = 0) uniform objectDataBlock
 {
@@ -23,5 +25,5 @@ void main()
 {
 	gl_Position = camera.projection * camera.view * object.model * vec4(pos, 1.0);
 
-    vclr = vec4(clr / 255.0, 1.0);
+    vclr = vec4(clr, 1.0);
 }
