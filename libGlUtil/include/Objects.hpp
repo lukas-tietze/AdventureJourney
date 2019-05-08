@@ -12,15 +12,15 @@ namespace glutil
 template <class TData>
 class StaticUboOwner
 {
-private:
+  private:
     GLuint ubo;
     GLuint bindingTarget;
     bool dirty;
 
-protected:
+  protected:
     TData data;
 
-public:
+  public:
     StaticUboOwner();
 
     void CreateGlObjects();
@@ -36,16 +36,16 @@ public:
 template <class TData>
 class DynamicUboOwner
 {
-private:
+  private:
     int ubo;
     int bindingTarget;
     bool dirty;
     int bufferSize;
 
-protected:
+  protected:
     std::vector<TData> data;
 
-public:
+  public:
     DynamicUboOwner();
 
     void CreateGlObjects();
@@ -60,14 +60,14 @@ public:
 
 class GeometryBufferAttribute
 {
-private:
+  private:
     int index;
     int type;
     int count;
     int offset;
     bool normalized;
 
-public:
+  public:
     GeometryBufferAttribute();
     GeometryBufferAttribute(int index, int count, int type, bool normalized, int offset);
 
@@ -80,7 +80,7 @@ public:
 
 class Mesh
 {
-private:
+  private:
     int vertexCount;
     int vertexSize;
     void *vertices;
@@ -97,7 +97,7 @@ private:
     void CopyFrom(const Mesh &);
     void TransferFrom(Mesh &);
 
-public:
+  public:
     Mesh();
     Mesh(const Mesh &);
     Mesh(Mesh &&);
@@ -130,12 +130,12 @@ class SceneObject;
 
 class GeometryBuffer
 {
-private:
+  private:
     GLuint vao;
     GLuint vbo;
     GLuint ibo;
 
-public:
+  public:
     GeometryBuffer();
     GeometryBuffer(const Mesh &);
     ~GeometryBuffer();
@@ -153,7 +153,7 @@ struct SceneObjectUboData
 
 class SceneObject : public StaticUboOwner<SceneObjectUboData>
 {
-private:
+  private:
     int bufferOffset;
     int indexCount;
     int offset;
@@ -163,7 +163,7 @@ private:
     GeometryBuffer *geometry;
     bool geometryManaged;
 
-public:
+  public:
     SceneObject(GeometryBuffer *data, int bufferOffset, int indexCount, int offset, int drawMode, int indexType, bool manageGeometryBuffer = false);
     SceneObject(GeometryBuffer *, const Mesh &);
     SceneObject(const SceneObject &copy);
@@ -187,7 +187,7 @@ struct CameraUboData
 
 class Camera : public StaticUboOwner<CameraUboData>
 {
-private:
+  private:
     glm::vec3 position;
     glm::vec3 up;
     glm::vec3 direction;
@@ -199,7 +199,7 @@ private:
     bool viewDirty;
     bool projectionDirty;
 
-public:
+  public:
     Camera();
 
     void SetPosition(glm::vec3 const &pos);
@@ -276,7 +276,7 @@ class Shader
 {
     friend std::ostream &operator<<(std::ostream &, const Shader &);
 
-private:
+  private:
     std::string path;
     GLenum type;
     GLuint id;
@@ -285,7 +285,7 @@ private:
     void CopyFrom(const Shader &);
     void TransferFrom(Shader &);
 
-public:
+  public:
     Shader();
     Shader(const Shader &);
     Shader(Shader &&);
@@ -293,6 +293,7 @@ public:
 
     GLuint GetId() const;
 
+    bool LoadFrom(const std::string &path);
     bool LoadFrom(const std::string &path, GLenum type);
     bool Reload();
 
@@ -304,7 +305,7 @@ std::ostream &operator<<(std::ostream &, const Shader &);
 
 class Program
 {
-private:
+  private:
     std::vector<Shader *> shaders;
     GLuint id;
 
@@ -312,16 +313,18 @@ private:
     void CopyFrom(const Program &);
     void TransferFrom(Program &);
 
-public:
+  public:
     Program();
     Program(const Program &);
     Program(Program &&);
     ~Program();
 
-    void AttachShader(Shader *);
-    void DetachShader(Shader *);
+    void AttachAll(const std::initializer_list<Shader *> &);
+    void Attach(Shader *);
+    void Detach(Shader *);
     void Clear();
     bool Link();
+    bool LinkAll(const std::initializer_list<Shader *> &);
     bool ReloadAll();
     void Use();
 
@@ -331,7 +334,7 @@ public:
 
 class Texture
 {
-private:
+  private:
     template <uint PChannels>
     class FormatConverter
     {
@@ -360,7 +363,7 @@ private:
     template <class TBuilder, uint PChannels>
     bool LoadCubeMapFromBuilderCore(const TBuilder &);
 
-public:
+  public:
     Texture();
     ~Texture();
 
@@ -415,16 +418,25 @@ struct SceneUboData
 {
 };
 
+typedef std::string resourceId_t;
+
 class Scene : public StaticUboOwner<SceneUboData>
 {
-private:
-    std::map<int, Mesh *> meshes;
-    std::map<int, GeometryBuffer *> geometry;
-    std::map<int, SceneObject *> objects;
+  private:
+    std::map<resourceId_t, Mesh *> meshes;
+    std::map<resourceId_t, GeometryBuffer *> geometry;
+    std::map<resourceId_t, SceneObject *> objects;
+    std::map<resourceId_t, Program *> programs;
+    std::map<resourceId_t, Shader *> shaders;
     Camera camera;
 
-public:
-    bool AddGeometry();
+  public:
+    Mesh *GetMesh(resourceId_t);
+    Mesh *Get(resourceId_t);
+    Mesh *Get(resourceId_t);
+    Mesh *Get(resourceId_t);
+    Mesh *Get(resourceId_t);
+    Mesh *Get(resourceId_t);
 
     void Render();
 };

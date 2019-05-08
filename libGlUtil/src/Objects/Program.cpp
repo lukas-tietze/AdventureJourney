@@ -51,12 +51,17 @@ void glutil::Program::TransferFrom(Program &program)
     program.id = 0;
 }
 
-void glutil::Program::AttachShader(Shader *shader)
+void glutil::Program::AttachAll(const std::initializer_list<Shader *> &shaderList)
+{
+    this->shaders.insert(this->shaders.end(), shaderList);
+}
+
+void glutil::Program::Attach(Shader *shader)
 {
     this->shaders.push_back(shader);
 }
 
-void glutil::Program::DetachShader(Shader *shader)
+void glutil::Program::Detach(Shader *shader)
 {
     auto pos = std::find(this->shaders.begin(), this->shaders.end(), shader);
 
@@ -87,6 +92,13 @@ bool glutil::Program::Link()
         util::dbg.WriteLine("Linked program % from: {%}.", this->id, util::WrapIterable(this->shaders.begin(), this->shaders.end(), ", "));
 
     return true;
+}
+
+bool glutil::Program::LinkAll(const std::initializer_list<Shader *> &shaders)
+{
+    this->Clear();
+    this->AttachAll(shaders);
+    return this->Link();
 }
 
 bool glutil::Program::ReloadAll()
