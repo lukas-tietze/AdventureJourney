@@ -89,7 +89,7 @@ bool glutil::Program::Link()
     if (!glutil::CheckProgram(this->id))
         return false;
     else
-        util::dbg.WriteLine("Linked program % from: {%}.", this->id, util::WrapIterable(this->shaders.begin(), this->shaders.end(), ", "));
+        util::dbg.WriteLine("Linked program % from: {%}.", this->id, util::WrapPointerIterable(this->shaders.begin(), this->shaders.end(), "}, {"));
 
     return true;
 }

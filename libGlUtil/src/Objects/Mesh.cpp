@@ -1,5 +1,6 @@
 #include "Objects.hpp"
 #include "data/Io.hpp"
+#include "Exception.hpp"
 #include <cstring>
 
 glutil::Mesh::Mesh() : vertexCount(0),
@@ -31,11 +32,9 @@ glutil::Mesh::~Mesh()
 
     this->vertexCount = 0;
     this->vertexSize = 0;
-    this->vertices = nullptr;
     this->indexCount = 0;
     this->indexSize = 0;
     this->indexType = 0;
-    this->indices = nullptr;
 
     this->attributes.clear();
 
@@ -46,6 +45,9 @@ glutil::Mesh::~Mesh()
         delete[] this->vertices;
         delete[] this->indices;
     }
+
+    this->vertices = nullptr;
+    this->indices = nullptr;
 
     this->drawMode = 0;
 }
@@ -91,7 +93,7 @@ void glutil::Mesh::TransferFrom(Mesh &mesh)
     this->attributes = mesh.attributes;
     this->drawMode = mesh.drawMode;
     this->vertices = mesh.vertices;
-    this->indices = mesh.vertices;
+    this->indices = mesh.indices;
     this->dataManaged = mesh.dataManaged;
 
     mesh.vertexCount = 0;
@@ -119,7 +121,7 @@ int glutil::Mesh::CalculateIndexSize(int type)
     case GL_UNSIGNED_INT:
         return sizeof(GLuint);
     default:
-        return 0;
+        throw util::InvalidCaseException();
     }
 }
 
@@ -148,7 +150,7 @@ bool glutil::Mesh::LoadFromData(int vertexCount, int vertexSize, void *vertices,
         this->indices = indices;
     }
 
-    util::dbg.WriteLine("Loaded Mesh [%] from data: vertexCount=%, vertexSize=%, indexCount=%, indexType=%, indexSize=%, drawMode=%, attributes=%",
+    util::dbg.WriteLine("Loaded Mesh [%] from data: vertexCount=%, vertexSize=%, indexCount=%, indexType=%, indexSize=%, drawMode=%, attributes=%, dataManaged=%",
                         this,
                         this->vertexCount,
                         this->vertexSize,
@@ -156,7 +158,8 @@ bool glutil::Mesh::LoadFromData(int vertexCount, int vertexSize, void *vertices,
                         this->indexType,
                         this->indexSize,
                         this->drawMode,
-                        attributes.size());
+                        attributes.size(),
+                        this->dataManaged);
 
     for (const auto &attrib : this->attributes)
     {

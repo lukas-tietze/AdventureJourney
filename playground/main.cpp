@@ -5,34 +5,14 @@
 #include "data/String.hpp"
 #include "data/Io.hpp"
 #include "glad/glad.h"
-
-namespace
-{
-namespace nsp
-{
-class Foo
-{
-  public:
-    template <int T>
-    int bar();
-};
-} // namespace nsp
-} // namespace
-
-template <>
-int nsp::Foo::bar<1>()
-{
-    return 0;
-}
-
-template <int T>
-int nsp::Foo::bar()
-{
-    return T;
-}
+#include "DummyData.hpp"
 
 int main()
 {
-    util::out.WriteLine("bar<2> is %", nsp::Foo().bar<2>());
-    util::out.WriteLine("bar<1> is %", nsp::Foo().bar<1>());
+    util::out.WriteLine("size=%, position=%, normal=%, color=%, texture=%",
+                        sizeof(gui::Vertex_Full),
+                        offsetof(gui::Vertex_Full, gui::Vertex_Full::position),
+                        offsetof(gui::Vertex_Full, gui::Vertex_Full::normal),
+                        offsetof(gui::Vertex_Full, gui::Vertex_Full::texture),
+                        offsetof(gui::Vertex_Full, gui::Vertex_Full::color));
 }

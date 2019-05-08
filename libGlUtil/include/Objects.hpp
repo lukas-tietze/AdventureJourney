@@ -58,6 +58,20 @@ class DynamicUboOwner
 
 #include "libGlUtil/src/Objects/DynamicUboOwner.inl"
 
+class FboStage
+{
+private:
+    bool requireColorValues;
+    bool requireDepthValues;
+    bool requireStencilValue;
+};
+
+class FboPipeLine
+{
+private:
+    std::vector<FboStage> stages;
+};
+
 class GeometryBufferAttribute
 {
   private:
@@ -145,11 +159,13 @@ class GeometryBuffer
     void Bind();
 };
 
+#pragma pack(push, 1)
 struct SceneObjectUboData
 {
     glm::mat4 modelMatrix;
     glm::mat3 normalMatrix;
 };
+#pragma pack(pop)
 
 class SceneObject : public StaticUboOwner<SceneObjectUboData>
 {
@@ -177,6 +193,7 @@ class SceneObject : public StaticUboOwner<SceneObjectUboData>
     void Render();
 };
 
+#pragma pack(push, 1)
 struct CameraUboData
 {
     glm::mat4 viewMat;
@@ -184,6 +201,7 @@ struct CameraUboData
     glm::mat4 projectionMat;
     glm::mat4 inverseProjectionMat;
 };
+#pragma pack(pop)
 
 class Camera : public StaticUboOwner<CameraUboData>
 {
@@ -229,6 +247,7 @@ class Camera : public StaticUboOwner<CameraUboData>
     float GetAspectRation() const;
 };
 
+#pragma pack(push, 1)
 struct LigthSourceUboData
 {
     ////falls w = 1 -> xyz = Richtung
@@ -237,16 +256,40 @@ struct LigthSourceUboData
     ////rgb = Color
     ////a = ambient factor
     glm::vec4 color;
+    bool active;
 };
+#pragma pack(pop)
 
-class LigthSource
+class LigthSource : StaticUboOwner<LigthSourceUboData>
 {
+public:
+    LigthSource();
+    LigthSource(const glm::vec3 &position, bool directionalLigth, const glm::vec3 &color, float ambientFactor, bool active);
+
+    const glm::vec3 &GetPosition() const;
+    bool IsDirectionalLigth() const;
+    const glm::vec3 &GetColor() const;
+    float GetAmbientFactor() const;
+    bool IsActive() const;
+
+    void SetPosition(const glm::vec3 &);
+    void SsDirectionalLigth(bool);
+    void SetColor(const glm::vec3 &);
+    void SetAmbientFactor(float);
+    void SetActive(bool);
 };
 
-class LigthSourceCollection
+class LigthSourceCollection : DynamicUboOwner<LigthSourceUboData>
 {
+public:
+    LigthSourceCollection();
+    LigthSourceCollection(const std::initializer_list<LigthSource> &);
+
+    void Add(const LigthSource &);
+    void Clear();
 };
 
+#pragma pack(push, 1)
 struct MaterialUboData
 {
     glm::vec4 ambientColor;
@@ -254,13 +297,22 @@ struct MaterialUboData
     glm::vec4 specularColor;
     float shininess;
 };
+#pragma pack(pop)
 
 class Material : StaticUboOwner<MaterialUboData>
 {
+public:
+    Material();
+    Material(const glm::vec4 &ambient, const glm::vec4 &diffuse, const glm::vec4 &specular, float shininess);
 };
 
 class MaterialCollection : DynamicUboOwner<MaterialUboData>
 {
+    MaterialCollection();
+    MaterialCollection(const std::initializer_list<Material> &);
+
+    void Add(const Material &);
+    void Clear();
 };
 
 enum class ImageFormat
@@ -406,17 +458,21 @@ class TextOverlay
 {
 };
 
+#pragma pack(push, 1)
 struct SceneOverlayUboData
 {
 };
+#pragma pack(pop)
 
 class SceneOverlay : public StaticUboOwner<SceneOverlayUboData>
 {
 };
 
+#pragma pack(push, 1)
 struct SceneUboData
 {
 };
+#pragma pack(pop)
 
 typedef std::string resourceId_t;
 

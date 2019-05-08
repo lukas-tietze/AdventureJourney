@@ -25,5 +25,7 @@ void main()
 {
 	gl_Position = camera.projection * camera.view * object.model * vec4(pos, 1.0);
 
-    vclr = vec4(clr / 255.0, 1.0);
+    // vclr.rgb = vec3(tex, 0.0);
+    vclr.rgb = clr;
+    vclr.a = 1.0;
 }
