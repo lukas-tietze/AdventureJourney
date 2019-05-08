@@ -134,7 +134,7 @@ bool glutil::Texture::LoadData(const std::string &path, ImageFormat format)
 
     auto pixels = stbi_load_from_file(file, &this->width, &this->height, &nChannels, 0);
 
-    this->format = this->GetFormatFromChannelCount();
+    this->format = this->GetFormatFromChannelCount(nChannels);
 
     if (!pixels)
     {

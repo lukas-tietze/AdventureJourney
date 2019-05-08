@@ -20,7 +20,7 @@ struct TextureBuilder
 
     uint32_t operator()(float x, float y) const
     {
-        return util::Color(x * (1 - y), x * (1 - y), x * y * (1 - x) * (1 - y)).Value();
+        return util::Color(x, y, 0.f).Value();
     }
 };
 } // namespace
@@ -41,9 +41,9 @@ gui::DummyScreen::DummyScreen()
     this->program.Attach(&this->fragmentShader);
     this->program.Link();
 
-    // this->cubeTexture.SetSize(256, 256);
-    // this->cubeTexture.LoadDataFromBuilder(TextureBuilder(256, 256));
-    this->cubeTexture.LoadData("assets/textures/pebble.jpg");
+    this->cubeTexture.SetSize(256, 256);
+    this->cubeTexture.LoadDataFromBuilder(TextureBuilder(256, 256));
+    // this->cubeTexture.LoadData("assets/textures/pebble.jpg");
     this->cubeTexture.Bind(GL_TEXTURE0);
 
     this->axis = new glutil::SceneObject(gui::models::CoordMesh());
@@ -107,37 +107,29 @@ void gui::DummyScreen::Update(double delta)
 
     if (glutil::IsKeyDown(GLFW_KEY_ESCAPE) || glutil::IsKeyDown(GLFW_KEY_Q))
         glutil::Quit();
-
     if (glutil::IsKeyDown(GLFW_KEY_W))
         x++;
-
     if (glutil::IsKeyDown(GLFW_KEY_S))
         x--;
-
     if (glutil::IsKeyDown(GLFW_KEY_D))
         z++;
-
     if (glutil::IsKeyDown(GLFW_KEY_A))
         z--;
-
     if (glutil::IsKeyDown(GLFW_KEY_SPACE))
         y++;
-
     if (glutil::IsKeyDown(GLFW_KEY_LEFT_SHIFT))
         y--;
-
     if (glutil::IsKeyDown(GLFW_KEY_F5))
         this->camera.SetViewDirection(-this->camera.GetViewDirection());
-
     if (glutil::IsKeyDown(GLFW_KEY_F5))
         this->program.ReloadAll();
-
+    if(glutil::WasKeyPressed(GLFW_KEY_P))
+        this->animationPaused = !this->animationPaused;
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_1))
     {
         glutil::SetCursorGameMode(true);
         this->mouseCaptured = true;
     }
-
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_2))
     {
         glutil::SetCursorGameMode(false);
@@ -150,10 +142,9 @@ void gui::DummyScreen::Update(double delta)
     auto viewCross = glm::cross(viewFlat, this->camera.GetUp());
     viewCross.y = 0;
 
-    for (int i = 0; i < this->objects.size(); i++)
-    {
-        this->objects[i]->Step(delta);
-    }
+    if (!this->animationPaused)
+        for (int i = 0; i < this->objects.size(); i++)
+            this->objects[i]->Step(delta);
 
     this->camera.MoveBy(viewFlat * static_cast<float>(delta * x) +
                         this->camera.GetUp() * static_cast<float>(delta * y) +

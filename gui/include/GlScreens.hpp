@@ -40,6 +40,7 @@ private:
     glutil::Camera camera;
 
     bool mouseCaptured;
+    bool animationPaused;
 
 public:
     DummyScreen();
