@@ -21,5 +21,5 @@ glutil::Mesh gui::CreateMesh(std::vector<gui::Vertex_Full> &vertices, std::vecto
 
 uint16_t gui::TexCoord(float f)
 {
-    return util::Crop(f, 0.f, 1.f) * std::numeric_limits<uint16_t>::max();
+    return static_cast<uint16_t>(util::Crop(f, 0.f, 1.f) * static_cast<float>(std::numeric_limits<uint16_t>::max()));
 }

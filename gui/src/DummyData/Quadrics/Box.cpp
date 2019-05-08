@@ -44,8 +44,8 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
                 vertex.normal[1] = 0;
                 vertex.normal[2] = 1;
 
-                vertex.texture[0] = TexCoord(iX * stepX / 2.f);
-                vertex.texture[1] = TexCoord(iY * stepY / 2.f);
+                vertex.texture[0] = TexCoord(static_cast<float>(iX) * stepX / 2.f);
+                vertex.texture[1] = TexCoord(static_cast<float>(iY) * stepY / 2.f);
 
                 vertices.push_back(vertex);
 
@@ -106,8 +106,8 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
                 vertex.normal[1] = 0;
                 vertex.normal[2] = 1;
 
-                vertex.texture[0] = TexCoord(iY * stepY / 2.f);
-                vertex.texture[1] = TexCoord(iZ * stepZ / 2.f);
+                vertex.texture[0] = TexCoord(static_cast<float>(iY) * stepY / 2.f);
+                vertex.texture[1] = TexCoord(static_cast<float>(iZ) * stepZ / 2.f);
 
                 vertices.push_back(vertex);
 
@@ -168,8 +168,8 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
                 vertex.normal[1] = 0;
                 vertex.normal[2] = 1;
 
-                vertex.texture[0] = TexCoord(iZ * stepZ / 2.f);
-                vertex.texture[1] = TexCoord(iX * stepX / 2.f);
+                vertex.texture[0] = TexCoord(static_cast<float>(iZ) * stepZ / 2.f);
+                vertex.texture[1] = TexCoord(static_cast<float>(iX) * stepX / 2.f);
 
                 vertices.push_back(vertex);
 
