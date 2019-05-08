@@ -136,7 +136,7 @@ bool glutil::Texture::LoadData(const std::string &path, ImageFormat format)
 
     if (!pixels)
     {
-        util::dbg.WriteLine("Failed to load texture from %. Error while reading data!", path);
+        util::dbg.WriteLine("Failed to load texture from %. Error while reading data! Message: %", path, stbi_failure_reason());
 
         return false;
     }
