@@ -116,7 +116,13 @@ if [[ $RUN_BUILD == 1 ]]; then
 fi
 
 if [[ $RUN_PROGRAM == 1 ]]; then
-    PRINT "Executable path is $EXEC_PATH"
+    FULL_PATH=./build/$BUILD_TYPE/$EXEC_PATH
+    PRINT "Executable path is $FULL_PATH"
     INFO "Launching program..."
-    ./build/$BUILD_TYPE/$EXEC_PATH
+
+    if [[ -e $FULL_PATH ]]; then
+        $FULL_PATH
+    else
+        WARN "Could not find executable!"
+    fi
 fi

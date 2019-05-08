@@ -12,8 +12,6 @@ gui::DummyScreen::DummyScreen()
     this->camera.SetBindingTarget(1);
     this->camera.CreateGlObjects();
 
-    this->ligths.Add();
-
     glEnable(GL_DEPTH_TEST);
 
     this->vertexShader.LoadFrom("assets/shaders/passthrough.vs.glsl", GL_VERTEX_SHADER);
