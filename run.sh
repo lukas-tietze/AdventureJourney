@@ -120,8 +120,6 @@ if [[ $RUN_PROGRAM == 1 ]]; then
     PRINT "Executable path is $FULL_PATH"
     INFO "Launching program..."
 
-    sleep 5
-
     if [[ -f $FULL_PATH ]]; then
         $FULL_PATH
     else

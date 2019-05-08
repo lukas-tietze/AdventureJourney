@@ -62,28 +62,25 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
             for (int iY = 0; iY < slicesY; iY++)
             {
                 uint16_t quad[4] = {
-                    iX + iY * (slicesX + 1) + indexOffset,
-                    iX + 1 + iY * (slicesX + 1) + indexOffset,
-                    iX + (iY + 1) * (slicesX + 1) + indexOffset,
-                    iX + 1 + (iY + 1) * (slicesX + 1) + indexOffset,
+                    iX + iY * (slicesX + 1),
+                    iX + 1 + iY * (slicesX + 1),
+                    iX + (iY + 1) * (slicesX + 1),
+                    iX + 1 + (iY + 1) * (slicesX + 1),
                 };
 
-                indices.push_back(quad[0]);
-                indices.push_back(quad[2]);
-                indices.push_back(quad[3]);
-                indices.push_back(quad[3]);
-                indices.push_back(quad[1]);
-                indices.push_back(quad[0]);
+                indices.push_back(quad[0] * 2 + indexOffset);
+                indices.push_back(quad[2] * 2 + indexOffset);
+                indices.push_back(quad[3] * 2 + indexOffset);
+                indices.push_back(quad[3] * 2 + indexOffset);
+                indices.push_back(quad[1] * 2 + indexOffset);
+                indices.push_back(quad[0] * 2 + indexOffset);
 
-                for (int i = 0; i < 4; i++)
-                    quad[i] += (slicesX + 1) * (slicesY + 1);
-
-                indices.push_back(quad[0]);
-                indices.push_back(quad[2]);
-                indices.push_back(quad[3]);
-                indices.push_back(quad[3]);
-                indices.push_back(quad[1]);
-                indices.push_back(quad[0]);
+                indices.push_back(quad[0] * 2 + 1 + indexOffset);
+                indices.push_back(quad[2] * 2 + 1 + indexOffset);
+                indices.push_back(quad[3] * 2 + 1 + indexOffset);
+                indices.push_back(quad[3] * 2 + 1 + indexOffset);
+                indices.push_back(quad[1] * 2 + 1 + indexOffset);
+                indices.push_back(quad[0] * 2 + 1 + indexOffset);
             }
         }
 
@@ -127,28 +124,25 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
             for (int iZ = 0; iZ < slicesZ; iZ++)
             {
                 uint16_t quad[4] = {
-                    iY + iZ * (slicesY + 1) + indexOffset,
-                    iY + 1 + iZ * (slicesY + 1) + indexOffset,
-                    iY + (iZ + 1) * (slicesY + 1) + indexOffset,
-                    iY + 1 + (iZ + 1) * (slicesY + 1) + indexOffset,
+                    iY + iZ * (slicesY + 1),
+                    iY + 1 + iZ * (slicesY + 1),
+                    iY + (iZ + 1) * (slicesY + 1),
+                    iY + 1 + (iZ + 1) * (slicesY + 1),
                 };
 
-                indices.push_back(quad[0]);
-                indices.push_back(quad[2]);
-                indices.push_back(quad[3]);
-                indices.push_back(quad[3]);
-                indices.push_back(quad[1]);
-                indices.push_back(quad[0]);
+                indices.push_back(quad[0] * 2 + indexOffset);
+                indices.push_back(quad[2] * 2 + indexOffset);
+                indices.push_back(quad[3] * 2 + indexOffset);
+                indices.push_back(quad[3] * 2 + indexOffset);
+                indices.push_back(quad[1] * 2 + indexOffset);
+                indices.push_back(quad[0] * 2 + indexOffset);
 
-                for (int i = 0; i < 4; i++)
-                    quad[i] += (slicesY + 1) * (slicesZ + 1);
-
-                indices.push_back(quad[0]);
-                indices.push_back(quad[2]);
-                indices.push_back(quad[3]);
-                indices.push_back(quad[3]);
-                indices.push_back(quad[1]);
-                indices.push_back(quad[0]);
+                indices.push_back(quad[0] * 2 + 1 + indexOffset);
+                indices.push_back(quad[2] * 2 + 1 + indexOffset);
+                indices.push_back(quad[3] * 2 + 1 + indexOffset);
+                indices.push_back(quad[3] * 2 + 1 + indexOffset);
+                indices.push_back(quad[1] * 2 + 1 + indexOffset);
+                indices.push_back(quad[0] * 2 + 1 + indexOffset);
             }
         }
 
@@ -192,28 +186,25 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
             for (int iX = 0; iX < slicesX; iX++)
             {
                 uint16_t quad[4] = {
-                    iZ + iX * (slicesZ + 1) + indexOffset,
-                    iZ + 1 + iX * (slicesZ + 1) + indexOffset,
-                    iZ + (iX + 1) * (slicesZ + 1) + indexOffset,
-                    iZ + 1 + (iX + 1) * (slicesZ + 1) + indexOffset,
+                    iZ + iX * (slicesZ + 1),
+                    iZ + 1 + iX * (slicesZ + 1),
+                    iZ + (iX + 1) * (slicesZ + 1),
+                    iZ + 1 + (iX + 1) * (slicesZ + 1),
                 };
 
-                indices.push_back(quad[0]);
-                indices.push_back(quad[2]);
-                indices.push_back(quad[3]);
-                indices.push_back(quad[3]);
-                indices.push_back(quad[1]);
-                indices.push_back(quad[0]);
+                indices.push_back(quad[0] * 2 + indexOffset);
+                indices.push_back(quad[2] * 2 + indexOffset);
+                indices.push_back(quad[3] * 2 + indexOffset);
+                indices.push_back(quad[3] * 2 + indexOffset);
+                indices.push_back(quad[1] * 2 + indexOffset);
+                indices.push_back(quad[0] * 2 + indexOffset);
 
-                for (int i = 0; i < 4; i++)
-                    quad[i] += (slicesZ + 1) * (slicesX + 1);
-
-                indices.push_back(quad[0]);
-                indices.push_back(quad[2]);
-                indices.push_back(quad[3]);
-                indices.push_back(quad[3]);
-                indices.push_back(quad[1]);
-                indices.push_back(quad[0]);
+                indices.push_back(quad[0] * 2 + 1 + indexOffset);
+                indices.push_back(quad[2] * 2 + 1 + indexOffset);
+                indices.push_back(quad[3] * 2 + 1 + indexOffset);
+                indices.push_back(quad[3] * 2 + 1 + indexOffset);
+                indices.push_back(quad[1] * 2 + 1 + indexOffset);
+                indices.push_back(quad[0] * 2 + 1 + indexOffset);
             }
         }
 

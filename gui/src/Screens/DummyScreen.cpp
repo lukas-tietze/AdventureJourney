@@ -43,7 +43,8 @@ gui::DummyScreen::DummyScreen()
 
     // this->cubeTexture.SetSize(256, 256);
     // this->cubeTexture.LoadDataFromBuilder(TextureBuilder(256, 256));
-    this->cubeTexture.LoadData("assets/textures/pebble.jpg");
+    // this->cubeTexture.LoadData("assets/textures/dummy/pebble.jpg");
+    this->cubeTexture.LoadData("assets/textures/dummy/distribution.png");
     this->cubeTexture.Bind(GL_TEXTURE0);
 
     this->axis = new glutil::SceneObject(gui::models::CoordMesh());
@@ -129,7 +130,7 @@ void gui::DummyScreen::Update(double delta)
     if (glutil::IsKeyDown(GLFW_KEY_F5))
         this->camera.SetViewDirection(-this->camera.GetViewDirection());
 
-    if (glutil::IsKeyDown(GLFW_KEY_F5))
+    if (glutil::WasKeyPressed(GLFW_KEY_R))
         this->program.ReloadAll();
 
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_1))

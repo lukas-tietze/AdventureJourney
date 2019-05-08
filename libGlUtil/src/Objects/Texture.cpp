@@ -119,13 +119,11 @@ bool glutil::Texture::LoadData(const std::string &path, ImageFormat format)
     if (!this->format || !this->internalFormat || !this->target)
         return false;
 
-    std::FILE *file;
-
-    file = std::fopen(path.c_str(), "r");
+    auto file = std::fopen(path.c_str(), "r");;
 
     if (!file)
     {
-        util::dbg.WriteLine("Failed to load texture from %. Could not open file!");
+        util::dbg.WriteLine("Failed to load texture from %. Could not open file!", path);
 
         return false;
     }
@@ -134,11 +132,11 @@ bool glutil::Texture::LoadData(const std::string &path, ImageFormat format)
 
     auto pixels = stbi_load_from_file(file, &this->width, &this->height, &nChannels, 0);
 
-    this->format = this->GetFormatFromChannelCount();
+    this->format = this->GetFormatFromChannelCount(nChannels);
 
     if (!pixels)
     {
-        util::dbg.WriteLine("Failed to load texture from %. Error while reading data!");
+        util::dbg.WriteLine("Failed to load texture from %. Error while reading data!", path);
 
         return false;
     }
