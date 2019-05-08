@@ -71,11 +71,6 @@ glutil::GeometryBuffer::~GeometryBuffer()
     this->ibo = 0;
 }
 
-bool glutil::GeometryBuffer::Buffer(const glutil::Mesh &, glutil::SceneObject &)
-{
-    return false;
-}
-
 void glutil::GeometryBuffer::Bind()
 {
     glBindVertexArray(this->vao);

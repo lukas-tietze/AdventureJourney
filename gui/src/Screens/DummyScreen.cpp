@@ -16,20 +16,18 @@ gui::DummyScreen::DummyScreen()
 
     this->vertexShader.LoadFrom("assets/shaders/passthrough.vs.glsl", GL_VERTEX_SHADER);
     this->fragmentShader.LoadFrom("assets/shaders/passthrough.fs.glsl", GL_FRAGMENT_SHADER);
-    this->program.AttachShader(&this->vertexShader);
-    this->program.AttachShader(&this->fragmentShader);
+    this->program.Attach(&this->vertexShader);
+    this->program.Attach(&this->fragmentShader);
     this->program.Link();
 
     this->axis = new glutil::SceneObject(gui::models::CoordMesh());
     this->axis->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
 
     auto cubeMesh = gui::quadrics::Box();
-
-    auto cubeGeometry = new glutil::GeometryBuffer(cubeMesh);
     auto rnd = util::Random();
 
     for (int i = 0; i < 30; i++)
-        this->objects.push_back(new gui::DummyObject(cubeGeometry, cubeMesh));
+        this->objects.push_back(new gui::DummyObject(cubeMesh));
 
     for (auto object : this->objects)
     {

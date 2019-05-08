@@ -60,7 +60,7 @@ class DynamicUboOwner
 
 class FboStage
 {
-private:
+  private:
     bool requireColorValues;
     bool requireDepthValues;
     bool requireStencilValue;
@@ -68,7 +68,7 @@ private:
 
 class FboPipeLine
 {
-private:
+  private:
     std::vector<FboStage> stages;
 };
 
@@ -92,6 +92,8 @@ class GeometryBufferAttribute
     bool IsNormalized() const;
 };
 
+class GeometryBuffer;
+
 class Mesh
 {
   private:
@@ -105,6 +107,8 @@ class Mesh
     std::vector<GeometryBufferAttribute> attributes;
     int drawMode;
     bool dataManaged;
+
+    GeometryBuffer *buffer;
 
     int CalculateIndexSize(int);
 
@@ -136,6 +140,10 @@ class Mesh
     const void *GetIndexData() const;
     const std::vector<GeometryBufferAttribute> &GetAttributes() const;
 
+    GeometryBuffer *CreateBuffer();
+    GeometryBuffer *GetBuffer();
+    bool HasBuffer() const;
+
     const Mesh &operator=(const Mesh &);
     Mesh &operator=(Mesh &&);
 };
@@ -153,8 +161,6 @@ class GeometryBuffer
     GeometryBuffer();
     GeometryBuffer(const Mesh &);
     ~GeometryBuffer();
-
-    bool Buffer(const Mesh &, SceneObject &out);
 
     void Bind();
 };
@@ -181,7 +187,7 @@ class SceneObject : public StaticUboOwner<SceneObjectUboData>
 
   public:
     SceneObject(GeometryBuffer *data, int bufferOffset, int indexCount, int offset, int drawMode, int indexType, bool manageGeometryBuffer = false);
-    SceneObject(GeometryBuffer *, const Mesh &);
+    SceneObject(Mesh &);
     SceneObject(const SceneObject &copy);
     SceneObject(SceneObject &&copy);
     SceneObject(const Mesh &);
@@ -262,7 +268,7 @@ struct LigthSourceUboData
 
 class LigthSource : StaticUboOwner<LigthSourceUboData>
 {
-public:
+  public:
     LigthSource();
     LigthSource(const glm::vec3 &position, bool directionalLigth, const glm::vec3 &color, float ambientFactor, bool active);
 
@@ -281,7 +287,7 @@ public:
 
 class LigthSourceCollection : DynamicUboOwner<LigthSourceUboData>
 {
-public:
+  public:
     LigthSourceCollection();
     LigthSourceCollection(const std::initializer_list<LigthSource> &);
 
@@ -301,7 +307,7 @@ struct MaterialUboData
 
 class Material : StaticUboOwner<MaterialUboData>
 {
-public:
+  public:
     Material();
     Material(const glm::vec4 &ambient, const glm::vec4 &diffuse, const glm::vec4 &specular, float shininess);
 };
@@ -480,7 +486,6 @@ class Scene : public StaticUboOwner<SceneUboData>
 {
   private:
     std::map<resourceId_t, Mesh *> meshes;
-    std::map<resourceId_t, GeometryBuffer *> geometry;
     std::map<resourceId_t, SceneObject *> objects;
     std::map<resourceId_t, Program *> programs;
     std::map<resourceId_t, Shader *> shaders;
@@ -488,11 +493,10 @@ class Scene : public StaticUboOwner<SceneUboData>
 
   public:
     Mesh *GetMesh(resourceId_t);
-    Mesh *Get(resourceId_t);
-    Mesh *Get(resourceId_t);
-    Mesh *Get(resourceId_t);
-    Mesh *Get(resourceId_t);
-    Mesh *Get(resourceId_t);
+    SceneObject *GetSceneObject(resourceId_t);
+    Program *GetProgram(resourceId_t);
+    Shader *GetShader(resourceId_t);
+    Camera &GetCamera();
 
     void Render();
 };

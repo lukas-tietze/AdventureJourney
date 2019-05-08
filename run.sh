@@ -87,7 +87,7 @@ fi
 
 INFO "Parameters are:"
 PRINT "MAKE_CFG_DEBUG=$MAKE_CFG_DEBUG"
-PRINT "MAKE_CFG_RELEASE=$RUN_MAKE_RELEASE"
+PRINT "MAKE_CFG_RELEASE=$MAKE_CFG_RELEASE"
 PRINT "RUN_MAKE=$RUN_MAKE"
 PRINT "RUN_BUILD=$RUN_BUILD"
 PRINT "RUN_PROGRAM=$RUN_PROGRAM"
@@ -101,7 +101,7 @@ else
     BUILD_TYPE='debug'
 fi
 
-if [[ RUN_MAKE == 1 ]]; then
+if [[ $RUN_MAKE == 1 ]]; then
     PRINT "Build type is $BUILD_TYPE"
     INFO "Starting Make..."
     make $BUILD_TYPE
@@ -120,7 +120,7 @@ if [[ $RUN_PROGRAM == 1 ]]; then
     PRINT "Executable path is $FULL_PATH"
     INFO "Launching program..."
 
-    if [[ -e $FULL_PATH ]]; then
+    if [[ -f $FULL_PATH ]]; then
         $FULL_PATH
     else
         WARN "Could not find executable!"

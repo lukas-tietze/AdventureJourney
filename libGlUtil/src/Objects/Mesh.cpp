@@ -12,7 +12,8 @@ glutil::Mesh::Mesh() : vertexCount(0),
                        vertices(nullptr),
                        indices(nullptr),
                        drawMode(0),
-                       dataManaged(false)
+                       dataManaged(false),
+                       buffer(nullptr)
 {
 }
 
@@ -50,6 +51,9 @@ glutil::Mesh::~Mesh()
     this->indices = nullptr;
 
     this->drawMode = 0;
+
+    if (this->buffer)
+        delete this->buffer;
 }
 
 void glutil::Mesh::CopyFrom(const Mesh &mesh)
@@ -81,6 +85,9 @@ void glutil::Mesh::CopyFrom(const Mesh &mesh)
         this->indices = mesh.indices;
         this->dataManaged = false;
     }
+
+    if (mesh.HasBuffer())
+        this->CreateBuffer();
 }
 
 void glutil::Mesh::TransferFrom(Mesh &mesh)
@@ -95,6 +102,7 @@ void glutil::Mesh::TransferFrom(Mesh &mesh)
     this->vertices = mesh.vertices;
     this->indices = mesh.indices;
     this->dataManaged = mesh.dataManaged;
+    this->buffer = mesh.buffer;
 
     mesh.vertexCount = 0;
     mesh.indexCount = 0;
@@ -106,6 +114,7 @@ void glutil::Mesh::TransferFrom(Mesh &mesh)
     mesh.vertices = nullptr;
     mesh.vertices = nullptr;
     mesh.dataManaged = false;
+    mesh.buffer = nullptr;
 
     util::dbg.WriteLine("Created Mesh % from transfer of %.", this, &mesh);
 }
@@ -228,6 +237,24 @@ int glutil::Mesh::GetDrawMode() const
 const std::vector<glutil::GeometryBufferAttribute> &glutil::Mesh::GetAttributes() const
 {
     return this->attributes;
+}
+
+glutil::GeometryBuffer *glutil::Mesh::CreateBuffer()
+{
+    if (this->buffer != nullptr)
+        this->buffer = new glutil::GeometryBuffer(*this);
+
+    return this->buffer;
+}
+
+glutil::GeometryBuffer *glutil::Mesh::GetBuffer()
+{
+    return this->buffer;
+}
+
+bool glutil::Mesh::HasBuffer() const
+{
+    return this->buffer != nullptr;
 }
 
 const glutil::Mesh &glutil::Mesh::operator=(const Mesh &mesh)

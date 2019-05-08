@@ -4,14 +4,14 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "data/Math.hpp"
 
-gui::DummyObject::DummyObject(glutil::GeometryBuffer *geometry, const glutil::Mesh &mesh) : glutil::SceneObject(geometry, mesh),
-                                                                                            axis(0.f),
-                                                                                            rotation(0.f),
-                                                                                            basePos(0.f),
-                                                                                            pos(0.f),
-                                                                                            max(0.f),
-                                                                                            speed(0.f),
-                                                                                            scale(0.f)
+gui::DummyObject::DummyObject(const glutil::Mesh &mesh) : glutil::SceneObject(mesh),
+                                                          axis(0.f),
+                                                          rotation(0.f),
+                                                          basePos(0.f),
+                                                          pos(0.f),
+                                                          max(0.f),
+                                                          speed(0.f),
+                                                          scale(0.f)
 {
     util::Random rnd;
 

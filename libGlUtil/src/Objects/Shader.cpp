@@ -1,15 +1,20 @@
 #include "Objects.hpp"
 #include "GlUtils.hpp"
 #include "data/Io.hpp"
-#include "boost/filesystem.hpp"
 
-namespace{
-    constexpr const char *EXT_VERTEX_SHADER = ".vert";
-    constexpr const char *EXT_VERTEX_SHADER_ALT = ".vert";
-    constexpr const char *EXT_VERTEX_SHADER = ".vert";
-    constexpr const char *EXT_VERTEX_SHADER = ".vert";
-    constexpr const char *EXT_VERTEX_SHADER = ".vert";
-}
+namespace
+{
+constexpr const char *EXT_VERTEX_SHADER = ".vert";
+constexpr const char *EXT_VERTEX_SHADER_ALT = ".vert";
+constexpr const char *EXT_FRAGMENT_SHADER = ".vert";
+constexpr const char *EXT_FRAGMENT_SHADER_ALT = ".vert";
+constexpr const char *EXT_COMPUTATION_SHADER = ".vert";
+constexpr const char *EXT_COMPUTATION_SHADER_ALT = ".vert";
+constexpr const char *EXT_TESSELATION_CONTROL_SHADER = ".vert";
+constexpr const char *EXT_TESSELATION_CONTROL_SHADER_ALT = ".vert";
+constexpr const char *EXT_TESSELATION_EVALUAION_SHADER = ".vert";
+constexpr const char *EXT_TESSELATION_EVALUAION_SHADER_ALT = ".vert";
+} // namespace
 
 glutil::Shader::Shader() : path(),
                            type(0),
@@ -72,10 +77,6 @@ bool glutil::Shader::LoadFrom(const std::string &path, GLenum type)
 
 bool glutil::Shader::LoadFrom(const std::string &path)
 {
-    auto ext = boost::filesystem::extension(path);
-
-    if(ext == )
-
     this->path = path;
     this->type = type;
 

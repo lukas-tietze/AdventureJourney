@@ -22,13 +22,13 @@ glutil::SceneObject::SceneObject(GeometryBuffer *data, int bufferOffset, int ind
                         manageGeometryBuffer);
 }
 
-glutil::SceneObject::SceneObject(GeometryBuffer *geometry, const Mesh &mesh) : bufferOffset(0),
-                                                                               indexCount(mesh.GetIndexCount()),
-                                                                               offset(0),
-                                                                               drawMode(mesh.GetDrawMode()),
-                                                                               indexType(mesh.GetIndexType()),
-                                                                               geometry(geometry),
-                                                                               geometryManaged(false)
+glutil::SceneObject::SceneObject(Mesh &mesh) : bufferOffset(0),
+                                               indexCount(mesh.GetIndexCount()),
+                                               offset(0),
+                                               drawMode(mesh.GetDrawMode()),
+                                               indexType(mesh.GetIndexType()),
+                                               geometry(mesh.CreateBuffer()),
+                                               geometryManaged(false)
 {
 }
 

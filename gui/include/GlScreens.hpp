@@ -20,7 +20,7 @@ private:
     float scale;
 
 public:
-    DummyObject(glutil::GeometryBuffer *, const glutil::Mesh &);
+    DummyObject(const glutil::Mesh &);
 
     void Step(double delta);
 };
