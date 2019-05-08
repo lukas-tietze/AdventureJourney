@@ -25,13 +25,13 @@ bool glutil::Texture::LoadDataFromBuilder(const TBuilder &builder)
     switch (this->GetChannelCountFromFormat())
     {
     case 1:
-        return this->LoadDataFromBuilder<TBuilder, 1>(builder);
+        return this->LoadDataFromBuilderCore<TBuilder, 1>(builder);
     case 2:
-        return this->LoadDataFromBuilder<TBuilder, 2>(builder);
+        return this->LoadDataFromBuilderCore<TBuilder, 2>(builder);
     case 3:
-        return this->LoadDataFromBuilder<TBuilder, 3>(builder);
+        return this->LoadDataFromBuilderCore<TBuilder, 3>(builder);
     case 4:
-        return this->LoadDataFromBuilder<TBuilder, 4>(builder);
+        return this->LoadDataFromBuilderCore<TBuilder, 4>(builder);
     }
 }
 
@@ -71,12 +71,12 @@ bool glutil::Texture::LoadCubeMapFromBuilder(const TBuilder &builder)
     switch (this->GetChannelCountFromFormat())
     {
     case 1:
-        return this->LoadCubeMapFromBuilder<TBuilder, 1>(builder);
+        return this->LoadCubeMapFromBuilderCore<TBuilder, 1>(builder);
     case 2:
-        return this->LoadCubeMapFromBuilder<TBuilder, 2>(builder);
+        return this->LoadCubeMapFromBuilderCore<TBuilder, 2>(builder);
     case 3:
-        return this->LoadCubeMapFromBuilder<TBuilder, 3>(builder);
+        return this->LoadCubeMapFromBuilderCore<TBuilder, 3>(builder);
     case 4:
-        return this->LoadCubeMapFromBuilder<TBuilder, 4>(builder);
+        return this->LoadCubeMapFromBuilderCore<TBuilder, 4>(builder);
     }
 }

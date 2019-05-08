@@ -241,7 +241,7 @@ const std::vector<glutil::GeometryBufferAttribute> &glutil::Mesh::GetAttributes(
 
 glutil::GeometryBuffer *glutil::Mesh::CreateBuffer()
 {
-    if (this->buffer != nullptr)
+    if (this->buffer == nullptr)
         this->buffer = new glutil::GeometryBuffer(*this);
 
     return this->buffer;

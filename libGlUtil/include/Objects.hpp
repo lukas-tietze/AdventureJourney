@@ -12,15 +12,15 @@ namespace glutil
 template <class TData>
 class StaticUboOwner
 {
-  private:
+private:
     GLuint ubo;
     GLuint bindingTarget;
     bool dirty;
 
-  protected:
+protected:
     TData data;
 
-  public:
+public:
     StaticUboOwner();
 
     void CreateGlObjects();
@@ -36,16 +36,16 @@ class StaticUboOwner
 template <class TData>
 class DynamicUboOwner
 {
-  private:
+private:
     int ubo;
     int bindingTarget;
     bool dirty;
     int bufferSize;
 
-  protected:
+protected:
     std::vector<TData> data;
 
-  public:
+public:
     DynamicUboOwner();
 
     void CreateGlObjects();
@@ -60,7 +60,7 @@ class DynamicUboOwner
 
 class FboStage
 {
-  private:
+private:
     bool requireColorValues;
     bool requireDepthValues;
     bool requireStencilValue;
@@ -68,20 +68,20 @@ class FboStage
 
 class FboPipeLine
 {
-  private:
+private:
     std::vector<FboStage> stages;
 };
 
 class GeometryBufferAttribute
 {
-  private:
+private:
     int index;
     int type;
     int count;
     int offset;
     bool normalized;
 
-  public:
+public:
     GeometryBufferAttribute();
     GeometryBufferAttribute(int index, int count, int type, bool normalized, int offset);
 
@@ -96,7 +96,7 @@ class GeometryBuffer;
 
 class Mesh
 {
-  private:
+private:
     int vertexCount;
     int vertexSize;
     void *vertices;
@@ -115,7 +115,7 @@ class Mesh
     void CopyFrom(const Mesh &);
     void TransferFrom(Mesh &);
 
-  public:
+public:
     Mesh();
     Mesh(const Mesh &);
     Mesh(Mesh &&);
@@ -152,12 +152,12 @@ class SceneObject;
 
 class GeometryBuffer
 {
-  private:
+private:
     GLuint vao;
     GLuint vbo;
     GLuint ibo;
 
-  public:
+public:
     GeometryBuffer();
     GeometryBuffer(const Mesh &);
     ~GeometryBuffer();
@@ -175,7 +175,7 @@ struct SceneObjectUboData
 
 class SceneObject : public StaticUboOwner<SceneObjectUboData>
 {
-  private:
+private:
     int bufferOffset;
     int indexCount;
     int offset;
@@ -185,7 +185,7 @@ class SceneObject : public StaticUboOwner<SceneObjectUboData>
     GeometryBuffer *geometry;
     bool geometryManaged;
 
-  public:
+public:
     SceneObject(GeometryBuffer *data, int bufferOffset, int indexCount, int offset, int drawMode, int indexType, bool manageGeometryBuffer = false);
     SceneObject(Mesh &);
     SceneObject(const SceneObject &copy);
@@ -211,7 +211,7 @@ struct CameraUboData
 
 class Camera : public StaticUboOwner<CameraUboData>
 {
-  private:
+private:
     glm::vec3 position;
     glm::vec3 up;
     glm::vec3 direction;
@@ -223,7 +223,7 @@ class Camera : public StaticUboOwner<CameraUboData>
     bool viewDirty;
     bool projectionDirty;
 
-  public:
+public:
     Camera();
 
     void SetPosition(glm::vec3 const &pos);
@@ -268,7 +268,7 @@ struct LigthSourceUboData
 
 class LigthSource : StaticUboOwner<LigthSourceUboData>
 {
-  public:
+public:
     LigthSource();
     LigthSource(const glm::vec3 &position, bool directionalLigth, const glm::vec3 &color, float ambientFactor, bool active);
 
@@ -287,7 +287,7 @@ class LigthSource : StaticUboOwner<LigthSourceUboData>
 
 class LigthSourceCollection : DynamicUboOwner<LigthSourceUboData>
 {
-  public:
+public:
     LigthSourceCollection();
     LigthSourceCollection(const std::initializer_list<LigthSource> &);
 
@@ -307,7 +307,7 @@ struct MaterialUboData
 
 class Material : StaticUboOwner<MaterialUboData>
 {
-  public:
+public:
     Material();
     Material(const glm::vec4 &ambient, const glm::vec4 &diffuse, const glm::vec4 &specular, float shininess);
 };
@@ -334,7 +334,7 @@ class Shader
 {
     friend std::ostream &operator<<(std::ostream &, const Shader &);
 
-  private:
+private:
     std::string path;
     GLenum type;
     GLuint id;
@@ -343,7 +343,7 @@ class Shader
     void CopyFrom(const Shader &);
     void TransferFrom(Shader &);
 
-  public:
+public:
     Shader();
     Shader(const Shader &);
     Shader(Shader &&);
@@ -363,7 +363,7 @@ std::ostream &operator<<(std::ostream &, const Shader &);
 
 class Program
 {
-  private:
+private:
     std::vector<Shader *> shaders;
     GLuint id;
 
@@ -371,7 +371,7 @@ class Program
     void CopyFrom(const Program &);
     void TransferFrom(Program &);
 
-  public:
+public:
     Program();
     Program(const Program &);
     Program(Program &&);
@@ -392,11 +392,11 @@ class Program
 
 class Texture
 {
-  private:
+private:
     template <uint PChannels>
-    class FormatConverter
+    struct FormatConverter
     {
-        void *operator()(uint8_t *target, uint32_t value) const;
+        uint8_t *operator()(uint8_t *target, uint32_t value) const;
     };
 
     int format;
@@ -414,6 +414,7 @@ class Texture
     void DestroyGlObjects();
     void PrepareLoad();
     void SetTextureParameters();
+    GLenum GetFormatFromChannelCount(int);
     int GetChannelCountFromFormat();
 
     template <class TBuilder, uint PChannels>
@@ -421,7 +422,7 @@ class Texture
     template <class TBuilder, uint PChannels>
     bool LoadCubeMapFromBuilderCore(const TBuilder &);
 
-  public:
+public:
     Texture();
     ~Texture();
 
@@ -443,6 +444,7 @@ class Texture
     void SetInternalFormat(int);
     void SetDataType(int);
     void SetTarget(int);
+    void SetSize(int w, int h);
     void SetWidth(int);
     void SetHeight(int);
     void SetMipmapsEnabled(bool);
@@ -484,19 +486,20 @@ typedef std::string resourceId_t;
 
 class Scene : public StaticUboOwner<SceneUboData>
 {
-  private:
+private:
     std::map<resourceId_t, Mesh *> meshes;
     std::map<resourceId_t, SceneObject *> objects;
     std::map<resourceId_t, Program *> programs;
     std::map<resourceId_t, Shader *> shaders;
     Camera camera;
 
-  public:
+public:
     Mesh *GetMesh(resourceId_t);
     SceneObject *GetSceneObject(resourceId_t);
     Program *GetProgram(resourceId_t);
     Shader *GetShader(resourceId_t);
     Camera &GetCamera();
+    Texture *GetTexture();
 
     void Render();
 };

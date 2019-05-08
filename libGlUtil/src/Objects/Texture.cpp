@@ -1,4 +1,5 @@
 #include "Objects.hpp"
+#include "data/Io.hpp"
 
 #define __STDC_WANT_LIB_EXT1__ 1
 #include <cstdio>
@@ -85,6 +86,21 @@ int glutil::Texture::GetChannelCountFromFormat()
     }
 }
 
+GLenum glutil::Texture::GetFormatFromChannelCount(int n)
+{
+    switch (n)
+    {
+    case 1:
+        return GL_RED;
+    case 2:
+        return GL_RG;
+    case 3:
+        return GL_RGB;
+    case 4:
+        return GL_RGBA;
+    }
+}
+
 bool glutil::Texture::LoadDataFromMemory(void *data)
 {
     this->PrepareLoad();
@@ -108,18 +124,30 @@ bool glutil::Texture::LoadData(const std::string &path, ImageFormat format)
     file = std::fopen(path.c_str(), "r");
 
     if (!file)
-        return false;
+    {
+        util::dbg.WriteLine("Failed to load texture from %. Could not open file!");
 
-    auto pixels = stbi_load_from_file(file, &this->width, &this->height, nullptr, this->internalFormat);
+        return false;
+    }
+
+    int nChannels;
+
+    auto pixels = stbi_load_from_file(file, &this->width, &this->height, &nChannels, 0);
+
+    this->format = this->GetFormatFromChannelCount();
 
     if (!pixels)
-        return false;
+    {
+        util::dbg.WriteLine("Failed to load texture from %. Error while reading data!");
 
-    this->LoadDataFromMemory(pixels);
+        return false;
+    }
+
+    auto res = this->LoadDataFromMemory(pixels);
 
     stbi_image_free(pixels);
 
-    return true;
+    return res;
 }
 
 bool glutil::Texture::LoadCubeMap(const std::string &directory, const std::initializer_list<std::string> &files)
@@ -171,6 +199,12 @@ void glutil::Texture::SetDataType(int type)
 void glutil::Texture::SetTarget(int target)
 {
     this->target = target;
+}
+
+void glutil::Texture::SetSize(int w, int h)
+{
+    this->width = w;
+    this->height = h;
 }
 
 void glutil::Texture::SetWidth(int w)

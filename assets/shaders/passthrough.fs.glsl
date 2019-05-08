@@ -1,10 +1,14 @@
 #version 430 core
 
 in vec4 vclr;
+in vec2 vtex;
 
 out vec4 fclr;
 
+layout(location = 0) uniform sampler2D albedo;
+
 void main()
 {
-	fclr = vclr;
+	fclr = texture(albedo, vtex);
 }
+ 

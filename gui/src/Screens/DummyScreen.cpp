@@ -3,6 +3,27 @@
 #include "data/Io.hpp"
 #include "glm/gtx/transform.hpp"
 #include "data/Random.hpp"
+#include "graphics/Color.hpp"
+
+namespace
+{
+struct TextureBuilder
+{
+    int w;
+    int h;
+
+    TextureBuilder(int w, int h)
+    {
+        this->w = w;
+        this->h = h;
+    }
+
+    uint32_t operator()(float x, float y) const
+    {
+        return util::Color(x * (1 - y), x * (1 - y), x * y * (1 - x) * (1 - y)).Value();
+    }
+};
+} // namespace
 
 gui::DummyScreen::DummyScreen()
 {
@@ -19,6 +40,11 @@ gui::DummyScreen::DummyScreen()
     this->program.Attach(&this->vertexShader);
     this->program.Attach(&this->fragmentShader);
     this->program.Link();
+
+    // this->cubeTexture.SetSize(256, 256);
+    // this->cubeTexture.LoadDataFromBuilder(TextureBuilder(256, 256));
+    this->cubeTexture.LoadData("assets/textures/pebble.jpg");
+    this->cubeTexture.Bind(GL_TEXTURE0);
 
     this->axis = new glutil::SceneObject(gui::models::CoordMesh());
     this->axis->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));

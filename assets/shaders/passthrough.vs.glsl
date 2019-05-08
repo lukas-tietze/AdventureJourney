@@ -20,10 +20,13 @@ layout(std140, binding = 1) uniform cameraDataBlock
 } camera;
 
 out vec4 vclr;
+out vec2 vtex;
 
 void main()
 {
 	gl_Position = camera.projection * camera.view * object.model * vec4(pos, 1.0);
+
+    vtex = tex;
 
     // vclr.rgb = vec3(tex, 0.0);
     vclr.rgb = clr;
