@@ -41,11 +41,11 @@ gui::DummyScreen::DummyScreen()
     this->program.Attach(&this->fragmentShader);
     this->program.Link();
 
-    // this->cubeTexture.SetSize(256, 256);
-    // this->cubeTexture.LoadDataFromBuilder(TextureBuilder(256, 256));
     this->cubeTexture.SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
     this->cubeTexture.SetMipmapsEnabled(true);
-    this->cubeTexture.LoadData("assets/textures/dummy/pebble.jpg");
+    this->cubeTexture.SetSize(256, 256);
+    this->cubeTexture.LoadDataFromBuilder(TextureBuilder(256, 256));
+    // this->cubeTexture.LoadData("assets/textures/dummy/pebble.jpg");
     this->cubeTexture.Bind(GL_TEXTURE0);
 
     this->axis = new glutil::SceneObject(gui::models::CoordMesh());

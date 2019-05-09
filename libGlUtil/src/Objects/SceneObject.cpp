@@ -28,7 +28,7 @@ glutil::SceneObject::SceneObject(Mesh &mesh) : bufferOffset(0),
                                                drawMode(mesh.GetDrawMode()),
                                                indexType(mesh.GetIndexType()),
                                                geometry(mesh.CreateBuffer()),
-                                               geometryManaged(false)
+                                               geometryManaged(true)
 {
 }
 
