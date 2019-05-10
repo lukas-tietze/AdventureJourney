@@ -4,16 +4,16 @@
 
 namespace
 {
-constexpr const char *EXT_VERTEX_SHADER = ".vert";
-constexpr const char *EXT_VERTEX_SHADER_ALT = ".vert";
-constexpr const char *EXT_FRAGMENT_SHADER = ".vert";
-constexpr const char *EXT_FRAGMENT_SHADER_ALT = ".vert";
-constexpr const char *EXT_COMPUTATION_SHADER = ".vert";
-constexpr const char *EXT_COMPUTATION_SHADER_ALT = ".vert";
-constexpr const char *EXT_TESSELATION_CONTROL_SHADER = ".vert";
-constexpr const char *EXT_TESSELATION_CONTROL_SHADER_ALT = ".vert";
-constexpr const char *EXT_TESSELATION_EVALUAION_SHADER = ".vert";
-constexpr const char *EXT_TESSELATION_EVALUAION_SHADER_ALT = ".vert";
+constexpr const char EXT_VERTEX_SHADER[] = ".vert";
+constexpr const char EXT_VERTEX_SHADER_ALT[] = ".vs.glsl";
+constexpr const char EXT_FRAGMENT_SHADER[] = ".frag";
+constexpr const char EXT_FRAGMENT_SHADER_ALT[] = ".fs.glsl";
+constexpr const char EXT_COMPUTATION_SHADER[] = ".cmp";
+constexpr const char EXT_COMPUTATION_SHADER_ALT[] = ".cp.glsl";
+constexpr const char EXT_TESSELATION_CONTROL_SHADER[] = ".tctrl";
+constexpr const char EXT_TESSELATION_CONTROL_SHADER_ALT[] = ".tc.glsl";
+constexpr const char EXT_TESSELATION_EVALUAION_SHADER[] = ".teval";
+constexpr const char EXT_TESSELATION_EVALUAION_SHADER_ALT[] = ".te.glsl";
 } // namespace
 
 glutil::Shader::Shader() : path(),
@@ -78,7 +78,19 @@ bool glutil::Shader::LoadFrom(const std::string &path, GLenum type)
 bool glutil::Shader::LoadFrom(const std::string &path)
 {
     this->path = path;
-    this->type = type;
+
+    if (util::EndsWith(path, EXT_VERTEX_SHADER) || util::EndsWith(path, EXT_VERTEX_SHADER_ALT))
+        this->type = GL_VERTEX_SHADER;
+    else if (util::EndsWith(path, EXT_FRAGMENT_SHADER) || util::EndsWith(path, EXT_FRAGMENT_SHADER_ALT))
+        this->type = GL_FRAGMENT_SHADER;
+    else if (util::EndsWith(path, EXT_COMPUTATION_SHADER) || util::EndsWith(path, EXT_COMPUTATION_SHADER_ALT))
+        this->type = GL_COMPUTE_SHADER;
+    else if (util::EndsWith(path, EXT_TESSELATION_CONTROL_SHADER) || util::EndsWith(path, EXT_TESSELATION_CONTROL_SHADER_ALT))
+        this->type = GL_TESS_CONTROL_SHADER;
+    else if (util::EndsWith(path, EXT_TESSELATION_EVALUAION_SHADER) || util::EndsWith(path, EXT_TESSELATION_EVALUAION_SHADER_ALT))
+        this->type = GL_TESS_EVALUATION_SHADER;
+    else
+        throw util::Exception("Load Shader: can't deduce shader type from file extension!");
 
     return this->Reload();
 }

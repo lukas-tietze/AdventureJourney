@@ -324,7 +324,7 @@ uint32_t Attribute_size(const CG2VDAttribute &am)
 }
 } // namespace
 
-bool glutil::Mesh::LoadFromCg2vd(const std::string &path)
+bool glutil::MeshBuffer::LoadFromCg2vd(const std::string &path)
 {
     CG2VertexData data;
     if (!data.read(path))
@@ -361,7 +361,7 @@ bool glutil::Mesh::LoadFromCg2vd(const std::string &path)
                             attrib.normalized,
                             attrib.offset);
                             
-        this->attributes.push_back(GeometryBufferAttribute(attrib.attrib_id, attrib.count, attrib.type, attrib.normalized, attrib.offset));
+        this->attributes.push_back(MeshAttribute(attrib.attrib_id, attrib.count, attrib.type, attrib.normalized, attrib.offset));
     }
 
     return true;

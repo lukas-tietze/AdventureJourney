@@ -4,14 +4,14 @@
 #include "glm/gtc/matrix_transform.hpp"
 #include "data/Math.hpp"
 
-gui::DummyObject::DummyObject(const glutil::Mesh &mesh) : glutil::SceneObject(mesh),
-                                                          axis(0.f),
-                                                          rotation(0.f),
-                                                          basePos(0.f),
-                                                          pos(0.f),
-                                                          max(0.f),
-                                                          speed(0.f),
-                                                          scale(0.f)
+gui::DummyObject::DummyObject(glutil::SceneObject *sceneObject) : sceneObject(sceneObject),
+                                                                  axis(0.f),
+                                                                  rotation(0.f),
+                                                                  basePos(0.f),
+                                                                  pos(0.f),
+                                                                  max(0.f),
+                                                                  speed(0.f),
+                                                                  scale(0.f)
 {
     util::Random rnd;
 
@@ -31,9 +31,9 @@ gui::DummyObject::DummyObject(const glutil::Mesh &mesh) : glutil::SceneObject(me
     this->speed = rnd.Next(0.5f, 1.5f);
     this->rotation = rnd.Next(0.f, 360.f);
 
-    this->SetModelMatrix(glm::translate(this->basePos) *
-                         glm::rotate(glm::radians(this->rotation), this->axis) *
-                         glm::scale(glm::vec3(this->scale, this->scale, this->scale)));
+    this->sceneObject->SetModelMatrix(glm::translate(this->basePos) *
+                                      glm::rotate(glm::radians(this->rotation), this->axis) *
+                                      glm::scale(glm::vec3(this->scale, this->scale, this->scale)));
 }
 
 void gui::DummyObject::Step(double delta)
@@ -46,7 +46,7 @@ void gui::DummyObject::Step(double delta)
 
     this->pos = util::Crop(this->pos, 0.f, this->max);
 
-    this->SetModelMatrix(glm::translate(this->basePos + glm::vec3(0, this->pos, 0)) *
-                         glm::rotate(glm::radians(this->rotation), this->axis) *
-                         glm::scale(glm::vec3(this->scale, this->scale, this->scale)));
+    this->sceneObject->SetModelMatrix(glm::translate(this->basePos + glm::vec3(0, this->pos, 0)) *
+                                      glm::rotate(glm::radians(this->rotation), this->axis) *
+                                      glm::scale(glm::vec3(this->scale, this->scale, this->scale)));
 }

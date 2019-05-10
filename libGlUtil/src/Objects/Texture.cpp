@@ -1,9 +1,9 @@
 #include "Objects.hpp"
 #include "data/Io.hpp"
 
-#define __STDC_WANT_LIB_EXT1__ 1
 #include <cstdio>
 
+#define STBI_WINDOWS_UTF8
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -101,6 +101,41 @@ GLenum glutil::Texture::GetFormatFromChannelCount(int n)
     }
 }
 
+bool glutil::Texture::CreateBuffer()
+{
+    this->PrepareLoad();
+
+    glTexImage2D(this->target, 0, this->internalFormat,
+                 this->width, this->height, 0,
+                 this->format, GL_UNSIGNED_BYTE, nullptr);
+
+    this->SetTextureParameters();
+}
+
+bool glutil::Texture::CreateAsStencilBuffer()
+{
+    this->format = GL_STENCIL_INDEX;
+    this->internalFormat = GL_STENCIL_INDEX;
+
+    this->CreateBuffer();
+}
+
+bool glutil::Texture::CreateAsDepthBuffer()
+{
+    this->format = GL_DEPTH_COMPONENT;
+    this->internalFormat = GL_DEPTH_COMPONENT;
+
+    this->CreateBuffer();
+}
+
+bool glutil::Texture::CreateAsStencilAndDepthBuffer()
+{
+    this->format = GL_DEPTH_STENCIL;
+    this->internalFormat = GL_DEPTH24_STENCIL8;
+
+    this->CreateBuffer();
+}
+
 bool glutil::Texture::LoadDataFromMemory(void *data)
 {
     this->PrepareLoad();
@@ -119,7 +154,8 @@ bool glutil::Texture::LoadData(const std::string &path, ImageFormat format)
     if (!this->format || !this->internalFormat || !this->target)
         return false;
 
-    auto file = std::fopen(path.c_str(), "r");;
+    auto file = std::fopen(path.c_str(), "r");
+    ;
 
     if (!file)
     {

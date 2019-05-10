@@ -72,7 +72,7 @@ private:
     std::vector<FboStage> stages;
 };
 
-class GeometryBufferAttribute
+class MeshAttribute
 {
 private:
     int index;
@@ -82,8 +82,8 @@ private:
     bool normalized;
 
 public:
-    GeometryBufferAttribute();
-    GeometryBufferAttribute(int index, int count, int type, bool normalized, int offset);
+    MeshAttribute();
+    MeshAttribute(int index, int count, int type, bool normalized, int offset);
 
     int GetIndex() const;
     int GetType() const;
@@ -92,9 +92,7 @@ public:
     bool IsNormalized() const;
 };
 
-class GeometryBuffer;
-
-class Mesh
+class MeshBuffer
 {
 private:
     int vertexCount;
@@ -104,28 +102,25 @@ private:
     int indexSize;
     int indexType;
     void *indices;
-    std::vector<GeometryBufferAttribute> attributes;
+    std::vector<MeshAttribute> attributes;
     int drawMode;
     bool dataManaged;
 
-    GeometryBuffer *buffer;
-
     int CalculateIndexSize(int);
-
-    void CopyFrom(const Mesh &);
-    void TransferFrom(Mesh &);
+    void CopyFrom(const MeshBuffer &);
+    void TransferFrom(MeshBuffer &);
 
 public:
-    Mesh();
-    Mesh(const Mesh &);
-    Mesh(Mesh &&);
-    ~Mesh();
+    MeshBuffer();
+    MeshBuffer(const MeshBuffer &);
+    MeshBuffer(MeshBuffer &&);
+    ~MeshBuffer();
 
     bool LoadFromJson(const std::string &path);
     bool LoadFromCg2vd(const std::string &path);
     bool LoadFromData(int vertexCount, int vertexSize, void *vertices,
                       int indexCount, int indexType, void *indices,
-                      std::vector<GeometryBufferAttribute> attributes,
+                      std::vector<MeshAttribute> attributes,
                       int drawMode, bool managaData = false);
 
     int GetVertexCount() const;
@@ -138,31 +133,46 @@ public:
     int GetIndexDataSize() const;
     int GetDrawMode() const;
     const void *GetIndexData() const;
-    const std::vector<GeometryBufferAttribute> &GetAttributes() const;
+    const std::vector<MeshAttribute> &GetAttributes() const;
 
-    GeometryBuffer *CreateBuffer();
-    GeometryBuffer *GetBuffer();
-    bool HasBuffer() const;
-
-    const Mesh &operator=(const Mesh &);
-    Mesh &operator=(Mesh &&);
+    const MeshBuffer &operator=(const MeshBuffer &);
+    MeshBuffer &operator=(MeshBuffer &&);
 };
 
-class SceneObject;
-
-class GeometryBuffer
+class Mesh
 {
 private:
     GLuint vao;
     GLuint vbo;
     GLuint ibo;
 
-public:
-    GeometryBuffer();
-    GeometryBuffer(const Mesh &);
-    ~GeometryBuffer();
+    int indexCount;
+    int drawMode;
+    int indexType;
 
-    void Bind();
+    void TransferFrom(Mesh &);
+    void DestroyGlObjects();
+
+    Mesh(const Mesh &) = delete;
+    Mesh &operator=(const Mesh &) = delete;
+
+public:
+    Mesh();
+    Mesh(const MeshBuffer &);
+    Mesh(Mesh &&);
+    ~Mesh();
+
+    void LoadFromBuffer(const MeshBuffer &);
+    bool LoadFromJson(const std::string &path);
+    bool LoadFromCg2vd(const std::string &path);
+    bool LoadFromData(int vertexCount, int vertexSize, void *vertices,
+                      int indexCount, int indexType, void *indices,
+                      std::vector<MeshAttribute> attributes,
+                      int drawMode, bool managaData = false);
+
+    void Draw();
+
+    Mesh &operator=(Mesh &&);
 };
 
 #pragma pack(push, 1)
@@ -176,27 +186,23 @@ struct SceneObjectUboData
 class SceneObject : public StaticUboOwner<SceneObjectUboData>
 {
 private:
-    int bufferOffset;
-    int indexCount;
-    int offset;
-    int drawMode;
-    int indexType;
-
-    GeometryBuffer *geometry;
-    bool geometryManaged;
+    Mesh *geometry;
 
 public:
-    SceneObject(GeometryBuffer *data, int bufferOffset, int indexCount, int offset, int drawMode, int indexType, bool manageGeometryBuffer = false);
-    SceneObject(Mesh &);
+    SceneObject();
+    SceneObject(Mesh *);
     SceneObject(const SceneObject &copy);
     SceneObject(SceneObject &&copy);
-    SceneObject(const Mesh &);
     ~SceneObject();
 
     const glm::mat4 &GetModelMatrix() const;
     void SetModelMatrix(const glm::mat4 &);
 
+    Mesh *GetGeometry();
+    void SetGeometry(Mesh *);
+
     void Render();
+    void Update(double delta);
 };
 
 #pragma pack(push, 1)
@@ -426,6 +432,10 @@ public:
     Texture();
     ~Texture();
 
+    bool CreateBuffer();
+    bool CreateAsStencilBuffer();
+    bool CreateAsDepthBuffer();
+    bool CreateAsStencilAndDepthBuffer();
     bool LoadDataFromMemory(void *);
     template <class TBuilder>
     bool LoadDataFromBuilder(const TBuilder &);
@@ -439,6 +449,7 @@ public:
     bool LoadCubeMapFromBuilder(const TBuilder &);
 
     void Bind(GLuint textureUnit);
+    GLuint GetId() const;
 
     void SetFormat(int);
     void SetInternalFormat(int);
@@ -482,25 +493,67 @@ struct SceneUboData
 };
 #pragma pack(pop)
 
-typedef std::string resourceId_t;
-
 class Scene : public StaticUboOwner<SceneUboData>
 {
 private:
-    std::map<resourceId_t, Mesh *> meshes;
+    typedef std::string resourceId_t;
+
+    template <class TKey, class TValue>
+    bool DeleteItem(std::map<TKey, TValue *> &map, const TKey &key);
+    template <class TKey, class TValue>
+    TValue *FindOrCreateItem(std::map<TKey, TValue *> &map, const TKey &key);
+    template <class TKey, class TValue>
+    const TValue *FindItemOrNull(const std::map<TKey, TValue *> &map, const TKey &key) const;
+    template <class TKey, class TValue>
+    void DeleteAll(std::map<TKey, TValue *> &map);
+
     std::map<resourceId_t, SceneObject *> objects;
+    std::map<resourceId_t, Material *> materials;
     std::map<resourceId_t, Program *> programs;
+    std::map<resourceId_t, Texture *> textures;
     std::map<resourceId_t, Shader *> shaders;
-    Camera camera;
+    std::map<resourceId_t, Camera *> cameras;
+    std::map<resourceId_t, Mesh *> meshs;
+
+    Camera *activeCamera;
 
 public:
-    Mesh *GetMesh(resourceId_t);
-    SceneObject *GetSceneObject(resourceId_t);
-    Program *GetProgram(resourceId_t);
-    Shader *GetShader(resourceId_t);
-    Camera &GetCamera();
-    Texture *GetTexture();
+    Scene();
+    ~Scene();
+
+    SceneObject *GetObject(const resourceId_t &);
+    Material *GetMaterial(const resourceId_t &);
+    Program *GetProgram(const resourceId_t &);
+    Texture *GetTexture(const resourceId_t &);
+    Shader *GetShader(const resourceId_t &);
+    Camera *GetCamera(const resourceId_t &);
+    Mesh *GetMesh(const resourceId_t &);
+
+    const SceneObject *GetObject(const resourceId_t &) const;
+    const Material *GetMaterial(const resourceId_t &) const;
+    const Program *GetProgram(const resourceId_t &) const;
+    const Texture *GetTexture(const resourceId_t &) const;
+    const Shader *GetShader(const resourceId_t &) const;
+    const Camera *GetCamera(const resourceId_t &) const;
+    const Mesh *GetMesh(const resourceId_t &) const;
+
+    bool RemoveObject(const resourceId_t &);
+    bool RemoveMaterial(const resourceId_t &);
+    bool RemoveProgram(const resourceId_t &);
+    bool RemoveTexture(const resourceId_t &);
+    bool RemoveShader(const resourceId_t &);
+    bool RemoveCamera(const resourceId_t &);
+    bool RemoveMesh(const resourceId_t &);
+
+    Shader *InitShader(const resourceId_t &, const std::string &sourcePath);
+    Program *InitProgram(const resourceId_t &, const std::initializer_list<std::string> &shaderNames);
+    Program *InitProgramFromSources(const resourceId_t &, const std::initializer_list<std::string> &sources);
+
+    void SetActiveCamera(const resourceId_t &);
 
     void Render();
+    void Update(double delta);
 };
+
+#include "libGlUtil/src/Objects/Scene.inl"
 } // namespace glutil

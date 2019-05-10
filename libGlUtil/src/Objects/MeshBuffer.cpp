@@ -3,7 +3,7 @@
 #include "Exception.hpp"
 #include <cstring>
 
-glutil::Mesh::Mesh() : vertexCount(0),
+glutil::MeshBuffer::MeshBuffer() : vertexCount(0),
                        indexCount(0),
                        vertexSize(0),
                        indexSize(0),
@@ -12,24 +12,23 @@ glutil::Mesh::Mesh() : vertexCount(0),
                        vertices(nullptr),
                        indices(nullptr),
                        drawMode(0),
-                       dataManaged(false),
-                       buffer(nullptr)
+                       dataManaged(false)
 {
 }
 
-glutil::Mesh::Mesh(const Mesh &mesh)
+glutil::MeshBuffer::MeshBuffer(const MeshBuffer &mesh)
 {
     this->CopyFrom(mesh);
 }
 
-glutil::Mesh::Mesh(Mesh &&mesh)
+glutil::MeshBuffer::MeshBuffer(MeshBuffer &&mesh)
 {
     this->TransferFrom(mesh);
 }
 
-glutil::Mesh::~Mesh()
+glutil::MeshBuffer::~MeshBuffer()
 {
-    util::dbg.WriteLine("Destroying Mesh [%]", this);
+    util::dbg.WriteLine("Destroying MeshBuffer [%]", this);
 
     this->vertexCount = 0;
     this->vertexSize = 0;
@@ -41,7 +40,7 @@ glutil::Mesh::~Mesh()
 
     if (this->dataManaged)
     {
-        util::dbg.WriteLine("Deleting data of Mesh [%]", this);
+        util::dbg.WriteLine("Deleting data of MeshBuffer [%]", this);
 
         delete[] this->vertices;
         delete[] this->indices;
@@ -51,12 +50,9 @@ glutil::Mesh::~Mesh()
     this->indices = nullptr;
 
     this->drawMode = 0;
-
-    if (this->buffer)
-        delete this->buffer;
 }
 
-void glutil::Mesh::CopyFrom(const Mesh &mesh)
+void glutil::MeshBuffer::CopyFrom(const MeshBuffer &mesh)
 {
     this->vertexCount = mesh.vertexCount;
     this->indexCount = mesh.indexCount;
@@ -68,7 +64,7 @@ void glutil::Mesh::CopyFrom(const Mesh &mesh)
 
     if (mesh.dataManaged)
     {
-        util::dbg.WriteLine("Created Mesh % from deep copy of %.", this, &mesh);
+        util::dbg.WriteLine("Created MeshBuffer % from deep copy of %.", this, &mesh);
 
         this->vertices = new uint8_t[mesh.GetVertexDataSize()];
         this->indices = new uint8_t[mesh.GetIndexDataSize()];
@@ -79,18 +75,15 @@ void glutil::Mesh::CopyFrom(const Mesh &mesh)
     }
     else
     {
-        util::dbg.WriteLine("Created Mesh % from shallow copy of %.", this, &mesh);
+        util::dbg.WriteLine("Created MeshBuffer % from shallow copy of %.", this, &mesh);
 
         this->vertices = mesh.vertices;
         this->indices = mesh.indices;
         this->dataManaged = false;
     }
-
-    if (mesh.HasBuffer())
-        this->CreateBuffer();
 }
 
-void glutil::Mesh::TransferFrom(Mesh &mesh)
+void glutil::MeshBuffer::TransferFrom(MeshBuffer &mesh)
 {
     this->vertexCount = mesh.vertexCount;
     this->indexCount = mesh.indexCount;
@@ -102,7 +95,6 @@ void glutil::Mesh::TransferFrom(Mesh &mesh)
     this->vertices = mesh.vertices;
     this->indices = mesh.indices;
     this->dataManaged = mesh.dataManaged;
-    this->buffer = mesh.buffer;
 
     mesh.vertexCount = 0;
     mesh.indexCount = 0;
@@ -114,12 +106,11 @@ void glutil::Mesh::TransferFrom(Mesh &mesh)
     mesh.vertices = nullptr;
     mesh.vertices = nullptr;
     mesh.dataManaged = false;
-    mesh.buffer = nullptr;
 
-    util::dbg.WriteLine("Created Mesh % from transfer of %.", this, &mesh);
+    util::dbg.WriteLine("Created MeshBuffer % from transfer of %.", this, &mesh);
 }
 
-int glutil::Mesh::CalculateIndexSize(int type)
+int glutil::MeshBuffer::CalculateIndexSize(int type)
 {
     switch (type)
     {
@@ -134,7 +125,7 @@ int glutil::Mesh::CalculateIndexSize(int type)
     }
 }
 
-bool glutil::Mesh::LoadFromData(int vertexCount, int vertexSize, void *vertices, int indexCount, int indexType, void *indices, std::vector<GeometryBufferAttribute> attributes, int drawMode, bool managaData)
+bool glutil::MeshBuffer::LoadFromData(int vertexCount, int vertexSize, void *vertices, int indexCount, int indexType, void *indices, std::vector<MeshAttribute> attributes, int drawMode, bool managaData)
 {
     this->vertexCount = vertexCount;
     this->vertexSize = vertexSize;
@@ -159,7 +150,7 @@ bool glutil::Mesh::LoadFromData(int vertexCount, int vertexSize, void *vertices,
         this->indices = indices;
     }
 
-    util::dbg.WriteLine("Loaded Mesh [%] from data: vertexCount=%, vertexSize=%, indexCount=%, indexType=%, indexSize=%, drawMode=%, attributes=%, dataManaged=%",
+    util::dbg.WriteLine("Loaded MeshBuffer [%] from data: vertexCount=%, vertexSize=%, indexCount=%, indexType=%, indexSize=%, drawMode=%, attributes=%, dataManaged=%",
                         this,
                         this->vertexCount,
                         this->vertexSize,
@@ -172,7 +163,7 @@ bool glutil::Mesh::LoadFromData(int vertexCount, int vertexSize, void *vertices,
 
     for (const auto &attrib : this->attributes)
     {
-        util::dbg.WriteLine("Loaded Attribute % for Mesh [%]: count=%, type=%, normalized=%, offset=%",
+        util::dbg.WriteLine("Loaded Attribute % for MeshBuffer [%]: count=%, type=%, normalized=%, offset=%",
                             attrib.GetIndex(),
                             this,
                             attrib.GetCount(),
@@ -184,87 +175,69 @@ bool glutil::Mesh::LoadFromData(int vertexCount, int vertexSize, void *vertices,
     return true;
 }
 
-int glutil::Mesh::GetVertexCount() const
+int glutil::MeshBuffer::GetVertexCount() const
 {
     return this->vertexCount;
 }
 
-int glutil::Mesh::GetVertexSize() const
+int glutil::MeshBuffer::GetVertexSize() const
 {
     return this->vertexSize;
 }
 
-int glutil::Mesh::GetVertexDataSize() const
+int glutil::MeshBuffer::GetVertexDataSize() const
 {
     return this->vertexCount * this->vertexSize;
 }
 
-const void *glutil::Mesh::GetVertexData() const
+const void *glutil::MeshBuffer::GetVertexData() const
 {
     return this->vertices;
 }
 
-int glutil::Mesh::GetIndexCount() const
+int glutil::MeshBuffer::GetIndexCount() const
 {
     return this->indexCount;
 }
 
-int glutil::Mesh::GetIndexSize() const
+int glutil::MeshBuffer::GetIndexSize() const
 {
     return this->indexSize;
 }
 
-int glutil::Mesh::GetIndexType() const
+int glutil::MeshBuffer::GetIndexType() const
 {
     return this->indexType;
 }
 
-int glutil::Mesh::GetIndexDataSize() const
+int glutil::MeshBuffer::GetIndexDataSize() const
 {
     return this->indexCount * this->indexSize;
 }
 
-const void *glutil::Mesh::GetIndexData() const
+const void *glutil::MeshBuffer::GetIndexData() const
 {
     return this->indices;
 }
 
-int glutil::Mesh::GetDrawMode() const
+int glutil::MeshBuffer::GetDrawMode() const
 {
     return this->drawMode;
 }
 
-const std::vector<glutil::GeometryBufferAttribute> &glutil::Mesh::GetAttributes() const
+const std::vector<glutil::MeshAttribute> &glutil::MeshBuffer::GetAttributes() const
 {
     return this->attributes;
 }
 
-glutil::GeometryBuffer *glutil::Mesh::CreateBuffer()
-{
-    if (this->buffer == nullptr)
-        this->buffer = new glutil::GeometryBuffer(*this);
-
-    return this->buffer;
-}
-
-glutil::GeometryBuffer *glutil::Mesh::GetBuffer()
-{
-    return this->buffer;
-}
-
-bool glutil::Mesh::HasBuffer() const
-{
-    return this->buffer != nullptr;
-}
-
-const glutil::Mesh &glutil::Mesh::operator=(const Mesh &mesh)
+const glutil::MeshBuffer &glutil::MeshBuffer::operator=(const MeshBuffer &mesh)
 {
     this->CopyFrom(mesh);
 
     return *this;
 }
 
-glutil::Mesh &glutil::Mesh::operator=(Mesh &&mesh)
+glutil::MeshBuffer &glutil::MeshBuffer::operator=(MeshBuffer &&mesh)
 {
     this->TransferFrom(mesh);
 

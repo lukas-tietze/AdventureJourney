@@ -8,7 +8,7 @@ constexpr uint resolution = 8;
 
 gui::Vertex_XYZ_RGB vertices[3 * 2 * resolution];
 GLubyte indices[3 * 6 * resolution];
-glutil::Mesh mesh;
+glutil::MeshBuffer mesh;
 bool meshReady = false;
 
 void BuildMesh()
@@ -45,15 +45,15 @@ void BuildMesh()
 
     mesh.LoadFromData(6, sizeof(gui::Vertex_XYZ_RGB), vertices,
                       6, GL_UNSIGNED_BYTE, indices,
-                      {glutil::GeometryBufferAttribute(0, 3, GL_FLOAT, GL_FALSE, offsetof(gui::Vertex_XYZ_RGB, position)),
-                       glutil::GeometryBufferAttribute(1, 3, GL_UNSIGNED_BYTE, GL_FALSE, offsetof(gui::Vertex_XYZ_RGB, color))},
+                      {glutil::MeshAttribute(0, 3, GL_FLOAT, GL_FALSE, offsetof(gui::Vertex_XYZ_RGB, position)),
+                       glutil::MeshAttribute(1, 3, GL_UNSIGNED_BYTE, GL_FALSE, offsetof(gui::Vertex_XYZ_RGB, color))},
                       GL_TRIANGLES);
 
     meshReady = true;
 }
 } // namespace
 
-const glutil::Mesh &gui::models::Coord3dMesh()
+const glutil::MeshBuffer &gui::models::Coord3dMesh()
 {
     if (!meshReady)
         BuildMesh();

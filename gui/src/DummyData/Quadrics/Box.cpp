@@ -3,12 +3,12 @@
 #include "data/IteratorUtils.hpp"
 #include "data/Io.hpp"
 
-glutil::Mesh gui::quadrics::Box(uint32_t color)
+bool gui::quadrics::Box(glutil::Mesh &out, uint32_t color)
 {
-    return Box(1, 1, 1, color);
+    return Box(1, 1, 1, out, color);
 }
 //---------------------------------------------------------------------------
-glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t color)
+bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, glutil::Mesh &out, uint32_t color)
 {
     std::vector<gui::Vertex_Full> vertices;
     vertices.reserve(2 * (slicesX + 1) * (slicesY + 1) +
@@ -28,9 +28,9 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
     ////front & back
     {
         ////vertices
-        for (int iX = 0; iX < slicesX + 1; iX++)
+        for (uint32_t iX = 0; iX < slicesX + 1; iX++)
         {
-            for (int iY = 0; iY < slicesY + 1; iY++)
+            for (uint32_t iY = 0; iY < slicesY + 1; iY++)
             {
                 vertex.position[0] = iX * stepX - 1.f;
                 vertex.position[1] = iY * stepY - 1.f;
@@ -57,9 +57,9 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
         }
 
         ////indices
-        for (int iX = 0; iX < slicesX; iX++)
+        for (uint32_t iX = 0; iX < slicesX; iX++)
         {
-            for (int iY = 0; iY < slicesY; iY++)
+            for (uint32_t iY = 0; iY < slicesY; iY++)
             {
                 uint16_t quad[4] = {
                     iX + iY * (slicesX + 1),
@@ -90,9 +90,9 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
     ////left & right
     {
         ////vertices
-        for (int iY = 0; iY < slicesY + 1; iY++)
+        for (uint32_t iY = 0; iY < slicesY + 1; iY++)
         {
-            for (int iZ = 0; iZ < slicesZ + 1; iZ++)
+            for (uint32_t iZ = 0; iZ < slicesZ + 1; iZ++)
             {
                 vertex.position[0] = 1;
                 vertex.position[1] = iY * stepY - 1.f;
@@ -119,9 +119,9 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
         }
 
         ////indices
-        for (int iY = 0; iY < slicesY; iY++)
+        for (uint32_t iY = 0; iY < slicesY; iY++)
         {
-            for (int iZ = 0; iZ < slicesZ; iZ++)
+            for (uint32_t iZ = 0; iZ < slicesZ; iZ++)
             {
                 uint16_t quad[4] = {
                     iY + iZ * (slicesY + 1),
@@ -152,9 +152,9 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
     ////top & bottom
     {
         ////vertices
-        for (int iZ = 0; iZ < slicesZ + 1; iZ++)
+        for (uint32_t iZ = 0; iZ < slicesZ + 1; iZ++)
         {
-            for (int iX = 0; iX < slicesX + 1; iX++)
+            for (uint32_t iX = 0; iX < slicesX + 1; iX++)
             {
                 vertex.position[0] = iX * stepX - 1.f;
                 vertex.position[1] = 1;
@@ -181,9 +181,9 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
         }
 
         ////indices
-        for (int iZ = 0; iZ < slicesZ; iZ++)
+        for (uint32_t iZ = 0; iZ < slicesZ; iZ++)
         {
-            for (int iX = 0; iX < slicesX; iX++)
+            for (uint32_t iX = 0; iX < slicesX; iX++)
             {
                 uint16_t quad[4] = {
                     iZ + iX * (slicesZ + 1),
@@ -211,9 +211,5 @@ glutil::Mesh gui::quadrics::Box(int slicesX, int slicesY, int slicesZ, uint32_t 
         indexOffset = vertices.size();
     }
 
-    util::dbg.WriteLine("Created Box Quadric with vertices: {%}\nindices: {%}",
-                        util::WrapIterable(vertices.begin(), vertices.end(), "}, {"),
-                        util::WrapIterable(indices.begin(), indices.end()), ", ");
-
-    return gui::CreateMesh(vertices, indices);
+    return gui::CreateMesh(out, vertices, indices);
 }

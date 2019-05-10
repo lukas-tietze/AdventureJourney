@@ -14,22 +14,22 @@ gui::Vertex_XYZ_RGB vertices[6] = {
 GLubyte indices[6] = {
     0, 1, 2, 3, 4, 5};
 
-glutil::Mesh mesh;
+glutil::MeshBuffer mesh;
 bool meshReady = false;
 
 void BuildMesh()
 {
     mesh.LoadFromData(6, sizeof(gui::Vertex_XYZ_RGB), vertices,
                       6, GL_UNSIGNED_BYTE, indices,
-                      {glutil::GeometryBufferAttribute(0, 3, GL_FLOAT, GL_FALSE, offsetof(gui::Vertex_XYZ_RGB, position)),
-                       glutil::GeometryBufferAttribute(2, 3, GL_UNSIGNED_BYTE, GL_FALSE, offsetof(gui::Vertex_XYZ_RGB, color))},
+                      {glutil::MeshAttribute(0, 3, GL_FLOAT, GL_FALSE, offsetof(gui::Vertex_XYZ_RGB, position)),
+                       glutil::MeshAttribute(2, 3, GL_UNSIGNED_BYTE, GL_FALSE, offsetof(gui::Vertex_XYZ_RGB, color))},
                       GL_LINES);
 
     meshReady = true;
 }
 } // namespace
 
-const glutil::Mesh &gui::models::CoordMesh()
+const glutil::MeshBuffer &gui::models::CoordMesh()
 {
     if (!meshReady)
         BuildMesh();

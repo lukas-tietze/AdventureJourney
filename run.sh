@@ -4,9 +4,9 @@ CLR_OUT='\e[32m'
 CLR_WARN='\e[33m'
 CLR_DEFAULT='\e[39m'
 
-function INFO { echo -e "$CLR_OUT >> $1 $CLR_DEFAULT"; }
-function PRINT { echo -e "$CLR_DEFAULT >> $1 $CLR_DEFAULT"; }
-function WARN { echo -e "$CLR_WARN >> $1 $CLR_DEFAULT"; }
+function INFO { echo -e "$CLR_OUT [" `date` "] >> $1 $CLR_DEFAULT"; }
+function PRINT { echo -e "$CLR_DEFAULT [" `date` "] >> $1 $CLR_DEFAULT"; }
+function WARN { echo -e "$CLR_WARN [" `date` "] >> $1 $CLR_DEFAULT"; }
 
 
 MAKE_CFG_DEBUG=0
@@ -117,12 +117,19 @@ fi
 
 if [[ $RUN_PROGRAM == 1 ]]; then
     FULL_PATH=./build/$BUILD_TYPE/$EXEC_PATH
-    PRINT "Executable path is $FULL_PATH"
+    PRINT "Executable path is "'"'"$FULL_PATH"'"'""
     INFO "Launching program..."
 
-    if [[ -f $FULL_PATH ]]; then
+    COUNT=0
+    while [[ ! -e $FULL_PATH && $COUNT -lt 5 ]]; do
+        WARN "[$COUNT] Could not find executable! Trying again."
+        COUNT=$((COUNT + 1))
+        sleep 1
+    done
+
+    if [[ -e "$FULL_PATH" ]]; then
         $FULL_PATH
     else
-        WARN "Could not find executable!"
+        WARN "Could not find executable after 5 trys! Stopping..."
     fi
 fi

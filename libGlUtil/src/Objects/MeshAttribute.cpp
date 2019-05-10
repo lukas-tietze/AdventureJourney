@@ -1,6 +1,6 @@
 #include "Objects.hpp"
 
-glutil::GeometryBufferAttribute::GeometryBufferAttribute() : index(0),
+glutil::MeshAttribute::MeshAttribute() : index(0),
                                                              type(0),
                                                              count(0),
                                                              offset(0),
@@ -8,7 +8,7 @@ glutil::GeometryBufferAttribute::GeometryBufferAttribute() : index(0),
 {
 }
 
-glutil::GeometryBufferAttribute::GeometryBufferAttribute(int index, int count, int type, bool normalized, int offset) : index(index),
+glutil::MeshAttribute::MeshAttribute(int index, int count, int type, bool normalized, int offset) : index(index),
                                                                                                                         type(type),
                                                                                                                         count(count),
                                                                                                                         offset(offset),
@@ -16,27 +16,27 @@ glutil::GeometryBufferAttribute::GeometryBufferAttribute(int index, int count, i
 {
 }
 
-int glutil::GeometryBufferAttribute::GetIndex() const
+int glutil::MeshAttribute::GetIndex() const
 {
     return this->index;
 }
 
-int glutil::GeometryBufferAttribute::GetType() const
+int glutil::MeshAttribute::GetType() const
 {
     return this->type;
 }
 
-int glutil::GeometryBufferAttribute::GetCount() const
+int glutil::MeshAttribute::GetCount() const
 {
     return this->count;
 }
 
-int glutil::GeometryBufferAttribute::GetOffset() const
+int glutil::MeshAttribute::GetOffset() const
 {
     return this->offset;
 }
 
-bool glutil::GeometryBufferAttribute::IsNormalized() const
+bool glutil::MeshAttribute::IsNormalized() const
 {
     return this->normalized;
 }

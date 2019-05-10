@@ -7,17 +7,19 @@
 
 namespace
 {
+const std::string MainCam = "MainCam";
+const std::string MainProg = "MainProg";
+
 struct TextureBuilder
 {
-    int w;
-    int h;
-
-    TextureBuilder(int w, int h)
+    uint32_t operator()(float x, float y) const
     {
-        this->w = w;
-        this->h = h;
+        return util::Color(x * (1 - y), x * (1 - y), x * y * (1 - x) * (1 - y)).Value();
     }
+};
 
+struct NormalMapBuilder
+{
     uint32_t operator()(float x, float y) const
     {
         return util::Color(x * (1 - y), x * (1 - y), x * y * (1 - x) * (1 - y)).Value();
@@ -25,80 +27,64 @@ struct TextureBuilder
 };
 } // namespace
 
-gui::DummyScreen::DummyScreen()
+gui::DummyScreen::DummyScreen() : scene(),
+                                  objects()
 {
-    this->camera.SetViewDirection(glm::vec3(-1.f, -1.f, -1.f));
-    this->camera.SetPosition(glm::vec3(7.f, 7.f, 7.f));
-    this->camera.SetUp(glutil::AXIS_Y);
-    this->camera.SetBindingTarget(1);
-    this->camera.CreateGlObjects();
+    auto camera = this->scene.GetCamera(MainCam);
+    camera->SetViewDirection(glm::vec3(-1.f, -1.f, -1.f));
+    camera->SetPosition(glm::vec3(7.f, 7.f, 7.f));
+    camera->SetUp(glutil::AXIS_Y);
+    camera->SetBindingTarget(1);
+    camera->CreateGlObjects();
 
     glEnable(GL_DEPTH_TEST);
 
-    this->vertexShader.LoadFrom("assets/shaders/passthrough.vs.glsl", GL_VERTEX_SHADER);
-    this->fragmentShader.LoadFrom("assets/shaders/passthrough.fs.glsl", GL_FRAGMENT_SHADER);
-    this->program.Attach(&this->vertexShader);
-    this->program.Attach(&this->fragmentShader);
-    this->program.Link();
+    this->scene.InitProgramFromSources(MainProg,
+                                       {
+                                           "assets/shaders/simple.vert",
+                                           "assets/shaders/simple.frag",
+                                       });
 
-    // this->cubeTexture.SetSize(256, 256);
-    // this->cubeTexture.LoadDataFromBuilder(TextureBuilder(256, 256));
-    this->cubeTexture.SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
-    this->cubeTexture.SetMipmapsEnabled(true);
-    this->cubeTexture.LoadData("assets/textures/dummy/pebble.jpg");
-    this->cubeTexture.Bind(GL_TEXTURE0);
+    auto cubeTex = this->scene.GetTexture("CubeTex");
+    cubeTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
+    cubeTex->SetMipmapsEnabled(true);
+    cubeTex->LoadData("assets/textures/dummy/pebble.jpg");
+    cubeTex->Bind(GL_TEXTURE0);
 
-    this->axis = new glutil::SceneObject(gui::models::CoordMesh());
-    this->axis->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
+    auto coords = this->scene.GetObject("Coord");
+    coords->SetGeometry(this->scene.GetMesh("CoordMesh"));
+    coords->GetGeometry()->LoadFromBuffer(gui::models::CoordMesh());
+    coords->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
+    coords->SetBindingTarget(0);
+    coords->CreateGlObjects();
 
-    auto cubeMesh = gui::quadrics::Box();
-    auto rnd = util::Random();
+    auto cubeMesh = this->scene.GetMesh("CubeMesh");
+    gui::quadrics::Box(*cubeMesh);
 
     for (int i = 0; i < 30; i++)
-        this->objects.push_back(new gui::DummyObject(cubeMesh));
-
-    for (auto object : this->objects)
     {
-        object->SetBindingTarget(0);
-        object->CreateGlObjects();
-    }
+        auto obj = this->scene.GetObject(util::Format("Cube_%", i));
+        obj->SetGeometry(cubeMesh);
+        obj->SetBindingTarget(0);
+        obj->CreateGlObjects();
 
-    this->axis->SetBindingTarget(0);
-    this->axis->CreateGlObjects();
+        this->objects.push_back(new DummyObject(obj));
+    }
 }
 
 gui::DummyScreen::~DummyScreen()
 {
-    for (auto object : this->objects)
-    {
-        object->DestroyGlObjects();
-        delete object;
-    }
-
-    this->axis->DestroyGlObjects();
-    delete this->axis;
+    for (auto obj : this->objects)
+        delete obj;
 
     this->objects.clear();
-    this->camera.DestroyGlObjects();
 }
 
 void gui::DummyScreen::Render()
 {
-    this->program.Use();
-
-    this->camera.Upload(true);
-    this->camera.Bind();
-
-    for (auto object : this->objects)
-    {
-        object->Upload(true);
-        object->Bind();
-        object->Render();
-    }
-
-    this->axis->Upload();
-    this->axis->Bind();
-    this->axis->Render();
+    this->scene.GetProgram(MainProg)->Use();
+    this->scene.SetActiveCamera(MainCam);
+    this->scene.Render();
 }
 
 void gui::DummyScreen::Update(double delta)
@@ -106,6 +92,8 @@ void gui::DummyScreen::Update(double delta)
     int x = 0;
     int y = 0;
     int z = 0;
+
+    auto camera = this->scene.GetCamera(MainCam);
 
     if (glutil::IsKeyDown(GLFW_KEY_ESCAPE) || glutil::IsKeyDown(GLFW_KEY_Q))
         glutil::Quit();
@@ -129,10 +117,10 @@ void gui::DummyScreen::Update(double delta)
         y--;
 
     if (glutil::IsKeyDown(GLFW_KEY_F5))
-        this->camera.SetViewDirection(-this->camera.GetViewDirection());
+        camera->SetViewDirection(-camera->GetViewDirection());
 
     if (glutil::WasKeyPressed(GLFW_KEY_R))
-        this->program.ReloadAll();
+        this->scene.GetProgram(MainProg)->ReloadAll();
 
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_1))
     {
@@ -146,31 +134,29 @@ void gui::DummyScreen::Update(double delta)
         this->mouseCaptured = false;
     }
 
-    auto viewFlat = this->camera.GetViewDirection();
+    auto viewFlat = camera->GetViewDirection();
     viewFlat.y = 0;
 
-    auto viewCross = glm::cross(viewFlat, this->camera.GetUp());
+    auto viewCross = glm::cross(viewFlat, camera->GetUp());
     viewCross.y = 0;
 
-    for (int i = 0; i < this->objects.size(); i++)
-    {
-        this->objects[i]->Step(delta);
-    }
+    for (auto obj : this->objects)
+        obj->Step(delta);
 
-    this->camera.MoveBy(viewFlat * static_cast<float>(delta * x) +
-                        this->camera.GetUp() * static_cast<float>(delta * y) +
-                        viewCross * static_cast<float>(delta * z));
+    camera->MoveBy(viewFlat * static_cast<float>(delta * x) +
+                   camera->GetUp() * static_cast<float>(delta * y) +
+                   viewCross * static_cast<float>(delta * z));
 
     if (this->mouseCaptured)
     {
-        this->camera.Rotate(static_cast<float>(glutil::GetMouseDeltaX() * -1), glutil::AXIS_Y);
-        this->camera.Rotate(static_cast<float>(glutil::GetMouseDeltaY() * -1), viewCross);
+        camera->Rotate(static_cast<float>(glutil::GetMouseDeltaX() * -1), glutil::AXIS_Y);
+        camera->Rotate(static_cast<float>(glutil::GetMouseDeltaY() * -1), viewCross);
     }
 
     if (glutil::WasWindowResized())
     {
-        this->camera.SetAspectRation(glutil::GetAspectRatio());
+        camera->SetAspectRation(glutil::GetAspectRatio());
     }
 
-    this->camera.UpdateMatrices();
+    camera->UpdateMatrices();
 }

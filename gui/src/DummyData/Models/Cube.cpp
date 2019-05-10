@@ -27,22 +27,22 @@ GLubyte indices[36] = {
     7, 6, 2,
     7, 2, 3};
 
-glutil::Mesh mesh;
+glutil::MeshBuffer mesh;
 bool meshReady = false;
 
 void BuildMesh()
 {
     mesh.LoadFromData(8, sizeof(gui::Vertex_XYZ_RGB), vertices,
                       36, GL_UNSIGNED_BYTE, indices,
-                      {glutil::GeometryBufferAttribute(0, 3, GL_FLOAT, false, offsetof(gui::Vertex_XYZ_RGB, position)),
-                       glutil::GeometryBufferAttribute(2, 3, GL_UNSIGNED_BYTE, true, offsetof(gui::Vertex_XYZ_RGB, color))},
+                      {glutil::MeshAttribute(0, 3, GL_FLOAT, false, offsetof(gui::Vertex_XYZ_RGB, position)),
+                       glutil::MeshAttribute(2, 3, GL_UNSIGNED_BYTE, true, offsetof(gui::Vertex_XYZ_RGB, color))},
                       GL_TRIANGLES);
 
     meshReady = true;
 }
 } // namespace
 
-const glutil::Mesh &gui::models::CubeMesh()
+const glutil::MeshBuffer &gui::models::CubeMesh()
 {
     if (!meshReady)
         BuildMesh();
