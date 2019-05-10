@@ -8,7 +8,8 @@
 namespace
 {
 const std::string MainCam = "MainCam";
-const std::string MainProg = "MainProg";
+const std::string DepthProg = "Prog1";
+const std::string ColorProg = "Prog2";
 
 struct TextureBuilder
 {
@@ -36,10 +37,17 @@ gui::DummyScreen::DummyScreen() : scene(),
     camera->SetUp(glutil::AXIS_Y);
     camera->SetBindingTarget(1);
     camera->CreateGlObjects();
+    this->scene.SetActiveCamera(MainCam);
 
     glEnable(GL_DEPTH_TEST);
 
-    this->scene.InitProgramFromSources(MainProg,
+    this->scene.InitProgramFromSources(ColorProg,
+                                       {
+                                           "assets/shaders/simple.vert",
+                                           "assets/shaders/simple.frag",
+                                       });
+
+    this->scene.InitProgramFromSources(DepthProg,
                                        {
                                            "assets/shaders/simple.vert",
                                            "assets/shaders/simple.frag",
@@ -50,7 +58,6 @@ gui::DummyScreen::DummyScreen() : scene(),
     cubeTex->SetMipmapsEnabled(true);
     cubeTex->LoadData("assets/textures/dummy/pebble.jpg");
     cubeTex->Bind(GL_TEXTURE0);
-
 
     auto coords = this->scene.GetObject("Coord");
     coords->SetGeometry(this->scene.GetMesh("CoordMesh"));
@@ -83,8 +90,15 @@ gui::DummyScreen::~DummyScreen()
 
 void gui::DummyScreen::Render()
 {
-    this->scene.GetProgram(MainProg)->Use();
-    this->scene.SetActiveCamera(MainCam);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDepthFunc(GL_LESS);
+
+    this->scene.GetProgram(DepthProg)->Use();
+    this->scene.Render();
+
+    glDepthFunc(GL_EQUAL);
+
+    this->scene.GetProgram(ColorProg)->Use();
     this->scene.Render();
 }
 
@@ -121,7 +135,10 @@ void gui::DummyScreen::Update(double delta)
         camera->SetViewDirection(-camera->GetViewDirection());
 
     if (glutil::WasKeyPressed(GLFW_KEY_R))
-        this->scene.GetProgram(MainProg)->ReloadAll();
+    {
+        this->scene.GetProgram(DepthProg)->ReloadAll();
+        this->scene.GetProgram(ColorProg)->ReloadAll();
+    }
 
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_1))
     {

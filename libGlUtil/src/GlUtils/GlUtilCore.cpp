@@ -283,8 +283,6 @@ void glutil::Loop()
 
         activeScreen->Update(delta);
 
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         activeScreen->Render();
 
         gpuTime += watch[1]->get_gpu_time_in_ms() -

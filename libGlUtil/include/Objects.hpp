@@ -53,6 +53,7 @@ public:
     void Bind() const;
     void SetBindingTarget(int);
     void Upload(bool force = false);
+    void Resize();
     void SetDirty();
 };
 
@@ -262,15 +263,19 @@ public:
 #pragma pack(push, 1)
 struct LigthSourceUboData
 {
-    ////falls w = 1 -> xyz = Richtung
-    ////falls w = 0 -> xyz = Position
-    glm::vec4 position;
-    ////rgb = Color
-    ////a = ambient factor
-    glm::vec4 color;
-    bool active;
+    glm::vec3 position;
+    uint32_t type;
+    glm::vec3 color;
+    float ambienFactor;
+    uint32_t active;
 };
 #pragma pack(pop)
+
+enum class LigthType
+{
+    Directional,
+    Point,
+};
 
 class LigthSource : StaticUboOwner<LigthSourceUboData>
 {
@@ -279,13 +284,13 @@ public:
     LigthSource(const glm::vec3 &position, bool directionalLigth, const glm::vec3 &color, float ambientFactor, bool active);
 
     const glm::vec3 &GetPosition() const;
-    bool IsDirectionalLigth() const;
+    LigthType GetType() const;
     const glm::vec3 &GetColor() const;
     float GetAmbientFactor() const;
     bool IsActive() const;
 
     void SetPosition(const glm::vec3 &);
-    void SsDirectionalLigth(bool);
+    void SetType(LigthType);
     void SetColor(const glm::vec3 &);
     void SetAmbientFactor(float);
     void SetActive(bool);
@@ -293,12 +298,53 @@ public:
 
 class LigthSourceCollection : DynamicUboOwner<LigthSourceUboData>
 {
-public:
-    LigthSourceCollection();
-    LigthSourceCollection(const std::initializer_list<LigthSource> &);
+    friend class ConstLigthSourceAccessor;
+    friend class LigthSourceAccessor;
 
-    void Add(const LigthSource &);
+public:
+    class ConstLigthSourceAccessor
+    {
+        friend LigthSourceCollection;
+
+    protected:
+        size_t id;
+        const LigthSourceCollection *collection;
+
+        ConstLigthSourceAccessor(const LigthSourceCollection *, size_t);
+
+    public:
+        const glm::vec3 &GetPosition() const;
+        LigthType GetType() const;
+        const glm::vec3 &GetColor() const;
+        float GetAmbientFactor() const;
+        bool IsActive() const;
+    };
+
+    class LigthSourceAccessor : public ConstLigthSourceAccessor
+    {
+        friend LigthSourceCollection;
+
+    private:
+        LigthSourceCollection *modifiableCollection;
+
+        LigthSourceAccessor(LigthSourceCollection *, size_t);
+
+    public:
+        LigthSourceAccessor &SetPosition(const glm::vec3 &);
+        LigthSourceAccessor &SetType(LigthType);
+        LigthSourceAccessor &SetColor(const glm::vec3 &);
+        LigthSourceAccessor &SetAmbientFactor(float);
+        LigthSourceAccessor &SetActive(bool);
+
+        LigthSourceAccessor &operator=(const LigthSource &);
+    };
+
+    void Add(size_t n = 1);
     void Clear();
+    size_t Size() const;
+
+    LigthSourceAccessor operator[](size_t i);
+    ConstLigthSourceAccessor operator[](size_t i) const;
 };
 
 #pragma pack(push, 1)

@@ -1,25 +1,20 @@
 #version 430 core
 
-
-layout(std140,binding = 1) uniform cameraDataBlock
+layout(std140, binding = 1) uniform cameraDataBlock
 {
         mat4 view;
-        mat4 inv_view;
-        mat4 projection;
-        mat4 inv_projection;
-        vec4 near_far_width_height;
+        mat4 invViewMat;
+        mat4 projectionMat;
+        mat4 invProjectionMat;
 
 } camera;
 
-
-layout(std140,binding = 2) uniform objectDataBlock
+layout(std140, binding = 2) uniform objectDataBlock
 {
-        mat4 model;
-        mat4 normal_matrix;
+        mat4 modelMat;
+        mat4 normalMat;
 
 } object;
-
-
 
 // All the possible attributes.
 layout(location = 0) in vec3 position_os;
@@ -31,7 +26,6 @@ layout(location = 5) in vec4 color;
 layout(location = 6) in vec4 boneWeights;
 layout(location = 7) in uvec4 boneIDs;
 layout(location = 8) in uint boneCnt;
-
 
 // The position in Object Space
 out vec3 v_position_os;
