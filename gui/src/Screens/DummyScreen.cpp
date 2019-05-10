@@ -51,6 +51,7 @@ gui::DummyScreen::DummyScreen() : scene(),
     cubeTex->LoadData("assets/textures/dummy/pebble.jpg");
     cubeTex->Bind(GL_TEXTURE0);
 
+
     auto coords = this->scene.GetObject("Coord");
     coords->SetGeometry(this->scene.GetMesh("CoordMesh"));
     coords->GetGeometry()->LoadFromBuffer(gui::models::CoordMesh());
