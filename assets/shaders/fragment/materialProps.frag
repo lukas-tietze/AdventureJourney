@@ -8,15 +8,13 @@
 //in vec4 v_color;
 // layout(binding = 2) uniform sampler2D mp_map;
 
-layout(std140,binding = 4) uniform materialDataBlock
+layout(std140,binding = 3) uniform materialDataBlock
 {
     vec4 albedo;
     vec4 properties;
 } material;
 
-
-
-vec4 get_material_props()
+vec4 GetMaterialProps()
 {
     return vec4(0.5);
 }

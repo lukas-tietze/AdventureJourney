@@ -1,11 +1,10 @@
 #version 430 core
 
-in vec2 v_texcoord;
-layout(binding = 0) uniform sampler2D albedo_map;
+in vec2 vTexcoord;
+layout(binding = 0) uniform sampler2D albedoMap;
 
-
-vec4 get_albedo()
+vec4 GetAlbedo()
 {
-    return vec4(1.0);
+    return texture(albedoMap, vTexcoord);
 }
 

@@ -17,13 +17,13 @@ struct Vertex_XYZ
 struct Vertex_XYZ_RGB
 {
     GLfloat position[3];
-    GLubyte color[3];
+    GLubyte color[4];
 };
 
 struct Vertex_XYZ_RGB_ST
 {
     GLfloat position[3];
-    GLubyte color[3];
+    GLubyte color[4];
     GLshort texture[2];
 };
 
@@ -31,7 +31,7 @@ struct Vertex_XYZ_NRM_RGB
 {
     GLfloat position[3];
     GLfloat normal[3];
-    GLubyte color[3];
+    GLubyte color[4];
 };
 
 struct Vertex_XYZ_NRM_RGB_ST
@@ -39,7 +39,7 @@ struct Vertex_XYZ_NRM_RGB_ST
     GLfloat position[3];
     GLfloat normal[3];
     GLushort texture[2];
-    GLubyte color[3];
+    GLubyte color[4];
 };
 #pragma pack(pop)
 

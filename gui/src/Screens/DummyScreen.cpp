@@ -43,14 +43,21 @@ gui::DummyScreen::DummyScreen() : scene(),
 
     this->scene.InitProgramFromSources(ColorProg,
                                        {
-                                           "assets/shaders/simple.vert",
-                                           "assets/shaders/simple.frag",
+                                           "assets/shaders/base/full.vert",
+                                           "assets/shaders/vertex/simple.vert",
+                                           "assets/shaders/base/color.frag",
+                                           "assets/shaders/fragment/lightingNone.frag",
+                                           "assets/shaders/fragment/materialPropsSimple.frag",
+                                           "assets/shaders/fragment/normalAttrib.frag",
+                                           "assets/shaders/fragment/textureOnly.frag",
                                        });
 
     this->scene.InitProgramFromSources(DepthProg,
                                        {
-                                           "assets/shaders/simple.vert",
-                                           "assets/shaders/simple.frag",
+                                           "assets/shaders/base/positionOnly.vert",
+                                           "assets/shaders/vertex/simple.vert",
+                                           "assets/shaders/base/depth.frag",
+                                           "assets/shaders/fragment/textureOnly.frag",
                                        });
 
     auto cubeTex = this->scene.GetTexture("CubeTex");
@@ -73,7 +80,7 @@ gui::DummyScreen::DummyScreen() : scene(),
     {
         auto obj = this->scene.GetObject(util::Format("Cube_%", i));
         obj->SetGeometry(cubeMesh);
-        obj->SetBindingTarget(0);
+        obj->SetBindingTarget(2);
         obj->CreateGlObjects();
 
         this->objects.push_back(new DummyObject(obj));

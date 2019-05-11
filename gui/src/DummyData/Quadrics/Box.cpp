@@ -39,6 +39,7 @@ bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, gl
                 vertex.color[0] = (color & 0xff000000) >> 24;
                 vertex.color[1] = (color & 0x00ff0000) >> 16;
                 vertex.color[2] = (color & 0x0000ff00) >> 8;
+                vertex.color[3] = color & 0x000000ff;
 
                 vertex.normal[0] = 0;
                 vertex.normal[1] = 0;
@@ -101,6 +102,7 @@ bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, gl
                 vertex.color[0] = (color & 0xff000000) >> 24;
                 vertex.color[1] = (color & 0x00ff0000) >> 16;
                 vertex.color[2] = (color & 0x0000ff00) >> 8;
+                vertex.color[3] = color & 0x000000ff;
 
                 vertex.normal[0] = 0;
                 vertex.normal[1] = 0;
@@ -163,6 +165,7 @@ bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, gl
                 vertex.color[0] = (color & 0xff000000) >> 24;
                 vertex.color[1] = (color & 0x00ff0000) >> 16;
                 vertex.color[2] = (color & 0x0000ff00) >> 8;
+                vertex.color[3] = color & 0x000000ff;
 
                 vertex.normal[0] = 0;
                 vertex.normal[1] = 0;

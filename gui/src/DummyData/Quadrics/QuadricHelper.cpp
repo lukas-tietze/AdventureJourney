@@ -9,7 +9,7 @@ bool gui::CreateMesh(glutil::Mesh &out, std::vector<gui::Vertex_Full> &vertices,
                      {
                          glutil::MeshAttribute(0, 3, GL_FLOAT, false, offsetof(gui::Vertex_Full, gui::Vertex_Full::position)),
                          glutil::MeshAttribute(1, 3, GL_FLOAT, false, offsetof(gui::Vertex_Full, gui::Vertex_Full::normal)),
-                         glutil::MeshAttribute(2, 3, GL_UNSIGNED_BYTE, true, offsetof(gui::Vertex_Full, gui::Vertex_Full::color)),
+                         glutil::MeshAttribute(2, 4, GL_UNSIGNED_BYTE, true, offsetof(gui::Vertex_Full, gui::Vertex_Full::color)),
                          glutil::MeshAttribute(3, 2, GL_UNSIGNED_SHORT, true, offsetof(gui::Vertex_Full, gui::Vertex_Full::texture)),
                      },
                      GL_TRIANGLES, true);

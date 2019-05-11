@@ -4,7 +4,6 @@ layout(location = 0) in vec3 pos;
 layout(location = 1) in vec3 nrml;
 layout(location = 4) in vec2 tex_coord;
 
-
 layout(std140,binding = 1) uniform cameraDataBlock
 {
 	mat4 view;

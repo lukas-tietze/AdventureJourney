@@ -1,16 +1,14 @@
 #version 430 core
 
-//in vec3 v_position_ws;
-//in vec3 v_tangent_ws;
-//in vec3 v_bitangent_ws;
-//in vec3 v_nrm_ws;
-//in vec2 v_texcoord;
-//in vec4 v_color;
+in vec3 vPositionWs;
+in vec3 vTangentWs;
+in vec3 vBitangentWs;
+in vec3 vNormalWs;
+in vec2 vTexcoord;
+in vec4 vColor;
 
-
-
-vec3 get_normal()
+vec3 GetNormal()
 {
-    return vec3(0.0,1.0,0.0);
+    return vNormalWs;
 }
 

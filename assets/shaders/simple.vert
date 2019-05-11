@@ -5,7 +5,7 @@ layout(location = 1) in vec3 nrm;
 layout(location = 2) in vec3 clr;
 layout(location = 3) in vec2 tex;
 
-layout(std140, binding = 0) uniform objectDataBlock
+layout(std140, binding = 2) uniform objectDataBlock
 {
     mat4 model;
     mat3 normal;
