@@ -296,21 +296,21 @@ public:
     void SetActive(bool);
 };
 
-class LightSourceCollection : DynamicUboOwner<LightSourceUboData>
+class LightSet : DynamicUboOwner<LightSourceUboData>
 {
-    friend class ConstLightSourceAccessor;
-    friend class LightSourceAccessor;
+    friend class ConstLight;
+    friend class Light;
 
 public:
-    class ConstLightSourceAccessor
+    class ConstLight
     {
-        friend LightSourceCollection;
+        friend LightSet;
 
     protected:
         size_t id;
-        const LightSourceCollection *collection;
+        const LightSet *collection;
 
-        ConstLightSourceAccessor(const LightSourceCollection *, size_t);
+        ConstLight(const LightSet *, size_t);
 
     public:
         const glm::vec3 &GetPosition() const;
@@ -320,31 +320,31 @@ public:
         bool IsActive() const;
     };
 
-    class LightSourceAccessor : public ConstLightSourceAccessor
+    class Light : public ConstLight
     {
-        friend LightSourceCollection;
+        friend LightSet;
 
     private:
-        LightSourceCollection *modifiableCollection;
+        LightSet *modifiableCollection;
 
-        LightSourceAccessor(LightSourceCollection *, size_t);
+        Light(LightSet *, size_t);
 
     public:
-        LightSourceAccessor &SetPosition(const glm::vec3 &);
-        LightSourceAccessor &SetType(LightType);
-        LightSourceAccessor &SetColor(const glm::vec3 &);
-        LightSourceAccessor &SetAmbientFactor(float);
-        LightSourceAccessor &SetActive(bool);
+        Light &SetPosition(const glm::vec3 &);
+        Light &SetType(LightType);
+        Light &SetColor(const glm::vec3 &);
+        Light &SetAmbientFactor(float);
+        Light &SetActive(bool);
 
-        LightSourceAccessor &operator=(const SimpleLight &);
+        Light &operator=(const SimpleLight &);
     };
 
     void Add(size_t n = 1);
     void Clear();
     size_t Size() const;
 
-    LightSourceAccessor operator[](size_t i);
-    ConstLightSourceAccessor operator[](size_t i) const;
+    Light operator[](size_t i);
+    ConstLight operator[](size_t i) const;
 };
 
 #pragma pack(push, 1)
@@ -560,6 +560,7 @@ private:
     std::map<resourceId_t, Shader *> shaders;
     std::map<resourceId_t, Camera *> cameras;
     std::map<resourceId_t, Mesh *> meshs;
+    std::map<resourceId_t, LigthSet *>ligths;
 
     Camera *activeCamera;
 
