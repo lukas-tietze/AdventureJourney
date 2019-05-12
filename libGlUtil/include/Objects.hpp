@@ -266,7 +266,7 @@ struct LightSourceUboData
     glm::vec3 position;
     uint32_t type;
     glm::vec3 color;
-    float ambienFactor;
+    float ambientFactor;
     uint32_t active;
 };
 #pragma pack(pop)
@@ -296,7 +296,7 @@ public:
     void SetActive(bool);
 };
 
-class LightSet : DynamicUboOwner<LightSourceUboData>
+class LightSet : public DynamicUboOwner<LightSourceUboData>
 {
     friend class ConstLight;
     friend class Light;
@@ -339,7 +339,7 @@ public:
         Light &operator=(const SimpleLight &);
     };
 
-    void Add(size_t n = 1);
+    Light Add();
     void Clear();
     size_t Size() const;
 
@@ -560,9 +560,10 @@ private:
     std::map<resourceId_t, Shader *> shaders;
     std::map<resourceId_t, Camera *> cameras;
     std::map<resourceId_t, Mesh *> meshs;
-    std::map<resourceId_t, LigthSet *>ligths;
+    std::map<resourceId_t, LightSet *>lightSets;
 
     Camera *activeCamera;
+    LightSet *activeLightSet;
 
 public:
     Scene();
@@ -575,6 +576,7 @@ public:
     Shader *GetShader(const resourceId_t &);
     Camera *GetCamera(const resourceId_t &);
     Mesh *GetMesh(const resourceId_t &);
+    LightSet *GetLightSet(const resourceId_t &);
 
     const SceneObject *GetObject(const resourceId_t &) const;
     const Material *GetMaterial(const resourceId_t &) const;
@@ -583,6 +585,7 @@ public:
     const Shader *GetShader(const resourceId_t &) const;
     const Camera *GetCamera(const resourceId_t &) const;
     const Mesh *GetMesh(const resourceId_t &) const;
+    const LightSet *GetLightSet(const resourceId_t &) const;
 
     bool RemoveObject(const resourceId_t &);
     bool RemoveMaterial(const resourceId_t &);
@@ -591,12 +594,14 @@ public:
     bool RemoveShader(const resourceId_t &);
     bool RemoveCamera(const resourceId_t &);
     bool RemoveMesh(const resourceId_t &);
+    bool RemoveLightSet(const resourceId_t &);
 
     Shader *InitShader(const resourceId_t &, const std::string &sourcePath);
     Program *InitProgram(const resourceId_t &, const std::initializer_list<std::string> &shaderNames);
     Program *InitProgramFromSources(const resourceId_t &, const std::initializer_list<std::string> &sources);
 
     void SetActiveCamera(const resourceId_t &);
+    void SetActiveLightSet(const resourceId_t &);
 
     void Render();
     void Update(double delta);

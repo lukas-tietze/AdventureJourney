@@ -8,6 +8,7 @@
 namespace
 {
 const std::string MainCam = "MainCam";
+const std::string MainLight = "MainLight";
 const std::string DepthProg = "Prog1";
 const std::string ColorProg = "Prog2";
 
@@ -46,7 +47,7 @@ gui::DummyScreen::DummyScreen() : scene(),
                                            "assets/shaders/base/full.vert",
                                            "assets/shaders/vertex/simple.vert",
                                            "assets/shaders/base/color.frag",
-                                           "assets/shaders/fragment/lightingNone.frag",
+                                           "assets/shaders/fragment/lightingPhong.frag",
                                            "assets/shaders/fragment/materialPropsSimple.frag",
                                            "assets/shaders/fragment/normalAttrib.frag",
                                            "assets/shaders/fragment/textureOnly.frag",
@@ -60,10 +61,20 @@ gui::DummyScreen::DummyScreen() : scene(),
                                            "assets/shaders/fragment/textureOnly.frag",
                                        });
 
+    auto lights = this->scene.GetLightSet(MainLight);
+    lights->SetBindingTarget(4);
+    auto l0 = lights->Add();
+    l0.SetActive(true);
+    l0.SetAmbientFactor(0.3);
+    l0.SetColor(glm::vec3(0.3f, 0.7f, 0.9f));
+    l0.SetPosition(glm::vec3(0.f, 0.f, 0.f));
+    l0.SetType(glutil::LightType::Point);
+    this->scene.SetActiveLightSet(MainLight);
+
     auto cubeTex = this->scene.GetTexture("CubeTex");
     cubeTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
     cubeTex->SetMipmapsEnabled(true);
-    cubeTex->LoadData("assets/textures/dummy/pebble.jpg");
+    cubeTex->LoadData("assets/textures/dummy/grass.jpg");
     cubeTex->Bind(GL_TEXTURE0);
 
     auto coords = this->scene.GetObject("Coord");

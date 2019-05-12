@@ -6,7 +6,10 @@ glutil::Scene::Scene() : objects(),
                          textures(),
                          shaders(),
                          cameras(),
-                         meshs()
+                         meshs(),
+                         lightSets(),
+                         activeCamera(nullptr),
+                         activeLightSet(nullptr)
 {
 }
 
@@ -56,6 +59,11 @@ glutil::Mesh *glutil::Scene::GetMesh(const resourceId_t &id)
     return this->FindOrCreateItem(this->meshs, id);
 }
 
+glutil::LightSet *glutil::Scene::GetLightSet(const resourceId_t &id)
+{
+    return this->FindOrCreateItem(this->lightSets, id);
+}
+
 const glutil::SceneObject *glutil::Scene::GetObject(const resourceId_t &id) const
 {
     return this->FindItemOrNull(this->objects, id);
@@ -89,6 +97,11 @@ const glutil::Camera *glutil::Scene::GetCamera(const resourceId_t &id) const
 const glutil::Mesh *glutil::Scene::GetMesh(const resourceId_t &id) const
 {
     return this->FindItemOrNull(this->meshs, id);
+}
+
+const glutil::LightSet *glutil::Scene::GetLightSet(const resourceId_t &id) const
+{
+    return this->FindItemOrNull(this->lightSets, id);
 }
 
 bool glutil::Scene::RemoveObject(const resourceId_t &id)
@@ -126,10 +139,21 @@ bool glutil::Scene::RemoveMesh(const resourceId_t &id)
     return this->DeleteItem(this->meshs, id);
 }
 
+bool glutil::Scene::RemoveLightSet(const resourceId_t &id)
+{
+    return this->DeleteItem(this->lightSets, id);
+}
+
 void glutil::Scene::SetActiveCamera(const resourceId_t &id)
 {
     auto kvp = this->cameras.find(id);
     this->activeCamera = kvp != this->cameras.end() ? kvp->second : nullptr;
+}
+
+void glutil::Scene::SetActiveLightSet(const resourceId_t &id)
+{
+    auto kvp = this->lightSets.find(id);
+    this->activeLightSet = kvp != this->lightSets.end() ? kvp->second : nullptr;
 }
 
 glutil::Shader *glutil::Scene::InitShader(const resourceId_t &id, const std::string &sourcePath)
@@ -176,6 +200,12 @@ void glutil::Scene::Render()
     {
         this->activeCamera->Bind();
         this->activeCamera->Upload();
+    }
+
+    if(this->activeLightSet)
+    {
+        this->activeLightSet->Bind();
+        this->activeLightSet->Upload();
     }
 
     for (auto &obj : this->objects)
