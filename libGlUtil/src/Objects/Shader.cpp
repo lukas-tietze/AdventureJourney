@@ -106,12 +106,35 @@ bool glutil::Shader::Reload()
     glShaderSource(this->id, 1, &buf, nullptr);
     glCompileShader(this->id);
 
-    if (!glutil::CheckShader(this->id))
-        return false;
+    if (this->Check())
+        util::dbg.WriteLine("Loaded shader % (type %) from %.", this->id, this->type, this->path);
     else
-        util::dbg.WriteLine("Loaded shader % (%) from %.", this->id, this->type, this->path);
+        return false;
 
     return true;
+}
+
+bool glutil::Shader::Check()
+{
+    GLint isCompiled = 0;
+    GLint maxLen = 0;
+    std::string errorLog;
+
+    glGetShaderiv(this->id, GL_COMPILE_STATUS, &isCompiled);
+    glGetShaderiv(this->id, GL_INFO_LOG_LENGTH, &maxLen);
+
+    if (maxLen > 0)
+    {
+        errorLog.resize(static_cast<size_t>(maxLen));
+        glGetShaderInfoLog(this->id, maxLen, &maxLen, &errorLog[0]);
+    }
+
+    if (isCompiled == GL_FALSE)
+        util::dbg.WriteLine("Shader %, %. Failed to compile shader!\n%", this->id, this->path, errorLog);
+    else if (maxLen > 0)
+        util::dbg.WriteLine("Shader %, %. Compiled shader with warnings!\n%", this->id, this->path, errorLog);
+
+    return isCompiled == GL_TRUE;
 }
 
 glutil::Shader &glutil::Shader::operator=(const Shader &shader)

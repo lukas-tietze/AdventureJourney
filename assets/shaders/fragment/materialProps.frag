@@ -16,6 +16,6 @@ layout(std140,binding = 3) uniform materialDataBlock
 
 vec4 GetMaterialProps()
 {
-    return vec4(0.5);
+    return material.properties;
 }
 

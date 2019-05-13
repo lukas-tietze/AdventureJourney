@@ -22,6 +22,7 @@ glutil::Scene::~Scene()
     this->DeleteAll(this->shaders);
     this->DeleteAll(this->cameras);
     this->DeleteAll(this->meshs);
+    this->DeleteAll(this->lightSets);
 }
 
 glutil::SceneObject *glutil::Scene::GetObject(const resourceId_t &id)

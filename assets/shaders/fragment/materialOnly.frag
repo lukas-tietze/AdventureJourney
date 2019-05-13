@@ -7,10 +7,8 @@ layout(std140,binding = 3) uniform materialDataBlock
 } material;
 
 
-vec4 get_albedo()
+vec4 GetAlbedo()
 {
-    // 2 (a):
-    // return ...
-    return vec4(1.0);
+    return material.albedo;
 }
 

@@ -48,6 +48,7 @@ gui::DummyScreen::DummyScreen() : scene(),
                                            "assets/shaders/vertex/simple.vert",
                                            "assets/shaders/base/color.frag",
                                            "assets/shaders/fragment/lightingPhong.frag",
+                                           //    "assets/shaders/fragment/lightingNone.frag",
                                            "assets/shaders/fragment/materialPropsSimple.frag",
                                            "assets/shaders/fragment/normalAttrib.frag",
                                            "assets/shaders/fragment/textureOnly.frag",
@@ -63,12 +64,30 @@ gui::DummyScreen::DummyScreen() : scene(),
 
     auto lights = this->scene.GetLightSet(MainLight);
     lights->SetBindingTarget(4);
-    auto l0 = lights->Add();
-    l0.SetActive(true);
-    l0.SetAmbientFactor(0.3);
-    l0.SetColor(glm::vec3(0.3f, 0.7f, 0.9f));
-    l0.SetPosition(glm::vec3(0.f, 0.f, 0.f));
-    l0.SetType(glutil::LightType::Point);
+    auto light = lights->Add();
+    light.SetActive(true);
+    light.SetAmbientFactor(0.3);
+    light.SetColor(glm::vec3(0.3f, 0.7f, 0.9f));
+    light.SetPosition(glm::vec3(1.f, 1.f, 1.f));
+    light.SetType(glutil::LightType::Point);
+    light = lights->Add();
+    light.SetActive(true);
+    light.SetAmbientFactor(0.3);
+    light.SetColor(glm::vec3(0.3f, 0.7f, 0.9f));
+    light.SetPosition(glm::vec3(2.f, 1.f, 1.f));
+    light.SetType(glutil::LightType::Point);
+    light = lights->Add();
+    light.SetActive(true);
+    light.SetAmbientFactor(0.3);
+    light.SetColor(glm::vec3(0.3f, 0.7f, 0.9f));
+    light.SetPosition(glm::vec3(1.f, 2.f, 1.f));
+    light.SetType(glutil::LightType::Point);
+    light = lights->Add();
+    light.SetActive(true);
+    light.SetAmbientFactor(0.3);
+    light.SetColor(glm::vec3(0.3f, 0.7f, 0.9f));
+    light.SetPosition(glm::vec3(1.f, 1.f, 2.f));
+    light.SetType(glutil::LightType::Point);
     this->scene.SetActiveLightSet(MainLight);
 
     auto cubeTex = this->scene.GetTexture("CubeTex");
@@ -96,6 +115,8 @@ gui::DummyScreen::DummyScreen() : scene(),
 
         this->objects.push_back(new DummyObject(obj));
     }
+
+    util::dbg.WriteLine("Light has ");
 }
 
 gui::DummyScreen::~DummyScreen()
@@ -130,40 +151,32 @@ void gui::DummyScreen::Update(double delta)
 
     if (glutil::IsKeyDown(GLFW_KEY_ESCAPE) || glutil::IsKeyDown(GLFW_KEY_Q))
         glutil::Quit();
-
     if (glutil::IsKeyDown(GLFW_KEY_W))
         x++;
-
     if (glutil::IsKeyDown(GLFW_KEY_S))
         x--;
-
     if (glutil::IsKeyDown(GLFW_KEY_D))
         z++;
-
     if (glutil::IsKeyDown(GLFW_KEY_A))
         z--;
-
     if (glutil::IsKeyDown(GLFW_KEY_SPACE))
         y++;
-
     if (glutil::IsKeyDown(GLFW_KEY_LEFT_SHIFT))
         y--;
-
-    if (glutil::IsKeyDown(GLFW_KEY_F5))
+    if (glutil::WasKeyPressed(GLFW_KEY_P))
+        this->animationPaused = !this->animationPaused;
+    if (glutil::IsKeyDown(GLFW_KEY_C))
         camera->SetViewDirection(-camera->GetViewDirection());
-
     if (glutil::WasKeyPressed(GLFW_KEY_R))
     {
         this->scene.GetProgram(DepthProg)->ReloadAll();
         this->scene.GetProgram(ColorProg)->ReloadAll();
     }
-
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_1))
     {
         glutil::SetCursorGameMode(true);
         this->mouseCaptured = true;
     }
-
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_2))
     {
         glutil::SetCursorGameMode(false);
@@ -176,8 +189,9 @@ void gui::DummyScreen::Update(double delta)
     auto viewCross = glm::cross(viewFlat, camera->GetUp());
     viewCross.y = 0;
 
-    for (auto obj : this->objects)
-        obj->Step(delta);
+    if (!this->animationPaused)
+        for (auto obj : this->objects)
+            obj->Step(delta);
 
     camera->MoveBy(viewFlat * static_cast<float>(delta * x) +
                    camera->GetUp() * static_cast<float>(delta * y) +

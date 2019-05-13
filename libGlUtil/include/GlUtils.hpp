@@ -103,12 +103,6 @@ public:
 void RequestNextScreen(Screen *);
 void RequestBlankScreen();
 
-GLuint LoadShader(const std::string &path, GLenum type);
-GLuint CreateProgram(GLuint vs, GLuint fs);
-GLuint CreateProgram(const std::string &vsSrc, const std::string &fsSrc);
-bool CheckShader(GLuint shader);
-bool CheckProgram(GLuint prog);
-
 class GlErrorException : public util::Exception
 {
 public:

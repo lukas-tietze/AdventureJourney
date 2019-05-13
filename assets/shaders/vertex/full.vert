@@ -2,7 +2,7 @@
 
 layout(std140, binding = 1) uniform cameraDataBlock
 {
-        mat4 view;
+        mat4 viewMat;
         mat4 invViewMat;
         mat4 projectionMat;
         mat4 invProjectionMat;

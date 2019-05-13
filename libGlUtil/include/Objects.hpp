@@ -394,6 +394,7 @@ private:
     void DestroyGlObjects();
     void CopyFrom(const Shader &);
     void TransferFrom(Shader &);
+    bool Check();
 
 public:
     Shader();
@@ -422,6 +423,7 @@ private:
     void DestroyGlObjects();
     void CopyFrom(const Program &);
     void TransferFrom(Program &);
+    bool Check();
 
 public:
     Program();

@@ -86,10 +86,10 @@ bool glutil::Program::Link()
 
     glLinkProgram(this->id);
 
-    if (!glutil::CheckProgram(this->id))
-        return false;
-    else
+    if (this->Check())
         util::dbg.WriteLine("Linked program % from: {%}.", this->id, util::WrapPointerIterable(this->shaders.begin(), this->shaders.end(), "}, {"));
+    else
+        return false;
 
     return true;
 }
@@ -112,6 +112,28 @@ bool glutil::Program::ReloadAll()
 void glutil::Program::Use()
 {
     glUseProgram(this->id);
+}
+
+bool glutil::Program::Check()
+{
+    GLint isLinked = 0;
+    GLint maxLen = 0;
+    std::string errorLog;
+    glGetProgramiv(this->id, GL_LINK_STATUS, &isLinked);
+    glGetProgramiv(this->id, GL_INFO_LOG_LENGTH, &maxLen);
+
+    if (maxLen > 0)
+    {
+        errorLog.resize(static_cast<size_t>(maxLen));
+        glGetProgramInfoLog(this->id, maxLen, &maxLen, &errorLog[0]);
+    }
+
+    if (isLinked == GL_FALSE)
+        util::dbg.WriteLine("Program %. Failed to link program!\n%", this->id, errorLog);
+    else if (maxLen > 0)
+        util::dbg.WriteLine("Program %. Linkes program with warnings!\n%", this->id, errorLog);
+
+    return isLinked == GL_TRUE;
 }
 
 glutil::Program &glutil::Program::operator=(const Program &program)
