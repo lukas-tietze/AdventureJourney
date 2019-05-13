@@ -59,10 +59,10 @@ vec3 CalcOneLight(in int i, in vec3 N, in vec3 fpos, in vec3 albedo, in vec2 mp)
     {
         res += a * NdotL * LColor(i);
 
-        vec3 viewDir = normalize(camera.viewMat[3].xyz - fpos);
-        vec3 reflectDir = reflect(-L, N);
+        // vec3 viewDir = normalize(camera.viewMat[3].xyz - fpos);
+        // vec3 reflectDir = reflect(-L, N);
 
-        res += LColor(i) * a * pow(max(dot(viewDir, reflectDir), 0.0), 32);
+        // res += LColor(i) * a * pow(max(dot(viewDir, reflectDir), 0.0), 32);
     }
 
     return res;

@@ -36,17 +36,14 @@ bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, gl
                 vertex.position[1] = iY * stepY - 1.f;
                 vertex.position[2] = 1;
 
-                vertex.color[0] = (color & 0xff000000) >> 24;
-                vertex.color[1] = (color & 0x00ff0000) >> 16;
-                vertex.color[2] = (color & 0x0000ff00) >> 8;
-                vertex.color[3] = color & 0x000000ff;
+                FillColor(vertex, color);
 
                 vertex.normal[0] = 0;
                 vertex.normal[1] = 0;
                 vertex.normal[2] = 1;
 
-                vertex.texture[0] = TexCoord(static_cast<float>(iX) * stepX / 2.f);
-                vertex.texture[1] = TexCoord(static_cast<float>(iY) * stepY / 2.f);
+                vertex.texture[0] = TexCoord(iX * stepX / 2.f);
+                vertex.texture[1] = TexCoord(iY * stepY / 2.f);
 
                 vertices.push_back(vertex);
 
@@ -99,17 +96,14 @@ bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, gl
                 vertex.position[1] = iY * stepY - 1.f;
                 vertex.position[2] = iZ * stepZ - 1.f;
 
-                vertex.color[0] = (color & 0xff000000) >> 24;
-                vertex.color[1] = (color & 0x00ff0000) >> 16;
-                vertex.color[2] = (color & 0x0000ff00) >> 8;
-                vertex.color[3] = color & 0x000000ff;
+                FillColor(vertex, color);
 
                 vertex.normal[0] = 0;
                 vertex.normal[1] = 0;
                 vertex.normal[2] = 1;
 
-                vertex.texture[0] = TexCoord(static_cast<float>(iY) * stepY / 2.f);
-                vertex.texture[1] = TexCoord(static_cast<float>(iZ) * stepZ / 2.f);
+                vertex.texture[0] = TexCoord(iY * stepY / 2.f);
+                vertex.texture[1] = TexCoord(iZ * stepZ / 2.f);
 
                 vertices.push_back(vertex);
 
@@ -162,17 +156,14 @@ bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, gl
                 vertex.position[1] = 1;
                 vertex.position[2] = iZ * stepZ - 1.f;
 
-                vertex.color[0] = (color & 0xff000000) >> 24;
-                vertex.color[1] = (color & 0x00ff0000) >> 16;
-                vertex.color[2] = (color & 0x0000ff00) >> 8;
-                vertex.color[3] = color & 0x000000ff;
+                FillColor(vertex, color);
 
                 vertex.normal[0] = 0;
                 vertex.normal[1] = 0;
                 vertex.normal[2] = 1;
 
-                vertex.texture[0] = TexCoord(static_cast<float>(iZ) * stepZ / 2.f);
-                vertex.texture[1] = TexCoord(static_cast<float>(iX) * stepX / 2.f);
+                vertex.texture[0] = TexCoord(iZ * stepZ / 2.f);
+                vertex.texture[1] = TexCoord(iX * stepX / 2.f);
 
                 vertices.push_back(vertex);
 

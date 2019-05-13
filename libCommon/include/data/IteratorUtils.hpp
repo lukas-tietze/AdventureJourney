@@ -78,6 +78,8 @@ std::ostream &operator<<(std::ostream &s, const IteratorPrintWrapper<TIterator, 
 
     if (pos != end)
         s << wrapper.GetConverter()(pos);
+    else
+        return s;
 
     ++pos;
 

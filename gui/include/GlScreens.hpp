@@ -34,6 +34,7 @@ private:
 
     bool mouseCaptured;
     bool animationPaused;
+    bool wireMode;
 
     std::vector<DummyObject *> objects;
 

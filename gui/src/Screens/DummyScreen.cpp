@@ -48,7 +48,6 @@ gui::DummyScreen::DummyScreen() : scene(),
                                            "assets/shaders/vertex/simple.vert",
                                            "assets/shaders/base/color.frag",
                                            "assets/shaders/fragment/lightingPhong.frag",
-                                           //    "assets/shaders/fragment/lightingNone.frag",
                                            "assets/shaders/fragment/materialPropsSimple.frag",
                                            "assets/shaders/fragment/normalAttrib.frag",
                                            "assets/shaders/fragment/textureOnly.frag",
@@ -68,25 +67,7 @@ gui::DummyScreen::DummyScreen() : scene(),
     light.SetActive(true);
     light.SetAmbientFactor(0.3);
     light.SetColor(glm::vec3(0.3f, 0.7f, 0.9f));
-    light.SetPosition(glm::vec3(1.f, 1.f, 1.f));
-    light.SetType(glutil::LightType::Point);
-    light = lights->Add();
-    light.SetActive(true);
-    light.SetAmbientFactor(0.3);
-    light.SetColor(glm::vec3(0.3f, 0.7f, 0.9f));
-    light.SetPosition(glm::vec3(2.f, 1.f, 1.f));
-    light.SetType(glutil::LightType::Point);
-    light = lights->Add();
-    light.SetActive(true);
-    light.SetAmbientFactor(0.3);
-    light.SetColor(glm::vec3(0.3f, 0.7f, 0.9f));
-    light.SetPosition(glm::vec3(1.f, 2.f, 1.f));
-    light.SetType(glutil::LightType::Point);
-    light = lights->Add();
-    light.SetActive(true);
-    light.SetAmbientFactor(0.3);
-    light.SetColor(glm::vec3(0.3f, 0.7f, 0.9f));
-    light.SetPosition(glm::vec3(1.f, 1.f, 2.f));
+    light.SetPosition(glm::vec3(0.f, 0.f, 0.f));
     light.SetType(glutil::LightType::Point);
     this->scene.SetActiveLightSet(MainLight);
 
@@ -96,27 +77,45 @@ gui::DummyScreen::DummyScreen() : scene(),
     cubeTex->LoadData("assets/textures/dummy/grass.jpg");
     cubeTex->Bind(GL_TEXTURE0);
 
-    auto coords = this->scene.GetObject("Coord");
-    coords->SetGeometry(this->scene.GetMesh("CoordMesh"));
-    coords->GetGeometry()->LoadFromBuffer(gui::models::CoordMesh());
-    coords->SetModelMatrix(glm::scale(glm::vec3(5.f, 5.f, 5.f)));
-    coords->SetBindingTarget(0);
-    coords->CreateGlObjects();
+    auto icoMesh = this->scene.GetMesh("IcoMesh");
+    gui::quadrics::IcoSphere(2, *icoMesh);
+
+    auto diskMesh = this->scene.GetMesh("DiskMesh");
+    gui::quadrics::Disk(16, 2, *diskMesh);
 
     auto cubeMesh = this->scene.GetMesh("CubeMesh");
     gui::quadrics::Box(*cubeMesh);
 
+    auto cylinderMesh = this->scene.GetMesh("CylinderMesh");
+    gui::quadrics::Cylinder(16, 1, *cylinderMesh);
+
+    util::Random rnd;
+
     for (int i = 0; i < 30; i++)
     {
         auto obj = this->scene.GetObject(util::Format("Cube_%", i));
-        obj->SetGeometry(cubeMesh);
+
+        switch (rnd.Next(0, 4))
+        {
+        case 0:
+            obj->SetGeometry(cubeMesh);
+            break;
+        case 1:
+            obj->SetGeometry(icoMesh);
+            break;
+        case 2:
+            obj->SetGeometry(cylinderMesh);
+            break;
+        case 3:
+            obj->SetGeometry(diskMesh);
+            break;
+        }
+
         obj->SetBindingTarget(2);
         obj->CreateGlObjects();
 
         this->objects.push_back(new DummyObject(obj));
     }
-
-    util::dbg.WriteLine("Light has ");
 }
 
 gui::DummyScreen::~DummyScreen()
@@ -163,6 +162,12 @@ void gui::DummyScreen::Update(double delta)
         y++;
     if (glutil::IsKeyDown(GLFW_KEY_LEFT_SHIFT))
         y--;
+    if (glutil::WasKeyPressed(GLFW_KEY_F1))
+    {
+        this->wireMode = !this->wireMode;
+
+        glPolygonMode(GL_FRONT_AND_BACK, this->wireMode ? GL_LINE : GL_FILL);
+    }
     if (glutil::WasKeyPressed(GLFW_KEY_P))
         this->animationPaused = !this->animationPaused;
     if (glutil::IsKeyDown(GLFW_KEY_C))
