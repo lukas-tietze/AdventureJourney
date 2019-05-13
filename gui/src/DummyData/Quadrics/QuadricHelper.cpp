@@ -2,7 +2,7 @@
 #include "data/Math.hpp"
 #include "limits"
 
-bool gui::CreateMesh(glutil::Mesh &out, std::vector<gui::Vertex_Full> &vertices, std::vector<uint16_t> &indices)
+bool gui::quadrics::CreateMesh(glutil::Mesh &out, std::vector<gui::Vertex_Full> &vertices, std::vector<uint16_t> &indices)
 {
     out.LoadFromData(vertices.size(), sizeof(gui::Vertex_Full), vertices.data(),
                      indices.size(), GL_UNSIGNED_SHORT, indices.data(),
@@ -17,7 +17,7 @@ bool gui::CreateMesh(glutil::Mesh &out, std::vector<gui::Vertex_Full> &vertices,
     return true;
 }
 
-uint16_t gui::TexCoord(float f)
+uint16_t gui::quadrics::TexCoord(float f)
 {
     return static_cast<uint16_t>(util::Crop(f, 0.f, 1.f) * static_cast<float>(std::numeric_limits<uint16_t>::max()));
 }

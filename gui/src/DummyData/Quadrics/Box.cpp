@@ -214,5 +214,5 @@ bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, gl
         indexOffset = vertices.size();
     }
 
-    return gui::CreateMesh(out, vertices, indices);
+    return gui::quadrics::CreateMesh(out, vertices, indices);
 }
