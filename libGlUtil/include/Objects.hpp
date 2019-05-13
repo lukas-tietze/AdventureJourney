@@ -37,10 +37,10 @@ template <class TData>
 class DynamicUboOwner
 {
 private:
-    int ubo;
-    int bindingTarget;
+    uint ubo;
+    uint bindingTarget;
     bool dirty;
-    int bufferSize;
+    size_t bufferSize;
 
 protected:
     std::vector<TData> data;
@@ -263,11 +263,11 @@ public:
 #pragma pack(push, 1)
 struct LightSourceUboData
 {
-    glm::vec3 position;
-    uint32_t type;
-    glm::vec3 color;
-    float ambientFactor;
-    uint32_t active;
+    glm::vec4 position_type;
+    glm::vec4 color_ambientFactor;
+    glm::vec4 spotDir_cutOff;
+    glm::vec4 spotExponent_size_enabled; // z  unused!
+    glm::mat4 worldSpaceToShadowMap;
 };
 #pragma pack(pop)
 
@@ -275,25 +275,6 @@ enum class LightType
 {
     Directional,
     Point,
-};
-
-class SimpleLight : StaticUboOwner<LightSourceUboData>
-{
-public:
-    SimpleLight();
-    SimpleLight(const glm::vec3 &position, bool directionalLight, const glm::vec3 &color, float ambientFactor, bool active);
-
-    const glm::vec3 &GetPosition() const;
-    LightType GetType() const;
-    const glm::vec3 &GetColor() const;
-    float GetAmbientFactor() const;
-    bool IsActive() const;
-
-    void SetPosition(const glm::vec3 &);
-    void SetType(LightType);
-    void SetColor(const glm::vec3 &);
-    void SetAmbientFactor(float);
-    void SetActive(bool);
 };
 
 class LightSet : public DynamicUboOwner<LightSourceUboData>
@@ -313,9 +294,9 @@ public:
         ConstLight(const LightSet *, size_t);
 
     public:
-        const glm::vec3 &GetPosition() const;
+        glm::vec3 GetPosition() const;
         LightType GetType() const;
-        const glm::vec3 &GetColor() const;
+        glm::vec3 GetColor() const;
         float GetAmbientFactor() const;
         bool IsActive() const;
     };
@@ -335,8 +316,6 @@ public:
         Light &SetColor(const glm::vec3 &);
         Light &SetAmbientFactor(float);
         Light &SetActive(bool);
-
-        Light &operator=(const SimpleLight &);
     };
 
     Light Add();

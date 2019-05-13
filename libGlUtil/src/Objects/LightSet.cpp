@@ -4,6 +4,8 @@ glutil::LightSet::Light glutil::LightSet::Add()
 {
     this->data.push_back(LightSourceUboData());
     
+    this->Resize();
+
     return Light(this, this->data.size() - 1);
 }
 

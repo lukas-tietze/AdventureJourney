@@ -14,11 +14,11 @@ layout(std140, binding = 1) uniform cameraDataBlock
 
 struct Light
 {
-    vec3 position;
-    uint type;
-    vec3 color;
-    float ambientFactor;
-    uint enabled;
+    vec4 position_type;
+    vec4 color_ambientFactor;
+    vec4 spotDir_cutOff;
+    vec4 spotExponent_size_enabled; // z  unused!
+    mat4 worldSpaceToShadowMap;
 };
 
 layout(std140, binding = 4) uniform globalLightDataBlock
@@ -26,17 +26,15 @@ layout(std140, binding = 4) uniform globalLightDataBlock
     Light lights[4];
 } global;
 
-// #define LPos(i) (global.lights[i].position.xyz)
-// #define LIsDir(i) (global.lights[i].type == 0)
-// #define LColor(i) (global.lights[i].color.xyz)
-// #define LAmbient(i) (global.lights[i].ambientFactor)
-// #define LEnabled(i) (global.lights[i].enabled != 0)
-
-#define LPos(i) (vec3(0.0, 0.0, 0.0))
-#define LIsDir(i) (false)
-#define LColor(i) (vec3(0.3f, 0.7f, 0.9f))
-#define LAmbient(i) (0.3)
-#define LEnabled(i) (true)
+#define LPos(i) (global.lights[i].position_type.xyz)
+#define LIsDir(i) (global.lights[i].position_type.w == 0)
+#define LColor(i) (global.lights[i].color_ambientFactor.rgb)
+#define LAmbient(i) (global.lights[i].color_ambientFactor.a)
+#define LEnabled(i) (global.lights[i].spotExponent_size_enabled.w != 0)
+#define LSpotDir(i) (global.lights[i].spotDir_cutOff.xyz)
+#define LSpotCutoff(i) (global.lights[i].spotDir_cutOff.w)
+#define LSpotExponent(i) (global.lights[i].spotExponent_size_enabled.x)
+#define Lsize(i) (global.lights[i].spotExponent_size_enabled.y)
 
 vec3 CalcOneLight(in int i, in vec3 N, in vec3 fpos, in vec3 albedo, in vec2 mp)
 {
