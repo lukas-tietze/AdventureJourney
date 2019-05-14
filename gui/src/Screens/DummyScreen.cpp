@@ -33,7 +33,10 @@ struct NormalMapBuilder
 gui::DummyScreen::DummyScreen() : scene(),
                                   objects(),
                                   screenVao(0),
-                                  screenVbo(0)
+                                  screenVbo(0),
+                                  mouseCaptured(false),
+                                  animationPaused(false),
+                                  wireMode(false)
 {
     auto camera = this->scene.GetCamera(MainCam);
     camera->SetViewDirection(glm::vec3(-1.f, -1.f, -1.f));
@@ -42,8 +45,6 @@ gui::DummyScreen::DummyScreen() : scene(),
     camera->SetBindingTarget(1);
     camera->CreateGlObjects();
     this->scene.SetActiveCamera(MainCam);
-
-    glutil::PrintAllGlErrors("1: ");
 
     glEnable(GL_DEPTH_TEST);
 
@@ -72,8 +73,6 @@ gui::DummyScreen::DummyScreen() : scene(),
                                            "assets/shaders/postProcessing/noPp.frag",
                                        });
 
-    glutil::PrintAllGlErrors("2: ");
-
     auto lights = this->scene.GetLightSet(MainLight);
     lights->SetBindingTarget(4);
     auto light = lights->Add();
@@ -84,15 +83,11 @@ gui::DummyScreen::DummyScreen() : scene(),
     light.SetType(glutil::LightType::Point);
     this->scene.SetActiveLightSet(MainLight);
 
-    glutil::PrintAllGlErrors("3: ");
-
     auto cubeTex = this->scene.GetTexture("CubeTex");
     cubeTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
     cubeTex->SetMipmapsEnabled(true);
     cubeTex->LoadData("assets/textures/dummy/grass.jpg");
     cubeTex->Bind(GL_TEXTURE0);
-
-    glutil::PrintAllGlErrors("4: ");
 
     auto icoMesh = this->scene.GetMesh("IcoMesh");
     gui::quadrics::IcoSphere(2, *icoMesh);
@@ -107,8 +102,6 @@ gui::DummyScreen::DummyScreen() : scene(),
     gui::quadrics::Cylinder(16, 1, *cylinderMesh);
 
     util::Random rnd;
-
-    glutil::PrintAllGlErrors("5: ");
 
     for (int i = 0; i < 30; i++)
     {
@@ -136,11 +129,7 @@ gui::DummyScreen::DummyScreen() : scene(),
         this->objects.push_back(new DummyObject(obj));
     }
 
-    glutil::PrintAllGlErrors("6: ");
-
-    this->SetUpFrameBuffer();
-
-    glutil::PrintAllGlErrors("7: ");
+    this->RecreateFrameBuffer();
 }
 
 gui::DummyScreen::~DummyScreen()
@@ -160,7 +149,7 @@ gui::DummyScreen::~DummyScreen()
     this->objects.clear();
 }
 
-void gui::DummyScreen::SetUpFrameBuffer()
+void gui::DummyScreen::RecreateFrameBuffer()
 {
     if (!this->screenVao)
     {
@@ -187,73 +176,70 @@ void gui::DummyScreen::SetUpFrameBuffer()
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glBindVertexArray(0);
-
-        glutil::PrintAllGlErrors("vao done: ");
     }
 
-    // if (this->fbo)
-    //     glDeleteFramebuffers(1, &this->fbo);
+    auto w = glutil::GetWindowWidth();
+    auto h = glutil::GetWindowHeight();
 
-    // glGenFramebuffers(1, &fbo);
-    // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+    if (this->fbo)
+        glDeleteFramebuffers(1, &this->fbo);
 
-    // auto fboClrTex = this->scene.GetTexture("fboClrTex");
-    // fboClrTex->SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());
-    // fboClrTex->SetInternalFormat(GL_RGBA);
-    // fboClrTex->SetFormat(GL_RGBA);
-    // fboClrTex->CreateBuffer();
+    glGenFramebuffers(1, &fbo);
+    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 
-    // auto fboDepthTex = this->scene.GetTexture("fboDepthTex");
-    // fboDepthTex->SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());
-    // fboDepthTex->CreateAsDepthBuffer();
+    this->colorBuffer = this->scene.GetTexture("fboClrBuffer");
+    this->colorBuffer->SetSize(w, h);
+    this->colorBuffer->SetInternalFormat(GL_RGB);
+    this->colorBuffer->SetFormat(GL_RGB);
+    this->colorBuffer->SetWrapMode(GL_CLAMP_TO_EDGE);
+    this->colorBuffer->CreateBuffer();
 
-    // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboClrTex->GetId(), 0);
-    // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fboDepthTex->GetId(), 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->colorBuffer->GetId(), 0);
 
-    // if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-    //     util::dbg.WriteLine("Failed to create Framebuffer!");
+    if (this->rbo)
+        glDeleteRenderbuffers(1, &this->rbo);
+
+    glGenRenderbuffers(1, &this->rbo);
+    glBindRenderbuffer(GL_RENDERBUFFER, this->rbo);
+    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, w, h);
+    glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, this->rbo);
+
+    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+        util::dbg.WriteLine("Created Framebuffer!");
+    else
+        util::dbg.WriteLine("Failed to create Framebuffer!");
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
-void gui::DummyScreen::RenderDepth()
+void gui::DummyScreen::Render()
 {
+    glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
-    glDepthFunc(GL_LESS);
+    glEnable(GL_DEPTH_TEST);
+    // glDepthFunc(GL_LESS);
 
-    this->scene.GetProgram(DepthProg)->Use();
-    this->scene.Render();
-}
+    // this->scene.GetProgram(DepthProg)->Use();
+    // this->scene.Render();
 
-void gui::DummyScreen::RenderColorToFbo()
-{
-
-    glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
-    glDepthFunc(GL_EQUAL);
+    // glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
+    // glDepthFunc(GL_EQUAL);
 
     this->scene.GetProgram(ColorProg)->Use();
     this->scene.Render();
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-}
-
-void gui::DummyScreen::RenderFboToScreen()
-{
+    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glDisable(GL_DEPTH_TEST);
     glBindVertexArray(this->screenVao);
 
-    this->scene.GetTexture("fboClrTex")->Bind(GL_TEXTURE0);
-    this->scene.GetTexture("fboDepthTex")->Bind(GL_TEXTURE1);
-
+    this->colorBuffer->Bind(GL_TEXTURE0);
     this->scene.GetProgram(PostProcessProg)->Use();
-
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-}
-
-void gui::DummyScreen::Render()
-{
-    this->RenderDepth();
-    this->RenderColorToFbo();
-    this->RenderFboToScreen();
 }
 
 void gui::DummyScreen::Update(double delta)
@@ -328,6 +314,7 @@ void gui::DummyScreen::Update(double delta)
     if (glutil::WasWindowResized())
     {
         camera->SetAspectRation(glutil::GetAspectRatio());
+        this->RecreateFrameBuffer();
     }
 
     camera->UpdateMatrices();

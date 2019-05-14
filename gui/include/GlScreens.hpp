@@ -39,13 +39,12 @@ private:
     std::vector<DummyObject *> objects;
 
     GLuint fbo;
+    GLuint rbo;
     GLuint screenVao;
     GLuint screenVbo;
+    glutil::Texture *colorBuffer;
 
-    void SetUpFrameBuffer();
-    void RenderDepth();
-    void RenderColorToFbo();
-    void RenderFboToScreen();
+    void RecreateFrameBuffer();
 
 public:
     DummyScreen();

@@ -110,6 +110,8 @@ bool glutil::Texture::CreateBuffer()
                  this->format, GL_UNSIGNED_BYTE, nullptr);
 
     this->SetTextureParameters();
+
+    return true;
 }
 
 bool glutil::Texture::CreateAsStencilBuffer()
@@ -117,7 +119,7 @@ bool glutil::Texture::CreateAsStencilBuffer()
     this->format = GL_STENCIL_INDEX;
     this->internalFormat = GL_STENCIL_INDEX;
 
-    this->CreateBuffer();
+    return this->CreateBuffer();
 }
 
 bool glutil::Texture::CreateAsDepthBuffer()
@@ -125,7 +127,7 @@ bool glutil::Texture::CreateAsDepthBuffer()
     this->format = GL_DEPTH_COMPONENT;
     this->internalFormat = GL_DEPTH_COMPONENT;
 
-    this->CreateBuffer();
+    return this->CreateBuffer();
 }
 
 bool glutil::Texture::CreateAsStencilAndDepthBuffer()
@@ -133,7 +135,7 @@ bool glutil::Texture::CreateAsStencilAndDepthBuffer()
     this->format = GL_DEPTH_STENCIL;
     this->internalFormat = GL_DEPTH24_STENCIL8;
 
-    this->CreateBuffer();
+    return this->CreateBuffer();
 }
 
 bool glutil::Texture::LoadDataFromMemory(void *data)

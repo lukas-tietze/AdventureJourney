@@ -14,7 +14,7 @@ glm::vec3 glutil::LightSet::ConstLight::GetPosition() const
 
 glutil::LightType glutil::LightSet::ConstLight::GetType() const
 {
-    return static_cast<LightType>(this->collection->data[this->id].position_type.w);
+    return static_cast<LightType>(static_cast<int>(this->collection->data[this->id].position_type.w));
 }
 
 glm::vec3 glutil::LightSet::ConstLight::GetColor() const

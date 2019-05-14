@@ -11,6 +11,8 @@ glutil::LightSet::Light &glutil::LightSet::Light::SetPosition(const glm::vec3 &p
     this->modifiableCollection->data[this->id].position_type.y = pos.y;
     this->modifiableCollection->data[this->id].position_type.z = pos.z;
     this->modifiableCollection->SetDirty();
+
+    return *this;
 }
 
 glutil::LightSet::Light &glutil::LightSet::Light::SetType(LightType type)

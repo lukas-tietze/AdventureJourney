@@ -126,18 +126,22 @@ bool glutil::Mesh::LoadFromJson(const std::string &path)
 {
     MeshBuffer buf;
 
-    buf.LoadFromJson(path);
+    auto res = buf.LoadFromJson(path);
 
     this->LoadFromBuffer(buf);
+
+    return res;
 }
 
 bool glutil::Mesh::LoadFromCg2vd(const std::string &path)
 {
     MeshBuffer buf;
 
-    buf.LoadFromCg2vd(path);
+    auto res = buf.LoadFromCg2vd(path);
 
     this->LoadFromBuffer(buf);
+
+    return res;
 }
 
 bool glutil::Mesh::LoadFromData(int vertexCount, int vertexSize, void *vertices,
@@ -147,11 +151,13 @@ bool glutil::Mesh::LoadFromData(int vertexCount, int vertexSize, void *vertices,
 {
     MeshBuffer buf;
 
-    buf.LoadFromData(vertexCount, vertexSize, vertices,
+    auto res = buf.LoadFromData(vertexCount, vertexSize, vertices,
                      indexCount, indexType, indices,
                      attributes, drawMode, managaData);
 
     this->LoadFromBuffer(buf);
+
+    return res;
 }
 
 void glutil::Mesh::Draw()
