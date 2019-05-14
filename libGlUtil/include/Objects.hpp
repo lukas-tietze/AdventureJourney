@@ -542,6 +542,70 @@ public:
 #include "libGlUtil/src/Objects/Texture.inl"
 #include "libGlUtil/src/Objects/FormatConverter.inl"
 
+#pragma pack(push, 1)
+struct BitMapFontUboData
+{
+    glm::vec2 offset;
+    glm::vec2 charSize;
+    glm::vec2 stride;
+    glm::vec2 linesAndCols;
+};
+#pragma pack(pop)
+
+class BitMapFont : public StaticUboOwner<BitMapFontUboData>
+{
+private:
+    int offsetX;
+    int offsetY;
+    int strideX;
+    int strideY;
+    int charWidth;
+    int charHeight;
+    int width;
+    int height;
+
+    GLuint tex;
+
+    void DestroyGlObjects();
+    void TransferFrom(BitMapFont &);
+
+public:
+    BitMapFont();
+    BitMapFont(const BitMapFont &) = delete;
+    BitMapFont(BitMapFont &&);
+    ~BitMapFont();
+
+    void SetOffsetPx(int x, int y);
+    void SetStridePx(int x, int y);
+    void SetCharSizePx(int w, int h);
+    void Load(const std::string &path);
+
+    void Bind(GLenum target);
+    glm::vec2 GetTexCoords(char c);
+
+    BitMapFont &operator=(BitMapFont &&);
+    BitMapFont &operator=(const BitMapFont &) = delete;
+};
+
+class RenderToTextureHelper
+{
+private:
+    GLuint fbo;
+    GLuint rbo;
+
+public:
+    RenderToTextureHelper();
+    ~RenderToTextureHelper();
+
+    void BeginCapture();
+
+    void SetTargetTexture(GLuint id);
+};
+
+class TextImageFactory
+{
+};
+
 class TextOverlay
 {
 };
@@ -622,6 +686,8 @@ public:
     Shader *InitShader(const resourceId_t &, const std::string &sourcePath);
     Program *InitProgram(const resourceId_t &, const std::initializer_list<std::string> &shaderNames);
     Program *InitProgramFromSources(const resourceId_t &, const std::initializer_list<std::string> &sources);
+
+    void ReloadAllShaders();
 
     void SetActiveCamera(const resourceId_t &);
     void SetActiveLightSet(const resourceId_t &);

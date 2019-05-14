@@ -231,15 +231,7 @@ void gui::DummyScreen::Update(double delta)
     if (glutil::IsKeyDown(GLFW_KEY_C))
         camera->SetViewDirection(-camera->GetViewDirection());
     if (glutil::WasKeyPressed(GLFW_KEY_R))
-    {
-        this->scene.GetProgram(DepthProg)->ReloadAll();
-        this->scene.GetProgram(ColorProg)->ReloadAll();
-        this->scene.GetProgram(PixelationProg)->ReloadAll();
-        this->scene.GetProgram(NoPpProg)->ReloadAll();
-        this->scene.GetProgram(BlurProg)->ReloadAll();
-        this->scene.GetProgram(DepthBlurProg)->ReloadAll();
-        this->scene.GetProgram(EdgeDetectionProg)->ReloadAll();
-    }
+        this->scene.ReloadAllShaders();
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_1))
     {
         glutil::SetCursorGameMode(true);

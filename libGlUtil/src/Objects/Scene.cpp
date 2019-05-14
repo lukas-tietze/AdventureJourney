@@ -146,6 +146,15 @@ bool glutil::Scene::RemoveLightSet(const resourceId_t &id)
     return this->DeleteItem(this->lightSets, id);
 }
 
+void glutil::Scene::ReloadAllShaders()
+{
+    for(auto kvp : this->shaders)
+        kvp.second->Reload();
+
+    for(auto kvp : this->programs)
+        kvp.second->Link();    
+}
+
 void glutil::Scene::SetActiveCamera(const resourceId_t &id)
 {
     auto kvp = this->cameras.find(id);
