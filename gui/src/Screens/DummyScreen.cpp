@@ -11,6 +11,7 @@ const std::string MainCam = "MainCam";
 const std::string MainLight = "MainLight";
 const std::string DepthProg = "Prog1";
 const std::string ColorProg = "Prog2";
+const std::string PostProcessProg = "Prog3";
 
 struct TextureBuilder
 {
@@ -30,7 +31,9 @@ struct NormalMapBuilder
 } // namespace
 
 gui::DummyScreen::DummyScreen() : scene(),
-                                  objects()
+                                  objects(),
+                                  screenVao(0),
+                                  screenVbo(0)
 {
     auto camera = this->scene.GetCamera(MainCam);
     camera->SetViewDirection(glm::vec3(-1.f, -1.f, -1.f));
@@ -39,6 +42,8 @@ gui::DummyScreen::DummyScreen() : scene(),
     camera->SetBindingTarget(1);
     camera->CreateGlObjects();
     this->scene.SetActiveCamera(MainCam);
+
+    glutil::PrintAllGlErrors("1: ");
 
     glEnable(GL_DEPTH_TEST);
 
@@ -61,6 +66,14 @@ gui::DummyScreen::DummyScreen() : scene(),
                                            "assets/shaders/fragment/textureOnly.frag",
                                        });
 
+    this->scene.InitProgramFromSources(PostProcessProg,
+                                       {
+                                           "assets/shaders/postProcessing/pp.vert",
+                                           "assets/shaders/postProcessing/noPp.frag",
+                                       });
+
+    glutil::PrintAllGlErrors("2: ");
+
     auto lights = this->scene.GetLightSet(MainLight);
     lights->SetBindingTarget(4);
     auto light = lights->Add();
@@ -71,11 +84,15 @@ gui::DummyScreen::DummyScreen() : scene(),
     light.SetType(glutil::LightType::Point);
     this->scene.SetActiveLightSet(MainLight);
 
+    glutil::PrintAllGlErrors("3: ");
+
     auto cubeTex = this->scene.GetTexture("CubeTex");
     cubeTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
     cubeTex->SetMipmapsEnabled(true);
     cubeTex->LoadData("assets/textures/dummy/grass.jpg");
     cubeTex->Bind(GL_TEXTURE0);
+
+    glutil::PrintAllGlErrors("4: ");
 
     auto icoMesh = this->scene.GetMesh("IcoMesh");
     gui::quadrics::IcoSphere(2, *icoMesh);
@@ -90,6 +107,8 @@ gui::DummyScreen::DummyScreen() : scene(),
     gui::quadrics::Cylinder(16, 1, *cylinderMesh);
 
     util::Random rnd;
+
+    glutil::PrintAllGlErrors("5: ");
 
     for (int i = 0; i < 30; i++)
     {
@@ -116,6 +135,12 @@ gui::DummyScreen::DummyScreen() : scene(),
 
         this->objects.push_back(new DummyObject(obj));
     }
+
+    glutil::PrintAllGlErrors("6: ");
+
+    this->SetUpFrameBuffer();
+
+    glutil::PrintAllGlErrors("7: ");
 }
 
 gui::DummyScreen::~DummyScreen()
@@ -123,21 +148,112 @@ gui::DummyScreen::~DummyScreen()
     for (auto obj : this->objects)
         delete obj;
 
+    if (this->fbo)
+        glDeleteFramebuffers(1, &this->fbo);
+
+    if (this->screenVao)
+        glDeleteVertexArrays(1, &this->screenVao);
+
+    if (this->screenVbo)
+        glDeleteBuffers(1, &this->screenVbo);
+
     this->objects.clear();
 }
 
-void gui::DummyScreen::Render()
+void gui::DummyScreen::SetUpFrameBuffer()
+{
+    if (!this->screenVao)
+    {
+        glGenVertexArrays(1, &this->screenVao);
+        glBindVertexArray(this->screenVao);
+
+        glGenBuffers(1, &this->screenVbo);
+        glBindBuffer(GL_ARRAY_BUFFER, this->screenVbo);
+
+        float data[] = {
+            -1.f,
+            1.f,
+            -1.f,
+            -1.f,
+            1.f,
+            1.f,
+            1.f,
+            -1.f,
+        };
+
+        glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), data, GL_STATIC_DRAW);
+        glVertexAttribPointer(0, 2, GL_FLOAT, false, 2 * sizeof(float), 0);
+        glEnableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+
+        glutil::PrintAllGlErrors("vao done: ");
+    }
+
+    // if (this->fbo)
+    //     glDeleteFramebuffers(1, &this->fbo);
+
+    // glGenFramebuffers(1, &fbo);
+    // glBindFramebuffer(GL_FRAMEBUFFER, fbo);
+
+    // auto fboClrTex = this->scene.GetTexture("fboClrTex");
+    // fboClrTex->SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());
+    // fboClrTex->SetInternalFormat(GL_RGBA);
+    // fboClrTex->SetFormat(GL_RGBA);
+    // fboClrTex->CreateBuffer();
+
+    // auto fboDepthTex = this->scene.GetTexture("fboDepthTex");
+    // fboDepthTex->SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());
+    // fboDepthTex->CreateAsDepthBuffer();
+
+    // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, fboClrTex->GetId(), 0);
+    // glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, fboDepthTex->GetId(), 0);
+
+    // if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+    //     util::dbg.WriteLine("Failed to create Framebuffer!");
+}
+
+void gui::DummyScreen::RenderDepth()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
     glDepthFunc(GL_LESS);
 
     this->scene.GetProgram(DepthProg)->Use();
     this->scene.Render();
+}
 
+void gui::DummyScreen::RenderColorToFbo()
+{
+
+    glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
     glDepthFunc(GL_EQUAL);
 
     this->scene.GetProgram(ColorProg)->Use();
     this->scene.Render();
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
+void gui::DummyScreen::RenderFboToScreen()
+{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    glBindVertexArray(this->screenVao);
+
+    this->scene.GetTexture("fboClrTex")->Bind(GL_TEXTURE0);
+    this->scene.GetTexture("fboDepthTex")->Bind(GL_TEXTURE1);
+
+    this->scene.GetProgram(PostProcessProg)->Use();
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+}
+
+void gui::DummyScreen::Render()
+{
+    this->RenderDepth();
+    this->RenderColorToFbo();
+    this->RenderFboToScreen();
 }
 
 void gui::DummyScreen::Update(double delta)
@@ -176,6 +292,7 @@ void gui::DummyScreen::Update(double delta)
     {
         this->scene.GetProgram(DepthProg)->ReloadAll();
         this->scene.GetProgram(ColorProg)->ReloadAll();
+        this->scene.GetProgram(PostProcessProg)->ReloadAll();
     }
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_1))
     {

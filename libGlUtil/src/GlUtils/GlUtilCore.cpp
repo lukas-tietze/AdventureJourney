@@ -285,15 +285,15 @@ void glutil::Loop()
 
         activeScreen->Render();
 
-        gpuTime += watch[1]->get_gpu_time_in_ms() -
-                   watch[0]->get_gpu_time_in_ms();
+        // gpuTime += watch[1]->get_gpu_time_in_ms() -
+        //            watch[0]->get_gpu_time_in_ms();
 
-        cpuTime += watch[1]->get_cpu_time_in_ms() -
-                   watch[0]->get_cpu_time_in_ms();
+        // cpuTime += watch[1]->get_cpu_time_in_ms() -
+        //            watch[0]->get_cpu_time_in_ms();
 
         if (resized)
             glViewport(0, 0, w, h);
-
+        
         glfwSwapBuffers(win);
 
         ResetEventBuffers();
@@ -313,7 +313,7 @@ int glutil::GetWindowHeight()
     return h;
 }
 
-float glutil::GetAspectRatio() 
+float glutil::GetAspectRatio()
 {
     return static_cast<float>(w) / static_cast<float>(h);
 }

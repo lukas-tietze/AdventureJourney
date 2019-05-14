@@ -39,6 +39,13 @@ private:
     std::vector<DummyObject *> objects;
 
     GLuint fbo;
+    GLuint screenVao;
+    GLuint screenVbo;
+
+    void SetUpFrameBuffer();
+    void RenderDepth();
+    void RenderColorToFbo();
+    void RenderFboToScreen();
 
 public:
     DummyScreen();

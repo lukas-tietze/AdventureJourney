@@ -303,3 +303,8 @@ void glutil::Texture::SetAnisotropicFilterDisabled()
 {
     this->maxAnisotropy = 0;
 }
+
+GLuint glutil::Texture::GetId() const
+{
+    return this->tex;
+}

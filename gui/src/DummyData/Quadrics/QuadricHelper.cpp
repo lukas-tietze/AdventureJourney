@@ -40,15 +40,15 @@ gui::Vertex_Full &gui::quadrics::FillColor(gui::Vertex_Full &vertex, uint32_t co
     return vertex;
 }
 
-gui::Vertex_Full &gui::quadrics::SetPositionAndNormal(gui::Vertex_Full &v, float x, float y, float z)
+gui::Vertex_Full &gui::quadrics::SetPositionAndNormal(gui::Vertex_Full &vertex, float x, float y, float z)
 {
-    v.position[0] = x;
-    v.position[1] = y;
-    v.position[2] = z;
+    vertex.position[0] = x;
+    vertex.position[1] = y;
+    vertex.position[2] = z;
 
-    v.normal[0] = x;
-    v.normal[1] = y;
-    v.normal[2] = z;
+    vertex.normal[0] = x;
+    vertex.normal[1] = y;
+    vertex.normal[2] = z;
 
     return vertex;
 }

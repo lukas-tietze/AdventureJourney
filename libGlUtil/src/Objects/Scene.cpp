@@ -1,4 +1,5 @@
 #include "Objects.hpp"
+#include "GlUtils.hpp"
 
 glutil::Scene::Scene() : objects(),
                          materials(),
@@ -203,7 +204,7 @@ void glutil::Scene::Render()
         this->activeCamera->Upload();
     }
 
-    if(this->activeLightSet)
+    if (this->activeLightSet)
     {
         this->activeLightSet->Bind();
         this->activeLightSet->Upload();
