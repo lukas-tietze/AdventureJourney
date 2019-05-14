@@ -59,18 +59,60 @@ public:
 
 #include "libGlUtil/src/Objects/DynamicUboOwner.inl"
 
-class FboStage
+struct PostProcessingPipeLineUboData
 {
-private:
-    bool requireColorValues;
-    bool requireDepthValues;
-    bool requireStencilValue;
+    int width;
+    int height;
 };
 
-class FboPipeLine
+class PostProcessingPipeLine : public StaticUboOwner<PostProcessingPipeLineUboData>
 {
 private:
-    std::vector<FboStage> stages;
+    bool dirty;
+    bool useUboData;
+    bool ready;
+    bool autoUpdate;
+    bool requireColors;
+    bool requireDepthStencil;
+    GLenum colorTextureTarget;
+    GLenum depthStencilTextureTarget;
+
+    GLuint quadVao;
+    GLuint quadVbo;
+    GLuint colorTexture;
+    GLuint depthStencilTexture;
+    GLuint fbo;
+    GLuint rbo;
+
+    int w;
+    int h;
+
+    void DestroyGlObjects();
+    void Recreate();
+    void TransferFrom(PostProcessingPipeLine &);
+
+public:
+    PostProcessingPipeLine();
+    PostProcessingPipeLine(PostProcessingPipeLine &&);
+    PostProcessingPipeLine(const PostProcessingPipeLine &) = delete;
+    ~PostProcessingPipeLine();
+
+    void SetColorsEnabled(bool);
+    void SetDepthAndStencilEnabled(bool);
+    void SetColorBufferTextureTarget(GLenum);
+    void SetDepthStencilBufferTextureTarget(GLenum);
+    void SetSize(int, int);
+    void Update();
+    void SetAutoUpdateEnabled(bool);
+    void SetUseUboData(bool);
+
+    bool IsReady() const;
+
+    void StartRecording();
+    void Render();
+
+    PostProcessingPipeLine &operator=(PostProcessingPipeLine &&);
+    PostProcessingPipeLine &operator=(const PostProcessingPipeLine &) = delete;
 };
 
 class MeshAttribute
@@ -541,7 +583,7 @@ private:
     std::map<resourceId_t, Shader *> shaders;
     std::map<resourceId_t, Camera *> cameras;
     std::map<resourceId_t, Mesh *> meshs;
-    std::map<resourceId_t, LightSet *>lightSets;
+    std::map<resourceId_t, LightSet *> lightSets;
 
     Camera *activeCamera;
     LightSet *activeLightSet;

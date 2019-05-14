@@ -37,14 +37,9 @@ private:
     bool wireMode;
 
     std::vector<DummyObject *> objects;
+    glutil::Program *ppProg;
 
-    GLuint fbo;
-    GLuint rbo;
-    GLuint screenVao;
-    GLuint screenVbo;
-    glutil::Texture *colorBuffer;
-
-    void RecreateFrameBuffer();
+    glutil::PostProcessingPipeLine ppPipe;
 
 public:
     DummyScreen();

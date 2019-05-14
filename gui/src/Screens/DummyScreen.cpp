@@ -11,7 +11,11 @@ const std::string MainCam = "MainCam";
 const std::string MainLight = "MainLight";
 const std::string DepthProg = "Prog1";
 const std::string ColorProg = "Prog2";
-const std::string PostProcessProg = "Prog3";
+const std::string PixelationProg = "PPpix";
+const std::string NoPpProg = "PPoff";
+const std::string BlurProg = "PPblur";
+const std::string DepthBlurProg = "PPdepthBlur";
+const std::string EdgeDetectionProg = "PPedge";
 
 struct TextureBuilder
 {
@@ -32,8 +36,6 @@ struct NormalMapBuilder
 
 gui::DummyScreen::DummyScreen() : scene(),
                                   objects(),
-                                  screenVao(0),
-                                  screenVbo(0),
                                   mouseCaptured(false),
                                   animationPaused(false),
                                   wireMode(false)
@@ -67,10 +69,34 @@ gui::DummyScreen::DummyScreen() : scene(),
                                            "assets/shaders/fragment/textureOnly.frag",
                                        });
 
-    this->scene.InitProgramFromSources(PostProcessProg,
+    this->ppProg = this->scene.InitProgramFromSources(NoPpProg,
+                                                      {
+                                                          "assets/shaders/postProcessing/pp.vert",
+                                                          "assets/shaders/postProcessing/noPp.frag",
+                                                      });
+
+    this->scene.InitProgramFromSources(PixelationProg,
                                        {
                                            "assets/shaders/postProcessing/pp.vert",
-                                           "assets/shaders/postProcessing/noPp.frag",
+                                           "assets/shaders/postProcessing/pixelate.frag",
+                                       });
+
+    this->scene.InitProgramFromSources(BlurProg,
+                                       {
+                                           "assets/shaders/postProcessing/pp.vert",
+                                           "assets/shaders/postProcessing/blur.frag",
+                                       });
+
+    this->scene.InitProgramFromSources(DepthBlurProg,
+                                       {
+                                           "assets/shaders/postProcessing/pp.vert",
+                                           "assets/shaders/postProcessing/depthBlur.frag",
+                                       });
+
+    this->scene.InitProgramFromSources(EdgeDetectionProg,
+                                       {
+                                           "assets/shaders/postProcessing/pp.vert",
+                                           "assets/shaders/postProcessing/edgeDetection.frag",
                                        });
 
     auto lights = this->scene.GetLightSet(MainLight);
@@ -129,7 +155,10 @@ gui::DummyScreen::DummyScreen() : scene(),
         this->objects.push_back(new DummyObject(obj));
     }
 
-    this->RecreateFrameBuffer();
+    this->ppPipe.SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());
+    this->ppPipe.SetUseUboData(true);
+    this->ppPipe.SetBindingTarget(0);
+    this->ppPipe.Update();
 }
 
 gui::DummyScreen::~DummyScreen()
@@ -137,109 +166,25 @@ gui::DummyScreen::~DummyScreen()
     for (auto obj : this->objects)
         delete obj;
 
-    if (this->fbo)
-        glDeleteFramebuffers(1, &this->fbo);
-
-    if (this->screenVao)
-        glDeleteVertexArrays(1, &this->screenVao);
-
-    if (this->screenVbo)
-        glDeleteBuffers(1, &this->screenVbo);
-
     this->objects.clear();
-}
-
-void gui::DummyScreen::RecreateFrameBuffer()
-{
-    if (!this->screenVao)
-    {
-        glGenVertexArrays(1, &this->screenVao);
-        glBindVertexArray(this->screenVao);
-
-        glGenBuffers(1, &this->screenVbo);
-        glBindBuffer(GL_ARRAY_BUFFER, this->screenVbo);
-
-        float data[] = {
-            -1.f,
-            1.f,
-            -1.f,
-            -1.f,
-            1.f,
-            1.f,
-            1.f,
-            -1.f,
-        };
-
-        glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), data, GL_STATIC_DRAW);
-        glVertexAttribPointer(0, 2, GL_FLOAT, false, 2 * sizeof(float), 0);
-        glEnableVertexAttribArray(0);
-
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(0);
-    }
-
-    auto w = glutil::GetWindowWidth();
-    auto h = glutil::GetWindowHeight();
-
-    if (this->fbo)
-        glDeleteFramebuffers(1, &this->fbo);
-
-    glGenFramebuffers(1, &fbo);
-    glBindFramebuffer(GL_FRAMEBUFFER, fbo);
-
-    this->colorBuffer = this->scene.GetTexture("fboClrBuffer");
-    this->colorBuffer->SetSize(w, h);
-    this->colorBuffer->SetInternalFormat(GL_RGB);
-    this->colorBuffer->SetFormat(GL_RGB);
-    this->colorBuffer->SetWrapMode(GL_CLAMP_TO_EDGE);
-    this->colorBuffer->CreateBuffer();
-
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->colorBuffer->GetId(), 0);
-
-    if (this->rbo)
-        glDeleteRenderbuffers(1, &this->rbo);
-
-    glGenRenderbuffers(1, &this->rbo);
-    glBindRenderbuffer(GL_RENDERBUFFER, this->rbo);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, w, h);
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, this->rbo);
-
-    if (glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
-        util::dbg.WriteLine("Created Framebuffer!");
-    else
-        util::dbg.WriteLine("Failed to create Framebuffer!");
-
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void gui::DummyScreen::Render()
 {
-    glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    this->ppPipe.StartRecording();
     glEnable(GL_DEPTH_TEST);
-    // glDepthFunc(GL_LESS);
+    glDepthFunc(GL_LESS);
 
-    // this->scene.GetProgram(DepthProg)->Use();
-    // this->scene.Render();
+    this->scene.GetProgram(DepthProg)->Use();
+    this->scene.Render();
 
-    // glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
-    // glDepthFunc(GL_EQUAL);
+    glDepthFunc(GL_EQUAL);
 
     this->scene.GetProgram(ColorProg)->Use();
     this->scene.Render();
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    glDisable(GL_DEPTH_TEST);
-    glBindVertexArray(this->screenVao);
-
-    this->colorBuffer->Bind(GL_TEXTURE0);
-    this->scene.GetProgram(PostProcessProg)->Use();
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    this->ppProg->Use();
+    this->ppPipe.Render();
 }
 
 void gui::DummyScreen::Update(double delta)
@@ -270,6 +215,17 @@ void gui::DummyScreen::Update(double delta)
 
         glPolygonMode(GL_FRONT_AND_BACK, this->wireMode ? GL_LINE : GL_FILL);
     }
+    if (glutil::WasKeyPressed(GLFW_KEY_F2))
+        this->ppProg = this->scene.GetProgram(NoPpProg);
+    if (glutil::WasKeyPressed(GLFW_KEY_F3))
+        this->ppProg = this->scene.GetProgram(PixelationProg);
+    if (glutil::WasKeyPressed(GLFW_KEY_F4))
+        this->ppProg = this->scene.GetProgram(BlurProg);
+    if (glutil::WasKeyPressed(GLFW_KEY_F5))
+        this->ppProg = this->scene.GetProgram(DepthBlurProg);
+    if (glutil::WasKeyPressed(GLFW_KEY_F6))
+        this->ppProg = this->scene.GetProgram(EdgeDetectionProg);
+
     if (glutil::WasKeyPressed(GLFW_KEY_P))
         this->animationPaused = !this->animationPaused;
     if (glutil::IsKeyDown(GLFW_KEY_C))
@@ -278,7 +234,11 @@ void gui::DummyScreen::Update(double delta)
     {
         this->scene.GetProgram(DepthProg)->ReloadAll();
         this->scene.GetProgram(ColorProg)->ReloadAll();
-        this->scene.GetProgram(PostProcessProg)->ReloadAll();
+        this->scene.GetProgram(PixelationProg)->ReloadAll();
+        this->scene.GetProgram(NoPpProg)->ReloadAll();
+        this->scene.GetProgram(BlurProg)->ReloadAll();
+        this->scene.GetProgram(DepthBlurProg)->ReloadAll();
+        this->scene.GetProgram(EdgeDetectionProg)->ReloadAll();
     }
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_1))
     {
@@ -314,7 +274,8 @@ void gui::DummyScreen::Update(double delta)
     if (glutil::WasWindowResized())
     {
         camera->SetAspectRation(glutil::GetAspectRatio());
-        this->RecreateFrameBuffer();
+        this->ppPipe.SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());
+        this->ppPipe.Update();
     }
 
     camera->UpdateMatrices();
