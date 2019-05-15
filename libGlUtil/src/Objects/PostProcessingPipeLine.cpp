@@ -33,22 +33,40 @@ glutil::PostProcessingPipeLine::~PostProcessingPipeLine()
 void glutil::PostProcessingPipeLine::DestroyGlObjects()
 {
     if (this->quadVao)
+    {
         glDeleteVertexArrays(1, &this->quadVao);
+        this->quadVao = 0;
+    }
 
     if (this->quadVbo)
+    {
         glDeleteBuffers(1, &this->quadVbo);
+        this->quadVbo = 0;
+    }
 
     if (this->colorTexture)
+    {
         glDeleteTextures(1, &this->colorTexture);
+        this->colorTexture = 0;
+    }
 
     if (this->depthStencilTexture)
+    {
         glDeleteTextures(1, &this->depthStencilTexture);
+        this->depthStencilTexture = 0;
+    }
 
     if (this->fbo)
+    {
         glDeleteFramebuffers(1, &this->fbo);
+        this->fbo = 0;
+    }
 
     if (this->rbo)
+    {
         glDeleteRenderbuffers(1, &this->rbo);
+        this->rbo = 0;
+    }
 }
 
 void glutil::PostProcessingPipeLine::Recreate()

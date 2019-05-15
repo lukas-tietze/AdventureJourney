@@ -18,7 +18,7 @@ void glutil::BitMapFont::DestroyGlObjects()
 {
     if (this->tex)
     {
-        glDeleteTextures(this->tex);
+        glDeleteTextures(1, &this->tex);
         this->tex = 0;
     }
 }
