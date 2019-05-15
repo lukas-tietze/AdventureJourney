@@ -157,6 +157,10 @@ gui::DummyScreen::DummyScreen() : scene(),
 
     this->ppPipe.SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());
     this->ppPipe.SetUseUboData(true);
+    this->ppPipe.SetColorsEnabled(true);
+    this->ppPipe.SetColorBufferTextureTarget(GL_TEXTURE0);
+    this->ppPipe.SetDepthAndStencilEnabled(true);
+    this->ppPipe.SetDepthStencilBufferTextureTarget(GL_TEXTURE1);
     this->ppPipe.SetBindingTarget(0);
     this->ppPipe.Update();
 }

@@ -26,9 +26,9 @@ vec2 offsets[9] = vec2[](
 
 const float kernel[9] = float[]
 (
-    -1, -1, -1, 
-    -1,  9, -1,
-    -1, -1, -1
+    1, 1,  1, 
+    1, -7, 1,
+    1, 1,  1
 );
 
 void main()

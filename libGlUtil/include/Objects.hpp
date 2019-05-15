@@ -59,13 +59,18 @@ public:
 
 #include "libGlUtil/src/Objects/DynamicUboOwner.inl"
 
+class RenderToTextureBase
+{
+
+};
+
 struct PostProcessingPipeLineUboData
 {
     int width;
     int height;
 };
 
-class PostProcessingPipeLine : public StaticUboOwner<PostProcessingPipeLineUboData>
+class PostProcessingPipeLine : public RenderToTextureBase, public StaticUboOwner<PostProcessingPipeLineUboData>
 {
 private:
     bool dirty;
@@ -113,6 +118,10 @@ public:
 
     PostProcessingPipeLine &operator=(PostProcessingPipeLine &&);
     PostProcessingPipeLine &operator=(const PostProcessingPipeLine &) = delete;
+};
+
+class TextFactory : public RenderToTextureBase
+{  
 };
 
 class MeshAttribute
