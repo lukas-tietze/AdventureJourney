@@ -6,6 +6,7 @@
 #include "glad/glad.h"
 #include "glm/glm.hpp"
 #include "Defs.hpp"
+#include "data/Json.hpp"
 
 namespace glutil
 {
@@ -61,7 +62,6 @@ public:
 
 class RenderToTextureBase
 {
-
 };
 
 struct PostProcessingPipeLineUboData
@@ -118,10 +118,6 @@ public:
 
     PostProcessingPipeLine &operator=(PostProcessingPipeLine &&);
     PostProcessingPipeLine &operator=(const PostProcessingPipeLine &) = delete;
-};
-
-class TextFactory : public RenderToTextureBase
-{  
 };
 
 class MeshAttribute
@@ -551,6 +547,31 @@ public:
 #include "libGlUtil/src/Objects/Texture.inl"
 #include "libGlUtil/src/Objects/FormatConverter.inl"
 
+enum class BitMapFontContent
+{
+    AZaz09Space,
+    Ascii32To126,
+    Custom,
+};
+
+struct BitMapFontInfo : public json::IJsonSerializable
+{
+    int offsetX;
+    int offsetY;
+    int strideX;
+    int strideY;
+    int charWidth;
+    int charHeight;
+    int width;
+    int height;
+    BitMapFontContent content;
+    std::string charList;
+
+    void Load(const std::string &path);
+    json::Node *Serialize();
+    void Deserialize(const json::Node *);
+};
+
 #pragma pack(push, 1)
 struct BitMapFontUboData
 {
@@ -566,6 +587,8 @@ class BitMapFont : public StaticUboOwner<BitMapFontUboData>
 private:
     int offsetX;
     int offsetY;
+    int imgWidth;
+    int imgHeight;
     int strideX;
     int strideY;
     int charWidth;
@@ -580,6 +603,7 @@ private:
 
 public:
     BitMapFont();
+    BitMapFont(int offsetX, int offsetY, int strideX, int strideY, int charWidth, int charHeight);
     BitMapFont(const BitMapFont &) = delete;
     BitMapFont(BitMapFont &&);
     ~BitMapFont();
@@ -587,32 +611,33 @@ public:
     void SetOffsetPx(int x, int y);
     void SetStridePx(int x, int y);
     void SetCharSizePx(int w, int h);
-    void Load(const std::string &path);
+    void SetClipSize(int w, int h);
+    bool LoadTexture(const std::string &);
+    bool Load(const std::string &);
+    bool Load(const BitMapFontInfo &);
 
     void Bind(GLenum target);
-    glm::vec2 GetTexCoords(char c);
+    glm::vec4 GetTexCoords(char c);
 
     BitMapFont &operator=(BitMapFont &&);
     BitMapFont &operator=(const BitMapFont &) = delete;
 };
 
-class RenderToTextureHelper
-{
-private:
-    GLuint fbo;
-    GLuint rbo;
-
-public:
-    RenderToTextureHelper();
-    ~RenderToTextureHelper();
-
-    void BeginCapture();
-
-    void SetTargetTexture(GLuint id);
-};
-
 class TextImageFactory
 {
+private:
+    void DestroyGlObjects();
+    void TransferFrom(TextImageFactory &);
+
+public:
+    TextImageFactory();
+    TextImageFactory(const TextImageFactory &) = delete;
+    TextImageFactory(TextImageFactory &&);
+
+    int DrawStringToTxture(const std::string &, const BitMapFont &, const Texture *);
+
+    TextImageFactory &operator=(const TextImageFactory &) = delete;
+    TextImageFactory &operator=(TextImageFactory &&);
 };
 
 class TextOverlay
