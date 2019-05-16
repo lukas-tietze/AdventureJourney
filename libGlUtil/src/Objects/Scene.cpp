@@ -236,17 +236,5 @@ void glutil::Scene::Render()
     }
 
     for (auto &obj : this->objects)
-    {
-        obj.second->Bind();
-        obj.second->Upload();
         obj.second->Render();
-    }
-}
-
-void glutil::Scene::Update(double delta)
-{
-    for (auto &obj : this->objects)
-    {
-        // obj.second->Update(delta);
-    }
 }

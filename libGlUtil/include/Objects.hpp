@@ -231,10 +231,15 @@ struct SceneObjectUboData
 };
 #pragma pack(pop)
 
+class Program;
+class Material;
+
 class SceneObject : public StaticUboOwner<SceneObjectUboData>
 {
 private:
     Mesh *geometry;
+    Program *program;
+    Material *material;
 
 public:
     SceneObject();
@@ -243,12 +248,20 @@ public:
     SceneObject(SceneObject &&copy);
     ~SceneObject();
 
-    const glm::mat4 &GetModelMatrix() const;
-    void SetModelMatrix(const glm::mat4 &);
-    Mesh *GetGeometry();
     void SetGeometry(Mesh *);
+    void SetProgram(Program *);
+    void SetMaterial(Material *);
+    void SetModelMatrix(const glm::mat4 &);
+    const glm::mat4 &GetModelMatrix() const;
+    Mesh *GetGeometry();
+    const Mesh *GetGeometry() const;
+    Program *GetProgram();
+    const Program *GetProgram() const;
+    Material *GetMaterial();
+    const Material *GetMaterial() const;
 
     void Render();
+    void RenderDepthPass();
 };
 
 #pragma pack(push, 1)
@@ -374,18 +387,36 @@ public:
 #pragma pack(push, 1)
 struct MaterialUboData
 {
-    glm::vec4 ambientColor;
-    glm::vec4 diffuseColor;
-    glm::vec4 specularColor;
-    float shininess;
+    glm::vec4 albedo;
+    glm::vec4 shininess_metalness;
 };
 #pragma pack(pop)
 
-class Material : StaticUboOwner<MaterialUboData>
+class Material : public StaticUboOwner<MaterialUboData>
 {
+private:
+    Texture *normalMap;
+    GLenum normalMapTarget;
+    Texture *albedoMap;
+    GLenum albedoMapTarget;
+    Texture *propertyMap;
+    GLenum propertyMapTarget;
+
 public:
     Material();
-    Material(const glm::vec4 &ambient, const glm::vec4 &diffuse, const glm::vec4 &specular, float shininess);
+
+    void SetAlbedo(const glm::vec4 &);
+    void SetShininess(float);
+    void SetMetalness(float);
+    void SetNormalMap(Texture *, GLenum);
+    void SetAlbedoMap(Texture *, GLenum);
+    void SetPropertyMap(Texture *, GLenum);
+
+    const glm::vec4 &GetAlbedo(const glm::vec4 &) const;
+    float GetShininess(float) const;
+    float GetMetalness(float) const;
+
+    void Use();
 };
 
 class MaterialCollection : DynamicUboOwner<MaterialUboData>

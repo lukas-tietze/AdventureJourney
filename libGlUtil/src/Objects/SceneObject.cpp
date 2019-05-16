@@ -41,13 +41,49 @@ void glutil::SceneObject::SetGeometry(glutil::Mesh *geometry)
     this->geometry = geometry;
 }
 
+void glutil::SceneObject::SetProgram(glutil::Program *program)
+{
+    this->program = program;
+}
+
+void glutil::SceneObject::SetMaterial(glutil::Material *material)
+{
+    this->material = material;
+}
+
 glutil::Mesh *glutil::SceneObject::GetGeometry()
 {
     return this->geometry;
 }
 
+glutil::Program *glutil::SceneObject::GetProgram()
+{
+    return this->program;
+}
+
+glutil::Material *glutil::SceneObject::GetMaterial()
+{
+    return this->material;
+}
+
 void glutil::SceneObject::Render()
 {
-    if (this->geometry)
+    if (this->program && this->material && this->geometry)
+    {
+        this->program->Use();
+        this->material->Use();
+        this->Bind();
+        this->Upload();
         this->geometry->Draw();
+    }
+}
+
+void glutil::SceneObject::RenderDepthPass()
+{
+    if (this->geometry)
+    {
+        this->Bind();
+        this->Upload();
+        this->geometry->Draw();
+    }
 }
