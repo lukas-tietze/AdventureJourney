@@ -158,7 +158,7 @@ bool gui::quadrics::IcoSphere(uint32_t subdiv, glutil::Mesh &out, uint32_t color
                     9, 2, 5,
                     7, 2, 11});
 
-    for (int i = 0; i < subdiv; i++)
+    for (size_t i = 0; i < subdiv; i++)
         SubdivideTriangles(vertices, indices);
 
     return gui::quadrics::CreateMesh(out, vertices, indices);

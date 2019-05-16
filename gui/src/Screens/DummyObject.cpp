@@ -25,7 +25,7 @@ gui::DummyObject::DummyObject(glutil::SceneObject *sceneObject) : sceneObject(sc
                            rnd.Next(0.0f, 1.0f),
                            rnd.Next(0.0f, 1.0f));
 
-    this->max = rnd.Next(0, 4);
+    this->max = rnd.Next(0.f, 4.f);
     this->pos = rnd.Next(0.f, this->max);
 
     this->speed = rnd.Next(0.5f, 1.5f);
@@ -38,8 +38,8 @@ gui::DummyObject::DummyObject(glutil::SceneObject *sceneObject) : sceneObject(sc
 
 void gui::DummyObject::Step(double delta)
 {
-    this->rotation += glm::degrees(delta);
-    this->pos += delta * this->speed;
+    this->rotation += static_cast<float>(glm::degrees(delta));
+    this->pos += static_cast<float>(delta * this->speed);
 
     if (this->pos < 0 || this->pos > this->max)
         this->speed *= -1;

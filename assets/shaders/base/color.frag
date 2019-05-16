@@ -19,5 +19,5 @@ void main()
                GetNormal());
 
     // transform back to 'gamma compressed' colors
-     fclr.rgb = pow(fclr.rgb, vec3(1.0 / 2));
+    //  fclr.rgb = pow(fclr.rgb, vec3(1.0 / 2));
 }

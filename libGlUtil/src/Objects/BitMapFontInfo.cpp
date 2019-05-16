@@ -1,8 +1,25 @@
 #include "Objects.hpp"
+#include "data/String.hpp"
 
 json::Node *glutil::BitMapFontInfo::Serialize()
 {
-    ////TODO
+    auto node = new json::ObjectNode();
+
+    node->Put("offsetX", new json::PrimitiveNode(this->offsetX));
+    node->Put("offsetY", new json::PrimitiveNode(this->offsetY));
+    node->Put("strideX", new json::PrimitiveNode(this->strideX));
+    node->Put("strideY", new json::PrimitiveNode(this->strideY));
+    node->Put("charWidth", new json::PrimitiveNode(this->charWidth));
+    node->Put("charHeight", new json::PrimitiveNode(this->charHeight));
+    node->Put("cols", new json::PrimitiveNode(this->cols));
+    node->Put("rows", new json::PrimitiveNode(this->rows));
+    node->Put("source", new json::PrimitiveNode(this->source));
+    node->Put("content", new json::PrimitiveNode(util::ToString(this->content)));
+    node->Put("customCharList", new json::PrimitiveNode(this->content == BitMapFontContent::Custom
+                                                            ? this->charList
+                                                            : ""));
+
+    return node;
 }
 
 void glutil::BitMapFontInfo::Deserialize(const json::Node *node)
@@ -47,7 +64,7 @@ void glutil::BitMapFontInfo::Deserialize(const json::Node *node)
             this->content = BitMapFontContent::Ascii32To126;
             this->charList = " !\"#$%&'()*+,-./0123456789:;<=>\?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
         }
-        else if (value == "Custom" && obj->TryGetAs<json::PrimitiveNode>("charList", valueNode, json::ValueType::String))
+        else if (value == "Custom" && obj->TryGetAs<json::PrimitiveNode>("customCharList", valueNode, json::ValueType::String))
         {
             this->content = BitMapFontContent::Custom;
             this->charList = valueNode->GetValueAsString();

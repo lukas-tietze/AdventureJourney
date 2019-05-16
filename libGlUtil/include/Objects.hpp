@@ -227,7 +227,7 @@ public:
 struct SceneObjectUboData
 {
     glm::mat4 modelMatrix;
-    glm::mat3 normalMatrix;
+    glm::mat4 normalMatrix;
 };
 #pragma pack(pop)
 
@@ -249,7 +249,6 @@ public:
     void SetGeometry(Mesh *);
 
     void Render();
-    void Update(double delta);
 };
 
 #pragma pack(push, 1)
@@ -553,6 +552,8 @@ enum class BitMapFontContent
     Ascii32To126,
     Custom,
 };
+
+std::ostream &operator<<(std::ostream &, BitMapFontContent);
 
 struct BitMapFontInfo : public json::IJsonSerializable
 {

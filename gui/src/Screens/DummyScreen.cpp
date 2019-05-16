@@ -9,8 +9,9 @@ namespace
 {
 constexpr char MAIN_CAM[] = "MAIN_CAM";
 constexpr char MAIN_LIGHT[] = "MAIN_LIGHT";
-constexpr char DEPTH_PROG[] = "Prog1";
-constexpr char COLOR_PROG[] = "Prog2";
+constexpr char DEPTH_PROG[] = "PrgDepth";
+constexpr char COLOR_PROG[] = "PrgColorFull";
+constexpr char DEBUG_PROG[] = "PrgColorDebug";
 constexpr char PIXEL_PROG[] = "PPpix";
 constexpr char BLUR_PROG[] = "PPblur";
 constexpr char DEPTH_BLUR_PROG[] = "PPdepthBlur";
@@ -62,6 +63,17 @@ gui::DummyScreen::DummyScreen() : scene(),
                                            "assets/shaders/fragment/textureOnly.frag",
                                        });
 
+    this->scene.InitProgramFromSources(DEBUG_PROG,
+                                       {
+                                           "assets/shaders/base/full.vert",
+                                           "assets/shaders/vertex/simple.vert",
+                                           "assets/shaders/base/color.frag",
+                                           "assets/shaders/fragment/lightingDebug.frag",
+                                           "assets/shaders/fragment/materialPropsSimple.frag",
+                                           "assets/shaders/fragment/normalAttrib.frag",
+                                           "assets/shaders/fragment/textureOnly.frag",
+                                       });
+
     this->scene.InitProgramFromSources(DEPTH_PROG,
                                        {
                                            "assets/shaders/base/positionOnly.vert",
@@ -98,7 +110,7 @@ gui::DummyScreen::DummyScreen() : scene(),
     lights->SetBindingTarget(4);
     auto light = lights->Add();
     light.SetActive(true);
-    light.SetAmbientFactor(0.3);
+    light.SetAmbientFactor(0.3f);
     light.SetColor(glm::vec3(1.0f, 1.0f, 1.0f) * 0.75f);
     light.SetPosition(glm::vec3(0.f, 1.f, 0.f));
     light.SetType(glutil::LightType::Point);
@@ -197,7 +209,7 @@ void gui::DummyScreen::Render()
 
     glDepthFunc(GL_EQUAL);
 
-    this->scene.GetProgram(COLOR_PROG)->Use();
+    this->scene.GetProgram(this->debugMode ? DEBUG_PROG : COLOR_PROG)->Use();
     this->scene.Render();
 
     if (this->ppProg)
@@ -236,14 +248,16 @@ void gui::DummyScreen::Update(double delta)
         glPolygonMode(GL_FRONT_AND_BACK, this->wireMode ? GL_LINE : GL_FILL);
     }
     if (glutil::WasKeyPressed(GLFW_KEY_F2))
+        this->debugMode = !this->debugMode;
+    if (glutil::WasKeyPressed(GLFW_KEY_1))
         this->ppProg = nullptr;
-    if (glutil::WasKeyPressed(GLFW_KEY_F3))
+    if (glutil::WasKeyPressed(GLFW_KEY_2))
         this->ppProg = this->scene.GetProgram(PIXEL_PROG);
-    if (glutil::WasKeyPressed(GLFW_KEY_F4))
+    if (glutil::WasKeyPressed(GLFW_KEY_3))
         this->ppProg = this->scene.GetProgram(BLUR_PROG);
-    if (glutil::WasKeyPressed(GLFW_KEY_F5))
+    if (glutil::WasKeyPressed(GLFW_KEY_4))
         this->ppProg = this->scene.GetProgram(DEPTH_BLUR_PROG);
-    if (glutil::WasKeyPressed(GLFW_KEY_F6))
+    if (glutil::WasKeyPressed(GLFW_KEY_5))
         this->ppProg = this->scene.GetProgram(EDGE_PROG);
     if (glutil::WasKeyPressed(GLFW_KEY_P))
         this->animationPaused = !this->animationPaused;

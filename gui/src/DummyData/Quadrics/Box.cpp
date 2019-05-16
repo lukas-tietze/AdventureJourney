@@ -98,9 +98,9 @@ bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, gl
 
                 FillColor(vertex, color);
 
-                vertex.normal[0] = 0;
+                vertex.normal[0] = 1;
                 vertex.normal[1] = 0;
-                vertex.normal[2] = 1;
+                vertex.normal[2] = 0;
 
                 vertex.texture[0] = TexCoord(iY * stepY / 2.f);
                 vertex.texture[1] = TexCoord(iZ * stepZ / 2.f);
@@ -159,8 +159,8 @@ bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, gl
                 FillColor(vertex, color);
 
                 vertex.normal[0] = 0;
-                vertex.normal[1] = 0;
-                vertex.normal[2] = 1;
+                vertex.normal[1] = 1;
+                vertex.normal[2] = 0;
 
                 vertex.texture[0] = TexCoord(iZ * stepZ / 2.f);
                 vertex.texture[1] = TexCoord(iX * stepX / 2.f);

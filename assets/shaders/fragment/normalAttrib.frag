@@ -9,6 +9,6 @@ in vec4 vColor;
 
 vec3 GetNormal()
 {
-    return vNormalWs;
+    return normalize(vNormalWs);
 }
 

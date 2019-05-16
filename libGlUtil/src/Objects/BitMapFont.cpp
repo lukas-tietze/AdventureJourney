@@ -37,13 +37,15 @@ bool glutil::BitMapFont::Load(const std::string &path)
     p.parse(path, n);
     info.Deserialize(n);
 
-    this->Load(info);
+    return this->Load(info);
 }
 
 bool glutil::BitMapFont::Load(const glutil::BitMapFontInfo &info)
 {
-    this->LoadCoordinates(info);
-    this->LoadTexture(info);
+    auto lc = this->LoadCoordinates(info);
+    auto lt = this->LoadTexture(info);
+
+    return lc && lt;
 }
 
 bool glutil::BitMapFont::LoadTexture(const BitMapFontInfo &info)
@@ -72,6 +74,11 @@ bool glutil::BitMapFont::LoadCoordinates(const BitMapFontInfo &info)
 
         this->data.positions[info.charList[i]] = offset + glm::vec2(col, row) * stride;
     }
+
+    return info.rows > 0 && info.cols > 0 &&
+           info.charWidth > 0 && info.charHeight > 0 &&
+           info.strideX > 0 && info.strideY > 0 &&
+           info.charList.length() > 0;
 }
 
 void glutil::BitMapFont::Bind(GLenum target)

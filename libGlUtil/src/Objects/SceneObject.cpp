@@ -32,7 +32,7 @@ const glm::mat4 &glutil::SceneObject::GetModelMatrix() const
 void glutil::SceneObject::SetModelMatrix(const glm::mat4 &mat)
 {
     this->data.modelMatrix = mat;
-    this->data.normalMatrix = glm::inverseTranspose(glm::mat3(mat));
+    this->data.normalMatrix = glm::inverseTranspose(mat);
     this->SetDirty();
 }
 

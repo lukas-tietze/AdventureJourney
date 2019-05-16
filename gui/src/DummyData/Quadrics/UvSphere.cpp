@@ -10,10 +10,10 @@ bool gui::quadrics::UVSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out
     float slr = (2 * (float)M_PI) / (float)slices;
     float str = (float)(M_PI) / (float)stacks;
 
-    for (int iSt = 0; iSt < stacks; ++iSt)
+    for (size_t iSt = 0; iSt < stacks; ++iSt)
     {
         float rho = -(float)M_PI / 2.0f + (float)M_PI * (float(iSt) / float(stacks));
-        for (int iSl = 0; iSl < slices; ++iSl)
+        for (size_t iSl = 0; iSl < slices; ++iSl)
         {
             float phi = 2.0f * (float)M_PI * float(iSl) / float(slices);
 

@@ -36,45 +36,10 @@ layout(std140, binding = 4) uniform globalLightDataBlock
 #define LSpotExponent(i) (global.lights[i].spotExponent_size_enabled.x)
 #define Lsize(i) (global.lights[i].spotExponent_size_enabled.y)
 
-vec3 CalcOneLight(in int i, in vec3 N, in vec3 fpos, in vec3 albedo, in vec2 mp)
-{
-    vec3 res = LColor(i) * LAmbient(i);
-    vec3 L;
-    float a;
-
-    if(LIsDir(i))
-    {
-        L = LPos(i);
-        a = 1.0;
-    }
-    else
-    {
-        L = normalize(LPos(i) - fpos);
-        a = 1.0 / (1 + pow(length(LPos(i) - fpos), 2));
-    }
-
-    float NdotL = dot(N, L);
-    
-    if(NdotL > 0)
-    {
-        res += a * NdotL * LColor(i);
-
-        vec3 viewDir = normalize(camera.viewMat[3].xyz - fpos);
-        vec3 reflectDir = reflect(-L, N);
-
-        res += LColor(i) * a * pow(max(dot(viewDir, reflectDir), 0.0), 64);
-    }
-
-    return res;
-}
-
 vec3 CalcLighting(in vec3 albedo, in vec4 materialProps, in vec3 normal)
 {
-    vec3 res = vec3(0.0, 0.0, 0.0);
-
-    for(int i = 0; i < 4; i++) 
-        if(LEnabled(i))
-            res += CalcOneLight(i, normal, vPositionWs, albedo, materialProps.xy);
-
-    return res;
+    if(normal.x < 0 || normal.y < 0 || normal.z < 0)
+        return normal * -1.0;
+    
+    return normal;
 }
