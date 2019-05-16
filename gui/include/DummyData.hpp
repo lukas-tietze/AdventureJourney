@@ -55,6 +55,7 @@ namespace quadrics
 {
 constexpr uint32_t DEFAULT_COLOR = 0x808080ff;
 
+bool Quad(glutil::Mesh &, uint32_t color = DEFAULT_COLOR);
 bool Box(glutil::Mesh &, uint32_t color = DEFAULT_COLOR);
 bool Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, glutil::Mesh &, uint32_t color = DEFAULT_COLOR);
 bool UVSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &, uint32_t color = DEFAULT_COLOR);

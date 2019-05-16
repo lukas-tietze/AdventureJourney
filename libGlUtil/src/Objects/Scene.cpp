@@ -24,6 +24,7 @@ glutil::Scene::~Scene()
     this->DeleteAll(this->cameras);
     this->DeleteAll(this->meshs);
     this->DeleteAll(this->lightSets);
+    this->DeleteAll(this->fonts);
 }
 
 glutil::SceneObject *glutil::Scene::GetObject(const resourceId_t &id)
@@ -66,6 +67,11 @@ glutil::LightSet *glutil::Scene::GetLightSet(const resourceId_t &id)
     return this->FindOrCreateItem(this->lightSets, id);
 }
 
+glutil::BitMapFont *glutil::Scene::GetFont(const resourceId_t &id)
+{
+    return this->FindOrCreateItem(this->fonts, id);
+}
+
 const glutil::SceneObject *glutil::Scene::GetObject(const resourceId_t &id) const
 {
     return this->FindItemOrNull(this->objects, id);
@@ -104,6 +110,11 @@ const glutil::Mesh *glutil::Scene::GetMesh(const resourceId_t &id) const
 const glutil::LightSet *glutil::Scene::GetLightSet(const resourceId_t &id) const
 {
     return this->FindItemOrNull(this->lightSets, id);
+}
+
+const glutil::BitMapFont *glutil::Scene::GetFont(const resourceId_t &id) const
+{
+    return this->FindItemOrNull(this->fonts, id);
 }
 
 bool glutil::Scene::RemoveObject(const resourceId_t &id)
@@ -146,13 +157,18 @@ bool glutil::Scene::RemoveLightSet(const resourceId_t &id)
     return this->DeleteItem(this->lightSets, id);
 }
 
+bool glutil::Scene::RemoveFont(const resourceId_t &id)
+{
+    return this->DeleteItem(this->fonts, id);
+}
+
 void glutil::Scene::ReloadAllShaders()
 {
-    for(auto kvp : this->shaders)
+    for (auto kvp : this->shaders)
         kvp.second->Reload();
 
-    for(auto kvp : this->programs)
-        kvp.second->Link();    
+    for (auto kvp : this->programs)
+        kvp.second->Link();
 }
 
 void glutil::Scene::SetActiveCamera(const resourceId_t &id)

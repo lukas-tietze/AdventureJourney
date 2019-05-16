@@ -1,27 +1,8 @@
 #include "Objects.hpp"
 
-int offsetX;
-int offsetY;
-int strideX;
-int strideY;
-int charWidth;
-int charHeight;
-int width;
-int height;
-BitMapFontContent content;
-std::string customCharList;
-
-void glutil::BitMapFontInfo::Load(const std::string &path)
-{
-    json::Node *n;
-    json::Parser p;
-
-    p.parse(path, n);
-    this->Deserialize(n);
-}
-
 json::Node *glutil::BitMapFontInfo::Serialize()
 {
+    ////TODO
 }
 
 void glutil::BitMapFontInfo::Deserialize(const json::Node *node)
@@ -46,10 +27,12 @@ void glutil::BitMapFontInfo::Deserialize(const json::Node *node)
         this->charWidth = valueNode->GetValueAsNumber();
     if (obj->TryGetAs<json::PrimitiveNode>("charHeight", valueNode, json::ValueType::Number))
         this->charHeight = valueNode->GetValueAsNumber();
-    if (obj->TryGetAs<json::PrimitiveNode>("width", valueNode, json::ValueType::Number))
-        this->width = valueNode->GetValueAsNumber();
-    if (obj->TryGetAs<json::PrimitiveNode>("height", valueNode, json::ValueType::Number))
-        this->height = valueNode->GetValueAsNumber();
+    if (obj->TryGetAs<json::PrimitiveNode>("cols", valueNode, json::ValueType::Number))
+        this->cols = valueNode->GetValueAsNumber();
+    if (obj->TryGetAs<json::PrimitiveNode>("rows", valueNode, json::ValueType::Number))
+        this->rows = valueNode->GetValueAsNumber();
+    if (obj->TryGetAs<json::PrimitiveNode>("src", valueNode, json::ValueType::String))
+        this->source = valueNode->GetValueAsString();
     if (obj->TryGetAs<json::PrimitiveNode>("content", valueNode, json::ValueType::String))
     {
         auto value = valueNode->GetValueAsString();

@@ -28,44 +28,50 @@ void glutil::BitMapFont::TransferFrom(BitMapFont &other)
     this->data = other.data;
 }
 
-void glutil::BitMapFont::SetOffsetPx(int x, int y)
+bool glutil::BitMapFont::Load(const std::string &path)
 {
-    if (this->offsetX != x || this->offsetY != y)
-    {
-        this->offsetX = x;
-        this->offsetY = y;
-        this->data.offset = glm::vec2(x, y);
+    BitMapFontInfo info;
+    json::Node *n;
+    json::Parser p;
 
-        this->SetDirty();
-    }
+    p.parse(path, n);
+    info.Deserialize(n);
+
+    this->Load(info);
 }
 
-void glutil::BitMapFont::SetStridePx(int x, int y)
+bool glutil::BitMapFont::Load(const glutil::BitMapFontInfo &info)
 {
-    if (this->strideX != x || this->strideY != y)
-    {
-        this->strideX = x;
-        this->strideY = y;
-        this->data.stride = glm::vec2(x, y);
-
-        this->SetDirty();
-    }
+    this->LoadCoordinates(info);
+    this->LoadTexture(info);
 }
 
-void glutil::BitMapFont::SetCharSizePx(int w, int h)
+bool glutil::BitMapFont::LoadTexture(const BitMapFontInfo &info)
 {
-    if (this->charWidth != w || this->charHeight != h)
-    {
-        this->charWidth = w;
-        this->charHeight = h;
-        this->data.charSize = glm::vec2(w, h);
+    glutil::Texture tex;
+    tex.SetInternalFormat(GL_RED);
+    auto res = tex.LoadData(info.source);
 
-        this->SetDirty();
-    }
+    this->tex = tex.DisownId();
+
+    return res;
 }
 
-void glutil::BitMapFont::Load(const std::string &path)
+bool glutil::BitMapFont::LoadCoordinates(const BitMapFontInfo &info)
 {
+    auto size = glm::vec2(info.cols * info.strideX, info.rows * info.strideY);
+    auto offset = size / glm::vec2(info.offsetX, info.offsetY);
+    auto stride = size / glm::vec2(info.strideX, info.strideY);
+
+    this->data.charSize = size / glm::vec2(info.charWidth, info.charHeight);
+
+    for (int i = 0; i < info.charList.length() && i < (info.rows * info.cols); i++)
+    {
+        int row = i / info.cols;
+        int col = i % info.cols;
+
+        this->data.positions[info.charList[i]] = offset + glm::vec2(col, row) * stride;
+    }
 }
 
 void glutil::BitMapFont::Bind(GLenum target)
@@ -75,6 +81,7 @@ void glutil::BitMapFont::Bind(GLenum target)
 
 glm::vec4 glutil::BitMapFont::GetTexCoords(char c)
 {
+    return glm::vec4(this->data.positions[c], this->data.positions[c] + this->data.charSize);
 }
 
 glutil::BitMapFont &glutil::BitMapFont::operator=(BitMapFont &&other)

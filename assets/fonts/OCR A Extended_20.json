@@ -5,8 +5,8 @@
     "strideY": 27,
     "charWidth": 16,
     "charHeight": 27,
-    "width": -1,
-    "height": -1,
-    "content": "AZaz09",
+    "cols": 26,
+    "lines": 3,
+    "content": "AZaz09Space",
     "src": "OCR A Extended 20.png"
 }

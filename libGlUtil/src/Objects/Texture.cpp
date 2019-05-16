@@ -310,3 +310,12 @@ GLuint glutil::Texture::GetId() const
 {
     return this->tex;
 }
+
+GLuint glutil::Texture::DisownId()
+{
+    auto res = this->tex;
+
+    this->tex = 0;
+
+    return res;
+}

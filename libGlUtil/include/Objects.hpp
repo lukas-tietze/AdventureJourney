@@ -524,6 +524,7 @@ public:
 
     void Bind(GLuint textureUnit);
     GLuint GetId() const;
+    GLuint DisownId();
 
     void SetFormat(int);
     void SetInternalFormat(int);
@@ -562,12 +563,12 @@ struct BitMapFontInfo : public json::IJsonSerializable
     int strideY;
     int charWidth;
     int charHeight;
-    int width;
-    int height;
+    int rows;
+    int cols;
     BitMapFontContent content;
     std::string charList;
+    std::string source;
 
-    void Load(const std::string &path);
     json::Node *Serialize();
     void Deserialize(const json::Node *);
 };
@@ -575,44 +576,27 @@ struct BitMapFontInfo : public json::IJsonSerializable
 #pragma pack(push, 1)
 struct BitMapFontUboData
 {
-    glm::vec2 offset;
+    glm::vec2 positions[256];
     glm::vec2 charSize;
-    glm::vec2 stride;
-    glm::vec2 linesAndCols;
 };
 #pragma pack(pop)
 
 class BitMapFont : public StaticUboOwner<BitMapFontUboData>
 {
 private:
-    int offsetX;
-    int offsetY;
-    int imgWidth;
-    int imgHeight;
-    int strideX;
-    int strideY;
-    int charWidth;
-    int charHeight;
-    int width;
-    int height;
-
     GLuint tex;
 
     void DestroyGlObjects();
     void TransferFrom(BitMapFont &);
+    bool LoadTexture(const BitMapFontInfo &);
+    bool LoadCoordinates(const BitMapFontInfo &);
 
 public:
     BitMapFont();
-    BitMapFont(int offsetX, int offsetY, int strideX, int strideY, int charWidth, int charHeight);
     BitMapFont(const BitMapFont &) = delete;
     BitMapFont(BitMapFont &&);
     ~BitMapFont();
 
-    void SetOffsetPx(int x, int y);
-    void SetStridePx(int x, int y);
-    void SetCharSizePx(int w, int h);
-    void SetClipSize(int w, int h);
-    bool LoadTexture(const std::string &);
     bool Load(const std::string &);
     bool Load(const BitMapFontInfo &);
 
@@ -642,6 +626,13 @@ public:
 
 class TextOverlay
 {
+private:
+    std::string text;
+    BitMapFont *font;
+
+public:
+    TextOverlay();
+    ~TextOverlay();
 };
 
 #pragma pack(push, 1)
@@ -682,6 +673,7 @@ private:
     std::map<resourceId_t, Camera *> cameras;
     std::map<resourceId_t, Mesh *> meshs;
     std::map<resourceId_t, LightSet *> lightSets;
+    std::map<resourceId_t, BitMapFont *> fonts;
 
     Camera *activeCamera;
     LightSet *activeLightSet;
@@ -698,6 +690,7 @@ public:
     Camera *GetCamera(const resourceId_t &);
     Mesh *GetMesh(const resourceId_t &);
     LightSet *GetLightSet(const resourceId_t &);
+    BitMapFont *GetFont(const resourceId_t &);
 
     const SceneObject *GetObject(const resourceId_t &) const;
     const Material *GetMaterial(const resourceId_t &) const;
@@ -707,6 +700,7 @@ public:
     const Camera *GetCamera(const resourceId_t &) const;
     const Mesh *GetMesh(const resourceId_t &) const;
     const LightSet *GetLightSet(const resourceId_t &) const;
+    const BitMapFont *GetFont(const resourceId_t &) const;
 
     bool RemoveObject(const resourceId_t &);
     bool RemoveMaterial(const resourceId_t &);
@@ -716,6 +710,7 @@ public:
     bool RemoveCamera(const resourceId_t &);
     bool RemoveMesh(const resourceId_t &);
     bool RemoveLightSet(const resourceId_t &);
+    bool RemoveFont(const resourceId_t &);
 
     Shader *InitShader(const resourceId_t &, const std::string &sourcePath);
     Program *InitProgram(const resourceId_t &, const std::initializer_list<std::string> &shaderNames);
