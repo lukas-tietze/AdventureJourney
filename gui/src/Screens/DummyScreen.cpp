@@ -7,15 +7,15 @@
 
 namespace
 {
-const std::string MainCam = "MainCam";
-const std::string MainLight = "MainLight";
-const std::string DepthProg = "Prog1";
-const std::string ColorProg = "Prog2";
-const std::string PixelationProg = "PPpix";
-const std::string NoPpProg = "PPoff";
-const std::string BlurProg = "PPblur";
-const std::string DepthBlurProg = "PPdepthBlur";
-const std::string EdgeDetectionProg = "PPedge";
+constexpr char MAIN_CAM[] = "MAIN_CAM";
+constexpr char MAIN_LIGHT[] = "MAIN_LIGHT";
+constexpr char DEPTH_PROG[] = "Prog1";
+constexpr char COLOR_PROG[] = "Prog2";
+constexpr char PIXEL_PROG[] = "PPpix";
+constexpr char BLUR_PROG[] = "PPblur";
+constexpr char DEPTH_BLUR_PROG[] = "PPdepthBlur";
+constexpr char EDGE_PROG[] = "PPedge";
+constexpr size_t NUM_OBJECTS = 0;
 
 struct TextureBuilder
 {
@@ -38,19 +38,20 @@ gui::DummyScreen::DummyScreen() : scene(),
                                   objects(),
                                   mouseCaptured(false),
                                   animationPaused(false),
-                                  wireMode(false)
+                                  wireMode(false),
+                                  ppProg(nullptr)
 {
-    auto camera = this->scene.GetCamera(MainCam);
+    auto camera = this->scene.GetCamera(MAIN_CAM);
     camera->SetViewDirection(glm::vec3(-1.f, -1.f, -1.f));
-    camera->SetPosition(glm::vec3(7.f, 7.f, 7.f));
+    camera->SetPosition(glm::vec3(1.f, 2.f, 1.f));
     camera->SetUp(glutil::AXIS_Y);
     camera->SetBindingTarget(1);
     camera->CreateGlObjects();
-    this->scene.SetActiveCamera(MainCam);
+    this->scene.SetActiveCamera(MAIN_CAM);
 
     glEnable(GL_DEPTH_TEST);
 
-    this->scene.InitProgramFromSources(ColorProg,
+    this->scene.InitProgramFromSources(COLOR_PROG,
                                        {
                                            "assets/shaders/base/full.vert",
                                            "assets/shaders/vertex/simple.vert",
@@ -61,7 +62,7 @@ gui::DummyScreen::DummyScreen() : scene(),
                                            "assets/shaders/fragment/textureOnly.frag",
                                        });
 
-    this->scene.InitProgramFromSources(DepthProg,
+    this->scene.InitProgramFromSources(DEPTH_PROG,
                                        {
                                            "assets/shaders/base/positionOnly.vert",
                                            "assets/shaders/vertex/simple.vert",
@@ -69,51 +70,48 @@ gui::DummyScreen::DummyScreen() : scene(),
                                            "assets/shaders/fragment/textureOnly.frag",
                                        });
 
-    this->ppProg = this->scene.InitProgramFromSources(NoPpProg,
-                                                      {
-                                                          "assets/shaders/postProcessing/pp.vert",
-                                                          "assets/shaders/postProcessing/noPp.frag",
-                                                      });
-
-    this->scene.InitProgramFromSources(PixelationProg,
+    this->scene.InitProgramFromSources(PIXEL_PROG,
                                        {
                                            "assets/shaders/postProcessing/pp.vert",
                                            "assets/shaders/postProcessing/pixelate.frag",
                                        });
 
-    this->scene.InitProgramFromSources(BlurProg,
+    this->scene.InitProgramFromSources(BLUR_PROG,
                                        {
                                            "assets/shaders/postProcessing/pp.vert",
                                            "assets/shaders/postProcessing/blur.frag",
                                        });
 
-    this->scene.InitProgramFromSources(DepthBlurProg,
+    this->scene.InitProgramFromSources(DEPTH_BLUR_PROG,
                                        {
                                            "assets/shaders/postProcessing/pp.vert",
                                            "assets/shaders/postProcessing/depthBlur.frag",
                                        });
 
-    this->scene.InitProgramFromSources(EdgeDetectionProg,
+    this->scene.InitProgramFromSources(EDGE_PROG,
                                        {
                                            "assets/shaders/postProcessing/pp.vert",
                                            "assets/shaders/postProcessing/edgeDetection.frag",
                                        });
 
-    auto lights = this->scene.GetLightSet(MainLight);
+    auto lights = this->scene.GetLightSet(MAIN_LIGHT);
     lights->SetBindingTarget(4);
     auto light = lights->Add();
     light.SetActive(true);
     light.SetAmbientFactor(0.3);
-    light.SetColor(glm::vec3(0.3f, 0.7f, 0.9f));
-    light.SetPosition(glm::vec3(0.f, 0.f, 0.f));
+    light.SetColor(glm::vec3(1.0f, 1.0f, 1.0f) * 0.75f);
+    light.SetPosition(glm::vec3(0.f, 1.f, 0.f));
     light.SetType(glutil::LightType::Point);
-    this->scene.SetActiveLightSet(MainLight);
+    this->scene.SetActiveLightSet(MAIN_LIGHT);
 
     auto cubeTex = this->scene.GetTexture("CubeTex");
     cubeTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
     cubeTex->SetMipmapsEnabled(true);
     cubeTex->LoadData("assets/textures/dummy/grass.jpg");
     cubeTex->Bind(GL_TEXTURE0);
+
+    auto floorMesh = this->scene.GetMesh("Floor");
+    gui::quadrics::Quad(*floorMesh);
 
     auto icoMesh = this->scene.GetMesh("IcoMesh");
     gui::quadrics::IcoSphere(2, *icoMesh);
@@ -127,9 +125,21 @@ gui::DummyScreen::DummyScreen() : scene(),
     auto cylinderMesh = this->scene.GetMesh("CylinderMesh");
     gui::quadrics::Cylinder(16, 1, *cylinderMesh);
 
+    auto floorObj = this->scene.GetObject("floor");
+    floorObj->SetGeometry(floorMesh);
+    floorObj->SetModelMatrix(glm::scale(glm::vec3(5, 5, 5)));
+    floorObj->SetBindingTarget(2);
+    floorObj->CreateGlObjects();
+
+    auto lamp = this->scene.GetObject("lamp");
+    lamp->SetGeometry(cubeMesh);
+    lamp->SetModelMatrix(glm::translate(glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.1, 0.1, 0.1)));
+    lamp->SetBindingTarget(2);
+    lamp->CreateGlObjects();
+
     util::Random rnd;
 
-    for (int i = 0; i < 30; i++)
+    for (int i = 0; i < NUM_OBJECTS; i++)
     {
         auto obj = this->scene.GetObject(util::Format("Cube_%", i));
 
@@ -175,20 +185,26 @@ gui::DummyScreen::~DummyScreen()
 
 void gui::DummyScreen::Render()
 {
-    this->ppPipe.StartRecording();
+    if (this->ppProg)
+        this->ppPipe.StartRecording();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
 
-    this->scene.GetProgram(DepthProg)->Use();
+    this->scene.GetProgram(DEPTH_PROG)->Use();
     this->scene.Render();
 
     glDepthFunc(GL_EQUAL);
 
-    this->scene.GetProgram(ColorProg)->Use();
+    this->scene.GetProgram(COLOR_PROG)->Use();
     this->scene.Render();
 
-    this->ppProg->Use();
-    this->ppPipe.Render();
+    if (this->ppProg)
+    {
+        this->ppProg->Use();
+        this->ppPipe.Render();
+    }
 }
 
 void gui::DummyScreen::Update(double delta)
@@ -197,7 +213,7 @@ void gui::DummyScreen::Update(double delta)
     int y = 0;
     int z = 0;
 
-    auto camera = this->scene.GetCamera(MainCam);
+    auto camera = this->scene.GetCamera(MAIN_CAM);
 
     if (glutil::IsKeyDown(GLFW_KEY_ESCAPE) || glutil::IsKeyDown(GLFW_KEY_Q))
         glutil::Quit();
@@ -220,16 +236,15 @@ void gui::DummyScreen::Update(double delta)
         glPolygonMode(GL_FRONT_AND_BACK, this->wireMode ? GL_LINE : GL_FILL);
     }
     if (glutil::WasKeyPressed(GLFW_KEY_F2))
-        this->ppProg = this->scene.GetProgram(NoPpProg);
+        this->ppProg = nullptr;
     if (glutil::WasKeyPressed(GLFW_KEY_F3))
-        this->ppProg = this->scene.GetProgram(PixelationProg);
+        this->ppProg = this->scene.GetProgram(PIXEL_PROG);
     if (glutil::WasKeyPressed(GLFW_KEY_F4))
-        this->ppProg = this->scene.GetProgram(BlurProg);
+        this->ppProg = this->scene.GetProgram(BLUR_PROG);
     if (glutil::WasKeyPressed(GLFW_KEY_F5))
-        this->ppProg = this->scene.GetProgram(DepthBlurProg);
+        this->ppProg = this->scene.GetProgram(DEPTH_BLUR_PROG);
     if (glutil::WasKeyPressed(GLFW_KEY_F6))
-        this->ppProg = this->scene.GetProgram(EdgeDetectionProg);
-
+        this->ppProg = this->scene.GetProgram(EDGE_PROG);
     if (glutil::WasKeyPressed(GLFW_KEY_P))
         this->animationPaused = !this->animationPaused;
     if (glutil::IsKeyDown(GLFW_KEY_C))

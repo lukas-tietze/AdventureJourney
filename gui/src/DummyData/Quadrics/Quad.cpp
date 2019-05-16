@@ -12,8 +12,8 @@ bool gui::quadrics::Quad(glutil::Mesh &out, uint32_t color)
 
     FillColor(vertex, color);
     vertex.normal[0] = 0;
-    vertex.normal[1] = 0;
-    vertex.normal[2] = 1;
+    vertex.normal[1] = 1;
+    vertex.normal[2] = 0;
 
     vertex.position[0] = -1;
     vertex.position[1] = 0;

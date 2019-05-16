@@ -8,7 +8,15 @@
 
 namespace gui
 {
-class DummyObject
+class IDummyObject
+{
+public:
+    virtual ~IDummyObject();
+
+    virtual void Step(double delta) = 0;
+};
+
+class DummyObject : public IDummyObject
 {
 private:
     glutil::SceneObject *sceneObject;
@@ -27,6 +35,21 @@ public:
     void Step(double delta);
 };
 
+class DummyLightSource : public IDummyObject
+{
+private:
+    glutil::SceneObject *sceneObject;
+    glutil::LightSet::Light light;
+    float pos;
+    float speed;
+    float radius;
+
+public:
+    DummyLightSource(glutil::SceneObject *sceneObject, glutil::LightSet::Light light, float pos, float speed, float radius);
+
+    void Step(double delta);
+};
+
 class DummyScreen : public glutil::Screen
 {
 private:
@@ -36,7 +59,7 @@ private:
     bool animationPaused;
     bool wireMode;
 
-    std::vector<DummyObject *> objects;
+    std::vector<IDummyObject *> objects;
     glutil::Program *ppProg;
 
     glutil::PostProcessingPipeLine ppPipe;

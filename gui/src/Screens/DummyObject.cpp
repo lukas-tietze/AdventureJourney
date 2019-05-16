@@ -15,9 +15,9 @@ gui::DummyObject::DummyObject(glutil::SceneObject *sceneObject) : sceneObject(sc
 {
     util::Random rnd;
 
-    this->basePos = glm::vec3(rnd.Next(-5.f, 5.f),
-                              rnd.Next(-5.f, 5.f),
-                              rnd.Next(-5.f, 5.f));
+    this->basePos = glm::vec3(rnd.Next(0.f, 5.f),
+                              rnd.Next(0.f, 5.f),
+                              rnd.Next(0.f, 5.f));
 
     this->scale = rnd.Next(0.1f, 0.5f);
 

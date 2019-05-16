@@ -245,7 +245,6 @@ public:
 
     const glm::mat4 &GetModelMatrix() const;
     void SetModelMatrix(const glm::mat4 &);
-
     Mesh *GetGeometry();
     void SetGeometry(Mesh *);
 
