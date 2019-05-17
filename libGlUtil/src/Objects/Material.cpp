@@ -1,6 +1,11 @@
 #include "Objects.hpp"
 
-glutil::Material::Material()
+glutil::Material::Material() : albedoMap(nullptr),
+                               albedoMapTarget(0),
+                               normalMap(nullptr),
+                               normalMapTarget(0),
+                               propertyMap(nullptr),
+                               propertyMapTarget(0)
 {
 }
 

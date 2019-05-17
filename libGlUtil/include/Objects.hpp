@@ -392,6 +392,8 @@ struct MaterialUboData
 };
 #pragma pack(pop)
 
+class Texture;
+
 class Material : public StaticUboOwner<MaterialUboData>
 {
 private:
