@@ -98,15 +98,12 @@ file(GLOB_RECURSE GUI_TESTS "gui/test/**/*.cpp" "gui/test/*.cpp")
 #--------------------------------------------------------
 # LibCommon - enthält Utils und Wrapper, die in verschiedenen Projekten genutzt werden könnten.
 #--------------------------------------------------------
-project(LibCommon)
-
 configure_file(libCommon/include/config.in.hpp libCommon/include/config.hpp)
 add_library(LibCommon STATIC ${LIB_COMMON_SRC})
 target_link_libraries(LibCommon ${Boost_LIBRARIES} ${CMAKE_DL_LIBS})
 
 #Tests dazu
 if(COMPILE_TESTS)
-    project(LibCommonTests)
     add_executable(LibCommonTests libCommon/test/main.cpp ${LIB_COMMON_TESTS})
     target_link_libraries(LibCommonTests ${Boost_LIBRARIES} Boost::boost LibCommon)
 else()
@@ -116,7 +113,6 @@ endif()
 #--------------------------------------------------------
 # LibTermUtil - enthält Wrapper für NCurses-Funktionen
 #--------------------------------------------------------
-project(LibGlUtil)
 
 configure_file(libGlUtil/include/config.in.hpp libGlUtil/include/config.hpp)
 add_library(LibGlUtil STATIC ${LIB_GL_UTIL_SRC})
@@ -124,7 +120,6 @@ target_link_libraries(LibGlUtil LibCommon ${CMAKE_DL_LIBS} )
 
 #Tests dazu
 if(COMPILE_TESTS)
-    project(LibGlUtilTests)
     add_executable(LibGlUtilTests libGlUtil/test/main.cpp ${LIB_GL_UTIL_TESTS})
     target_link_libraries(LibGlUtilTests ${Boost_LIBRARIES}  LibGlUtil LibCommon)
 else()
@@ -135,7 +130,6 @@ endif()
 # Common Library - enthält Utils und Wrapper, die in verschiedenen Projekten genutzt werden könnten.
 #--------------------------------------------------------
 if(CURSES_FOUND)
-    project(LibTermUtil)
     include_directories(${CURSES_INCLUDE_DIRS})
 
     configure_file(libTermUtil/include/config.in.hpp libTermUtil/include/config.hpp)
@@ -144,7 +138,6 @@ if(CURSES_FOUND)
 
     #Tests dazu
     if(COMPILE_TESTS)
-        project(LibTermUtilTests)
         add_executable(LibTermUtilTests libTermUtil/test/main.cpp ${LIB_TERM_UTIL_TESTS})
         target_link_libraries(LibTermUtilTests ${Boost_LIBRARIES} LibTermUtil)
     else()
@@ -169,12 +162,10 @@ endif()
 #--------------------------------------------------------
 # Core
 #--------------------------------------------------------
-project(Core)
 add_library(Core STATIC ${CORE_SRC})
 target_link_libraries(Core LibCommon ${Boost_LIBRARIES})
 #Tests dazu
 if(COMPILE_TESTS)
-    project(CoreTests)
     add_executable(CoreTests core/test/main.cpp ${CORE_TESTS})
     target_link_libraries(CoreTests ${Boost_LIBRARIES} LibCommon Core)
 else()
@@ -186,7 +177,6 @@ endif()
 #--------------------------------------------------------
 if(COMPILE_TUI)
     if(CURSES_FOUND)
-        project(TerminalUi)
         include_directories(${CURSES_INCLUDE_DIRS})
 
         configure_file(terminal_ui/include/config.in.hpp terminal_ui/include/config.hpp)
@@ -195,7 +185,6 @@ if(COMPILE_TUI)
         
         if(COMPIlE_TESTS)
             #Tests dazu
-            project(TerminalUiTests)
             add_executable(TerminalUiTests terminal_ui/test/main.cpp ${TUI_TESTS})
             target_link_libraries(TerminalUiTests ${Boost_LIBRARIES}  LibCommon LibTermUtil Core ${CURSES_LIBRARIES})
         else()
@@ -211,8 +200,6 @@ endif()
 # GUI - Grafische UI mittels OpenGl
 #--------------------------------------------------------
 if(COMPILE_GUI)
-    project(Gui)
-    
     set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
@@ -225,7 +212,6 @@ if(COMPILE_GUI)
 
     if(COMPILE_TESTS)
         #Tests dazu
-        project(GuiTests)
         add_executable(GuiTests gui/test/main.cpp libs/glad/src/glad.c ${GUI_TESTS})
         target_link_libraries(GuiTests LibCommon LibGlUtil Core ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} glfw ${GLFW_LIBRARIES})
     else()
@@ -234,3 +220,5 @@ if(COMPILE_GUI)
 else()
     message(STATUS "Skipping Gui (project turend off)")
 endif()
+
+project(GalaxyAtWar)
