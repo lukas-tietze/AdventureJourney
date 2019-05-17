@@ -7,19 +7,21 @@
 
 int main()
 {
-    if(!glutil::Init())
+    if (!glutil::Init())
     {
         util::dbg.WriteLine("Failed to Init GL! Exiting...");
         return 1;
     }
 
-    auto screen = new gui::DummyScreen();
-
-    screen->Show();
-
     try
     {
+        auto screen = new gui::DummyScreen();
+
+        screen->Show();
+        
         glutil::Loop();
+        
+        delete screen;
     }
     catch (util::Exception &e)
     {
@@ -33,8 +35,6 @@ int main()
     {
         util::err.WriteLine("unknown exception occurred.");
     }
-
-    delete screen;
 
     glutil::DestroyGlContext();
 }

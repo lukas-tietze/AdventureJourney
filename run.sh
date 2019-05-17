@@ -73,7 +73,7 @@ INFO "Detected Os as $OS"
 
 if  [[ $OS == 'CYGWIN_NT-10.0' ]]; then
     BUILD_PROG='MSBuild.exe -nr:true -m'
-    BUILD_TARGET='GuiTests.sln'
+    BUILD_TARGET='GalaxyAtWar.sln'
     EXEC_PATH='Debug/Gui.exe'
 elif [[ $OS == 'Linux' ]]; then
     BUILD_PROG='make'

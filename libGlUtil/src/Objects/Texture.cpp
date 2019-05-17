@@ -157,7 +157,6 @@ bool glutil::Texture::LoadData(const std::string &path, ImageFormat format)
         return false;
 
     auto file = std::fopen(path.c_str(), "r");
-    ;
 
     if (!file)
     {

@@ -100,7 +100,13 @@ bool glutil::Shader::Reload()
     this->DestroyGlObjects();
     this->id = glCreateShader(this->type);
 
-    auto text = util::ReadFile(this->path);
+    std::string text;
+    if(!util::TryReadFile(this->path, text))
+    {
+        util::dbg.WriteLine("Failed to Lladed shader % (type %) from %. FiCould not read file!", this->id, this->type, this->path);
+        return false;
+    }
+
     auto buf = text.c_str();
 
     glShaderSource(this->id, 1, &buf, nullptr);
