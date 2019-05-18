@@ -38,7 +38,7 @@ layout(std140, binding = 4) uniform globalLightDataBlock
 
 vec3 CalcOneLight(in int i, in vec3 N, in vec3 fpos, in vec3 albedo, in vec2 mp)
 {
-    vec3 res = LColor(i) * LAmbient(i) * material.ambient;
+    vec3 res = LColor(i) * LAmbient(i);
     vec3 L;
     float a;
 
@@ -57,12 +57,12 @@ vec3 CalcOneLight(in int i, in vec3 N, in vec3 fpos, in vec3 albedo, in vec2 mp)
     
     if(NdotL > 0)
     {
-        res += a * NdotL * LColor(i) * material.;
+        res += a * NdotL * LColor(i);
 
         vec3 viewDir = normalize(camera.viewMat[3].xyz - fpos);
         vec3 reflectDir = reflect(-L, N);
 
-        res += LColor(i) * a * pow(max(dot(viewDir, reflectDir), 0.0), material.shininess) * material.specular;
+        res += LColor(i) * a * pow(max(dot(viewDir, reflectDir), 0.0), 32);
     }
 
     return res;

@@ -40,6 +40,7 @@ gui::DummyScreen::DummyScreen() : scene(),
                                   mouseCaptured(false),
                                   animationPaused(false),
                                   wireMode(false),
+                                  debugMode(false),
                                   ppProg(nullptr)
 {
     auto camera = this->scene.GetCamera(MAIN_CAM);
@@ -119,7 +120,7 @@ gui::DummyScreen::DummyScreen() : scene(),
     auto cubeTex = this->scene.GetTexture("CubeTex");
     cubeTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
     cubeTex->SetMipmapsEnabled(true);
-    cubeTex->LoadData("assets/textures/dummy/grass.jpg");
+    cubeTex->LoadData("assets/textures/grass.png");
     cubeTex->Bind(GL_TEXTURE0);
 
     auto floorMesh = this->scene.GetMesh("Floor");

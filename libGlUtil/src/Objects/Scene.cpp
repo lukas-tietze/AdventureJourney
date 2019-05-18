@@ -210,9 +210,20 @@ glutil::Program *glutil::Scene::InitProgramFromSources(const resourceId_t &id, c
 
     for (const auto &source : sources)
     {
-        auto shader = this->GetShader(source);
+        auto kvp = this->shaders.find(source);
 
-        shader->LoadFrom(source);
+        Shader *shader = nullptr;
+
+        if (kvp == this->shaders.end())
+        {
+            shader = this->GetShader(source);
+            shader->LoadFrom(source);
+        }
+        else
+        {
+            shader = this->shaders[source];
+        }
+
         program->Attach(shader);
     }
 
