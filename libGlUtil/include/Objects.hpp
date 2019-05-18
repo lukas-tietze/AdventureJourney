@@ -228,6 +228,7 @@ struct SceneObjectUboData
 {
     glm::mat4 modelMatrix;
     glm::mat4 normalMatrix;
+    int materialId;
 };
 #pragma pack(pop)
 
@@ -238,7 +239,6 @@ class SceneObject : public StaticUboOwner<SceneObjectUboData>
 {
 private:
     Mesh *geometry;
-    Program *program;
     Material *material;
 
 public:
@@ -249,14 +249,11 @@ public:
     ~SceneObject();
 
     void SetGeometry(Mesh *);
-    void SetProgram(Program *);
     void SetMaterial(Material *);
     void SetModelMatrix(const glm::mat4 &);
     const glm::mat4 &GetModelMatrix() const;
     Mesh *GetGeometry();
     const Mesh *GetGeometry() const;
-    Program *GetProgram();
-    const Program *GetProgram() const;
     Material *GetMaterial();
     const Material *GetMaterial() const;
 
@@ -410,9 +407,9 @@ public:
     void SetAlbedo(const glm::vec4 &);
     void SetShininess(float);
     void SetMetalness(float);
-    void SetNormalMap(Texture *, GLenum);
-    void SetAlbedoMap(Texture *, GLenum);
-    void SetPropertyMap(Texture *, GLenum);
+    void SetNormalMap(Texture *map, GLenum target);
+    void SetAlbedoMap(Texture *map, GLenum target);
+    void SetPropertyMap(Texture *map, GLenum target);
 
     const glm::vec4 &GetAlbedo(const glm::vec4 &) const;
     float GetShininess(float) const;
@@ -421,22 +418,14 @@ public:
     void Use();
 };
 
-class MaterialCollection : DynamicUboOwner<MaterialUboData>
+class MaterialSet : DynamicUboOwner<MaterialUboData>
 {
-    MaterialCollection();
-    MaterialCollection(const std::initializer_list<Material> &);
+public:
+    MaterialSet();
+    MaterialSet(const std::initializer_list<Material> &);
 
     void Add(const Material &);
     void Clear();
-};
-
-enum class ImageFormat
-{
-    FromFileExtension,
-    JPEG,
-    PNG,
-    BMP,
-    Binary,
 };
 
 class Shader
@@ -544,7 +533,7 @@ public:
     bool LoadDataFromMemory(void *);
     template <class TBuilder>
     bool LoadDataFromBuilder(const TBuilder &);
-    bool LoadData(const std::string &path, ImageFormat format = ImageFormat::FromFileExtension);
+    bool LoadData(const std::string &path);
     bool LoadCubeMap(const std::string &directory, const std::initializer_list<std::string> &files);
     bool LoadCubeMap(const std::initializer_list<std::string> &files);
     bool LoadCubeMap(const std::vector<std::string> &paths);

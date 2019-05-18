@@ -155,7 +155,7 @@ bool glutil::Texture::LoadDataFromMemory(void *data)
     return true;
 }
 
-bool glutil::Texture::LoadData(const std::string &path, ImageFormat format)
+bool glutil::Texture::LoadData(const std::string &path)
 {
     if (!this->format || !this->internalFormat || !this->target)
         return false;

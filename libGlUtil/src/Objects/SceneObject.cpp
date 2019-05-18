@@ -4,7 +4,6 @@
 #include "glm/gtc/matrix_inverse.hpp"
 
 glutil::SceneObject::SceneObject() : geometry(nullptr),
-                                     program(nullptr),
                                      material(nullptr)
 {
 }
@@ -43,11 +42,6 @@ void glutil::SceneObject::SetGeometry(glutil::Mesh *geometry)
     this->geometry = geometry;
 }
 
-void glutil::SceneObject::SetProgram(glutil::Program *program)
-{
-    this->program = program;
-}
-
 void glutil::SceneObject::SetMaterial(glutil::Material *material)
 {
     this->material = material;
@@ -58,11 +52,6 @@ glutil::Mesh *glutil::SceneObject::GetGeometry()
     return this->geometry;
 }
 
-glutil::Program *glutil::SceneObject::GetProgram()
-{
-    return this->program;
-}
-
 glutil::Material *glutil::SceneObject::GetMaterial()
 {
     return this->material;
@@ -70,8 +59,6 @@ glutil::Material *glutil::SceneObject::GetMaterial()
 
 void glutil::SceneObject::Render()
 {
-    if (this->program)
-        this->program->Use();
     if (this->material)
         this->material->Use();
 
