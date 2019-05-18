@@ -4,15 +4,15 @@
 #include <cstring>
 
 glutil::MeshBuffer::MeshBuffer() : vertexCount(0),
-                       indexCount(0),
-                       vertexSize(0),
-                       indexSize(0),
-                       indexType(0),
-                       attributes(0),
-                       vertices(nullptr),
-                       indices(nullptr),
-                       drawMode(0),
-                       dataManaged(false)
+                                   indexCount(0),
+                                   vertexSize(0),
+                                   indexSize(0),
+                                   indexType(0),
+                                   attributes(0),
+                                   vertices(nullptr),
+                                   indices(nullptr),
+                                   drawMode(0),
+                                   dataManaged(false)
 {
 }
 

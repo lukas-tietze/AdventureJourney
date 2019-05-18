@@ -76,10 +76,10 @@ void glutil::Program::Clear()
 
 bool glutil::Program::Link()
 {
-    util::dbg.WriteLine("Linking program % from: %.", this->id, util::WrapPointerIterable(this->shaders.begin(), this->shaders.end(), "\n\t"));
-
     this->DestroyGlObjects();
     this->id = glCreateProgram();
+
+    util::dbg.WriteLine("Linking program % from: \n\t%.", this->id, util::WrapPointerIterable(this->shaders.begin(), this->shaders.end(), "\n\t"));
 
     for (auto shader : this->shaders)
         glAttachShader(this->id, shader->GetId());

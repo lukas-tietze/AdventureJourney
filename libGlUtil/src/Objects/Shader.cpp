@@ -90,32 +90,34 @@ bool glutil::Shader::LoadFrom(const std::string &path)
     else if (util::EndsWith(path, EXT_TESSELATION_EVALUAION_SHADER) || util::EndsWith(path, EXT_TESSELATION_EVALUAION_SHADER_ALT))
         this->type = GL_TESS_EVALUATION_SHADER;
     else
-        throw util::Exception("Load Shader: can't deduce shader type from file extension!");
+        throw util::Exception("Failed to load shader! Can't deduce shader type from file extension!");
 
     return this->Reload();
 }
 
 bool glutil::Shader::Reload()
 {
+    std::string text;
+    if (!util::TryReadFile(this->path, text))
+    {
+        util::dbg.WriteLine("Failed to Load shader! Could not read file %", this->path);
+        return false;
+    }
+
     this->DestroyGlObjects();
     this->id = glCreateShader(this->type);
 
-    std::string text;
-    if(!util::TryReadFile(this->path, text))
-    {
-        util::dbg.WriteLine("Failed to Lladed shader % (type %) from %. FiCould not read file!", this->id, this->type, this->path);
-        return false;
-    }
+    util::dbg.WriteLine("Compiling shader % from: %.", this->id, this->path);
 
     auto buf = text.c_str();
 
     glShaderSource(this->id, 1, &buf, nullptr);
     glCompileShader(this->id);
 
-    if (this->Check())
-        util::dbg.WriteLine("Loaded shader % (type %) from %.", this->id, this->type, this->path);
-    else
+    if (!this->Check())
         return false;
+
+    util::dbg.WriteLine("Done!");
 
     return true;
 }
@@ -135,10 +137,10 @@ bool glutil::Shader::Check()
         glGetShaderInfoLog(this->id, maxLen, &maxLen, &errorLog[0]);
     }
 
-    if (isCompiled == GL_FALSE)
-        util::dbg.WriteLine("Shader %, %. Failed to compile shader!\n%", this->id, this->path, errorLog);
+    if (!isCompiled)
+        util::dbg.WriteLine("Compiler Error! %", errorLog);
     else if (maxLen > 0)
-        util::dbg.WriteLine("Shader %, %. Compiled shader with warnings!\n%", this->id, this->path, errorLog);
+        util::dbg.WriteLine("Completed with warnings! %", errorLog);
 
     return isCompiled == GL_TRUE;
 }
@@ -159,7 +161,7 @@ glutil::Shader &glutil::Shader::operator=(Shader &&shader)
 
 std::ostream &glutil::operator<<(std::ostream &s, const Shader &shader)
 {
-    s << "source=" << shader.path << ", type=" << shader.type << ", id=" << shader.id;
+    s << "id=" << shader.id << ", type=" << shader.type << ", source=" << shader.path;
 
     return s;
 }

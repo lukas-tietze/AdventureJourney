@@ -54,6 +54,8 @@ void glutil::Texture::PrepareLoad()
     glBindTexture(this->target, this->tex);
 }
 
+#include "GlUtils.hpp"
+
 void glutil::Texture::SetTextureParameters()
 {
     glTexParameteri(this->target, GL_TEXTURE_WRAP_R, this->wrapModes[WRAP_R]);
@@ -61,7 +63,9 @@ void glutil::Texture::SetTextureParameters()
     glTexParameteri(this->target, GL_TEXTURE_WRAP_T, this->wrapModes[WRAP_T]);
     glTexParameteri(this->target, GL_TEXTURE_MIN_FILTER, this->filterModes[FILTER_MIN]);
     glTexParameteri(this->target, GL_TEXTURE_MAG_FILTER, this->filterModes[FILTER_MAG]);
-    glTexParameterf(this->target, GL_TEXTURE_MAX_ANISOTROPY, this->maxAnisotropy);
+
+    if (this->maxAnisotropy > 0)
+        glTexParameterf(this->target, GL_TEXTURE_MAX_ANISOTROPY, this->maxAnisotropy);
 
     if (this->createMipmaps)
         glGenerateMipmap(this->target);

@@ -3,7 +3,9 @@
 #include "glm/gtx/transform.hpp"
 #include "glm/gtc/matrix_inverse.hpp"
 
-glutil::SceneObject::SceneObject() : geometry(nullptr)
+glutil::SceneObject::SceneObject() : geometry(nullptr),
+                                     program(nullptr),
+                                     material(nullptr)
 {
 }
 
@@ -68,14 +70,16 @@ glutil::Material *glutil::SceneObject::GetMaterial()
 
 void glutil::SceneObject::Render()
 {
-    if (this->program && this->material && this->geometry)
-    {
+    if (this->program)
         this->program->Use();
+    if (this->material)
         this->material->Use();
-        this->Bind();
-        this->Upload();
+
+    this->Bind();
+    this->Upload();
+
+    if (this->geometry)
         this->geometry->Draw();
-    }
 }
 
 void glutil::SceneObject::RenderDepthPass()

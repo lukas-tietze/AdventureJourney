@@ -19,8 +19,8 @@ bool gui::quadrics::Quad(glutil::Mesh &out, uint32_t color)
     vertex.position[1] = 0;
     vertex.position[2] = 1;
 
-    vertex.texture[0] = 0;
-    vertex.texture[1] = 0;
+    vertex.texture[0] = TexCoord(0.f);
+    vertex.texture[1] = TexCoord(0.f);
 
     vertices.push_back(vertex);
 
@@ -28,8 +28,8 @@ bool gui::quadrics::Quad(glutil::Mesh &out, uint32_t color)
     vertex.position[1] = 0;
     vertex.position[2] = 1;
 
-    vertex.texture[0] = 1;
-    vertex.texture[1] = 0;
+    vertex.texture[0] = TexCoord(1.f);
+    vertex.texture[1] = TexCoord(0.f);
 
     vertices.push_back(vertex);
 
@@ -37,8 +37,8 @@ bool gui::quadrics::Quad(glutil::Mesh &out, uint32_t color)
     vertex.position[1] = 0;
     vertex.position[2] = -1;
 
-    vertex.texture[0] = 1;
-    vertex.texture[1] = 1;
+    vertex.texture[0] = TexCoord(1.f);
+    vertex.texture[1] = TexCoord(1.f);
 
     vertices.push_back(vertex);
 
@@ -46,8 +46,8 @@ bool gui::quadrics::Quad(glutil::Mesh &out, uint32_t color)
     vertex.position[1] = 0;
     vertex.position[2] = -1;
 
-    vertex.texture[0] = 0;
-    vertex.texture[1] = 1;
+    vertex.texture[0] = TexCoord(0.f);
+    vertex.texture[1] = TexCoord(1.f);
 
     vertices.push_back(vertex);
 

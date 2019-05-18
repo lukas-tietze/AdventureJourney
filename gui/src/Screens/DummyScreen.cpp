@@ -16,7 +16,7 @@ constexpr char PIXEL_PROG[] = "PPpix";
 constexpr char BLUR_PROG[] = "PPblur";
 constexpr char DEPTH_BLUR_PROG[] = "PPdepthBlur";
 constexpr char EDGE_PROG[] = "PPedge";
-constexpr size_t NUM_OBJECTS = 0;
+constexpr size_t NUM_OBJECTS = 30;
 
 struct TextureBuilder
 {
@@ -117,11 +117,15 @@ gui::DummyScreen::DummyScreen() : scene(),
     light.SetType(glutil::LightType::Point);
     this->scene.SetActiveLightSet(MAIN_LIGHT);
 
-    auto cubeTex = this->scene.GetTexture("CubeTex");
-    cubeTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
-    cubeTex->SetMipmapsEnabled(true);
-    cubeTex->LoadData("assets/textures/grass.png");
-    cubeTex->Bind(GL_TEXTURE0);
+    auto grassTex = this->scene.GetTexture("CubeTex");
+    grassTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
+    grassTex->SetMipmapsEnabled(true);
+    grassTex->LoadData("assets/textures/grass.png");
+    grassTex->Bind(GL_TEXTURE0);
+
+    auto grassMaterial = this->scene.GetMaterial("Grass");
+    grassMaterial->SetAlbedo(glm::vec4(0.3f, 0.8f, 0.5f, 1.f));
+    grassMaterial->SetAlbedoMap(grassTex, GL_TEXTURE0);
 
     auto floorMesh = this->scene.GetMesh("Floor");
     gui::quadrics::Quad(*floorMesh);
@@ -142,12 +146,14 @@ gui::DummyScreen::DummyScreen() : scene(),
     floorObj->SetGeometry(floorMesh);
     floorObj->SetModelMatrix(glm::scale(glm::vec3(5, 5, 5)));
     floorObj->SetBindingTarget(2);
+    floorObj->SetMaterial(grassMaterial);
     floorObj->CreateGlObjects();
 
     auto lamp = this->scene.GetObject("lamp");
     lamp->SetGeometry(cubeMesh);
     lamp->SetModelMatrix(glm::translate(glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.1, 0.1, 0.1)));
     lamp->SetBindingTarget(2);
+    lamp->SetMaterial(grassMaterial);
     lamp->CreateGlObjects();
 
     util::Random rnd;

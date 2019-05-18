@@ -1,7 +1,13 @@
 #version 430 core
 
-in vec3 vPositionWs;
 const float CG2PI = 3.14159265359;
+
+in vec3 vPositionWs;
+in vec3 vTangentWs;
+in vec3 vBitangentWs;
+in vec3 vNormalWs;
+in vec2 vTexcoord;
+in vec4 vColor;
 
 layout(std140, binding = 1) uniform cameraDataBlock
 {
@@ -11,6 +17,12 @@ layout(std140, binding = 1) uniform cameraDataBlock
         mat4 invProjectionMat;
 
 } camera;
+
+layout(std140,binding = 3) uniform materialDataBlock
+{
+    vec4 albedo;
+    vec4 properties;
+} material;
 
 struct Light
 {
@@ -38,8 +50,5 @@ layout(std140, binding = 4) uniform globalLightDataBlock
 
 vec3 CalcLighting(in vec3 albedo, in vec4 materialProps, in vec3 normal)
 {
-    if(normal.x < 0 || normal.y < 0 || normal.z < 0)
-        return normal * -1.0;
-    
-    return normal;
+    return vec3(vTexcoord, 0.0);
 }
