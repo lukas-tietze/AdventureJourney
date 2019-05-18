@@ -76,20 +76,20 @@ void glutil::Program::Clear()
 
 bool glutil::Program::Link()
 {
+    util::dbg.WriteLine("Linking program % from: %.", this->id, util::WrapPointerIterable(this->shaders.begin(), this->shaders.end(), "\n\t"));
+
     this->DestroyGlObjects();
     this->id = glCreateProgram();
 
     for (auto shader : this->shaders)
-    {
         glAttachShader(this->id, shader->GetId());
-    }
 
     glLinkProgram(this->id);
 
-    if (this->Check())
-        util::dbg.WriteLine("Linked program % from: {%}.", this->id, util::WrapPointerIterable(this->shaders.begin(), this->shaders.end(), "}, {"));
-    else
+    if (!this->Check())
         return false;
+
+    util::dbg.WriteLine("Done!\n");
 
     return true;
 }
@@ -128,10 +128,10 @@ bool glutil::Program::Check()
         glGetProgramInfoLog(this->id, maxLen, &maxLen, &errorLog[0]);
     }
 
-    if (isLinked == GL_FALSE)
-        util::dbg.WriteLine("Program %. Failed to link program!\n%", this->id, errorLog);
+    if (!isLinked)
+        util::dbg.WriteLine("Failed! %", errorLog);
     else if (maxLen > 0)
-        util::dbg.WriteLine("Program %. Linkes program with warnings!\n%", this->id, errorLog);
+        util::dbg.WriteLine("Completed with warnings! %", errorLog);
 
     return isLinked == GL_TRUE;
 }
