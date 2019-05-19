@@ -117,15 +117,25 @@ gui::DummyScreen::DummyScreen() : scene(),
     light.SetType(glutil::LightType::Point);
     this->scene.SetActiveLightSet(MAIN_LIGHT);
 
-    auto grassTex = this->scene.GetTexture("CubeTex");
+    auto grassTex = this->scene.GetTexture("Grass");
     grassTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
     grassTex->SetMipmapsEnabled(true);
     grassTex->LoadData("assets/textures/grass.png");
     grassTex->Bind(GL_TEXTURE0);
 
+    auto pebbleTex = this->scene.GetTexture("Pebble");
+    pebbleTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
+    pebbleTex->SetMipmapsEnabled(true);
+    pebbleTex->LoadData("assets/textures/pebble.png");
+    pebbleTex->Bind(GL_TEXTURE0);
+
     auto grassMaterial = this->scene.GetMaterial("Grass");
     grassMaterial->SetAlbedo(glm::vec4(0.3f, 0.8f, 0.5f, 1.f));
     grassMaterial->SetAlbedoMap(grassTex, GL_TEXTURE0);
+
+    auto pebbleMaterial = this->scene.GetMaterial("Pebble");
+    pebbleMaterial->SetAlbedo(glm::vec4(0.3f, 0.3f, 0.3f, 1.f));
+    pebbleMaterial->SetAlbedoMap(pebbleTex, GL_TEXTURE0);
 
     auto floorMesh = this->scene.GetMesh("Floor");
     gui::quadrics::Quad(*floorMesh);
@@ -146,7 +156,7 @@ gui::DummyScreen::DummyScreen() : scene(),
     floorObj->SetGeometry(floorMesh);
     floorObj->SetModelMatrix(glm::scale(glm::vec3(5, 5, 5)));
     floorObj->SetBindingTarget(2);
-    floorObj->SetMaterial(grassMaterial);
+    floorObj->SetMaterial(pebbleMaterial);
     floorObj->CreateGlObjects();
 
     auto lamp = this->scene.GetObject("lamp");

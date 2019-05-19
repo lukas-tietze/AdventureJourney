@@ -268,6 +268,7 @@ struct CameraUboData
     glm::mat4 inverseViewMat;
     glm::mat4 projectionMat;
     glm::mat4 inverseProjectionMat;
+    // glm::vec3 position;
 };
 #pragma pack(pop)
 
