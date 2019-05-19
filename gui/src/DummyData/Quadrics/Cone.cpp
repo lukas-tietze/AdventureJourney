@@ -1,10 +1,14 @@
 #include "DummyData.hpp"
 #include "QuadricHelper.internal.hpp"
 
-bool gui::quadrics::Cone(uint32_t slices, uint32_t stacks, glutil::Mesh &out, uint32_t color)
+bool gui::quadrics::Cone(uint32_t slices, uint32_t stacks, glutil::Mesh &out)
 {
-    std::vector<gui::Vertex_Full> vertices;
-    std::vector<uint16_t> indices;
+    return Cone(slices, stacks, out, QuadricConfig());
+}
+
+bool gui::quadrics::Cone(uint32_t slices, uint32_t stacks, glutil::Mesh &out, const QuadricConfig &config)
+{
+    QuadricContext q(config);
 
     // this is a small normal trick:
     float n[3] = {1, 0, 1};
@@ -46,5 +50,5 @@ bool gui::quadrics::Cone(uint32_t slices, uint32_t stacks, glutil::Mesh &out, ui
         }
     }
 
-    return gui::quadrics::CreateMesh(out, vertices, indices);
+    return q.CreateMesh(out);
 }

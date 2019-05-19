@@ -1,11 +1,14 @@
 #include "DummyData.hpp"
 #include "QuadricHelper.internal.hpp"
 
-//---------------------------------------------------------------------------
-bool gui::quadrics::Cylinder(uint32_t slices, uint32_t stacks, glutil::Mesh &out, uint32_t color)
+bool gui::quadrics::Cylinder(uint32_t slices, uint32_t stacks, glutil::Mesh &out)
 {
-    std::vector<gui::Vertex_Full> vertices;
-    std::vector<uint16_t> indices;
+    return Cylinder(slices, stacks, out, QuadricConfig());
+}
+
+bool gui::quadrics::Cylinder(uint32_t slices, uint32_t stacks, glutil::Mesh &out, const QuadricConfig &config)
+{
+    QuadricContext q(config);
 
     // create (stacks-1) rings
     for (int iSt = 0; iSt < stacks; iSt++)
@@ -28,5 +31,5 @@ bool gui::quadrics::Cylinder(uint32_t slices, uint32_t stacks, glutil::Mesh &out
         }
     }
 
-    return gui::quadrics::CreateMesh(out, vertices, indices);
+    return q.CreateMesh(out);
 }

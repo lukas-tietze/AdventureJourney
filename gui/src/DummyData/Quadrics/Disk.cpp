@@ -1,10 +1,14 @@
 #include "DummyData.hpp"
 #include "QuadricHelper.internal.hpp"
 
-bool gui::quadrics::Disk(uint32_t slices, uint32_t loops, glutil::Mesh &out, uint32_t color)
+bool gui::quadrics::Disk(uint32_t slices, uint32_t loops, glutil::Mesh &out)
 {
-    std::vector<gui::Vertex_Full> vertices;
-    std::vector<uint16_t> indices;
+    return Disk(slices, loops, out, QuadricConfig());
+}
+
+bool gui::quadrics::Disk(uint32_t slices, uint32_t loops, glutil::Mesh &out, const QuadricConfig &config)
+{
+    QuadricContext q(config);
 
     // create (loops-1) rings
     for (int iL = 0; iL < loops; iL++)
@@ -36,5 +40,5 @@ bool gui::quadrics::Disk(uint32_t slices, uint32_t loops, glutil::Mesh &out, uin
         }
     }
 
-    return gui::quadrics::CreateMesh(out, vertices, indices);
+    return q.CreateMesh(out);
 }

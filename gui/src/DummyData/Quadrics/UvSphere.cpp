@@ -1,10 +1,14 @@
 #include "DummyData.hpp"
 #include "QuadricHelper.internal.hpp"
 
-bool gui::quadrics::UVSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out, uint32_t color)
+bool gui::quadrics::UVSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out)
 {
-    std::vector<gui::Vertex_Full> vertices;
-    std::vector<uint16_t> indices;
+    return UVSphere(slices, stacks, out, QuadricConfig());
+}
+
+bool gui::quadrics::UVSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out, const QuadricConfig &config)
+{
+    QuadricContext q(config);
 
     float x0, y0, z0, x1, y1, z1, x2, y2, z2, x3, y3, z3;
     float slr = (2 * (float)M_PI) / (float)slices;
@@ -55,5 +59,5 @@ bool gui::quadrics::UVSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out
         }
     }
 
-    return gui::quadrics::CreateMesh(out, vertices, indices);
+    return q.CreateMesh(out);
 }
