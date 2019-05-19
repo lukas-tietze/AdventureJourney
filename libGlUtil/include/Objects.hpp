@@ -60,9 +60,18 @@ public:
 
 #include "libGlUtil/src/Objects/DynamicUboOwner.inl"
 
-class RenderToTextureBase
+template<class TData, class TAccessor, class TConstAccessor>
+class UboSet : public DynamicUboOwner<TData>
 {
+  public:
+    TAccessor Add();
+    void Clear();
+    
+    TAccessor operator[](size_t index);
+    TConstAccessor operator[](size_t index) const;
 };
+
+#include "libGlUtil/src/Objects/UboSet.inl"
 
 struct PostProcessingPipeLineUboData
 {
@@ -70,7 +79,7 @@ struct PostProcessingPipeLineUboData
     int height;
 };
 
-class PostProcessingPipeLine : public RenderToTextureBase, public StaticUboOwner<PostProcessingPipeLineUboData>
+class PostProcessingPipeLine : public StaticUboOwner<PostProcessingPipeLineUboData>
 {
 private:
     bool dirty;
@@ -268,7 +277,6 @@ struct CameraUboData
     glm::mat4 inverseViewMat;
     glm::mat4 projectionMat;
     glm::mat4 inverseProjectionMat;
-    // glm::vec3 position;
 };
 #pragma pack(pop)
 
@@ -423,7 +431,6 @@ class MaterialSet : DynamicUboOwner<MaterialUboData>
 {
 public:
     MaterialSet();
-    MaterialSet(const std::initializer_list<Material> &);
 
     void Add(const Material &);
     void Clear();
@@ -527,10 +534,6 @@ public:
     Texture();
     ~Texture();
 
-    bool CreateBuffer();
-    bool CreateAsStencilBuffer();
-    bool CreateAsDepthBuffer();
-    bool CreateAsStencilAndDepthBuffer();
     bool LoadDataFromMemory(void *);
     template <class TBuilder>
     bool LoadDataFromBuilder(const TBuilder &);

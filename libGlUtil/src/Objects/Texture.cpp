@@ -105,43 +105,6 @@ GLenum glutil::Texture::GetFormatFromChannelCount(int n)
     }
 }
 
-bool glutil::Texture::CreateBuffer()
-{
-    this->PrepareLoad();
-
-    glTexImage2D(this->target, 0, this->internalFormat,
-                 this->width, this->height, 0,
-                 this->format, GL_UNSIGNED_BYTE, nullptr);
-
-    this->SetTextureParameters();
-
-    return true;
-}
-
-bool glutil::Texture::CreateAsStencilBuffer()
-{
-    this->format = GL_STENCIL_INDEX;
-    this->internalFormat = GL_STENCIL_INDEX;
-
-    return this->CreateBuffer();
-}
-
-bool glutil::Texture::CreateAsDepthBuffer()
-{
-    this->format = GL_DEPTH_COMPONENT;
-    this->internalFormat = GL_DEPTH_COMPONENT;
-
-    return this->CreateBuffer();
-}
-
-bool glutil::Texture::CreateAsStencilAndDepthBuffer()
-{
-    this->format = GL_DEPTH_STENCIL;
-    this->internalFormat = GL_DEPTH24_STENCIL8;
-
-    return this->CreateBuffer();
-}
-
 bool glutil::Texture::LoadDataFromMemory(void *data)
 {
     this->PrepareLoad();
@@ -152,6 +115,14 @@ bool glutil::Texture::LoadDataFromMemory(void *data)
 
     this->SetTextureParameters();
 
+    util::dbg.WriteLine("Copying data to buffer %. Target=%, internalFormat=%, width=%, height=%, format=%\nDone!\n",
+                        this->tex,
+                        this->target,
+                        this->internalFormat,
+                        this->width,
+                        this->height,
+                        this->format);
+
     return true;
 }
 
@@ -160,11 +131,13 @@ bool glutil::Texture::LoadData(const std::string &path)
     if (!this->format || !this->internalFormat || !this->target)
         return false;
 
+    util::dbg.WriteLine("Loading texture from %...", path);
+
     auto file = std::fopen(path.c_str(), "r");
 
     if (!file)
     {
-        util::dbg.WriteLine("Failed to load texture from %. Could not open file!", path);
+        util::dbg.WriteLine("Error: Could not open file!");
 
         return false;
     }
@@ -177,7 +150,7 @@ bool glutil::Texture::LoadData(const std::string &path)
 
     if (!pixels)
     {
-        util::dbg.WriteLine("Failed to load texture from %. Error while reading data! Message: %", path, stbi_failure_reason());
+        util::dbg.WriteLine("Error: Invalid or corrupted data! Message: %", stbi_failure_reason());
 
         return false;
     }

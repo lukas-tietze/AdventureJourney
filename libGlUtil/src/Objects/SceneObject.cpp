@@ -71,10 +71,9 @@ void glutil::SceneObject::Render()
 
 void glutil::SceneObject::RenderDepthPass()
 {
+    this->Bind();
+    this->Upload();
+    
     if (this->geometry)
-    {
-        this->Bind();
-        this->Upload();
         this->geometry->Draw();
-    }
 }

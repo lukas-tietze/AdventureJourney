@@ -56,7 +56,7 @@ namespace quadrics
 struct QuadricConfig
 {
     glm::vec2 texCoordOffset = glm::vec2(0.f, 0.f);
-    glm::vec2 texCoordScale = glm::vec2(0.f, 0.f);
+    glm::vec2 texCoordScale = glm::vec2(1.f, 1.f);
     bool useColorFunc = false;
     union {
         uint32_t (*colorFunc)(const glm::vec3 &);

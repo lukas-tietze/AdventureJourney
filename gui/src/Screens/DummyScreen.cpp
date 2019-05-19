@@ -121,13 +121,11 @@ gui::DummyScreen::DummyScreen() : scene(),
     grassTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
     grassTex->SetMipmapsEnabled(true);
     grassTex->LoadData("assets/textures/grass.png");
-    grassTex->Bind(GL_TEXTURE0);
 
     auto pebbleTex = this->scene.GetTexture("Pebble");
     pebbleTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
     pebbleTex->SetMipmapsEnabled(true);
     pebbleTex->LoadData("assets/textures/pebble.png");
-    pebbleTex->Bind(GL_TEXTURE0);
 
     auto grassMaterial = this->scene.GetMaterial("Grass");
     grassMaterial->SetAlbedo(glm::vec4(0.3f, 0.8f, 0.5f, 1.f));

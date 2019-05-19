@@ -76,5 +76,5 @@ vec3 CalcLighting(in vec3 albedo, in vec4 materialProps, in vec3 normal)
         if(LEnabled(i))
             res += CalcOneLight(i, normal, vPositionWs, albedo, materialProps.xy);
 
-    return res;
+    return albedo;
 }
