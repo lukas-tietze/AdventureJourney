@@ -13,13 +13,16 @@ bool gui::quadrics::UVSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out
     float x0, y0, z0, x1, y1, z1, x2, y2, z2, x3, y3, z3;
     float slr = (2 * (float)M_PI) / (float)slices;
     float str = (float)(M_PI) / (float)stacks;
+    float phi;
+    float rho;
 
-    for (size_t iSt = 0; iSt < stacks; ++iSt)
+    for (size_t stack = 0; stack < stacks; ++stack)
     {
-        float rho = -(float)M_PI / 2.0f + (float)M_PI * (float(iSt) / float(stacks));
-        for (size_t iSl = 0; iSl < slices; ++iSl)
+        rho = -M_PI / 2.0 + M_PI * (static_cast<float>(stack) / static_cast<float>(stacks));
+
+        for (size_t slice = 0; slice < slices; ++slice)
         {
-            float phi = 2.0f * (float)M_PI * float(iSl) / float(slices);
+            phi = 2.0f * M_PI * static_cast<float>(slice) / static_cast<float>(slices);
 
             x0 = cos(rho) * cos(phi);
             y0 = cos(rho) * sin(phi);
@@ -34,14 +37,14 @@ bool gui::quadrics::UVSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out
             y3 = cos(rho + str) * sin(phi);
             z3 = sin(rho + str);
 
-            if (iSt == 0)
+            if (stack == 0)
             {
                 // TODO
                 // m_addTriangle(0, 0, -1, 0, 0, -1,
                 //               x2, y2, z2, x2, y2, z2,
                 //               x3, y3, z3, x3, y3, z3);
             }
-            else if (iSt == stacks - 1)
+            else if (stack == stacks - 1)
             {
                 // TODO
                 // m_addTriangle(x0, y0, z0, x0, y0, z0,

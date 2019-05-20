@@ -172,7 +172,7 @@ bool gui::quadrics::IcoSphere(uint32_t subdiv, glutil::Mesh &out, const QuadricC
     q.PushTriangle(9, 0, 11);
     q.PushTriangle(9, 11, 2);
     q.PushTriangle(9, 2, 5);
-    q.PushTriangle(7, 2, 1);
+    q.PushTriangle(7, 2, 11);
 
     for (size_t i = 0; i < subdiv; i++)
         SubdivideTriangles(q);
