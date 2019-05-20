@@ -427,15 +427,6 @@ public:
     void Use();
 };
 
-class MaterialSet : DynamicUboOwner<MaterialUboData>
-{
-public:
-    MaterialSet();
-
-    void Add(const Material &);
-    void Clear();
-};
-
 class Shader
 {
     friend std::ostream &operator<<(std::ostream &, const Shader &);

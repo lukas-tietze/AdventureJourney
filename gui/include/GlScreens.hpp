@@ -59,6 +59,7 @@ private:
     bool animationPaused;
     bool wireMode;
     bool debugMode;
+    bool cullMode;
 
     std::vector<IDummyObject *> objects;
     glutil::Program *ppProg;

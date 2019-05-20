@@ -65,7 +65,7 @@ vec3 CalcOneLight(in int i, in vec3 N, in vec3 fpos, in vec3 albedo, in vec2 mp)
         res += LColor(i) * a * pow(max(dot(viewDir, reflectDir), 0.0), 32);
     }
 
-    return res * albedo;
+    return res;
 }
 
 vec3 CalcLighting(in vec3 albedo, in vec4 materialProps, in vec3 normal)
@@ -76,5 +76,5 @@ vec3 CalcLighting(in vec3 albedo, in vec4 materialProps, in vec3 normal)
         if(LEnabled(i))
             res += CalcOneLight(i, normal, vPositionWs, albedo, materialProps.xy);
 
-    return albedo;
+    return res * albedo;
 }

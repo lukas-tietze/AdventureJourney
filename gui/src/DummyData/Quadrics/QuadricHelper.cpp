@@ -42,6 +42,11 @@ size_t gui::quadrics::QuadricContext::IndexCount() const
     return this->indices.size();
 }
 
+gui::quadrics::QuadricVertex &gui::quadrics::QuadricContext::Current()
+{
+    return this->current;
+}
+
 std::vector<gui::quadrics::vertex_t> &gui::quadrics::QuadricContext::Vertices()
 {
     return this->vertices;
@@ -84,6 +89,22 @@ void gui::quadrics::QuadricContext::SetNormal(float x, float y, float z)
     this->current.normal.x = x;
     this->current.normal.y = y;
     this->current.normal.z = z;
+}
+
+void gui::quadrics::QuadricContext::SetPositionAndNormal(const glm::vec3 &v)
+{
+    SetPosition(v);
+    SetNormal(v);
+}
+
+void gui::quadrics::QuadricContext::SetPosition(const glm::vec3 &v)
+{
+    this->current.pos = v;
+}
+
+void gui::quadrics::QuadricContext::SetNormal(const glm::vec3 &v)
+{
+    this->current.normal = v;
 }
 
 void gui::quadrics::QuadricContext::Push()

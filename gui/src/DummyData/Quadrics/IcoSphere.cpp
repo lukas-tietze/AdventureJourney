@@ -9,75 +9,80 @@ namespace
 {
 struct SubdivData
 {
-    float x0;
-    float y0;
-    float z0;
-
-    float x1;
-    float y1;
-    float z1;
-
-    float x2;
-    float y2;
-    float z2;
-
-    float x3;
-    float y3;
-    float z3;
-
-    float x4;
-    float y4;
-    float z4;
-
-    float x5;
-    float y5;
-    float z5;
+    glm::vec3 v0;
+    glm::vec3 v1;
+    glm::vec3 v2;
+    glm::vec3 v3;
+    glm::vec3 v4;
+    glm::vec3 v5;
 };
 
 void CalcSubdivision(SubdivData &data)
 {
     //1. calculate new positions
-    data.x3 = 0.5f * data.x0 + 0.5f * data.x1; //            v2                //
-    data.y3 = 0.5f * data.y0 + 0.5f * data.y1; //           /  \               //
-    data.z3 = 0.5f * data.z0 + 0.5f * data.z1; //          /    \              //
-                                               //         /      \             //
-    data.x4 = 0.5f * data.x1 + 0.5f * data.x2; //        /        \            //
-    data.y4 = 0.5f * data.y1 + 0.5f * data.y2; //       v5---------v4          //
-    data.z4 = 0.5f * data.z1 + 0.5f * data.z2; //      / \        / \          //
-                                               //     /   \      /   \         //
-    data.x5 = 0.5f * data.x2 + 0.5f * data.x0; //    /     \    /     \        //
-    data.y5 = 0.5f * data.y2 + 0.5f * data.y0; //   /       \  /       \       //
-    data.z5 = 0.5f * data.z2 + 0.5f * data.z0; // v0---------v3---------v1     //
+    data.v3.x = 0.5f * data.v0.x + 0.5f * data.v1.x; //            v2                //
+    data.v3.y = 0.5f * data.v0.y + 0.5f * data.v1.y; //           /  \               //
+    data.v3.z = 0.5f * data.v0.z + 0.5f * data.v1.z; //          /    \              //
+                                                     //         /      \             //
+    data.v4.x = 0.5f * data.v1.x + 0.5f * data.v2.x; //        /        \            //
+    data.v4.y = 0.5f * data.v1.y + 0.5f * data.v2.y; //       v5---------v4          //
+    data.v4.z = 0.5f * data.v1.z + 0.5f * data.v2.z; //      / \        / \          //
+                                                     //     /   \      /   \         //
+    data.v5.x = 0.5f * data.v2.x + 0.5f * data.v0.x; //    /     \    /     \        //
+    data.v5.y = 0.5f * data.v2.y + 0.5f * data.v0.y; //   /       \  /       \       //
+    data.v5.z = 0.5f * data.v2.z + 0.5f * data.v0.z; // v0---------v3---------v1     //
 
-    //2. normalize them
-    float l;
-    l = sqrt(data.x3 * data.x3 + data.y3 * data.y3 + data.z3 * data.z3);
-    data.x3 /= l;
-    data.y3 /= l;
-    data.z3 /= l;
-    l = sqrt(data.x4 * data.x4 + data.y4 * data.y4 + data.z4 * data.z4);
-    data.x4 /= l;
-    data.y4 /= l;
-    data.z4 /= l;
-    l = sqrt(data.x5 * data.x5 + data.y5 * data.y5 + data.z5 * data.z5);
-    data.x5 /= l;
-    data.y5 /= l;
-    data.z5 /= l;
+    data.v3 = glm::normalize(data.v3);
+    data.v4 = glm::normalize(data.v4);
+    data.v5 = glm::normalize(data.v5);
 }
 
 void SubdivideTriangles(gui::quadrics::QuadricContext &q)
 {
-}
+    auto &vertices = q.Vertices();
+    auto &indices = q.Indices();
+    SubdivData data;
+    int length;
+    int indexBuf[6];
 
-gui::Vertex_Full &BaseQuadCorner(gui::quadrics::QuadricContext &q, int i, int c1, int c2)
-{
-    float values[3];
+    for (size_t c = 0, max = q.IndexCount() / 3; c < max; c++)
+    {
+        length = vertices.size();
 
-    values[(i + 0) % 3] = c1 * 1;
-    values[(i + 0) % 3] = c2 * M_INV_GR;
-    values[(i + 0) % 3] = 0;
+        indexBuf[0] = indices[c * 3 + 0];
+        indexBuf[1] = indices[c * 3 + 1];
+        indexBuf[2] = indices[c * 3 + 2];
+        indexBuf[3] = length;
+        indexBuf[4] = length + 1;
+        indexBuf[5] = length + 2;
 
-    q.SetPositionAndNormal(values[0], values[1], values[2]);
+        data.v0 = vertices[indexBuf[0]].pos;
+        data.v1 = vertices[indexBuf[1]].pos;
+        data.v2 = vertices[indexBuf[2]].pos;
+
+        CalcSubdivision(data);
+
+        q.SetPositionAndNormal(data.v3);
+        q.SetTexCoords(std::acos(data.v3.z), atan2(data.v3.y, data.v3.x));
+        q.Push();
+
+        q.SetPositionAndNormal(data.v4);
+        q.SetTexCoords(std::acos(data.v4.z), atan2(data.v4.y, data.v4.x));
+        q.Push();
+
+        q.SetPositionAndNormal(data.v5);
+        q.SetTexCoords(std::acos(data.v5.z), atan2(data.v5.y, data.v5.x));
+        q.Push();
+
+        indices[c * 3 + 0] = indexBuf[0];
+        indices[c * 3 + 1] = indexBuf[3];
+        indices[c * 3 + 2] = indexBuf[5];
+
+        // q.PushTriangle(indexBuf[0], indexBuf[3], indexBuf[5]);
+        q.PushTriangle(indexBuf[3], indexBuf[1], indexBuf[4]);
+        q.PushTriangle(indexBuf[3], indexBuf[4], indexBuf[5]);
+        q.PushTriangle(indexBuf[5], indexBuf[4], indexBuf[2]);
+    }
 }
 } // namespace
 
@@ -94,28 +99,6 @@ bool gui::quadrics::IcoSphere(uint32_t subdiv, glutil::Mesh &out, const QuadricC
 
     q.SetTexCoords(0, 0);
 
-    // ////Konstruktion nach https://upload.wikimedia.org/wikipedia/commons/9/9c/Icosahedron-golden-rectangles.svg
-    // ////3 Rechtecke
-    // for (int i = 0; i < 3; i++)
-    // {
-    //     vertices.push_back(BaseQuadCorner(vertex, i, 1, 1));
-    //     vertices.push_back(BaseQuadCorner(vertex, i, 1, -1));
-    //     vertices.push_back(BaseQuadCorner(vertex, i, -1, 1));
-    //     vertices.push_back(BaseQuadCorner(vertex, i, -1, -1));
-
-    //     indices.push_back(i * 4 + 0);
-    //     indices.push_back(i * 4 + 3);
-    //     indices.push_back(i * 4 + 1);
-    //     indices.push_back(i * 4 + 3);
-    //     indices.push_back(i * 4 + 2);
-    //     indices.push_back(i * 4 + 1);
-
-    //     // for (int j = 0; j < 20; j++)
-    //     // {
-    //     //     indices[i * 20 + j] = i * 4 + j % 5;
-    //     // }
-    // }
-
     ////Lade statische Werte von https://schneide.blog/2016/07/15/generating-an-icosphere-in-c/
 
     const float X = .525731112119133606f;
@@ -123,53 +106,76 @@ bool gui::quadrics::IcoSphere(uint32_t subdiv, glutil::Mesh &out, const QuadricC
     const float N = 0.f;
 
     q.SetPositionAndNormal(-X, N, Z);
+    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
     q.Push();
+    
     q.SetPositionAndNormal(X, N, Z);
+    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
     q.Push();
-    q.SetPositionAndNormal(-X, N, Z);
+    
+    q.SetPositionAndNormal(-X, N, -Z);
+    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
     q.Push();
-    q.SetPositionAndNormal(X, N, Z);
+    
+    q.SetPositionAndNormal(X, N, -Z);
+    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
     q.Push();
+    
     q.SetPositionAndNormal(N, Z, X);
+    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
     q.Push();
-    q.SetPositionAndNormal(N, Z, X);
+    
+    q.SetPositionAndNormal(N, Z, -X);
+    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
     q.Push();
+    
     q.SetPositionAndNormal(N, -Z, X);
+    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
     q.Push();
-    q.SetPositionAndNormal(N, -Z, X);
+    
+    q.SetPositionAndNormal(N, -Z, -X);
+    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
     q.Push();
+    
     q.SetPositionAndNormal(Z, X, N);
+    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
     q.Push();
+    
     q.SetPositionAndNormal(-Z, X, N);
+    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
     q.Push();
+    
     q.SetPositionAndNormal(Z, -X, N);
+    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
     q.Push();
+    
     q.SetPositionAndNormal(-Z, -X, N);
+    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
     q.Push();
 
-    q.PushIndices({0, 4, 1,
-                   0, 9, 4,
-                   9, 5, 4,
-                   4, 5, 8,
-                   4, 8, 1,
-                   8, 10, 1,
-                   8, 3, 10,
-                   5, 3, 8,
-                   5, 2, 3,
-                   2, 7, 3,
-                   7, 10, 3,
-                   7, 6, 10,
-                   7, 11, 6,
-                   11, 0, 6,
-                   0, 1, 6,
-                   6, 1, 10,
-                   9, 0, 11,
-                   9, 11, 2,
-                   9, 2, 5,
-                   7, 2, 11});
+    q.PushTriangle(0, 4, 1);
+    q.PushTriangle(0, 9, 4);
+    q.PushTriangle(9, 5, 4);
+    q.PushTriangle(4, 5, 8);
+    q.PushTriangle(4, 8, 1);
+    q.PushTriangle(8, 10, 1);
+    q.PushTriangle(8, 3, 10);
+    q.PushTriangle(5, 3, 8);
+    q.PushTriangle(5, 2, 3);
+    q.PushTriangle(2, 7, 3);
+    q.PushTriangle(7, 10, 3);
+    q.PushTriangle(7, 6, 10);
+    q.PushTriangle(7, 11, 6);
+    q.PushTriangle(11, 0, 6);
+    q.PushTriangle(0, 1, 6);
+    q.PushTriangle(6, 1, 10);
+    q.PushTriangle(9, 0, 11);
+    q.PushTriangle(9, 11, 2);
+    q.PushTriangle(9, 2, 5);
+    q.PushTriangle(7, 2, 1);
 
     for (size_t i = 0; i < subdiv; i++)
         SubdivideTriangles(q);
-
+        
     return q.CreateMesh(out);
 }

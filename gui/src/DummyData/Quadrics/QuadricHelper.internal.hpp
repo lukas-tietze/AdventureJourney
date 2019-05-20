@@ -48,14 +48,19 @@ public:
     size_t VertexCount() const;
     size_t IndexCount() const;
 
+    QuadricVertex &Current();
+
     std::vector<vertex_t> &Vertices();
     std::vector<index_t> &Indices();
 
     void Reserve(size_t, size_t);
     void SetTexCoords(float s, float t);
     void SetPositionAndNormal(float x, float y, float z);
+    void SetPositionAndNormal(const glm::vec3 &);
     void SetPosition(float x, float y, float z);
+    void SetPosition(const glm::vec3 &);
     void SetNormal(float x, float y, float z);
+    void SetNormal(const glm::vec3 &);
     void Push();
     void PushTriangle(index_t, index_t, index_t);
     void PushTriangle(const index_t *);

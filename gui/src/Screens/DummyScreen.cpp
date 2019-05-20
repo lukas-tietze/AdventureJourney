@@ -41,6 +41,7 @@ gui::DummyScreen::DummyScreen() : scene(),
                                   animationPaused(false),
                                   wireMode(false),
                                   debugMode(false),
+                                  cullMode(false),
                                   ppProg(nullptr)
 {
     auto camera = this->scene.GetCamera(MAIN_CAM);
