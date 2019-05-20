@@ -97,6 +97,11 @@ void gui::quadrics::QuadricContext::SetPositionAndNormal(const glm::vec3 &v)
     SetNormal(v);
 }
 
+void gui::quadrics::QuadricContext::SetSphericalTexCoords()
+{
+    this->SetTexCoords(std::acos(this->current.pos.y), std::atan(this->current.pos.z / this->current.pos.x));
+}
+
 void gui::quadrics::QuadricContext::SetPosition(const glm::vec3 &v)
 {
     this->current.pos = v;
@@ -181,8 +186,14 @@ bool gui::quadrics::QuadricContext::CreateMesh(glutil::Mesh &out)
 
 std::ostream &gui::quadrics::operator<<(std::ostream &s, const QuadricVertex &v)
 {
-    return s << "pos={" << v.pos.x << ", " << v.pos.y << ", " << v.pos.z
-             << "}, normal={" << v.normal.x << ", " << v.normal.y << ", " << v.normal.z
-             << "}, texCoord={" << v.texCoord.s << ", " << v.texCoord.t
-             << "}, color=#" << std::hex << v.color;
+    auto flags = s.flags();
+
+    s << "pos={" << v.pos.x << ", " << v.pos.y << ", " << v.pos.z
+      << "}, normal={" << v.normal.x << ", " << v.normal.y << ", " << v.normal.z
+      << "}, texCoord={" << v.texCoord.s << ", " << v.texCoord.t
+      << "}, color=#" << std::hex << v.color;
+
+    s.flags(flags);
+
+    return s;
 }

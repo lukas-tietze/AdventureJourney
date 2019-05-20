@@ -55,6 +55,7 @@ public:
 
     void Reserve(size_t, size_t);
     void SetTexCoords(float s, float t);
+    void SetSphericalTexCoords();
     void SetPositionAndNormal(float x, float y, float z);
     void SetPositionAndNormal(const glm::vec3 &);
     void SetPosition(float x, float y, float z);

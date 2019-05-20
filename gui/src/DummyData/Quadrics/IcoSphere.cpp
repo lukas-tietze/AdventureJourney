@@ -63,15 +63,15 @@ void SubdivideTriangles(gui::quadrics::QuadricContext &q)
         CalcSubdivision(data);
 
         q.SetPositionAndNormal(data.v3);
-        q.SetTexCoords(std::acos(data.v3.z), atan2(data.v3.y, data.v3.x));
+        q.SetSphericalTexCoords();
         q.Push();
 
         q.SetPositionAndNormal(data.v4);
-        q.SetTexCoords(std::acos(data.v4.z), atan2(data.v4.y, data.v4.x));
+        q.SetSphericalTexCoords();
         q.Push();
 
         q.SetPositionAndNormal(data.v5);
-        q.SetTexCoords(std::acos(data.v5.z), atan2(data.v5.y, data.v5.x));
+        q.SetSphericalTexCoords();
         q.Push();
 
         indices[c * 3 + 0] = indexBuf[0];
@@ -97,7 +97,7 @@ bool gui::quadrics::IcoSphere(uint32_t subdiv, glutil::Mesh &out, const QuadricC
 
     q.Reserve(12 * std::pow(4, subdiv), 20 * 3);
 
-    q.SetTexCoords(0, 0);
+    q.SetSphericalTexCoords();
 
     ////Lade statische Werte von https://schneide.blog/2016/07/15/generating-an-icosphere-in-c/
 
@@ -106,51 +106,51 @@ bool gui::quadrics::IcoSphere(uint32_t subdiv, glutil::Mesh &out, const QuadricC
     const float N = 0.f;
 
     q.SetPositionAndNormal(-X, N, Z);
-    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
+    q.SetSphericalTexCoords();
     q.Push();
-    
+
     q.SetPositionAndNormal(X, N, Z);
-    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
+    q.SetSphericalTexCoords();
     q.Push();
-    
+
     q.SetPositionAndNormal(-X, N, -Z);
-    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
+    q.SetSphericalTexCoords();
     q.Push();
-    
+
     q.SetPositionAndNormal(X, N, -Z);
-    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
+    q.SetSphericalTexCoords();
     q.Push();
-    
+
     q.SetPositionAndNormal(N, Z, X);
-    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
+    q.SetSphericalTexCoords();
     q.Push();
-    
+
     q.SetPositionAndNormal(N, Z, -X);
-    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
+    q.SetSphericalTexCoords();
     q.Push();
-    
+
     q.SetPositionAndNormal(N, -Z, X);
-    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
+    q.SetSphericalTexCoords();
     q.Push();
-    
+
     q.SetPositionAndNormal(N, -Z, -X);
-    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
+    q.SetSphericalTexCoords();
     q.Push();
-    
+
     q.SetPositionAndNormal(Z, X, N);
-    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
+    q.SetSphericalTexCoords();
     q.Push();
-    
+
     q.SetPositionAndNormal(-Z, X, N);
-    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
+    q.SetSphericalTexCoords();
     q.Push();
-    
+
     q.SetPositionAndNormal(Z, -X, N);
-    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
+    q.SetSphericalTexCoords();
     q.Push();
-    
+
     q.SetPositionAndNormal(-Z, -X, N);
-    q.SetTexCoords(std::acos(q.Current().pos.z), atan2(q.Current().pos.y, q.Current().pos.x));
+    q.SetSphericalTexCoords();
     q.Push();
 
     q.PushTriangle(0, 4, 1);
@@ -176,6 +176,6 @@ bool gui::quadrics::IcoSphere(uint32_t subdiv, glutil::Mesh &out, const QuadricC
 
     for (size_t i = 0; i < subdiv; i++)
         SubdivideTriangles(q);
-        
+
     return q.CreateMesh(out);
 }
