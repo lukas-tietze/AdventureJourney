@@ -16,7 +16,7 @@ constexpr char PIXEL_PROG[] = "PPpix";
 constexpr char BLUR_PROG[] = "PPblur";
 constexpr char DEPTH_BLUR_PROG[] = "PPdepthBlur";
 constexpr char EDGE_PROG[] = "PPedge";
-constexpr size_t NUM_OBJECTS = 30;
+constexpr size_t NUM_OBJECTS = 0;
 
 struct TextureBuilder
 {
@@ -142,6 +142,9 @@ gui::DummyScreen::DummyScreen() : scene(),
     auto icoMesh = this->scene.GetMesh("IcoMesh");
     gui::quadrics::IcoSphere(2, *icoMesh);
 
+    auto uvMesh = this->scene.GetMesh("UvMesh");
+    gui::quadrics::UvSphere(16, 10, *uvMesh);
+
     auto diskMesh = this->scene.GetMesh("DiskMesh");
     gui::quadrics::Disk(16, 2, *diskMesh);
 
@@ -165,11 +168,46 @@ gui::DummyScreen::DummyScreen() : scene(),
     lamp->SetMaterial(grassMaterial);
     lamp->CreateGlObjects();
 
+    auto ico = this->scene.GetObject("Ico");
+    ico->SetGeometry(icoMesh);
+    ico->SetModelMatrix(glm::translate(glm::vec3(1, 1, -2)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
+    ico->SetMaterial(pebbleMaterial);
+    ico->SetBindingTarget(2);
+    ico->CreateGlObjects();
+
+    auto uv = this->scene.GetObject("Uv");
+    uv->SetGeometry(uvMesh);
+    uv->SetModelMatrix(glm::translate(glm::vec3(1, 1, -1)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
+    uv->SetMaterial(pebbleMaterial);
+    uv->SetBindingTarget(2);
+    uv->CreateGlObjects();
+
+    auto disk = this->scene.GetObject("Disk");
+    disk->SetGeometry(diskMesh);
+    disk->SetModelMatrix(glm::translate(glm::vec3(1, 1, 0)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
+    disk->SetMaterial(pebbleMaterial);
+    disk->SetBindingTarget(2);
+    disk->CreateGlObjects();
+
+    auto cube = this->scene.GetObject("Cube");
+    cube->SetGeometry(cubeMesh);
+    cube->SetModelMatrix(glm::translate(glm::vec3(1, 1, 1)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
+    cube->SetMaterial(pebbleMaterial);
+    cube->SetBindingTarget(2);
+    cube->CreateGlObjects();
+
+    auto cylinder = this->scene.GetObject("Cylinder");
+    cylinder->SetGeometry(cylinderMesh);
+    cylinder->SetModelMatrix(glm::translate(glm::vec3(1, 1, 2)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
+    cylinder->SetMaterial(pebbleMaterial);
+    cylinder->SetBindingTarget(2);
+    cylinder->CreateGlObjects();
+
     util::Random rnd;
 
     for (int i = 0; i < NUM_OBJECTS; i++)
     {
-        auto obj = this->scene.GetObject(util::Format("Cube_%", i));
+        auto obj = this->scene.GetObject(util::Format("Object_%", i));
 
         switch (rnd.Next(0, 4))
         {

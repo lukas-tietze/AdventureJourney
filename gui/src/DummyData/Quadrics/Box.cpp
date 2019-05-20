@@ -103,14 +103,11 @@ bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, gl
             for (uint32_t iZ = 0; iZ < slicesZ; iZ++)
             {
                 uint16_t quad[4] = {
-                    iY + iZ * (slicesY + 1),
-                    iY + 1 + iZ * (slicesY + 1),
-                    iY + 1 + (iZ + 1) * (slicesY + 1),
-                    iY + (iZ + 1) * (slicesY + 1),
+                    static_cast<uint16_t>((iY + iZ * (slicesY + 1)) * 2 + indexOffset),
+                    static_cast<uint16_t>((iY + 1 + iZ * (slicesY + 1)) * 2 + indexOffset),
+                    static_cast<uint16_t>((iY + 1 + (iZ + 1) * (slicesY + 1)) * 2 + indexOffset),
+                    static_cast<uint16_t>((iY + (iZ + 1) * (slicesY + 1)) * 2 + indexOffset),
                 };
-
-                for (int i = 0; i < 4; i++)
-                    quad[i] = quad[i] * 2 + indexOffset;
 
                 q.PushQuad(quad);
 

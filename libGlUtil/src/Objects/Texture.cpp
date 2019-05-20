@@ -71,25 +71,6 @@ void glutil::Texture::SetTextureParameters()
         glGenerateMipmap(this->target);
 }
 
-int glutil::Texture::GetChannelCountFromFormat()
-{
-    switch (this->format)
-    {
-    case GL_DEPTH_COMPONENT:
-    case GL_RED:
-        return 1;
-    case GL_DEPTH_STENCIL:
-    case GL_RG:
-        return 2;
-    case GL_RGB:
-    case GL_BGR:
-        return 3;
-    case GL_RGBA:
-    case GL_BGRA:
-        return 4;
-    }
-}
-
 GLenum glutil::Texture::GetFormatFromChannelCount(int n)
 {
     switch (n)
@@ -101,6 +82,7 @@ GLenum glutil::Texture::GetFormatFromChannelCount(int n)
     case 3:
         return GL_RGB;
     case 4:
+    default:
         return GL_RGBA;
     }
 }
@@ -144,6 +126,7 @@ bool glutil::Texture::LoadData(const std::string &path)
 
     int nChannels;
 
+    stbi_set_flip_vertically_on_load(true);
     auto pixels = stbi_load_from_file(file, &this->width, &this->height, &nChannels, 0);
 
     this->format = this->GetFormatFromChannelCount(nChannels);

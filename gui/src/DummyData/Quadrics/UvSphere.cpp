@@ -1,14 +1,16 @@
 #include "DummyData.hpp"
 #include "QuadricHelper.internal.hpp"
 
-bool gui::quadrics::UVSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out)
+bool gui::quadrics::UvSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out)
 {
-    return UVSphere(slices, stacks, out, QuadricConfig());
+    return UvSphere(slices, stacks, out, QuadricConfig());
 }
 
-bool gui::quadrics::UVSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out, const QuadricConfig &config)
+bool gui::quadrics::UvSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out, const QuadricConfig &config)
 {
     QuadricContext q(config);
+
+    q.Reserve(0, 0);
 
     float x0, y0, z0, x1, y1, z1, x2, y2, z2, x3, y3, z3;
     float slr = (2 * (float)M_PI) / (float)slices;
@@ -16,50 +18,34 @@ bool gui::quadrics::UVSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out
     float phi;
     float rho;
 
-    for (size_t stack = 0; stack < stacks; ++stack)
+    ///Top
+    q.SetTexCoords(0.5f, 0.0f);
+    q.SetPositionAndNormal(0.f, 1.f, 0.f);
+    q.Push();
+    ///Bottom
+    q.SetTexCoords(0.5f, 0.0f);
+    q.SetPositionAndNormal(0.f, 1.f, 0.f);
+    q.Push();
+
+    for (size_t slice = 0; slice < slices; ++slice)
     {
-        rho = -M_PI / 2.0 + M_PI * (static_cast<float>(stack) / static_cast<float>(stacks));
+        phi = 2.0f * M_PI * static_cast<float>(slice) / static_cast<float>(slices);
 
-        for (size_t slice = 0; slice < slices; ++slice)
+        for (size_t stack = 0; stack < stacks - 1; ++stack)
         {
-            phi = 2.0f * M_PI * static_cast<float>(slice) / static_cast<float>(slices);
+            rho = -M_PI / 2.0 + M_PI * (static_cast<float>(stack) / static_cast<float>(stacks));
 
-            x0 = cos(rho) * cos(phi);
-            y0 = cos(rho) * sin(phi);
-            z0 = sin(rho);
-            x1 = cos(rho) * cos(phi + slr);
-            y1 = cos(rho) * sin(phi + slr);
-            z1 = sin(rho);
-            x2 = cos(rho + str) * cos(phi + slr);
-            y2 = cos(rho + str) * sin(phi + slr);
-            z2 = sin(rho + str);
-            x3 = cos(rho + str) * cos(phi);
-            y3 = cos(rho + str) * sin(phi);
-            z3 = sin(rho + str);
-
-            if (stack == 0)
-            {
-                // TODO
-                // m_addTriangle(0, 0, -1, 0, 0, -1,
-                //               x2, y2, z2, x2, y2, z2,
-                //               x3, y3, z3, x3, y3, z3);
-            }
-            else if (stack == stacks - 1)
-            {
-                // TODO
-                // m_addTriangle(x0, y0, z0, x0, y0, z0,
-                //               x1, y1, z1, x1, y1, z1,
-                //               0, 0, 1, 0, 0, 1);
-            }
-            else
-            {
-                // TODO
-                // m_addQuad(x0, y0, z0, x0, y0, z0,
-                //           x1, y1, z1, x1, y1, z1,
-                //           x2, y2, z2, x2, y2, z2,
-                //           x3, y3, z3, x3, y3, z3);
-            }
+            q.SetPositionAndNormal(cos(rho) * cos(phi), cos(rho) * sin(phi), sin(rho));
+            q.SetSphericalTexCoords();
+            q.Push();
+            q.PushQuad(slice * stacks + 2,
+                       (((slice + 1) % slices) * stacks + 2),
+                       (((slice + 1) % slices) * (stacks + 1) + 2),
+                       slice * (stacks + 1) + 2);
         }
+
+        q.PushTriangle(0, slice * stacks + 2, ((slice + 1) % slices) * stacks + 2);
+        q.PushTriangle(1, slice * stacks + 2 + stacks, ((slice + 1) % slices) * stacks + 2 + stacks);
     }
 
     return q.CreateMesh(out);

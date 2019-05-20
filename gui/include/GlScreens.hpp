@@ -64,7 +64,7 @@ private:
     std::vector<IDummyObject *> objects;
     glutil::Program *ppProg;
 
-    glutil::PostProcessingPipeLine ppPipe;
+    glutil::PostProcessingPipeline ppPipe;
 
 public:
     DummyScreen();

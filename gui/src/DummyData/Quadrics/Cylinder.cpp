@@ -11,12 +11,12 @@ bool gui::quadrics::Cylinder(uint32_t slices, uint32_t stacks, glutil::Mesh &out
     QuadricContext q(config);
 
     // create (stacks-1) rings
-    for (int iSt = 0; iSt < stacks; iSt++)
+    for (uint32_t iSt = 0; iSt < stacks; iSt++)
     {
         float zb = float(iSt) / float(stacks);
         float zt = float(iSt + 1) / float(stacks);
         // with (slices-1) elements
-        for (int iSl = 0; iSl < slices; iSl++)
+        for (uint32_t iSl = 0; iSl < slices; iSl++)
         {
             float sliceRatioL = float(iSl) / float(slices);
             float sliceRatioR = float(iSl + 1) / float(slices);

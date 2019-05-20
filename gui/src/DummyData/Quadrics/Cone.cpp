@@ -23,7 +23,7 @@ bool gui::quadrics::Cone(uint32_t slices, uint32_t stacks, glutil::Mesh &out, co
         float bz = iSt;
         float tz = iSt + (1.f / (float)stacks);
         // with (slices-1) elements
-        for (int iSl = 0; iSl < slices; iSl++)
+        for (uint32_t iSl = 0; iSl < slices; iSl++)
         {
             float sliceRatioL = float(iSl) / float(slices);
             float sliceRatioR = float(iSl + 1) / float(slices);

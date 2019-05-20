@@ -42,8 +42,8 @@ void SubdivideTriangles(gui::quadrics::QuadricContext &q)
     auto &vertices = q.Vertices();
     auto &indices = q.Indices();
     SubdivData data;
-    int length;
-    int indexBuf[6];
+    size_t length;
+    uint16_t indexBuf[6];
 
     for (size_t c = 0, max = q.IndexCount() / 3; c < max; c++)
     {

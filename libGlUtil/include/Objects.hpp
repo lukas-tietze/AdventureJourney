@@ -60,73 +60,150 @@ public:
 
 #include "libGlUtil/src/Objects/DynamicUboOwner.inl"
 
-template<class TData, class TAccessor, class TConstAccessor>
+template <class TData, class TAccessor, class TConstAccessor>
 class UboSet : public DynamicUboOwner<TData>
 {
-  public:
+public:
     TAccessor Add();
     void Clear();
-    
+
     TAccessor operator[](size_t index);
     TConstAccessor operator[](size_t index) const;
 };
 
 #include "libGlUtil/src/Objects/UboSet.inl"
 
-struct PostProcessingPipeLineUboData
+struct RenderToTextureUboData
 {
     int width;
     int height;
 };
 
-class PostProcessingPipeLine : public StaticUboOwner<PostProcessingPipeLineUboData>
+class RenderToTextureBase : public StaticUboOwner<RenderToTextureUboData>
 {
 private:
     bool dirty;
     bool useUboData;
     bool ready;
     bool autoUpdate;
-    bool requireColors;
-    bool requireDepthStencil;
-    GLenum colorTextureTarget;
-    GLenum depthStencilTextureTarget;
 
     GLuint quadVao;
     GLuint quadVbo;
-    GLuint colorTexture;
-    GLuint depthStencilTexture;
     GLuint fbo;
-    GLuint rbo;
 
     int w;
     int h;
 
-    void DestroyGlObjects();
-    void Recreate();
-    void TransferFrom(PostProcessingPipeLine &);
+    bool CheckBeforUsage();
+    void CreateQuad();
+    void DestroyQuad();
+    void DestroyFrameBuffer();
+    void CreateFrameBuffer();
+    void ValidateFrameBuffer();
+
+protected:
+    virtual void Recreate();
+
+    virtual void FillFrameBuffer() = 0;
+
+    virtual void BeginRender();
+    virtual void EndRender();
+    void TransferFrom(RenderToTextureBase &);
+    void BindFbo();
+    void SetFrameBufferDirty();
 
 public:
-    PostProcessingPipeLine();
-    PostProcessingPipeLine(PostProcessingPipeLine &&);
-    PostProcessingPipeLine(const PostProcessingPipeLine &) = delete;
-    ~PostProcessingPipeLine();
+    RenderToTextureBase();
+    RenderToTextureBase(RenderToTextureBase &&);
+    RenderToTextureBase(const RenderToTextureBase &) = delete;
+    virtual ~RenderToTextureBase();
 
-    void SetColorsEnabled(bool);
-    void SetDepthAndStencilEnabled(bool);
-    void SetColorBufferTextureTarget(GLenum);
-    void SetDepthStencilBufferTextureTarget(GLenum);
     void SetSize(int, int);
     void Update();
     void SetAutoUpdateEnabled(bool);
     void SetUseUboData(bool);
 
-    bool IsReady() const;
+    int GetWidth() const;
+    int GetHeight() const;
 
+    bool IsDirty() const;
+    bool IsReady() const;
     void StartRecording();
     void Render();
 
-    PostProcessingPipeLine &operator=(PostProcessingPipeLine &&);
-    PostProcessingPipeLine &operator=(const PostProcessingPipeLine &) = delete;
+    RenderToTextureBase &operator=(RenderToTextureBase &&);
+    RenderToTextureBase &operator=(const RenderToTextureBase &) = delete;
+};
+
+class DeferredRenderingPipeline : public RenderToTextureBase
+{
+private:
+    GLuint positionTex;
+    GLuint positionTarget;
+    GLuint normalTex;
+    GLuint normalTarget;
+    GLuint colorTex;
+    GLuint colorTarget;
+    GLuint rbo;
+
+protected:
+    virtual void DestroyGlObjects();
+    virtual void TransferFrom(DeferredRenderingPipeline &);
+
+    virtual void FillFrameBuffer();
+    virtual void BeginRender();
+    virtual void EndRender();
+
+public:
+    DeferredRenderingPipeline();
+    DeferredRenderingPipeline(DeferredRenderingPipeline &&);
+    DeferredRenderingPipeline(const DeferredRenderingPipeline &) = delete;
+    virtual ~DeferredRenderingPipeline();
+
+    void SetPositionTex(GLuint);
+    void SetPositionTarget(GLuint);
+    void SetNormalTex(GLuint);
+    void SetNormalTarget(GLuint);
+    void SetColorTex(GLuint);
+    void SetColorTarget(GLuint);
+
+    DeferredRenderingPipeline &operator=(const DeferredRenderingPipeline &) = delete;
+    DeferredRenderingPipeline &operator=(DeferredRenderingPipeline &&);
+};
+
+class PostProcessingPipeline : public RenderToTextureBase
+{
+private:
+    bool requireColors;
+    bool requireDepthStencil;
+    GLenum colorTextureTarget;
+    GLenum depthStencilTextureTarget;
+
+    GLuint colorTexture;
+    GLuint depthStencilTexture;
+    GLuint rbo;
+
+protected:
+    virtual void DestroyGlObjects();
+    virtual void TransferFrom(PostProcessingPipeline &);
+
+    virtual void FillFrameBuffer();
+    virtual void BeginRender();
+    virtual void EndRender();
+
+public:
+    PostProcessingPipeline();
+    PostProcessingPipeline(PostProcessingPipeline &&);
+    PostProcessingPipeline(const PostProcessingPipeline &) = delete;
+    virtual ~PostProcessingPipeline();
+
+    void SetColorsEnabled(bool);
+    void SetDepthAndStencilEnabled(bool);
+    void SetColorBufferTextureTarget(GLenum);
+    void SetDepthStencilBufferTextureTarget(GLenum);
+
+    PostProcessingPipeline &operator=(PostProcessingPipeline &&);
+    PostProcessingPipeline &operator=(const PostProcessingPipeline &) = delete;
 };
 
 class MeshAttribute
@@ -514,7 +591,6 @@ private:
     void PrepareLoad();
     void SetTextureParameters();
     GLenum GetFormatFromChannelCount(int);
-    int GetChannelCountFromFormat();
 
     template <class TBuilder, uint PChannels>
     bool LoadDataFromBuilderCore(const TBuilder &);
@@ -662,13 +738,15 @@ class SceneOverlay : public StaticUboOwner<SceneOverlayUboData>
 {
 };
 
-#pragma pack(push, 1)
-struct SceneUboData
+class RenderGroup
 {
+private:
+public:
+    RenderGroup();
+    ~RenderGroup();
 };
-#pragma pack(pop)
 
-class Scene : public StaticUboOwner<SceneUboData>
+class Scene
 {
 private:
     typedef std::string resourceId_t;

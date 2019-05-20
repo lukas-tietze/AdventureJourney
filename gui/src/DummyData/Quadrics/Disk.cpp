@@ -11,12 +11,12 @@ bool gui::quadrics::Disk(uint32_t slices, uint32_t loops, glutil::Mesh &out, con
     QuadricContext q(config);
 
     // create (loops-1) rings
-    for (int iL = 0; iL < loops; iL++)
+    for (uint32_t iL = 0; iL < loops; iL++)
     {
         float ro = (1.0f - float(iL) / float(loops));     // outer radius
         float ri = (1.0f - float(iL + 1) / float(loops)); // inner radius
         // with (slices-1) elements
-        for (int iSl = 0; iSl < slices; iSl++)
+        for (uint32_t iSl = 0; iSl < slices; iSl++)
         {
             float sliceRatioL = float(iSl) / float(slices);
             float sliceRatioR = float(iSl + 1) / float(slices);
