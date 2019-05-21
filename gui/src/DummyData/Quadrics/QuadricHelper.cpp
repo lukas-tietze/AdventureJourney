@@ -99,7 +99,7 @@ void gui::quadrics::QuadricContext::SetPositionAndNormal(const glm::vec3 &v)
 
 void gui::quadrics::QuadricContext::SetSphericalTexCoords()
 {
-    this->SetTexCoords(this->current.pos.z * 0.5 + 0.5,
+    this->SetTexCoords(std::asin(this->current.pos.z) / (2 * M_PI) + 0.5,
                        std::atan(this->current.pos.y / this->current.pos.x) / (2.0 * M_PI) + 0.5);
 }
 

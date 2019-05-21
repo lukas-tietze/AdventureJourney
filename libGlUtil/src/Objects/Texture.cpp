@@ -71,6 +71,22 @@ void glutil::Texture::SetTextureParameters()
         glGenerateMipmap(this->target);
 }
 
+int glutil::Texture::GetChannelCountFromFormat()
+{
+    switch (this->format)
+    {
+    case GL_RED:
+        return 1;
+    case GL_RG:
+        return 2;
+    case GL_RGB:
+        return 3;
+    case GL_RGBA:
+    default:
+        return 4;
+    }
+};
+
 GLenum glutil::Texture::GetFormatFromChannelCount(int n)
 {
     switch (n)

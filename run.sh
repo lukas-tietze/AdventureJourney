@@ -120,16 +120,11 @@ if [[ $RUN_PROGRAM == 1 ]]; then
     PRINT "Executable path is "'"'"$FULL_PATH"'"'""
     INFO "Launching program..."
 
-    COUNT=0
-    while [[ ! -e $FULL_PATH && $COUNT -lt 5 ]]; do
-        WARN "[$COUNT] Could not find executable! Trying again."
-        COUNT=$((COUNT + 1))
-        sleep 1
-    done
+    `$FULL_PATH`
 
-    if [[ -e "$FULL_PATH" ]]; then
-        $FULL_PATH
-    else
-        WARN "Could not find executable after 5 trys! Stopping..."
-    fi
+    # if [[ -e "$FULL_PATH" ]]; then
+    #     $FULL_PATH
+    # else
+    #     WARN "Could not find executable after 5 trys! Stopping..."
+    # fi
 fi

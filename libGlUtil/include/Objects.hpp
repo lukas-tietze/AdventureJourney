@@ -591,6 +591,7 @@ private:
     void PrepareLoad();
     void SetTextureParameters();
     GLenum GetFormatFromChannelCount(int);
+    int GetChannelCountFromFormat();
 
     template <class TBuilder, uint PChannels>
     bool LoadDataFromBuilderCore(const TBuilder &);

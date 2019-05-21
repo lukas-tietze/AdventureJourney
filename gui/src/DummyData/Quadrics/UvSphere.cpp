@@ -10,18 +10,18 @@ bool gui::quadrics::UvSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out
 {
     QuadricContext q(config);
 
-    q.Reserve(0, 0);
-    
+    q.Reserve((stacks - 1) * slices + 2, (stacks - 1) * slices * 6 + 2 * +3 * slices);
+
     float phi, rho;
     size_t slice, stack, nextSlice, nextStack;
 
     ///Top
     q.SetTexCoords(0.5f, 0.0f);
-    q.SetPositionAndNormal(0.f, 1.f, 0.f);
+    q.SetPositionAndNormal(0.f, 0.f, 1.f);
     q.Push();
     ///Bottom
-    q.SetTexCoords(0.5f, 0.0f);
-    q.SetPositionAndNormal(0.f, 1.f, 0.f);
+    q.SetTexCoords(0.5f, 1.0f);
+    q.SetPositionAndNormal(0.f, 0.f, -1.f);
     q.Push();
 
     for (slice = 0; slice < slices; ++slice)
@@ -31,7 +31,7 @@ bool gui::quadrics::UvSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out
 
         for (stack = 0; stack < stacks - 1; ++stack)
         {
-            rho = -M_PI / 2.0 + M_PI * (static_cast<float>(stack) / static_cast<float>(stacks));
+            rho = -M_PI / 2.0 + M_PI * (static_cast<float>(stack + 1) / static_cast<float>(stacks));
 
             q.SetPositionAndNormal(cos(rho) * cos(phi), cos(rho) * sin(phi), sin(rho));
             q.SetSphericalTexCoords();
@@ -42,14 +42,14 @@ bool gui::quadrics::UvSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out
         {
             nextStack = stack + 1;
 
-            q.PushQuad(stack * slice + 2,
-                       stack * nextSlice + 2,
-                       nextStack * nextSlice + 2,
-                       nextStack * slice + 2);
+            q.PushQuad(slice * (stacks - 1) + stack + 2,
+                       nextSlice * (stacks - 1) + stack + 2,
+                       nextSlice * (stacks - 1) + nextStack + 2,
+                       slice * (stacks - 1) + nextStack + 2);
         }
 
-        // q.PushTriangle(0, slice * stacks + 2, nextSlice * stacks + 2);
-        // q.PushTriangle(1, slice * stacks + 2 + stacks, nextSlice * stacks + 2 + stacks);
+        q.PushTriangle(1, slice * (stacks - 1) + 2, nextSlice * (stacks - 1) + 2);
+        q.PushTriangle(0, slice * (stacks - 1) + stacks, nextSlice * (stacks - 1) + stacks);
     }
 
     return q.CreateMesh(out);
