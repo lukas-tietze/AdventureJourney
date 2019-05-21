@@ -128,6 +128,16 @@ gui::DummyScreen::DummyScreen() : scene(),
     pebbleTex->SetMipmapsEnabled(true);
     pebbleTex->LoadData("assets/textures/pebble.png");
 
+    auto gridTex = this->scene.GetTexture("Grid");
+    gridTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
+    gridTex->SetMipmapsEnabled(true);
+    gridTex->LoadData("assets/textures/CubeGrid.png");
+
+    auto numGridTex = this->scene.GetTexture("NumGrid");
+    numGridTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
+    numGridTex->SetMipmapsEnabled(true);
+    numGridTex->LoadData("assets/textures/Numbered Grid.png");
+
     auto grassMaterial = this->scene.GetMaterial("Grass");
     grassMaterial->SetAlbedo(glm::vec4(0.3f, 0.8f, 0.5f, 1.f));
     grassMaterial->SetAlbedoMap(grassTex, GL_TEXTURE0);
@@ -135,6 +145,16 @@ gui::DummyScreen::DummyScreen() : scene(),
     auto pebbleMaterial = this->scene.GetMaterial("Pebble");
     pebbleMaterial->SetAlbedo(glm::vec4(0.3f, 0.3f, 0.3f, 1.f));
     pebbleMaterial->SetAlbedoMap(pebbleTex, GL_TEXTURE0);
+
+    auto gridMaterial = this->scene.GetMaterial("Grid");
+    gridMaterial->SetAlbedo(glm::vec4(0.3f, 0.3f, 0.3f, 1.f));
+    gridMaterial->SetAlbedoMap(gridTex, GL_TEXTURE0);
+
+    auto numGridMaterial = this->scene.GetMaterial("NumGrid");
+    numGridMaterial->SetAlbedo(glm::vec4(0.3f, 0.3f, 0.3f, 1.f));
+    numGridMaterial->SetAlbedoMap(numGridTex, GL_TEXTURE0);
+
+    auto testMaterial = numGridMaterial;
 
     auto floorMesh = this->scene.GetMesh("Floor");
     gui::quadrics::Quad(*floorMesh);
@@ -165,41 +185,41 @@ gui::DummyScreen::DummyScreen() : scene(),
     lamp->SetGeometry(cubeMesh);
     lamp->SetModelMatrix(glm::translate(glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.1, 0.1, 0.1)));
     lamp->SetBindingTarget(2);
-    lamp->SetMaterial(grassMaterial);
+    lamp->SetMaterial(testMaterial);
     lamp->CreateGlObjects();
 
     auto ico = this->scene.GetObject("Ico");
     ico->SetGeometry(icoMesh);
     ico->SetModelMatrix(glm::translate(glm::vec3(1, 1, -2)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
-    ico->SetMaterial(pebbleMaterial);
+    ico->SetMaterial(testMaterial);
     ico->SetBindingTarget(2);
     ico->CreateGlObjects();
 
     auto uv = this->scene.GetObject("Uv");
     uv->SetGeometry(uvMesh);
     uv->SetModelMatrix(glm::translate(glm::vec3(1, 1, -1)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
-    uv->SetMaterial(pebbleMaterial);
+    uv->SetMaterial(testMaterial);
     uv->SetBindingTarget(2);
     uv->CreateGlObjects();
 
     auto disk = this->scene.GetObject("Disk");
     disk->SetGeometry(diskMesh);
     disk->SetModelMatrix(glm::translate(glm::vec3(1, 1, 0)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
-    disk->SetMaterial(pebbleMaterial);
+    disk->SetMaterial(testMaterial);
     disk->SetBindingTarget(2);
     disk->CreateGlObjects();
 
     auto cube = this->scene.GetObject("Cube");
     cube->SetGeometry(cubeMesh);
     cube->SetModelMatrix(glm::translate(glm::vec3(1, 1, 1)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
-    cube->SetMaterial(pebbleMaterial);
+    cube->SetMaterial(testMaterial);
     cube->SetBindingTarget(2);
     cube->CreateGlObjects();
 
     auto cylinder = this->scene.GetObject("Cylinder");
     cylinder->SetGeometry(cylinderMesh);
     cylinder->SetModelMatrix(glm::translate(glm::vec3(1, 1, 2)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
-    cylinder->SetMaterial(pebbleMaterial);
+    cylinder->SetMaterial(testMaterial);
     cylinder->SetBindingTarget(2);
     cylinder->CreateGlObjects();
 
