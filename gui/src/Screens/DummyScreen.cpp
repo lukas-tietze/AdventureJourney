@@ -166,13 +166,13 @@ gui::DummyScreen::DummyScreen() : scene(),
     gui::quadrics::UvSphere(16, 10, *uvMesh);
 
     auto diskMesh = this->scene.GetMesh("DiskMesh");
-    gui::quadrics::Disk(16, 2, *diskMesh);
+    gui::quadrics::Disk(16, 4, *diskMesh);
 
     auto cubeMesh = this->scene.GetMesh("CubeMesh");
     gui::quadrics::Box(*cubeMesh);
 
     auto cylinderMesh = this->scene.GetMesh("CylinderMesh");
-    gui::quadrics::Cylinder(16, 1, *cylinderMesh);
+    gui::quadrics::Cylinder(16, 4, *cylinderMesh);
 
     auto floorObj = this->scene.GetObject("floor");
     floorObj->SetGeometry(floorMesh);
