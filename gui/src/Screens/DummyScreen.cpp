@@ -16,7 +16,6 @@ constexpr char PIXEL_PROG[] = "PPpix";
 constexpr char BLUR_PROG[] = "PPblur";
 constexpr char DEPTH_BLUR_PROG[] = "PPdepthBlur";
 constexpr char EDGE_PROG[] = "PPedge";
-constexpr size_t NUM_OBJECTS = 0;
 
 struct TextureBuilder
 {
@@ -160,19 +159,19 @@ gui::DummyScreen::DummyScreen() : scene(),
     gui::quadrics::Quad(*floorMesh);
 
     auto icoMesh = this->scene.GetMesh("IcoMesh");
-    gui::quadrics::IcoSphere(2, *icoMesh);
+    gui::quadrics::IcoSphere(3, *icoMesh);
 
     auto uvMesh = this->scene.GetMesh("UvMesh");
-    gui::quadrics::UvSphere(16, 10, *uvMesh);
+    gui::quadrics::UvSphere(32, 20, *uvMesh);
 
     auto diskMesh = this->scene.GetMesh("DiskMesh");
-    gui::quadrics::Disk(16, 4, *diskMesh);
+    gui::quadrics::Disk(32, 1, *diskMesh);
 
     auto cubeMesh = this->scene.GetMesh("CubeMesh");
     gui::quadrics::Box(*cubeMesh);
 
     auto cylinderMesh = this->scene.GetMesh("CylinderMesh");
-    gui::quadrics::Cylinder(16, 4, *cylinderMesh);
+    gui::quadrics::Cylinder(32, 1, *cylinderMesh);
 
     auto floorObj = this->scene.GetObject("floor");
     floorObj->SetGeometry(floorMesh);
@@ -182,73 +181,43 @@ gui::DummyScreen::DummyScreen() : scene(),
     floorObj->CreateGlObjects();
 
     auto lamp = this->scene.GetObject("lamp");
-    lamp->SetGeometry(cubeMesh);
+    lamp->SetGeometry(icoMesh);
     lamp->SetModelMatrix(glm::translate(glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.1, 0.1, 0.1)));
     lamp->SetBindingTarget(2);
-    lamp->SetMaterial(testMaterial);
+    lamp->SetMaterial(grassMaterial);
     lamp->CreateGlObjects();
 
     auto ico = this->scene.GetObject("Ico");
     ico->SetGeometry(icoMesh);
-    ico->SetModelMatrix(glm::translate(glm::vec3(1, 1, -2)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
-    ico->SetMaterial(testMaterial);
-    ico->SetBindingTarget(2);
-    ico->CreateGlObjects();
 
     auto uv = this->scene.GetObject("Uv");
     uv->SetGeometry(uvMesh);
-    uv->SetModelMatrix(glm::translate(glm::vec3(1, 1, -1)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
-    uv->SetMaterial(testMaterial);
-    uv->SetBindingTarget(2);
-    uv->CreateGlObjects();
 
     auto disk = this->scene.GetObject("Disk");
     disk->SetGeometry(diskMesh);
-    disk->SetModelMatrix(glm::translate(glm::vec3(1, 1, 0)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
-    disk->SetMaterial(testMaterial);
-    disk->SetBindingTarget(2);
-    disk->CreateGlObjects();
 
     auto cube = this->scene.GetObject("Cube");
     cube->SetGeometry(cubeMesh);
-    cube->SetModelMatrix(glm::translate(glm::vec3(1, 1, 1)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
-    cube->SetMaterial(testMaterial);
-    cube->SetBindingTarget(2);
-    cube->CreateGlObjects();
 
     auto cylinder = this->scene.GetObject("Cylinder");
     cylinder->SetGeometry(cylinderMesh);
-    cylinder->SetModelMatrix(glm::translate(glm::vec3(1, 1, 2)) * glm::scale(glm::vec3(0.2f, 0.2f, 0.2f)));
-    cylinder->SetMaterial(testMaterial);
-    cylinder->SetBindingTarget(2);
-    cylinder->CreateGlObjects();
 
-    util::Random rnd;
+    std::vector<glutil::SceneObject *> objects = {
+        cylinder,
+        cube,
+        disk,
+        ico,
+        uv,
+    };
 
-    for (int i = 0; i < NUM_OBJECTS; i++)
+    for (size_t i = 0; i < objects.size(); i++)
     {
-        auto obj = this->scene.GetObject(util::Format("Object_%", i));
+        auto obj = objects[i];
 
-        switch (rnd.Next(0, 4))
-        {
-        case 0:
-            obj->SetGeometry(cubeMesh);
-            break;
-        case 1:
-            obj->SetGeometry(icoMesh);
-            break;
-        case 2:
-            obj->SetGeometry(cylinderMesh);
-            break;
-        case 3:
-            obj->SetGeometry(diskMesh);
-            break;
-        }
-
+        obj->SetModelMatrix(glm::translate(glm::vec3(1.f, 1.f, static_cast<float>(objects.size()) / 2.f - static_cast<float>(i))) * glm::scale(glm::vec3(0.3f, 0.3f, 0.3f)));
+        obj->SetMaterial(testMaterial);
         obj->SetBindingTarget(2);
         obj->CreateGlObjects();
-
-        this->objects.push_back(new DummyObject(obj));
     }
 
     this->ppPipe.SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());

@@ -5,10 +5,11 @@
 #include "data/Io.hpp"
 #include "data/IteratorUtils.hpp"
 
-gui::quadrics::QuadricContext::QuadricContext(const QuadricConfig &config) : config(config),
-                                                                             vertices(),
-                                                                             indices(),
-                                                                             current()
+gui::quadrics::QuadricContext::QuadricContext(const QuadricConfig &config, const std::string &name) : config(config),
+                                                                                                      vertices(),
+                                                                                                      indices(),
+                                                                                                      current(),
+                                                                                                      name(name)
 {
 }
 
@@ -99,8 +100,8 @@ void gui::quadrics::QuadricContext::SetPositionAndNormal(const glm::vec3 &v)
 
 void gui::quadrics::QuadricContext::SetSphericalTexCoords()
 {
-    this->SetTexCoords(std::asin(this->current.pos.z) / (2 * M_PI) + 0.5,
-                       std::atan(this->current.pos.y / this->current.pos.x) / (2.0 * M_PI) + 0.5);
+    this->SetTexCoords(std::asin(this->current.pos.y) / (2 * M_PI) + 0.5,
+                       std::atan2(this->current.pos.z, this->current.pos.x) / (2.0 * M_PI) + 0.5);
 }
 
 void gui::quadrics::QuadricContext::SetPosition(const glm::vec3 &v)
@@ -166,10 +167,11 @@ void gui::quadrics::QuadricContext::PushIndices(const std::initializer_list<inde
 
 bool gui::quadrics::QuadricContext::CreateMesh(glutil::Mesh &out)
 {
-    util::dbg.WriteLine("Created Quadric with % vertices and % indices.\nVertices: {%}\nIndices: %",
+    util::dbg.WriteLine("Created Quadric with % vertices and % indices.\nName=%\nVertices={%}\nIndices=%",
+                        this->name,
                         this->vertices.size(),
                         this->indices.size(),
-                        util::WrapIterable(this->vertices.begin(), this->vertices.end(), "}, {"),
+                        util::WrapIterable(this->vertices.begin(), this->vertices.end(), "},\n         {"),
                         util::WrapIterable(this->indices.begin(), this->indices.end(), ", "));
 
     out.LoadFromData(this->vertices.size(), sizeof(QuadricVertex), this->vertices.data(),

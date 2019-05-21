@@ -1,5 +1,6 @@
 #include "DummyData.hpp"
 #include "QuadricHelper.internal.hpp"
+#include "data/String.hpp"
 
 bool gui::quadrics::UvSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out)
 {
@@ -8,7 +9,7 @@ bool gui::quadrics::UvSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out
 
 bool gui::quadrics::UvSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out, const QuadricConfig &config)
 {
-    QuadricContext q(config);
+    QuadricContext q(config, util::Format("UvSphere (%, %)", slices, stacks));
 
     q.Reserve((stacks - 1) * slices + 2, (stacks - 1) * slices * 6 + 2 * +3 * slices);
 

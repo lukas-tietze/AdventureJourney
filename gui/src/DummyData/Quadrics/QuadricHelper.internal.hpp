@@ -36,9 +36,10 @@ private:
     std::vector<index_t> indices;
 
     vertex_t current;
+    std::string name;
 
 public:
-    QuadricContext(const QuadricConfig &);
+    QuadricContext(const QuadricConfig &, const std::string &);
 
     pos_t &Pos();
     normal_t &Normal();

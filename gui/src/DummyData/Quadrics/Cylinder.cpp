@@ -1,5 +1,6 @@
 #include "DummyData.hpp"
 #include "QuadricHelper.internal.hpp"
+#include "data/String.hpp"
 
 bool gui::quadrics::Cylinder(uint32_t slices, uint32_t stacks, glutil::Mesh &out)
 {
@@ -8,7 +9,7 @@ bool gui::quadrics::Cylinder(uint32_t slices, uint32_t stacks, glutil::Mesh &out
 
 bool gui::quadrics::Cylinder(uint32_t slices, uint32_t stacks, glutil::Mesh &out, const QuadricConfig &config)
 {
-    QuadricContext q(config);
+    QuadricContext q(config, util::Format("cylinder (%, %)", slices, stacks));
 
     // create (stacks-1) rings
     for (uint32_t iSt = 0; iSt < stacks; iSt++)

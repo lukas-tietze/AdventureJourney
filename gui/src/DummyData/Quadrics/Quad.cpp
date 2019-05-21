@@ -8,7 +8,7 @@ bool gui::quadrics::Quad(glutil::Mesh &out)
 
 bool gui::quadrics::Quad(glutil::Mesh &out, const QuadricConfig &config)
 {
-    QuadricContext q(config);
+    QuadricContext q(config, "Quad");
 
     q.Reserve(4, 6);
 

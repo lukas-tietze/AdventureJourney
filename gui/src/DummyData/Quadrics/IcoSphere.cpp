@@ -4,6 +4,7 @@
 
 #include "QuadricHelper.internal.hpp"
 #include "Defs.hpp"
+#include "data/String.hpp"
 
 namespace
 {
@@ -93,7 +94,7 @@ bool gui::quadrics::IcoSphere(uint32_t subdiv, glutil::Mesh &out)
 
 bool gui::quadrics::IcoSphere(uint32_t subdiv, glutil::Mesh &out, const QuadricConfig &config)
 {
-    QuadricContext q(config);
+    QuadricContext q(config, util::Format("IcoSphere (%)", subdiv));
 
     q.Reserve(12 * std::pow(4, subdiv), 20 * 3);
 

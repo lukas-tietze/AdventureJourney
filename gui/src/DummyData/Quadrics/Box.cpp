@@ -20,7 +20,7 @@ bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, gl
 
 bool gui::quadrics::Box(uint32_t slicesX, uint32_t slicesY, uint32_t slicesZ, glutil::Mesh &out, const QuadricConfig &config)
 {
-    QuadricContext q(config);
+    QuadricContext q(config, util::Format("Box (%/%/%)", slicesX, slicesY, slicesZ));
 
     q.Reserve(2 * (slicesX + 1) * (slicesY + 1) +
                   2 * (slicesY + 1) * (slicesZ + 1) +

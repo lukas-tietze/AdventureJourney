@@ -1,5 +1,6 @@
 #include "DummyData.hpp"
 #include "QuadricHelper.internal.hpp"
+#include "data/String.hpp"
 
 bool gui::quadrics::Cone(uint32_t slices, uint32_t stacks, glutil::Mesh &out)
 {
@@ -8,7 +9,7 @@ bool gui::quadrics::Cone(uint32_t slices, uint32_t stacks, glutil::Mesh &out)
 
 bool gui::quadrics::Cone(uint32_t slices, uint32_t stacks, glutil::Mesh &out, const QuadricConfig &config)
 {
-    QuadricContext q(config);
+    QuadricContext q(config, util::Format("Cone (%, %)", slices, stacks));
 
     // this is a small normal trick:
     float n[3] = {1, 0, 1};

@@ -1,5 +1,6 @@
 #include "DummyData.hpp"
 #include "QuadricHelper.internal.hpp"
+#include "data/String.hpp"
 
 bool gui::quadrics::Disk(uint32_t slices, uint32_t loops, glutil::Mesh &out)
 {
@@ -8,7 +9,7 @@ bool gui::quadrics::Disk(uint32_t slices, uint32_t loops, glutil::Mesh &out)
 
 bool gui::quadrics::Disk(uint32_t slices, uint32_t loops, glutil::Mesh &out, const QuadricConfig &config)
 {
-    QuadricContext q(config);
+    QuadricContext q(config, util::Format("Disk (%, %)", slices, loops));
 
     q.Reserve(loops * slices + 1, slices * 3 + loops * (slices - 1));
 
@@ -27,16 +28,16 @@ bool gui::quadrics::Disk(uint32_t slices, uint32_t loops, glutil::Mesh &out, con
 
         for (loop = 0; loop < loops; loop++)
         {
-            float a = std::sin(slice * sliceStep) * loop * loopStep;
-            float b = std::cos(slice * sliceStep) * loop * loopStep;
+            float a = std::sin(slice * sliceStep) * (loop + 1) * loopStep;
+            float b = std::cos(slice * sliceStep) * (loop + 1) * loopStep;
 
             q.SetPosition(a, 0, b);
-            q.SetTexCoords(a, b);
+            q.SetTexCoords(a / 2.f + 0.5f, b / 2.f + 0.5f);
             q.Push();
         }
 
         for (loop = 0; loop < loops - 1; loop++)
-            q.PushQuad(slice * loops * loop + 1,
+            q.PushQuad(slice * loops + loop + 1,
                        nextSlice * loops + loop + 1,
                        nextSlice * loops + loop + 2,
                        slice * loops + loop + 2);
