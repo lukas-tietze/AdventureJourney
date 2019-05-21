@@ -12,9 +12,9 @@
                 "${workspaceFolder}/core/include/",
                 "${workspaceFolder}/playground/",
                 "${workspaceFolder}/libs/glad/include/",
+                "${workspaceFolder}/libs/stb/include",
                 "${workspaceFolder}/submodules/glm/",
-                "${workspaceFolder}/submodules/glfw/include/",
-                "${workspaceFolder}/submodules/stb/"
+                "${workspaceFolder}/submodules/glfw/include/"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

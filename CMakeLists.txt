@@ -58,9 +58,9 @@ include_directories(${Boost_INCLUDE_DIRS})
 
 #external libs/submodules
 include_directories(libs/glad/include)
+include_directories(libs/stb/include)
 include_directories(submodules/glfw/include)
 include_directories(submodules/glm/)
-include_directories(submodules/stb)
 
 #projects - libs
 include_directories(libCommon/include)
@@ -204,15 +204,14 @@ if(COMPILE_GUI)
     set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
     set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
     add_subdirectory("submodules/glfw") 
-    # add_subdirectory("libs/glad")
 
     configure_file(gui/include/config.in.hpp gui/include/config.hpp)
-    add_executable(Gui gui/src/main.cpp libs/glad/src/glad.c ${GUI_SRC})
+    add_executable(Gui gui/src/main.cpp libs/stb/src/stb_image.cpp libs/glad/src/glad.c ${GUI_SRC})
     target_link_libraries(Gui LibCommon LibGlUtil Core glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} )
 
     if(COMPILE_TESTS)
         #Tests dazu
-        add_executable(GuiTests gui/test/main.cpp libs/glad/src/glad.c ${GUI_TESTS})
+        add_executable(GuiTests gui/test/main.cpp libs/stb/src/stb_image.cpp libs/glad/src/glad.c ${GUI_TESTS})
         target_link_libraries(GuiTests LibCommon LibGlUtil Core ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} glfw ${GLFW_LIBRARIES})
     else()
         message(STATUS "Skipping Gui/Tests")

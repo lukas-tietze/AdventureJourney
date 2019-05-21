@@ -1,11 +1,9 @@
 #include "Objects.hpp"
-#include "data/Io.hpp"
 
 #include <cstdio>
 
-#define STBI_WINDOWS_UTF8
-#define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h"
+#include "data/Io.hpp"
+#include "stb/stb_image.h"
 
 namespace
 {
@@ -143,7 +141,7 @@ bool glutil::Texture::LoadData(const std::string &path)
     int nChannels;
 
     stbi_set_flip_vertically_on_load(true);
-    auto pixels = stbi_load_from_file(file, &this->width, &this->height, &nChannels, 0);
+    auto pixels = stbi_load(path.c_str(), &this->width, &this->height, &nChannels, 0);
 
     this->format = this->GetFormatFromChannelCount(nChannels);
 

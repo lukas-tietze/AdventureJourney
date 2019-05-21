@@ -1,0 +1,609 @@
+[32m [21 May 2019 18:20:37] >> Detected Os as CYGWIN_NT-10.0 [39m
+[32m [21 May 2019 18:20:37] >> Building project... [39m
+Microsoft (R)-Build-Engine, Version 16.0.461+g6ff56ef63c fr .NET Framework
+Copyright (C) Microsoft Corporation. Alle Rechte vorbehalten.
+
+Der Buildvorgang wurde am 21.05.2019 18:20:38 gestartet.
+     1>Projekt "D:\Entwicklung\AdventureJourney\build\debug\GalaxyAtWar.sln" auf Knoten "1" (Standardziele).
+     1>ValidateSolutionConfiguration:
+         Die Projektmappenkonfiguration "Debug|x64" wird erstellt.
+       ValidateProjects:
+         Das Projekt "INSTALL" ist in der Projektmappenkonfiguration "Debug|x64" nicht zum Erstellen ausgew„hlt.
+         Das Projekt "uninstall" ist in der Projektmappenkonfiguration "Debug|x64" nicht zum Erstellen ausgew„hlt.
+     1>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\GalaxyAtWar.sln" (1) erstellt "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" (2) auf Knoten "1" (Standardziele).
+     2>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" (2) erstellt "D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj.metaproj" (3) auf Knoten "1" (Standardziele).
+     3>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj.metaproj" (3) erstellt "D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj.metaproj" (4) auf Knoten "1" (Standardziele).
+     4>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj.metaproj" (4) erstellt "D:\Entwicklung\AdventureJourney\build\debug\ZERO_CHECK.vcxproj" (13) auf Knoten "2" (Standardziele).
+    13>InitializeBuildStatus:
+         "x64\Debug\ZERO_CHECK\ZERO_CHECK.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+       CustomBuild:
+         Alle Ausgaben sind aktuell.
+       FinalizeBuildStatus:
+         Die Datei "x64\Debug\ZERO_CHECK\ZERO_CHECK.tlog\unsuccessfulbuild" wird gel”scht.
+         Aktualisieren des Timestamps von "x64\Debug\ZERO_CHECK\ZERO_CHECK.tlog\ZERO_CHECK.lastbuildstate".
+    13>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\ZERO_CHECK.vcxproj" ist abgeschlossen (Standardziele).
+     4>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj.metaproj" (4) erstellt "D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj" (14) auf Knoten "2" (Standardziele).
+    14>InitializeBuildStatus:
+         "LibCommon.dir\Debug\LibCommon.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+       CustomBuild:
+         Alle Ausgaben sind aktuell.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\CL.exe /c /ID:\Entwicklung\_Libraries\boost_1_70_0 /ID:\Entwicklung\AdventureJourney\libs\glad\include /ID:\Entwicklung\AdventureJourney\libs\stb\include /ID:\Entwicklung\AdventureJourney\submodules\glfw\include /ID:\Entwicklung\AdventureJourney\submodules\glm /ID:\Entwicklung\AdventureJourney\libCommon\include /ID:\Entwicklung\AdventureJourney\libTermUtil\include /ID:\Entwicklung\AdventureJourney\libGlUtil\include /ID:\Entwicklung\AdventureJourney\core\include /ID:\Entwicklung\AdventureJourney\playground /ID:\Entwicklung\AdventureJourney\terminal_ui\include /ID:\Entwicklung\AdventureJourney\gui\include /ID:\Entwicklung\AdventureJourney\. /Zi /nologo /W3 /WX- /diagnostics:classic /Od /Ob0 /D WIN32 /D _WINDOWS /D GLM_ENABLE_EXPERIMENTAL /D BOOST_FILESYSTEM_NO_DEPRECATED /D BOOST_STACKTRACE_LINK /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /std:c++14 /Fo"LibCommon.dir\Debug\\" /Fd"LibCommon.dir\Debug\LibCommon.pdb" /Gd /TP /errorReport:queue D:\Entwicklung\AdventureJourney\libCommon\src\data\Args.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\Io\Channel.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\Io\Communicator.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\Io\Io.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\Io\Statics.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\ParsingException.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\Escaping.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\FormatException.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\FormatTime.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\HexNumberConversions.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\Justification.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\SetupStream.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\Split.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\Strip.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\StructureAnalysis.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\TimeFormatException.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\UpperLowerConversions.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\collection\Cache.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ArrayNode.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\json\FormattedPrinter.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\json\IJsonSerializable.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\json\Node.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ObjectNode.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\json\OperationException.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\json\Parser.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ParserException.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\json\PrimitiveNode.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\json\Tokenizer.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\json\TokenizerException.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ValueException.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\keyValueSettings\settings.cpp D:\Entwicklung\AdventureJourney\libCommon\src\data\random\Random.cpp D:\Entwicklung\AdventureJourney\libCommon\src\datetime\RoundTimer.cpp D:\Entwicklung\AdventureJourney\libCommon\src\datetime\Timer.cpp D:\Entwicklung\AdventureJourney\libCommon\src\event\SignalEvent.cpp D:\Entwicklung\AdventureJourney\libCommon\src\exception\Exception.cpp D:\Entwicklung\AdventureJourney\libCommon\src\exception\FileNotFoundException.cpp D:\Entwicklung\AdventureJourney\libCommon\src\exception\IndexOutOfRangeException.cpp D:\Entwicklung\AdventureJourney\libCommon\src\exception\InvalidCaseException.cpp D:\Entwicklung\AdventureJourney\libCommon\src\exception\MissingKeyException.cpp D:\Entwicklung\AdventureJourney\libCommon\src\exception\OverflowException.cpp D:\Entwicklung\AdventureJourney\libCommon\src\exception\Utils.cpp D:\Entwicklung\AdventureJourney\libCommon\src\graphics\Color.cpp D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\Runner.cpp D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\SimpleTest.cpp D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\Source.cpp D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\Test.cpp D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\TestBase.cpp D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\TestConfig.cpp D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\TestRun.cpp
+         Args.cpp
+     2>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" (2) erstellt "D:\Entwicklung\AdventureJourney\build\debug\Gui.vcxproj.metaproj" (6) auf Knoten "1" (Standardziele).
+     6>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\Gui.vcxproj.metaproj" (6) erstellt "D:\Entwicklung\AdventureJourney\build\debug\submodules\glfw\src\glfw.vcxproj.metaproj" (8) auf Knoten "1" (Standardziele).
+     8>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\submodules\glfw\src\glfw.vcxproj.metaproj" (8) erstellt "D:\Entwicklung\AdventureJourney\build\debug\submodules\glfw\src\glfw.vcxproj" (15) auf Knoten "1" (Standardziele).
+    15>InitializeBuildStatus:
+         "glfw.dir\Debug\glfw.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+       CustomBuild:
+         Alle Ausgaben sind aktuell.
+       ClCompile:
+         Alle Ausgaben sind aktuell.
+       Lib:
+         Alle Ausgaben sind aktuell.
+         glfw.vcxproj -> D:\Entwicklung\AdventureJourney\build\debug\submodules\glfw\src\Debug\glfw3.lib
+       FinalizeBuildStatus:
+         Die Datei "glfw.dir\Debug\glfw.tlog\unsuccessfulbuild" wird gel”scht.
+         Aktualisieren des Timestamps von "glfw.dir\Debug\glfw.tlog\glfw.lastbuildstate".
+    15>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\submodules\glfw\src\glfw.vcxproj" ist abgeschlossen (Standardziele).
+     8>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\submodules\glfw\src\glfw.vcxproj.metaproj" ist abgeschlossen (Standardziele).
+    14>ClCompile:
+         Channel.cpp
+         Communicator.cpp
+         Io.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\Io\Io.cpp(97): warning C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         C:\Program Files (x86)\Windows Kits\10\Include\10.0.17134.0\ucrt\stdio.h(1274): note: Siehe Deklaration von "scanf"
+         Statics.cpp
+         ParsingException.cpp
+         Escaping.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\Escaping.cpp(20): warning C4129: "e": nicht erkannte Folge von Escapesequenz [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         FormatException.cpp
+         FormatTime.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\FormatTime.cpp(11): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         C:\Program Files (x86)\Windows Kits\10\Include\10.0.17134.0\ucrt\time.h(506): note: Siehe Deklaration von "localtime"
+         HexNumberConversions.cpp
+         Justification.cpp
+         SetupStream.cpp
+         Split.cpp
+         Strip.cpp
+         StructureAnalysis.cpp
+         TimeFormatException.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\TimeFormatException.cpp(7): warning C4996: 'ctime': This function or variable may be unsafe. Consider using ctime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         C:\Program Files (x86)\Windows Kits\10\Include\10.0.17134.0\ucrt\time.h(476): note: Siehe Deklaration von "ctime"
+         UpperLowerConversions.cpp
+         Cache.cpp
+         ArrayNode.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ArrayNode.cpp(84): warning C4267: "Argument": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ArrayNode.cpp(99): warning C4267: "return": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ArrayNode.cpp(105): warning C4267: "Argument": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ArrayNode.cpp(113): warning C4267: "Argument": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ArrayNode.cpp(196): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "uint", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         FormattedPrinter.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\json\FormattedPrinter.cpp(275): warning C4267: "return": Konvertierung von "size_t" nach "uint", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         Code wird generiert...
+         Kompilieren...
+         IJsonSerializable.cpp
+         Node.cpp
+         ObjectNode.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ObjectNode.cpp(64): warning C4267: "return": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ObjectNode.cpp(170): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "uint", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+    14>C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\utility(161): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "_Ty2", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+                 with
+                 [
+                     _Ty2=int
+                 ]
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\xmemory0(819): note: Siehe Verweis auf die Instanziierung der gerade kompilierten Funktions-Vorlage "std::pair<const _Kty,_Ty>::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64,0>(std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64> &&) noexcept".
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=int
+                 ]
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\xmemory0(819): note: Siehe Verweis auf die Instanziierung der gerade kompilierten Funktions-Vorlage "std::pair<const _Kty,_Ty>::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64,0>(std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64> &&) noexcept".
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=int
+                 ]
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\list(758): note: Siehe Verweis auf die Instanziierung der gerade kompilierten Funktions-Vorlage "void std::_Default_allocator_traits<_Alloc>::construct<_Ty,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64>>(_Alloc &,_Objty *const ,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64> &&)".
+                 with
+                 [
+                     _Alloc=std::allocator<std::_List_node<std::pair<const std::string,int>,std::_Default_allocator_traits<std::allocator<std::pair<const std::string,int>>>::void_pointer>>,
+                     _Ty=std::pair<const std::string,int>,
+                     _Objty=std::pair<const std::string,int>
+                 ]
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\list(758): note: Siehe Verweis auf die Instanziierung der gerade kompilierten Funktions-Vorlage "void std::_Default_allocator_traits<_Alloc>::construct<_Ty,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64>>(_Alloc &,_Objty *const ,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64> &&)".
+                 with
+                 [
+                     _Alloc=std::allocator<std::_List_node<std::pair<const std::string,int>,std::_Default_allocator_traits<std::allocator<std::pair<const std::string,int>>>::void_pointer>>,
+                     _Ty=std::pair<const std::string,int>,
+                     _Objty=std::pair<const std::string,int>
+                 ]
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\list(722): note: Siehe Verweis auf die Instanziierung der gerade kompilierten Funktions-Vorlage "void std::list<std::pair<const _Kty,_Ty>,std::allocator<std::pair<const _Kty,_Ty>>>::_Insert<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64>>(std::_List_unchecked_const_iterator<std::_List_val<std::_List_simple_types<std::pair<const _Kty,_Ty>>>,std::_Iterator_base0>,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64> &&)".
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=int
+                 ]
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\list(722): note: Siehe Verweis auf die Instanziierung der gerade kompilierten Funktions-Vorlage "void std::list<std::pair<const _Kty,_Ty>,std::allocator<std::pair<const _Kty,_Ty>>>::_Insert<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64>>(std::_List_unchecked_const_iterator<std::_List_val<std::_List_simple_types<std::pair<const _Kty,_Ty>>>,std::_Iterator_base0>,std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64> &&)".
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=int
+                 ]
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\xhash(429): note: Siehe Verweis auf die Instanziierung der gerade kompilierten Funktions-Vorlage "void std::list<std::pair<const _Kty,_Ty>,std::allocator<std::pair<const _Kty,_Ty>>>::emplace_front<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64>>(std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64> &&)".
+                 with
+                 [
+                     _Kty=std::string,
+                     _Ty=int
+                 ]
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\unordered_map(250): note: Siehe Verweis auf die Instanziierung der gerade kompilierten Funktions-Vorlage "std::pair<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>,bool> std::_Hash<std::_Umap_traits<_Kty,int,std::_Uhash_compare<_Kty,_Hasher,_Keyeq>,_Alloc,false>>::emplace<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64>>(std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64> &&)".
+                 with
+                 [
+                     _Ty=std::pair<const std::string,int>,
+                     _Kty=std::string,
+                     _Hasher=std::hash<std::string>,
+                     _Keyeq=std::equal_to<std::string>,
+                     _Alloc=std::allocator<std::pair<const std::string,int>>
+                 ]
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\unordered_map(250): note: Siehe Verweis auf die Instanziierung der gerade kompilierten Funktions-Vorlage "std::pair<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>,bool> std::_Hash<std::_Umap_traits<_Kty,int,std::_Uhash_compare<_Kty,_Hasher,_Keyeq>,_Alloc,false>>::emplace<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64>>(std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64> &&)".
+                 with
+                 [
+                     _Ty=std::pair<const std::string,int>,
+                     _Kty=std::string,
+                     _Hasher=std::hash<std::string>,
+                     _Keyeq=std::equal_to<std::string>,
+                     _Alloc=std::allocator<std::pair<const std::string,int>>
+                 ]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ObjectNode.cpp(48): note: Siehe Verweis auf die Instanziierung der gerade kompilierten Funktions-Vorlage "std::pair<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>,bool> std::unordered_map<std::string,int,std::hash<_Kty>,std::equal_to<_Kty>,std::allocator<_Ty>>::insert<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64>,void>(_Valty &&)".
+                 with
+                 [
+                     _Ty=std::pair<const std::string,int>,
+                     _Kty=std::string,
+                     _Valty=std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64>
+                 ]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ObjectNode.cpp(48): note: Siehe Verweis auf die Instanziierung der gerade kompilierten Funktions-Vorlage "std::pair<std::_List_iterator<std::_List_val<std::_List_simple_types<_Ty>>>,bool> std::unordered_map<std::string,int,std::hash<_Kty>,std::equal_to<_Kty>,std::allocator<_Ty>>::insert<std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64>,void>(_Valty &&)".
+                 with
+                 [
+                     _Ty=std::pair<const std::string,int>,
+                     _Kty=std::string,
+                     _Valty=std::pair<std::basic_string<char,std::char_traits<char>,std::allocator<char>>,unsigned __int64>
+                 ]
+         OperationException.cpp
+         Parser.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\json\Parser.cpp(29): warning C4267: "Argument": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         ParserException.cpp
+         PrimitiveNode.cpp
+         Tokenizer.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\json\Tokenizer.cpp(307): warning C4267: "Argument": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         TokenizerException.cpp
+         ValueException.cpp
+         settings.cpp
+         Random.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\random\Random.cpp(13): warning C4244: "Argument": Konvertierung von "double" in "unsigned int", m”glicher Datenverlust [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         RoundTimer.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\datetime\RoundTimer.cpp(45): warning C4267: "return": Konvertierung von "size_t" nach "clock_t", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         Timer.cpp
+         SignalEvent.cpp
+         Exception.cpp
+         FileNotFoundException.cpp
+         IndexOutOfRangeException.cpp
+         InvalidCaseException.cpp
+         MissingKeyException.cpp
+         Code wird generiert...
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\data\keyValueSettings\settings.cpp(82): warning C4715: "util::SettingCollection::ReadSettings": Nicht alle Codepfade geben einen Wert zurck. [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         Kompilieren...
+         OverflowException.cpp
+         Utils.cpp
+         Color.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\graphics\Color.cpp(59): warning C4244: "return": Konvertierung von "double" in "float", m”glicher Datenverlust [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\graphics\Color.cpp(64): warning C4244: "return": Konvertierung von "double" in "float", m”glicher Datenverlust [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\graphics\Color.cpp(69): warning C4244: "return": Konvertierung von "double" in "float", m”glicher Datenverlust [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\graphics\Color.cpp(74): warning C4244: "return": Konvertierung von "double" in "float", m”glicher Datenverlust [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         Runner.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\Runner.cpp(76): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "uint", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         SimpleTest.cpp
+         Source.cpp
+         Test.cpp
+         TestBase.cpp
+         TestConfig.cpp
+         TestRun.cpp
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\TestRun.cpp(27): warning C4101: "e": Unreferenzierte lokale Variable [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\TestRun.cpp(57): warning C4101: "e": Unreferenzierte lokale Variable [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         Code wird generiert...
+    14>D:\Entwicklung\AdventureJourney\libCommon\src\graphics\Color.cpp(188): warning C4715: "util::Color::FromHexString": Nicht alle Codepfade geben einen Wert zurck. [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\CL.exe /c /ID:\Entwicklung\_Libraries\boost_1_70_0 /ID:\Entwicklung\AdventureJourney\libs\glad\include /ID:\Entwicklung\AdventureJourney\libs\stb\include /ID:\Entwicklung\AdventureJourney\submodules\glfw\include /ID:\Entwicklung\AdventureJourney\submodules\glm /ID:\Entwicklung\AdventureJourney\libCommon\include /ID:\Entwicklung\AdventureJourney\libTermUtil\include /ID:\Entwicklung\AdventureJourney\libGlUtil\include /ID:\Entwicklung\AdventureJourney\core\include /ID:\Entwicklung\AdventureJourney\playground /ID:\Entwicklung\AdventureJourney\terminal_ui\include /ID:\Entwicklung\AdventureJourney\gui\include /ID:\Entwicklung\AdventureJourney\. /Zi /nologo /W3 /WX- /diagnostics:classic /Od /Ob0 /D WIN32 /D _WINDOWS /D GLM_ENABLE_EXPERIMENTAL /D BOOST_FILESYSTEM_NO_DEPRECATED /D BOOST_STACKTRACE_LINK /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /std:c++14 /Fo"LibCommon.dir\Debug\/libCommon/src/data/json/Conversions.cpp.obj" /Fd"LibCommon.dir\Debug\LibCommon.pdb" /Gd /TP /errorReport:queue D:\Entwicklung\AdventureJourney\libCommon\src\data\json\Conversions.cpp
+         Conversions.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\CL.exe /c /ID:\Entwicklung\_Libraries\boost_1_70_0 /ID:\Entwicklung\AdventureJourney\libs\glad\include /ID:\Entwicklung\AdventureJourney\libs\stb\include /ID:\Entwicklung\AdventureJourney\submodules\glfw\include /ID:\Entwicklung\AdventureJourney\submodules\glm /ID:\Entwicklung\AdventureJourney\libCommon\include /ID:\Entwicklung\AdventureJourney\libTermUtil\include /ID:\Entwicklung\AdventureJourney\libGlUtil\include /ID:\Entwicklung\AdventureJourney\core\include /ID:\Entwicklung\AdventureJourney\playground /ID:\Entwicklung\AdventureJourney\terminal_ui\include /ID:\Entwicklung\AdventureJourney\gui\include /ID:\Entwicklung\AdventureJourney\. /Zi /nologo /W3 /WX- /diagnostics:classic /Od /Ob0 /D WIN32 /D _WINDOWS /D GLM_ENABLE_EXPERIMENTAL /D BOOST_FILESYSTEM_NO_DEPRECATED /D BOOST_STACKTRACE_LINK /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /std:c++14 /Fo"LibCommon.dir\Debug\/libCommon/src/datetime/Conversions.cpp.obj" /Fd"LibCommon.dir\Debug\LibCommon.pdb" /Gd /TP /errorReport:queue D:\Entwicklung\AdventureJourney\libCommon\src\datetime\Conversions.cpp
+         Conversions.cpp
+       Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\Lib.exe /OUT:"D:\Entwicklung\AdventureJourney\build\debug\Debug\LibCommon.lib" /NOLOGO /MACHINE:X64  /machine:x64 LibCommon.dir\Debug\Args.obj
+         LibCommon.dir\Debug\Channel.obj
+         LibCommon.dir\Debug\Communicator.obj
+         LibCommon.dir\Debug\Io.obj
+         LibCommon.dir\Debug\Statics.obj
+         LibCommon.dir\Debug\ParsingException.obj
+         LibCommon.dir\Debug\Escaping.obj
+         LibCommon.dir\Debug\FormatException.obj
+         LibCommon.dir\Debug\FormatTime.obj
+         LibCommon.dir\Debug\HexNumberConversions.obj
+         LibCommon.dir\Debug\Justification.obj
+         LibCommon.dir\Debug\SetupStream.obj
+         LibCommon.dir\Debug\Split.obj
+         LibCommon.dir\Debug\Strip.obj
+         LibCommon.dir\Debug\StructureAnalysis.obj
+         LibCommon.dir\Debug\TimeFormatException.obj
+         LibCommon.dir\Debug\UpperLowerConversions.obj
+         LibCommon.dir\Debug\Cache.obj
+         LibCommon.dir\Debug\ArrayNode.obj
+         LibCommon.dir\Debug\FormattedPrinter.obj
+         LibCommon.dir\Debug\IJsonSerializable.obj
+         LibCommon.dir\Debug\Node.obj
+         LibCommon.dir\Debug\ObjectNode.obj
+         LibCommon.dir\Debug\OperationException.obj
+         LibCommon.dir\Debug\Parser.obj
+         LibCommon.dir\Debug\ParserException.obj
+         LibCommon.dir\Debug\PrimitiveNode.obj
+         LibCommon.dir\Debug\Tokenizer.obj
+         LibCommon.dir\Debug\TokenizerException.obj
+         LibCommon.dir\Debug\ValueException.obj
+         LibCommon.dir\Debug\settings.obj
+         LibCommon.dir\Debug\Random.obj
+         LibCommon.dir\Debug\RoundTimer.obj
+         LibCommon.dir\Debug\Timer.obj
+         LibCommon.dir\Debug\SignalEvent.obj
+         LibCommon.dir\Debug\Exception.obj
+         LibCommon.dir\Debug\FileNotFoundException.obj
+         LibCommon.dir\Debug\IndexOutOfRangeException.obj
+         LibCommon.dir\Debug\InvalidCaseException.obj
+         LibCommon.dir\Debug\MissingKeyException.obj
+         LibCommon.dir\Debug\OverflowException.obj
+         LibCommon.dir\Debug\Utils.obj
+         LibCommon.dir\Debug\Color.obj
+         LibCommon.dir\Debug\Runner.obj
+         LibCommon.dir\Debug\SimpleTest.obj
+         LibCommon.dir\Debug\Source.obj
+         LibCommon.dir\Debug\Test.obj
+         LibCommon.dir\Debug\TestBase.obj
+         LibCommon.dir\Debug\TestConfig.obj
+         LibCommon.dir\Debug\TestRun.obj
+         LibCommon.dir\Debug\/libCommon/src/data/json/Conversions.cpp.obj
+         LibCommon.dir\Debug\/libCommon/src/datetime/Conversions.cpp.obj
+         LibCommon.vcxproj -> D:\Entwicklung\AdventureJourney\build\debug\Debug\LibCommon.lib
+       CopyFilesToOutputDirectory:
+         Die Datei wird von "D:\Entwicklung\AdventureJourney\build\debug\LibCommon.dir\Debug\LibCommon.pdb" in "D:\Entwicklung\AdventureJourney\build\debug\Debug\LibCommon.pdb" kopiert.
+       FinalizeBuildStatus:
+         Die Datei "LibCommon.dir\Debug\LibCommon.tlog\unsuccessfulbuild" wird gel”scht.
+         Aktualisieren des Timestamps von "LibCommon.dir\Debug\LibCommon.tlog\LibCommon.lastbuildstate".
+    14>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj" ist abgeschlossen (Standardziele).
+     4>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj.metaproj" ist abgeschlossen (Standardziele).
+     3>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj.metaproj" (3) erstellt "D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj" (16) auf Knoten "2" (Standardziele).
+    16>InitializeBuildStatus:
+         "Core.dir\Debug\Core.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+       CustomBuild:
+         Alle Ausgaben sind aktuell.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\CL.exe /c /ID:\Entwicklung\_Libraries\boost_1_70_0 /ID:\Entwicklung\AdventureJourney\libs\glad\include /ID:\Entwicklung\AdventureJourney\libs\stb\include /ID:\Entwicklung\AdventureJourney\submodules\glfw\include /ID:\Entwicklung\AdventureJourney\submodules\glm /ID:\Entwicklung\AdventureJourney\libCommon\include /ID:\Entwicklung\AdventureJourney\libTermUtil\include /ID:\Entwicklung\AdventureJourney\libGlUtil\include /ID:\Entwicklung\AdventureJourney\core\include /ID:\Entwicklung\AdventureJourney\playground /ID:\Entwicklung\AdventureJourney\terminal_ui\include /ID:\Entwicklung\AdventureJourney\gui\include /ID:\Entwicklung\AdventureJourney\. /Zi /nologo /W3 /WX- /diagnostics:classic /Od /Ob0 /D WIN32 /D _WINDOWS /D GLM_ENABLE_EXPERIMENTAL /D BOOST_FILESYSTEM_NO_DEPRECATED /D BOOST_STACKTRACE_LINK /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /std:c++14 /Fo"Core.dir\Debug\\" /Fd"Core.dir\Debug\Core.pdb" /Gd /TP /errorReport:queue D:\Entwicklung\AdventureJourney\core\src\engine\Engine.cpp D:\Entwicklung\AdventureJourney\core\src\fileSystem\DataLoader.cpp D:\Entwicklung\AdventureJourney\core\src\util\Conversions.cpp D:\Entwicklung\AdventureJourney\core\src\util\Version.cpp
+     6>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\Gui.vcxproj.metaproj" (6) erstellt "D:\Entwicklung\AdventureJourney\build\debug\LibGlUtil.vcxproj.metaproj" (7) auf Knoten "1" (Standardziele).
+     7>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibGlUtil.vcxproj.metaproj" (7) erstellt "D:\Entwicklung\AdventureJourney\build\debug\LibGlUtil.vcxproj" (19) auf Knoten "1" (Standardziele).
+    19>InitializeBuildStatus:
+         "LibGlUtil.dir\Debug\LibGlUtil.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+     2>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" (2) erstellt "D:\Entwicklung\AdventureJourney\build\debug\Playground.vcxproj.metaproj" (12) auf Knoten "1" (Standardziele).
+    12>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\Playground.vcxproj.metaproj" (12) erstellt "D:\Entwicklung\AdventureJourney\build\debug\Playground.vcxproj" (17) auf Knoten "3" (Standardziele).
+    17>InitializeBuildStatus:
+         "Playground.dir\Debug\Playground.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+     2>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" (2) erstellt "D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj.metaproj" (10) auf Knoten "1" (Standardziele).
+    10>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj.metaproj" (10) erstellt "D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj" (18) auf Knoten "4" (Standardziele).
+    18>InitializeBuildStatus:
+         "LibCommonTests.dir\Debug\LibCommonTests.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+    17>CustomBuild:
+         Alle Ausgaben sind aktuell.
+    19>CustomBuild:
+         Alle Ausgaben sind aktuell.
+    18>CustomBuild:
+         Alle Ausgaben sind aktuell.
+    17>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\CL.exe /c /ID:\Entwicklung\_Libraries\boost_1_70_0 /ID:\Entwicklung\AdventureJourney\libs\glad\include /ID:\Entwicklung\AdventureJourney\libs\stb\include /ID:\Entwicklung\AdventureJourney\submodules\glfw\include /ID:\Entwicklung\AdventureJourney\submodules\glm /ID:\Entwicklung\AdventureJourney\libCommon\include /ID:\Entwicklung\AdventureJourney\libTermUtil\include /ID:\Entwicklung\AdventureJourney\libGlUtil\include /ID:\Entwicklung\AdventureJourney\core\include /ID:\Entwicklung\AdventureJourney\playground /ID:\Entwicklung\AdventureJourney\terminal_ui\include /ID:\Entwicklung\AdventureJourney\gui\include /ID:\Entwicklung\AdventureJourney\. /Zi /nologo /W3 /WX- /diagnostics:classic /Od /Ob0 /D WIN32 /D _WINDOWS /D GLM_ENABLE_EXPERIMENTAL /D BOOST_FILESYSTEM_NO_DEPRECATED /D BOOST_STACKTRACE_LINK /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /std:c++14 /Fo"Playground.dir\Debug\\" /Fd"Playground.dir\Debug\vc142.pdb" /Gd /TP /errorReport:queue D:\Entwicklung\AdventureJourney\playground\main.cpp
+    18>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\CL.exe /c /ID:\Entwicklung\AdventureJourney\libs\glad\include /ID:\Entwicklung\AdventureJourney\libs\stb\include /ID:\Entwicklung\AdventureJourney\submodules\glfw\include /ID:\Entwicklung\AdventureJourney\submodules\glm /ID:\Entwicklung\AdventureJourney\libCommon\include /ID:\Entwicklung\AdventureJourney\libTermUtil\include /ID:\Entwicklung\AdventureJourney\libGlUtil\include /ID:\Entwicklung\AdventureJourney\core\include /ID:\Entwicklung\AdventureJourney\playground /ID:\Entwicklung\AdventureJourney\terminal_ui\include /ID:\Entwicklung\AdventureJourney\gui\include /ID:\Entwicklung\AdventureJourney\. /ID:\Entwicklung\_Libraries\boost_1_70_0 /Zi /nologo /W3 /WX- /diagnostics:classic /Od /Ob0 /D WIN32 /D _WINDOWS /D GLM_ENABLE_EXPERIMENTAL /D BOOST_FILESYSTEM_NO_DEPRECATED /D BOOST_STACKTRACE_LINK /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /std:c++14 /Fo"LibCommonTests.dir\Debug\\" /Fd"LibCommonTests.dir\Debug\vc142.pdb" /Gd /TP /errorReport:queue D:\Entwicklung\AdventureJourney\libCommon\test\color\ColorTest.cpp D:\Entwicklung\AdventureJourney\libCommon\test\color\HexStringConversions.cpp D:\Entwicklung\AdventureJourney\libCommon\test\color\HsvRgbConversions.cpp D:\Entwicklung\AdventureJourney\libCommon\test\data\collection\ArrayTest.cpp D:\Entwicklung\AdventureJourney\libCommon\test\data\collection\CacheTest.cpp D:\Entwicklung\AdventureJourney\libCommon\test\data\collection\CollectRopeTest.cpp D:\Entwicklung\AdventureJourney\libCommon\test\data\collection\IndexMapper.cpp D:\Entwicklung\AdventureJourney\libCommon\test\data\collection\ListTest.cpp D:\Entwicklung\AdventureJourney\libCommon\test\event\FunctionEventTest.cpp D:\Entwicklung\AdventureJourney\libCommon\test\event\GeneralizedEventTest.cpp D:\Entwicklung\AdventureJourney\libCommon\test\event\HandlerEventTest.cpp D:\Entwicklung\AdventureJourney\libCommon\test\event\ListenerEventTest.cpp D:\Entwicklung\AdventureJourney\libCommon\test\event\MemberHandlerEventTest.cpp D:\Entwicklung\AdventureJourney\libCommon\test\geometry\RectangleTest.cpp D:\Entwicklung\AdventureJourney\libCommon\test\json\ParserTests.cpp D:\Entwicklung\AdventureJourney\libCommon\test\json\TestNumberParsing.cpp D:\Entwicklung\AdventureJourney\libCommon\test\json\TestStringEscaping.cpp D:\Entwicklung\AdventureJourney\libCommon\test\main.cpp D:\Entwicklung\AdventureJourney\libCommon\test\math\Hex4ToNumber.cpp D:\Entwicklung\AdventureJourney\libCommon\test\math\HexToNumber.cpp D:\Entwicklung\AdventureJourney\libCommon\test\math\IsHexChar.cpp D:\Entwicklung\AdventureJourney\libCommon\test\math\TestComparisons.cpp D:\Entwicklung\AdventureJourney\libCommon\test\math\TestCrop.cpp D:\Entwicklung\AdventureJourney\libCommon\test\string\TestCommon.cpp D:\Entwicklung\AdventureJourney\libCommon\test\string\TestFormat2.cpp D:\Entwicklung\AdventureJourney\libCommon\test\string\TestJustification.cpp D:\Entwicklung\AdventureJourney\libCommon\test\string\TestSplit.cpp D:\Entwicklung\AdventureJourney\libCommon\test\string\TestStrip.cpp
+    19>ClCompile:
+         Alle Ausgaben sind aktuell.
+       Lib:
+         Alle Ausgaben sind aktuell.
+         LibGlUtil.vcxproj -> D:\Entwicklung\AdventureJourney\build\debug\Debug\LibGlUtil.lib
+    16>ClCompile:
+         Engine.cpp
+    19>FinalizeBuildStatus:
+         Die Datei "LibGlUtil.dir\Debug\LibGlUtil.tlog\unsuccessfulbuild" wird gel”scht.
+         Aktualisieren des Timestamps von "LibGlUtil.dir\Debug\LibGlUtil.tlog\LibGlUtil.lastbuildstate".
+    19>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibGlUtil.vcxproj" ist abgeschlossen (Standardziele).
+     7>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibGlUtil.vcxproj.metaproj" ist abgeschlossen (Standardziele).
+    17>ClCompile:
+         main.cpp
+    18>ClCompile:
+         ColorTest.cpp
+     2>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" (2) erstellt "D:\Entwicklung\AdventureJourney\build\debug\LibGlUtilTests.vcxproj.metaproj" (11) auf Knoten "1" (Standardziele).
+    11>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibGlUtilTests.vcxproj.metaproj" (11) erstellt "D:\Entwicklung\AdventureJourney\build\debug\LibGlUtilTests.vcxproj" (20) auf Knoten "3" (Standardziele).
+    20>InitializeBuildStatus:
+         "LibGlUtilTests.dir\Debug\LibGlUtilTests.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+       CustomBuild:
+         Alle Ausgaben sind aktuell.
+       ClCompile:
+         Alle Ausgaben sind aktuell.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Entwicklung\AdventureJourney\build\debug\Debug\LibGlUtilTests.exe" /INCREMENTAL /NOLOGO "D:\Entwicklung\_Libraries\boost_1_70_0\lib64-msvc-14.1\boost_stacktrace_noop-vc141-mt-gd-x64-1_70.lib" Debug\LibGlUtil.lib Debug\LibCommon.lib "D:\Entwicklung\_Libraries\boost_1_70_0\lib64-msvc-14.1\boost_stacktrace_noop-vc141-mt-gd-x64-1_70.lib" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Entwicklung/AdventureJourney/build/debug/Debug/LibGlUtilTests.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Entwicklung/AdventureJourney/build/debug/Debug/LibGlUtilTests.lib" /MACHINE:X64  /machine:x64 LibGlUtilTests.dir\Debug\main.obj
+         LibGlUtilTests.vcxproj -> D:\Entwicklung\AdventureJourney\build\debug\Debug\LibGlUtilTests.exe
+       FinalizeBuildStatus:
+         Die Datei "LibGlUtilTests.dir\Debug\LibGlUtilTests.tlog\unsuccessfulbuild" wird gel”scht.
+         Aktualisieren des Timestamps von "LibGlUtilTests.dir\Debug\LibGlUtilTests.tlog\LibGlUtilTests.lastbuildstate".
+    20>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibGlUtilTests.vcxproj" ist abgeschlossen (Standardziele).
+    11>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibGlUtilTests.vcxproj.metaproj" ist abgeschlossen (Standardziele).
+    16>D:\Entwicklung\AdventureJourney\core\include\entities/Resources.hpp(12): warning C4584: "logic::Resource": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::HasNameBase" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\include\data/Json.hpp(223): note: Siehe Deklaration von "json::IJsonSerializable"
+         D:\Entwicklung\AdventureJourney\core\include\util/HasNameBase.hpp(9): note: Siehe Deklaration von "logic::HasNameBase"
+    16>D:\Entwicklung\AdventureJourney\core\include\entities/Planet.hpp(48): warning C4584: "logic::PlanetaryBody": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::HasNameBase" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\include\data/Json.hpp(223): note: Siehe Deklaration von "json::IJsonSerializable"
+         D:\Entwicklung\AdventureJourney\core\include\util/HasNameBase.hpp(9): note: Siehe Deklaration von "logic::HasNameBase"
+    16>D:\Entwicklung\AdventureJourney\core\include\entities/Planet.hpp(48): warning C4584: "logic::PlanetaryBody": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::IdGeneratorBase<logic::PlanetaryBody>" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\include\data/Json.hpp(223): note: Siehe Deklaration von "json::IJsonSerializable"
+         D:\Entwicklung\AdventureJourney\core\include\entities/Planet.hpp(48): note: Siehe Deklaration von "logic::IdGeneratorBase<logic::PlanetaryBody>"
+    16>D:\Entwicklung\AdventureJourney\core\include\entities/Planet.hpp(113): warning C4584: "logic::PlanetarySystem": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::HasNameBase" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\include\data/Json.hpp(223): note: Siehe Deklaration von "json::IJsonSerializable"
+         D:\Entwicklung\AdventureJourney\core\include\util/HasNameBase.hpp(9): note: Siehe Deklaration von "logic::HasNameBase"
+    16>D:\Entwicklung\AdventureJourney\core\include\entities/Planet.hpp(113): warning C4584: "logic::PlanetarySystem": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::IdGeneratorBase<logic::PlanetarySystem>" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\include\data/Json.hpp(223): note: Siehe Deklaration von "json::IJsonSerializable"
+         D:\Entwicklung\AdventureJourney\core\include\entities/Planet.hpp(113): note: Siehe Deklaration von "logic::IdGeneratorBase<logic::PlanetarySystem>"
+    16>D:\Entwicklung\AdventureJourney\core\include\entities/Army.hpp(15): warning C4584: "logic::Army": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::HasNameBase" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\include\data/Json.hpp(223): note: Siehe Deklaration von "json::IJsonSerializable"
+         D:\Entwicklung\AdventureJourney\core\include\util/HasNameBase.hpp(9): note: Siehe Deklaration von "logic::HasNameBase"
+    16>D:\Entwicklung\AdventureJourney\core\include\entities/Army.hpp(28): warning C4584: "logic::Fleet": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::HasNameBase" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\include\data/Json.hpp(223): note: Siehe Deklaration von "json::IJsonSerializable"
+         D:\Entwicklung\AdventureJourney\core\include\util/HasNameBase.hpp(9): note: Siehe Deklaration von "logic::HasNameBase"
+         DataLoader.cpp
+    18>ClCompile:
+         HexStringConversions.cpp
+    16>ClCompile:
+         Conversions.cpp
+    18>ClCompile:
+         HsvRgbConversions.cpp
+    17>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Entwicklung\AdventureJourney\build\debug\Debug\Playground.exe" /INCREMENTAL /NOLOGO Debug\LibCommon.lib "D:\Entwicklung\_Libraries\boost_1_70_0\lib64-msvc-14.1\boost_stacktrace_noop-vc141-mt-gd-x64-1_70.lib" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Entwicklung/AdventureJourney/build/debug/Debug/Playground.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Entwicklung/AdventureJourney/build/debug/Debug/Playground.lib" /MACHINE:X64  /machine:x64 Playground.dir\Debug\main.obj
+         Playground.vcxproj -> D:\Entwicklung\AdventureJourney\build\debug\Debug\Playground.exe
+       FinalizeBuildStatus:
+         Die Datei "Playground.dir\Debug\Playground.tlog\unsuccessfulbuild" wird gel”scht.
+         Aktualisieren des Timestamps von "Playground.dir\Debug\Playground.tlog\Playground.lastbuildstate".
+    17>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\Playground.vcxproj" ist abgeschlossen (Standardziele).
+    12>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\Playground.vcxproj.metaproj" ist abgeschlossen (Standardziele).
+    16>ClCompile:
+         Version.cpp
+    18>ClCompile:
+         ArrayTest.cpp
+    16>D:\Entwicklung\AdventureJourney\core\src\util\Version.cpp(15): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         C:\Program Files (x86)\Windows Kits\10\Include\10.0.17134.0\ucrt\stdio.h(1774): note: Siehe Deklaration von "sprintf"
+         Code wird generiert...
+    16>Lib:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\Lib.exe /OUT:"D:\Entwicklung\AdventureJourney\build\debug\Debug\Core.lib" /NOLOGO /MACHINE:X64  /machine:x64 Core.dir\Debug\Engine.obj
+         Core.dir\Debug\DataLoader.obj
+         Core.dir\Debug\Conversions.obj
+         Core.dir\Debug\Version.obj
+         Core.vcxproj -> D:\Entwicklung\AdventureJourney\build\debug\Debug\Core.lib
+       CopyFilesToOutputDirectory:
+         Die Datei wird von "D:\Entwicklung\AdventureJourney\build\debug\Core.dir\Debug\Core.pdb" in "D:\Entwicklung\AdventureJourney\build\debug\Debug\Core.pdb" kopiert.
+       FinalizeBuildStatus:
+         Die Datei "Core.dir\Debug\Core.tlog\unsuccessfulbuild" wird gel”scht.
+         Aktualisieren des Timestamps von "Core.dir\Debug\Core.tlog\Core.lastbuildstate".
+    16>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj" ist abgeschlossen (Standardziele).
+     3>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj.metaproj" ist abgeschlossen (Standardziele).
+     2>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" (2) erstellt "D:\Entwicklung\AdventureJourney\build\debug\CoreTests.vcxproj.metaproj" (5) auf Knoten "1" (Standardziele).
+     5>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\CoreTests.vcxproj.metaproj" (5) erstellt "D:\Entwicklung\AdventureJourney\build\debug\CoreTests.vcxproj" (21) auf Knoten "1" (Standardziele).
+    21>InitializeBuildStatus:
+         "CoreTests.dir\Debug\CoreTests.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+       CustomBuild:
+         Alle Ausgaben sind aktuell.
+       ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\CL.exe /c /ID:\Entwicklung\_Libraries\boost_1_70_0 /ID:\Entwicklung\AdventureJourney\libs\glad\include /ID:\Entwicklung\AdventureJourney\libs\stb\include /ID:\Entwicklung\AdventureJourney\submodules\glfw\include /ID:\Entwicklung\AdventureJourney\submodules\glm /ID:\Entwicklung\AdventureJourney\libCommon\include /ID:\Entwicklung\AdventureJourney\libTermUtil\include /ID:\Entwicklung\AdventureJourney\libGlUtil\include /ID:\Entwicklung\AdventureJourney\core\include /ID:\Entwicklung\AdventureJourney\playground /ID:\Entwicklung\AdventureJourney\terminal_ui\include /ID:\Entwicklung\AdventureJourney\gui\include /ID:\Entwicklung\AdventureJourney\. /Zi /nologo /W3 /WX- /diagnostics:classic /Od /Ob0 /D WIN32 /D _WINDOWS /D GLM_ENABLE_EXPERIMENTAL /D BOOST_FILESYSTEM_NO_DEPRECATED /D BOOST_STACKTRACE_LINK /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /std:c++14 /Fo"CoreTests.dir\Debug\\" /Fd"CoreTests.dir\Debug\vc142.pdb" /Gd /TP /errorReport:queue D:\Entwicklung\AdventureJourney\core\test\main.cpp
+     6>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\Gui.vcxproj.metaproj" (6) erstellt "D:\Entwicklung\AdventureJourney\build\debug\Gui.vcxproj" (23) auf Knoten "3" (Standardziele).
+    23>InitializeBuildStatus:
+         "Gui.dir\Debug\Gui.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+     2>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" (2) erstellt "D:\Entwicklung\AdventureJourney\build\debug\GuiTests.vcxproj.metaproj" (9) auf Knoten "1" (Standardziele).
+     9>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\GuiTests.vcxproj.metaproj" (9) erstellt "D:\Entwicklung\AdventureJourney\build\debug\GuiTests.vcxproj" (22) auf Knoten "4" (Standardziele).
+    22>InitializeBuildStatus:
+         "GuiTests.dir\Debug\GuiTests.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+    23>CustomBuild:
+         Alle Ausgaben sind aktuell.
+    22>CustomBuild:
+         Alle Ausgaben sind aktuell.
+       ClCompile:
+         Alle Ausgaben sind aktuell.
+         Alle Ausgaben sind aktuell.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Entwicklung\AdventureJourney\build\debug\Debug\GuiTests.exe" /INCREMENTAL /NOLOGO Debug\LibCommon.lib Debug\LibGlUtil.lib Debug\Core.lib "D:\Entwicklung\_Libraries\boost_1_70_0\lib64-msvc-14.1\boost_stacktrace_noop-vc141-mt-gd-x64-1_70.lib" submodules\glfw\src\Debug\glfw3.lib Debug\LibCommon.lib "D:\Entwicklung\_Libraries\boost_1_70_0\lib64-msvc-14.1\boost_stacktrace_noop-vc141-mt-gd-x64-1_70.lib" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Entwicklung/AdventureJourney/build/debug/Debug/GuiTests.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Entwicklung/AdventureJourney/build/debug/Debug/GuiTests.lib" /MACHINE:X64  /machine:x64 GuiTests.dir\Debug\main.obj
+         GuiTests.dir\Debug\glad.obj
+    23>ClCompile:
+         Alle Ausgaben sind aktuell.
+         Alle Ausgaben sind aktuell.
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Entwicklung\AdventureJourney\build\debug\Debug\Gui.exe" /INCREMENTAL /NOLOGO Debug\LibCommon.lib Debug\LibGlUtil.lib Debug\Core.lib submodules\glfw\src\Debug\glfw3.lib "D:\Entwicklung\_Libraries\boost_1_70_0\lib64-msvc-14.1\boost_stacktrace_noop-vc141-mt-gd-x64-1_70.lib" Debug\LibCommon.lib "D:\Entwicklung\_Libraries\boost_1_70_0\lib64-msvc-14.1\boost_stacktrace_noop-vc141-mt-gd-x64-1_70.lib" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Entwicklung/AdventureJourney/build/debug/Debug/Gui.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Entwicklung/AdventureJourney/build/debug/Debug/Gui.lib" /MACHINE:X64  /machine:x64 Gui.dir\Debug\main.obj
+         Gui.dir\Debug\glad.obj
+         Gui.dir\Debug\Coords.obj
+         Gui.dir\Debug\Coords3D.obj
+         Gui.dir\Debug\Cube.obj
+         Gui.dir\Debug\Box.obj
+         Gui.dir\Debug\Cone.obj
+         Gui.dir\Debug\Cylinder.obj
+         Gui.dir\Debug\Disk.obj
+         Gui.dir\Debug\IcoSphere.obj
+         Gui.dir\Debug\Quad.obj
+         Gui.dir\Debug\QuadricHelper.obj
+         Gui.dir\Debug\UvSphere.obj
+         Gui.dir\Debug\StreamOperators.obj
+         Gui.dir\Debug\DummyObject.obj
+         Gui.dir\Debug\DummyScreen.obj
+         Gui.dir\Debug\IDummyObject.obj
+    21>ClCompile:
+         main.cpp
+    18>ClCompile:
+         CacheTest.cpp
+    21>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Entwicklung\AdventureJourney\build\debug\Debug\CoreTests.exe" /INCREMENTAL /NOLOGO "D:\Entwicklung\_Libraries\boost_1_70_0\lib64-msvc-14.1\boost_stacktrace_noop-vc141-mt-gd-x64-1_70.lib" Debug\LibCommon.lib Debug\Core.lib Debug\LibCommon.lib "D:\Entwicklung\_Libraries\boost_1_70_0\lib64-msvc-14.1\boost_stacktrace_noop-vc141-mt-gd-x64-1_70.lib" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Entwicklung/AdventureJourney/build/debug/Debug/CoreTests.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Entwicklung/AdventureJourney/build/debug/Debug/CoreTests.lib" /MACHINE:X64  /machine:x64 CoreTests.dir\Debug\main.obj
+    22>Link:
+         GuiTests.vcxproj -> D:\Entwicklung\AdventureJourney\build\debug\Debug\GuiTests.exe
+       FinalizeBuildStatus:
+         Die Datei "GuiTests.dir\Debug\GuiTests.tlog\unsuccessfulbuild" wird gel”scht.
+         Aktualisieren des Timestamps von "GuiTests.dir\Debug\GuiTests.tlog\GuiTests.lastbuildstate".
+    22>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\GuiTests.vcxproj" ist abgeschlossen (Standardziele).
+    21>Link:
+         CoreTests.vcxproj -> D:\Entwicklung\AdventureJourney\build\debug\Debug\CoreTests.exe
+       FinalizeBuildStatus:
+         Die Datei "CoreTests.dir\Debug\CoreTests.tlog\unsuccessfulbuild" wird gel”scht.
+         Aktualisieren des Timestamps von "CoreTests.dir\Debug\CoreTests.tlog\CoreTests.lastbuildstate".
+    21>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\CoreTests.vcxproj" ist abgeschlossen (Standardziele).
+     9>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\GuiTests.vcxproj.metaproj" ist abgeschlossen (Standardziele).
+     5>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\CoreTests.vcxproj.metaproj" ist abgeschlossen (Standardziele).
+    23>Link:
+         Gui.vcxproj -> D:\Entwicklung\AdventureJourney\build\debug\Debug\Gui.exe
+       FinalizeBuildStatus:
+         Die Datei "Gui.dir\Debug\Gui.tlog\unsuccessfulbuild" wird gel”scht.
+         Aktualisieren des Timestamps von "Gui.dir\Debug\Gui.tlog\Gui.lastbuildstate".
+    23>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\Gui.vcxproj" ist abgeschlossen (Standardziele).
+     6>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\Gui.vcxproj.metaproj" ist abgeschlossen (Standardziele).
+    18>ClCompile:
+         CollectRopeTest.cpp
+         IndexMapper.cpp
+         ListTest.cpp
+         FunctionEventTest.cpp
+         GeneralizedEventTest.cpp
+         HandlerEventTest.cpp
+         ListenerEventTest.cpp
+         MemberHandlerEventTest.cpp
+         RectangleTest.cpp
+         ParserTests.cpp
+         TestNumberParsing.cpp
+         TestStringEscaping.cpp
+    18>D:\Entwicklung\AdventureJourney\libCommon\test\json\TestStringEscaping.cpp(37): warning C4566: Das durch den universellen Zeichennamen "\u0AB3" dargestellte Zeichen kann in der aktuellen Codepage (1252) nicht dargestellt werden. [D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj]
+    18>D:\Entwicklung\AdventureJourney\libCommon\test\json\TestStringEscaping.cpp(38): warning C4566: Das durch den universellen Zeichennamen "\u2E0C" dargestellte Zeichen kann in der aktuellen Codepage (1252) nicht dargestellt werden. [D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj]
+    18>D:\Entwicklung\AdventureJourney\libCommon\test\json\TestStringEscaping.cpp(39): warning C4566: Das durch den universellen Zeichennamen "\u2300" dargestellte Zeichen kann in der aktuellen Codepage (1252) nicht dargestellt werden. [D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj]
+    18>D:\Entwicklung\AdventureJourney\libCommon\test\json\TestStringEscaping.cpp(40): warning C4566: Das durch den universellen Zeichennamen "\u0FF0" dargestellte Zeichen kann in der aktuellen Codepage (1252) nicht dargestellt werden. [D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj]
+         main.cpp
+         Hex4ToNumber.cpp
+         HexToNumber.cpp
+         Code wird generiert...
+         Kompilieren...
+         IsHexChar.cpp
+         TestComparisons.cpp
+         TestCrop.cpp
+         TestCommon.cpp
+         TestFormat2.cpp
+         TestJustification.cpp
+         TestSplit.cpp
+         TestStrip.cpp
+         Code wird generiert...
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\bin\HostX64\x64\link.exe /ERRORREPORT:QUEUE /OUT:"D:\Entwicklung\AdventureJourney\build\debug\Debug\LibCommonTests.exe" /INCREMENTAL /NOLOGO "D:\Entwicklung\_Libraries\boost_1_70_0\lib64-msvc-14.1\boost_stacktrace_noop-vc141-mt-gd-x64-1_70.lib" Debug\LibCommon.lib "D:\Entwicklung\_Libraries\boost_1_70_0\lib64-msvc-14.1\boost_stacktrace_noop-vc141-mt-gd-x64-1_70.lib" kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:/Entwicklung/AdventureJourney/build/debug/Debug/LibCommonTests.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:/Entwicklung/AdventureJourney/build/debug/Debug/LibCommonTests.lib" /MACHINE:X64  /machine:x64 LibCommonTests.dir\Debug\main.obj
+         LibCommonTests.dir\Debug\ColorTest.obj
+         LibCommonTests.dir\Debug\HexStringConversions.obj
+         LibCommonTests.dir\Debug\HsvRgbConversions.obj
+         LibCommonTests.dir\Debug\ArrayTest.obj
+         LibCommonTests.dir\Debug\CacheTest.obj
+         LibCommonTests.dir\Debug\CollectRopeTest.obj
+         LibCommonTests.dir\Debug\IndexMapper.obj
+         LibCommonTests.dir\Debug\ListTest.obj
+         LibCommonTests.dir\Debug\FunctionEventTest.obj
+         LibCommonTests.dir\Debug\GeneralizedEventTest.obj
+         LibCommonTests.dir\Debug\HandlerEventTest.obj
+         LibCommonTests.dir\Debug\ListenerEventTest.obj
+         LibCommonTests.dir\Debug\MemberHandlerEventTest.obj
+         LibCommonTests.dir\Debug\RectangleTest.obj
+         LibCommonTests.dir\Debug\ParserTests.obj
+         LibCommonTests.dir\Debug\TestNumberParsing.obj
+         LibCommonTests.dir\Debug\TestStringEscaping.obj
+         LibCommonTests.dir\Debug\Hex4ToNumber.obj
+         LibCommonTests.dir\Debug\HexToNumber.obj
+         LibCommonTests.dir\Debug\IsHexChar.obj
+         LibCommonTests.dir\Debug\TestComparisons.obj
+         LibCommonTests.dir\Debug\TestCrop.obj
+         LibCommonTests.dir\Debug\TestCommon.obj
+         LibCommonTests.dir\Debug\TestFormat2.obj
+         LibCommonTests.dir\Debug\TestJustification.obj
+         LibCommonTests.dir\Debug\TestSplit.obj
+         LibCommonTests.dir\Debug\TestStrip.obj
+         LibCommonTests.vcxproj -> D:\Entwicklung\AdventureJourney\build\debug\Debug\LibCommonTests.exe
+       FinalizeBuildStatus:
+         Die Datei "LibCommonTests.dir\Debug\LibCommonTests.tlog\unsuccessfulbuild" wird gel”scht.
+         Aktualisieren des Timestamps von "LibCommonTests.dir\Debug\LibCommonTests.tlog\LibCommonTests.lastbuildstate".
+    18>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj" ist abgeschlossen (Standardziele).
+    10>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj.metaproj" ist abgeschlossen (Standardziele).
+     2>Das Projekt "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" (2) erstellt "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj" (24) auf Knoten "4" (Standardziele).
+    24>InitializeBuildStatus:
+         "x64\Debug\ALL_BUILD\ALL_BUILD.tlog\unsuccessfulbuild" wird erstellt, da "AlwaysCreate" angegeben wurde.
+       CustomBuild:
+         Alle Ausgaben sind aktuell.
+       FinalizeBuildStatus:
+         Die Datei "x64\Debug\ALL_BUILD\ALL_BUILD.tlog\unsuccessfulbuild" wird gel”scht.
+         Aktualisieren des Timestamps von "x64\Debug\ALL_BUILD\ALL_BUILD.tlog\ALL_BUILD.lastbuildstate".
+    24>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj" ist abgeschlossen (Standardziele).
+     2>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" ist abgeschlossen (Standardziele).
+     1>Die Erstellung von Projekt "D:\Entwicklung\AdventureJourney\build\debug\GalaxyAtWar.sln" ist abgeschlossen (Standardziele).
+
+Der Buildvorgang wurde erfolgreich ausgefhrt.
+
+       "D:\Entwicklung\AdventureJourney\build\debug\GalaxyAtWar.sln" (Standardziel) (1) ->
+       "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" (Standardziel) (2) ->
+       "D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj.metaproj" (Standardziel) (3) ->
+       "D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj.metaproj" (Standardziel) (4) ->
+       "D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj" (Standardziel) (14) ->
+       (ClCompile Ziel) -> 
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\Io\Io.cpp(97): warning C4996: 'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\Escaping.cpp(20): warning C4129: "e": nicht erkannte Folge von Escapesequenz [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\FormatTime.cpp(11): warning C4996: 'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\StringUtils\TimeFormatException.cpp(7): warning C4996: 'ctime': This function or variable may be unsafe. Consider using ctime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ArrayNode.cpp(84): warning C4267: "Argument": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ArrayNode.cpp(99): warning C4267: "return": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ArrayNode.cpp(105): warning C4267: "Argument": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ArrayNode.cpp(113): warning C4267: "Argument": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ArrayNode.cpp(196): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "uint", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\json\FormattedPrinter.cpp(275): warning C4267: "return": Konvertierung von "size_t" nach "uint", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ObjectNode.cpp(64): warning C4267: "return": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\json\ObjectNode.cpp(170): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "uint", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.20.27508\include\utility(161): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "_Ty2", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\json\Parser.cpp(29): warning C4267: "Argument": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\json\Tokenizer.cpp(307): warning C4267: "Argument": Konvertierung von "size_t" nach "int", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\random\Random.cpp(13): warning C4244: "Argument": Konvertierung von "double" in "unsigned int", m”glicher Datenverlust [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\datetime\RoundTimer.cpp(45): warning C4267: "return": Konvertierung von "size_t" nach "clock_t", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\data\keyValueSettings\settings.cpp(82): warning C4715: "util::SettingCollection::ReadSettings": Nicht alle Codepfade geben einen Wert zurck. [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\graphics\Color.cpp(59): warning C4244: "return": Konvertierung von "double" in "float", m”glicher Datenverlust [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\graphics\Color.cpp(64): warning C4244: "return": Konvertierung von "double" in "float", m”glicher Datenverlust [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\graphics\Color.cpp(69): warning C4244: "return": Konvertierung von "double" in "float", m”glicher Datenverlust [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\graphics\Color.cpp(74): warning C4244: "return": Konvertierung von "double" in "float", m”glicher Datenverlust [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\Runner.cpp(76): warning C4267: "Initialisierung": Konvertierung von "size_t" nach "uint", Datenverlust m”glich [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\TestRun.cpp(27): warning C4101: "e": Unreferenzierte lokale Variable [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\testFramework\TestRun.cpp(57): warning C4101: "e": Unreferenzierte lokale Variable [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\src\graphics\Color.cpp(188): warning C4715: "util::Color::FromHexString": Nicht alle Codepfade geben einen Wert zurck. [D:\Entwicklung\AdventureJourney\build\debug\LibCommon.vcxproj]
+
+
+       "D:\Entwicklung\AdventureJourney\build\debug\GalaxyAtWar.sln" (Standardziel) (1) ->
+       "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" (Standardziel) (2) ->
+       "D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj.metaproj" (Standardziel) (3) ->
+       "D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj" (Standardziel) (16) ->
+         D:\Entwicklung\AdventureJourney\core\include\entities/Resources.hpp(12): warning C4584: "logic::Resource": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::HasNameBase" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\core\include\entities/Planet.hpp(48): warning C4584: "logic::PlanetaryBody": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::HasNameBase" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\core\include\entities/Planet.hpp(48): warning C4584: "logic::PlanetaryBody": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::IdGeneratorBase<logic::PlanetaryBody>" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\core\include\entities/Planet.hpp(113): warning C4584: "logic::PlanetarySystem": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::HasNameBase" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\core\include\entities/Planet.hpp(113): warning C4584: "logic::PlanetarySystem": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::IdGeneratorBase<logic::PlanetarySystem>" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\core\include\entities/Army.hpp(15): warning C4584: "logic::Army": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::HasNameBase" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\core\include\entities/Army.hpp(28): warning C4584: "logic::Fleet": Basisklasse "json::IJsonSerializable" ist bereits eine Basisklasse von "logic::HasNameBase" [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+         D:\Entwicklung\AdventureJourney\core\src\util\Version.cpp(15): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details. [D:\Entwicklung\AdventureJourney\build\debug\Core.vcxproj]
+
+
+       "D:\Entwicklung\AdventureJourney\build\debug\GalaxyAtWar.sln" (Standardziel) (1) ->
+       "D:\Entwicklung\AdventureJourney\build\debug\ALL_BUILD.vcxproj.metaproj" (Standardziel) (2) ->
+       "D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj.metaproj" (Standardziel) (10) ->
+       "D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj" (Standardziel) (18) ->
+         D:\Entwicklung\AdventureJourney\libCommon\test\json\TestStringEscaping.cpp(37): warning C4566: Das durch den universellen Zeichennamen "\u0AB3" dargestellte Zeichen kann in der aktuellen Codepage (1252) nicht dargestellt werden. [D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\test\json\TestStringEscaping.cpp(38): warning C4566: Das durch den universellen Zeichennamen "\u2E0C" dargestellte Zeichen kann in der aktuellen Codepage (1252) nicht dargestellt werden. [D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\test\json\TestStringEscaping.cpp(39): warning C4566: Das durch den universellen Zeichennamen "\u2300" dargestellte Zeichen kann in der aktuellen Codepage (1252) nicht dargestellt werden. [D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj]
+         D:\Entwicklung\AdventureJourney\libCommon\test\json\TestStringEscaping.cpp(40): warning C4566: Das durch den universellen Zeichennamen "\u0FF0" dargestellte Zeichen kann in der aktuellen Codepage (1252) nicht dargestellt werden. [D:\Entwicklung\AdventureJourney\build\debug\LibCommonTests.vcxproj]
+
+    38 Warnung(en)
+    0 Fehler
+
+Verstrichene Zeit 00:00:40.62
