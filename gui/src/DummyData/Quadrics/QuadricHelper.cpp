@@ -167,7 +167,7 @@ void gui::quadrics::QuadricContext::PushIndices(const std::initializer_list<inde
 
 bool gui::quadrics::QuadricContext::CreateMesh(glutil::Mesh &out)
 {
-    util::dbg.WriteLine("Created Quadric with % vertices and % indices.\nName=%\nVertices={%}\nIndices=%",
+    util::dbg.WriteLine("Created Quadric \"%\" with % vertices and % indices.\nVertices={%}\nIndices=%",
                         this->name,
                         this->vertices.size(),
                         this->indices.size(),

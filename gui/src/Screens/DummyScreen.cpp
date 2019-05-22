@@ -173,6 +173,9 @@ gui::DummyScreen::DummyScreen() : scene(),
     auto cylinderMesh = this->scene.GetMesh("CylinderMesh");
     gui::quadrics::Cylinder(32, 1, *cylinderMesh);
 
+    auto coneMesh = this->scene.GetMesh("ConeMesh");
+    gui::quadrics::Cone(32, 1, *cylinderMesh);
+
     auto floorObj = this->scene.GetObject("floor");
     floorObj->SetGeometry(floorMesh);
     floorObj->SetModelMatrix(glm::scale(glm::vec3(5, 5, 5)));
@@ -202,8 +205,12 @@ gui::DummyScreen::DummyScreen() : scene(),
     auto cylinder = this->scene.GetObject("Cylinder");
     cylinder->SetGeometry(cylinderMesh);
 
+    auto cone = this->scene.GetObject("Cone");
+    cone->SetGeometry(coneMesh);
+
     std::vector<glutil::SceneObject *> objects = {
         cylinder,
+        cone,
         cube,
         disk,
         ico,

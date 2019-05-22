@@ -11,42 +11,42 @@ bool gui::quadrics::Cone(uint32_t slices, uint32_t stacks, glutil::Mesh &out, co
 {
     QuadricContext q(config, util::Format("Cone (%, %)", slices, stacks));
 
-    // this is a small normal trick:
-    float n[3] = {1, 0, 1};
-    float len = sqrt(n[0] * n[0] + n[2] * n[2]);
-    n[0] /= len;
-    n[2] /= len;
-    // create (loops-1) rings
-    for (float iSt = 0; iSt < 1.f; iSt += (1.f / (float)stacks))
-    {
-        float br = (1.0f - iSt);                         // bottom radius
-        float tr = (1.0f - iSt - (1.f / (float)stacks)); // top radius
-        float bz = iSt;
-        float tz = iSt + (1.f / (float)stacks);
-        // with (slices-1) elements
-        for (uint32_t iSl = 0; iSl < slices; iSl++)
-        {
-            float sliceRatioL = float(iSl) / float(slices);
-            float sliceRatioR = float(iSl + 1) / float(slices);
-            float cl = cosf(sliceRatioL * (float)M_PI * 2.0f), sl = sinf(sliceRatioL * (float)M_PI * 2.0f),
-                  cr = cosf(sliceRatioR * (float)M_PI * 2.0f), sr = sinf(sliceRatioR * (float)M_PI * 2.0f);
-            float nlx = cl * n[0], nly = sl * n[0], nlz = n[2],
-                  nrx = cr * n[0], nry = sr * n[0], nrz = n[2];
+    float phi;
+    float x, y;
+    size_t slice, stack;
+    float sliceStep = 1.f / static_cast<float>(slices);
+    float stackStep = 1.f / static_cast<float>(stacks);
 
-            if (iSt < (1.0f - (1.f / (float)stacks)))
+    for (slice = 0; slice < slices + 1; slice++)
+    {
+        phi = 2.0f * M_PI * slice * sliceStep;
+        x = cos(phi);
+        y = sin(phi);
+        q.SetNormal(x, 0, y);
+
+        for (stack = 0; stack < stacks + 1; stack++)
+        {
+            q.SetPosition(x, stack * stackStep * 2.f - 1.f, y);
+            q.SetTexCoords(slice * sliceStep, stack * stackStep);
+            q.Push();
+        }
+
+        // stacks = 2, slices = 2
+        //  0  1  2
+        //0 0--3--6
+        //  |  |  |
+        //1 1--4--7
+        //  |  |  |
+        //2 2--5--8
+
+        if (slice < slices)
+        {
+            for (stack = 0; stack < stacks; stack++)
             {
-                // TODO!
-                // m_addQuad(cl * br, sl * br, bz, nlx, nly, nlz,
-                //           cr * br, sr * br, bz, nrx, nry, nrz,
-                //           cr * tr, sr * tr, tz, nrx, nry, nrz,
-                //           cl * tr, sl * tr, tz, nlx, nly, nlz);
-            }
-            else
-            {
-                // TODO!
-                // m_addTriangle(cl * br, sl * br, bz, nlx, nly, nlz,
-                //               cr * br, sr * br, bz, nrx, nry, nrz,
-                //               0, 0, tz, nrx, nry, nrz);
+                q.PushQuad(slice * (stacks + 1) + stack,
+                           (slice + 1) * (stacks + 1) + stack,
+                           (slice + 1) * (stacks + 1) + (stack + 1),
+                           slice * (stacks + 1) + (stack + 1));
             }
         }
     }

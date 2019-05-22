@@ -11,26 +11,47 @@ bool gui::quadrics::Cylinder(uint32_t slices, uint32_t stacks, glutil::Mesh &out
 {
     QuadricContext q(config, util::Format("cylinder (%, %)", slices, stacks));
 
-    // create (stacks-1) rings
-    for (uint32_t iSt = 0; iSt < stacks; iSt++)
-    {
-        float zb = float(iSt) / float(stacks);
-        float zt = float(iSt + 1) / float(stacks);
-        // with (slices-1) elements
-        for (uint32_t iSl = 0; iSl < slices; iSl++)
-        {
-            float sliceRatioL = float(iSl) / float(slices);
-            float sliceRatioR = float(iSl + 1) / float(slices);
-            float cl = cosf(sliceRatioL * (float)M_PI * 2.0f), sl = sinf(sliceRatioL * (float)M_PI * 2.0f),
-                  cr = cosf(sliceRatioR * (float)M_PI * 2.0f), sr = sinf(sliceRatioR * (float)M_PI * 2.0f);
+    q.Reserve((slices + 1) * (stacks + 1), slices * stacks * 6);
 
-            // TODO!
-            // m_addQuad(cl, sl, zb, cl, sl, 0,
-            // 	cr, sr, zb, cr, sr, 0,
-            // 	cr, sr, zt, cr, sr, 0,
-            // 	cl, sl, zt, cl, sl, 0);
+    float phi;
+    float x, y;
+    size_t slice, stack;
+    float sliceStep = 1.f / static_cast<float>(slices);
+    float stackStep = 1.f / static_cast<float>(stacks);
+
+    for (slice = 0; slice < slices + 1; slice++)
+    {
+        phi = 2.0f * M_PI * slice * sliceStep;
+        x = cos(phi);
+        y = sin(phi);
+        q.SetNormal(x, 0, y);
+
+        for (stack = 0; stack < stacks + 1; stack++)
+        {
+            q.SetPosition(x, stack * stackStep * 2.f - 1.f, y);
+            q.SetTexCoords(slice * sliceStep, stack * stackStep);
+            q.Push();
+        }
+
+        // stacks = 2, slices = 2
+        //  0  1  2
+        //0 0--3--6
+        //  |  |  |
+        //1 1--4--7
+        //  |  |  |
+        //2 2--5--8
+
+        if (slice < slices)
+        {
+            for (stack = 0; stack < stacks; stack++)
+            {
+                q.PushQuad(slice * (stacks + 1) + stack,
+                           (slice + 1) * (stacks + 1) + stack,
+                           (slice + 1) * (stacks + 1) + (stack + 1),
+                           slice * (stacks + 1) + (stack + 1));
+            }
         }
     }
-
+    
     return q.CreateMesh(out);
 }
