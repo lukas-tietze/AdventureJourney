@@ -247,6 +247,7 @@ gui::DummyScreen::DummyScreen() : scene(),
     this->ppPipe.SetDepthStencilBufferTextureTarget(GL_TEXTURE1);
     this->ppPipe.SetBindingTarget(0);
     this->ppPipe.Update();
+    this->ppPipe.CreateGlObjects();
 }
 
 gui::DummyScreen::~DummyScreen()

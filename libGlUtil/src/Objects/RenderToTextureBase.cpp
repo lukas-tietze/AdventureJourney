@@ -8,9 +8,7 @@ glutil::RenderToTextureBase::RenderToTextureBase() : dirty(true),
                                                      autoUpdate(true),
                                                      quadVao(0),
                                                      quadVbo(0),
-                                                     fbo(0),
-                                                     w(0),
-                                                     h(0)
+                                                     fbo(0)
 {
 }
 
@@ -27,12 +25,12 @@ glutil::RenderToTextureBase::~RenderToTextureBase()
 
 int glutil::RenderToTextureBase::GetWidth() const
 {
-    return this->w;
+    return this->data.width;
 }
 
 int glutil::RenderToTextureBase::GetHeight() const
 {
-    return this->h;
+    return this->data.height;
 }
 
 void glutil::RenderToTextureBase::Update()
@@ -91,6 +89,7 @@ void glutil::RenderToTextureBase::DestroyFrameBuffer()
     {
         glDeleteFramebuffers(1, &this->fbo);
         this->fbo = 0;
+        util::dbg.WriteLine("Destroyed Framebuffer %", this->fbo);
     }
 }
 
@@ -100,6 +99,7 @@ void glutil::RenderToTextureBase::CreateFrameBuffer()
 
     glGenFramebuffers(1, &this->fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
+    util::dbg.WriteLine("Generated Framebuffer %", this->fbo);
 }
 
 void glutil::RenderToTextureBase::ValidateFrameBuffer()
@@ -121,8 +121,7 @@ void glutil::RenderToTextureBase::TransferFrom(RenderToTextureBase &other)
     // this->StaticUboOwner::TransferFrom(other);
 
     this->autoUpdate = other.autoUpdate;
-    this->w = other.w;
-    this->h = other.h;
+    this->data = other.data;
     this->quadVao = other.quadVao;
     this->quadVbo = other.quadVbo;
     this->dirty = other.dirty;
@@ -135,11 +134,12 @@ void glutil::RenderToTextureBase::TransferFrom(RenderToTextureBase &other)
 
 void glutil::RenderToTextureBase::SetSize(int w, int h)
 {
-    if (this->w != w || this->h != h)
+    if (this->data.width != w || this->data.height != h)
     {
-        this->w = w;
-        this->h = h;
+        this->data.width = w;
+        this->data.height = h;
         this->dirty = true;
+        this->SetDirty();
     }
 }
 
@@ -183,18 +183,10 @@ void glutil::RenderToTextureBase::Render()
     if (!this->CheckBeforUsage())
         return;
 
-    if (this->useUboData)
+    if (this->useUboData || true)
     {
-        if (this->data.width != this->w ||
-            this->data.height != this->h)
-        {
-            this->data.width = this->w;
-            this->data.height = this->h;
-            this->SetDirty();
-        }
-
         this->Bind();
-        this->Upload();
+        this->Upload(true);
     }
 
     this->BeginRender();

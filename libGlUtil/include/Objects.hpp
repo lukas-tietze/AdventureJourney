@@ -91,9 +91,6 @@ private:
     GLuint quadVbo;
     GLuint fbo;
 
-    int w;
-    int h;
-
     bool CheckBeforUsage();
     void CreateQuad();
     void DestroyQuad();

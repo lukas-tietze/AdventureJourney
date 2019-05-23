@@ -47,6 +47,7 @@ void glutil::PostProcessingPipeline::DestroyGlObjects()
 void glutil::PostProcessingPipeline::FillFrameBuffer()
 {
     this->DestroyGlObjects();
+
     if (this->requireColors)
     {
         glGenTextures(1, &this->colorTexture);

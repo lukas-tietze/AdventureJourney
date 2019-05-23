@@ -12,6 +12,8 @@ glutil::DynamicUboOwner<TData>::DynamicUboOwner() : ubo(0),
 template <class TData>
 void glutil::DynamicUboOwner<TData>::CreateGlObjects()
 {
+    this->DestroyGlObjects();
+
     glGenBuffers(1, &this->ubo);
     glBindBuffer(GL_UNIFORM_BUFFER, this->ubo);
     glBufferData(GL_UNIFORM_BUFFER, sizeof(TData) * this->data.size(), this->data.data(), GL_STATIC_DRAW);
@@ -20,8 +22,11 @@ void glutil::DynamicUboOwner<TData>::CreateGlObjects()
 template <class TData>
 void glutil::DynamicUboOwner<TData>::DestroyGlObjects()
 {
-    glDeleteBuffers(1, &this->ubo);
-    this->ubo = 0;
+    if (this->ubo)
+    {
+        glDeleteBuffers(1, &this->ubo);
+        this->ubo = 0;
+    }
 }
 
 template <class TData>
