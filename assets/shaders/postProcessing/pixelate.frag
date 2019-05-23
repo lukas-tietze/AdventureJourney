@@ -12,7 +12,7 @@ layout(std140, binding = 0) uniform screenDataBlock
     int height;
 } screenData;
 
-const int PIXELATION = 10;
+const int PIXELATION = 5;
 
 void main()
 {
