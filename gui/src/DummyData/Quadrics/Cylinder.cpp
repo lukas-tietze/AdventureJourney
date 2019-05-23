@@ -24,7 +24,7 @@ bool gui::quadrics::Cylinder(uint32_t slices, uint32_t stacks, glutil::Mesh &out
         phi = 2.0f * M_PI * slice * sliceStep;
         x = cos(phi);
         y = sin(phi);
-        q.SetNormal(x, 0, y);
+        q.SetNormal(x, 0.f, y);
 
         for (stack = 0; stack < stacks + 1; stack++)
         {
@@ -32,15 +32,7 @@ bool gui::quadrics::Cylinder(uint32_t slices, uint32_t stacks, glutil::Mesh &out
             q.SetTexCoords(slice * sliceStep, stack * stackStep);
             q.Push();
         }
-
-        // stacks = 2, slices = 2
-        //  0  1  2
-        //0 0--3--6
-        //  |  |  |
-        //1 1--4--7
-        //  |  |  |
-        //2 2--5--8
-
+        
         if (slice < slices)
         {
             for (stack = 0; stack < stacks; stack++)

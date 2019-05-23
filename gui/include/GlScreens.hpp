@@ -58,11 +58,11 @@ private:
     bool mouseCaptured;
     bool animationPaused;
     bool wireMode;
-    bool debugMode;
     bool cullMode;
 
     std::vector<IDummyObject *> objects;
     glutil::Program *ppProg;
+    glutil::Program *debugProg;
 
     glutil::PostProcessingPipeline ppPipe;
 

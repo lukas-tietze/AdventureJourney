@@ -11,7 +11,8 @@ constexpr char MAIN_CAM[] = "MAIN_CAM";
 constexpr char MAIN_LIGHT[] = "MAIN_LIGHT";
 constexpr char DEPTH_PROG[] = "PrgDepth";
 constexpr char COLOR_PROG[] = "PrgColorFull";
-constexpr char DEBUG_PROG[] = "PrgColorDebug";
+constexpr char DEBUG_TEX_PROG[] = "PrgTexDebug";
+constexpr char DEBUG_NRM_PROG[] = "PrgNrmDebug";
 constexpr char PIXEL_PROG[] = "PPpix";
 constexpr char BLUR_PROG[] = "PPblur";
 constexpr char DEPTH_BLUR_PROG[] = "PPdepthBlur";
@@ -39,8 +40,8 @@ gui::DummyScreen::DummyScreen() : scene(),
                                   mouseCaptured(false),
                                   animationPaused(false),
                                   wireMode(false),
-                                  debugMode(false),
                                   cullMode(false),
+                                  debugProg(nullptr),
                                   ppProg(nullptr)
 {
     auto camera = this->scene.GetCamera(MAIN_CAM);
@@ -64,12 +65,23 @@ gui::DummyScreen::DummyScreen() : scene(),
                                            "assets/shaders/fragment/textureOnly.frag",
                                        });
 
-    this->scene.InitProgramFromSources(DEBUG_PROG,
+    this->scene.InitProgramFromSources(DEBUG_TEX_PROG,
                                        {
                                            "assets/shaders/base/full.vert",
                                            "assets/shaders/vertex/simple.vert",
                                            "assets/shaders/base/color.frag",
-                                           "assets/shaders/fragment/lightingDebug.frag",
+                                           "assets/shaders/fragment/lightingDebugTexCoord.frag",
+                                           "assets/shaders/fragment/materialPropsSimple.frag",
+                                           "assets/shaders/fragment/normalAttrib.frag",
+                                           "assets/shaders/fragment/textureOnly.frag",
+                                       });
+
+    this->scene.InitProgramFromSources(DEBUG_NRM_PROG,
+                                       {
+                                           "assets/shaders/base/full.vert",
+                                           "assets/shaders/vertex/simple.vert",
+                                           "assets/shaders/base/color.frag",
+                                           "assets/shaders/fragment/lightingDebugNrm.frag",
                                            "assets/shaders/fragment/materialPropsSimple.frag",
                                            "assets/shaders/fragment/normalAttrib.frag",
                                            "assets/shaders/fragment/textureOnly.frag",
@@ -174,7 +186,7 @@ gui::DummyScreen::DummyScreen() : scene(),
     gui::quadrics::Cylinder(32, 1, *cylinderMesh);
 
     auto coneMesh = this->scene.GetMesh("ConeMesh");
-    gui::quadrics::Cone(32, 1, *cylinderMesh);
+    gui::quadrics::Cone(32, 3, *coneMesh);
 
     auto floorObj = this->scene.GetObject("floor");
     floorObj->SetGeometry(floorMesh);
@@ -259,7 +271,11 @@ void gui::DummyScreen::Render()
 
     glDepthFunc(GL_EQUAL);
 
-    this->scene.GetProgram(this->debugMode ? DEBUG_PROG : COLOR_PROG)->Use();
+    if (this->debugProg)
+        this->debugProg->Use();
+    else
+        this->scene.GetProgram(COLOR_PROG)->Use();
+
     this->scene.Render();
 
     if (this->ppProg)
@@ -291,14 +307,19 @@ void gui::DummyScreen::Update(double delta)
         y++;
     if (glutil::IsKeyDown(GLFW_KEY_LEFT_SHIFT))
         y--;
-    if (glutil::WasKeyPressed(GLFW_KEY_F1))
+    if (glutil::WasKeyPressed(GLFW_KEY_F2))
+        this->debugProg = nullptr;
+    if (glutil::WasKeyPressed(GLFW_KEY_F3))
+        this->debugProg = this->scene.GetProgram(DEBUG_NRM_PROG);
+    if (glutil::WasKeyPressed(GLFW_KEY_F4))
+        this->debugProg = this->scene.GetProgram(DEBUG_TEX_PROG);
+    if (glutil::WasKeyPressed(GLFW_KEY_F5))
     {
         this->wireMode = !this->wireMode;
 
         glPolygonMode(GL_FRONT_AND_BACK, this->wireMode ? GL_LINE : GL_FILL);
     }
-    if (glutil::WasKeyPressed(GLFW_KEY_F2))
-        this->debugMode = !this->debugMode;
+
     if (glutil::WasKeyPressed(GLFW_KEY_1))
         this->ppProg = nullptr;
     if (glutil::WasKeyPressed(GLFW_KEY_2))
