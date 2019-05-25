@@ -57,6 +57,7 @@ std::string &StripBackInplace(std::string &);
 bool EndsWith(const std::string &str, const std::string &end);
 bool StartsWith(const std::string &str, const std::string &start);
 
+char Escape(char);
 std::string Unescape(char);
 std::string UtfCodePointToNarrowString(uint32_t);
 

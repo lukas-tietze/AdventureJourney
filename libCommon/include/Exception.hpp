@@ -19,12 +19,12 @@ std::string FormatStacktrace(const boost::stacktrace::stacktrace &trace, uint in
 
 class Exception : public std::exception
 {
-  private:
+private:
     int errorCode;
     std::string msg;
     boost::stacktrace::stacktrace trace;
 
-  public:
+public:
     Exception();
     Exception(int);
     Exception(const std::string &);
@@ -38,7 +38,7 @@ class Exception : public std::exception
 
 class IndexOutOfRangeException : public util::Exception
 {
-  public:
+public:
     IndexOutOfRangeException();
     IndexOutOfRangeException(int index, int max);
     IndexOutOfRangeException(int index, int max, const std::string &customMsg);
@@ -46,7 +46,7 @@ class IndexOutOfRangeException : public util::Exception
 
 class OverflowException : public util::Exception
 {
-  public:
+public:
     OverflowException();
     OverflowException(int max);
     OverflowException(int max, const std::string &customMsg);
@@ -54,7 +54,7 @@ class OverflowException : public util::Exception
 
 class MissingKeyException : public util::Exception
 {
-  public:
+public:
     MissingKeyException();
     MissingKeyException(const std::string &key);
     MissingKeyException(const std::string &key, const std::string &customMsg);
@@ -62,20 +62,27 @@ class MissingKeyException : public util::Exception
 
 class FileNotFoundException : public util::Exception
 {
-  public:
+public:
     FileNotFoundException();
     FileNotFoundException(const std::string &path);
     FileNotFoundException(const std::string &path, const std::string &customMsg);
 };
 
+class NotSupportedException : public util::Exception
+{
+public:
+    NotSupportedException();
+    NotSupportedException(const std::string &customMsg);
+};
+
 class InvalidCaseException : public util::Exception
 {
-  public:
+public:
     InvalidCaseException();
     InvalidCaseException(const std::string &which);
     InvalidCaseException(const std::string &which, const std::string &customMsg);
 
-    template<class TEnum>
+    template <class TEnum>
     static InvalidCaseException MakeException(TEnum value)
     {
         std::stringstream s[2];

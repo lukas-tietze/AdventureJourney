@@ -1,0 +1,412 @@
+#pragma once
+
+#include <string>
+#include <vector>
+#include <unordered_map>
+#include <stack>
+#include <set>
+
+#include "data/Io.hpp"
+
+namespace util
+{
+enum class ValueType
+{
+    String,
+    Number,
+    Set,
+};
+
+class IValue;
+class EvaluationContext;
+
+typedef IValue *(*function_t)(IValue **, int, EvaluationContext &);
+
+class Operator
+{
+private:
+    int priority;
+    bool isUnary;
+    function_t function;
+
+public:
+    Operator(int priority, bool isUnary, function_t function);
+
+    int GetPriority() const;
+    bool IsUnary() const;
+    bool IsBinary() const;
+    function_t GetFunction();
+    const function_t GetFunction() const;
+};
+
+class ValueSet
+{
+private:
+    std::vector<IValue *> values;
+
+public:
+    ValueSet();
+};
+
+class IValue
+{
+private:
+    ValueType type;
+
+public:
+    IValue(ValueType type);
+    virtual ~IValue();
+
+    ValueType GetType() const;
+
+    virtual const std::string &GetValueAsString() const = 0;
+    virtual double GetValueAsNumber() const = 0;
+    virtual const ValueSet &GetValueAsSet() const = 0;
+};
+
+class DoubleValue
+{
+private:
+    double value;
+
+public:
+    DoubleValue();
+    DoubleValue(double value);
+
+    const std::string &GetValueAsString() const;
+    double GetValueAsNumber() const;
+    const ValueSet &GetValueAsSet() const;
+};
+
+class StringValue
+{
+private:
+    std::string value;
+
+public:
+    StringValue();
+    StringValue(const std::string &value);
+
+    const std::string &GetValueAsString() const;
+    double GetValueAsNumber() const;
+    const ValueSet &GetValueAsSet() const;
+};
+
+class SetValue
+{
+private:
+    ValueSet value;
+
+public:
+    SetValue();
+    SetValue(const std::initializer_list<IValue *> values);
+
+    const std::string &GetValueAsString() const;
+    double GetValueAsNumber() const;
+    const ValueSet &GetValueAsSet() const;
+};
+
+class Config
+{
+private:
+    struct CharPair
+    {
+        char opening;
+        char closing;
+    };
+
+    std::unordered_map<std::string, function_t> functions;
+    std::unordered_map<std::string, Operator *> operators;
+    std::unordered_map<std::string, IValue *> variables;
+    CharPair bracketMarker;
+    CharPair stringMarker;
+    CharPair lazyEvalMarker;
+    CharPair functionBrackets;
+    CharPair setMarkers;
+    CharPair accessorMarkers;
+    char listSeperator;
+    char decimalSeperator;
+    char functionParameterSeperator;
+    char stringEscapeMarker;
+
+public:
+    Config();
+
+    void AddOperator(const std::string &, Operator *);
+    void AddFunction(const std::string &, function_t);
+    void AddVariable(const std::string &, IValue *);
+
+    bool RemoveOperator(char);
+    bool RemoveFunction(const std::string &);
+    bool RemoveVariable(const std::string &);
+
+    void SetBrackets(char, char);
+    void SetBracketMarker(char, char);
+    void SetStringMarker(char, char);
+    void SetLazyEvalMarker(char, char);
+    void SetFunctionBrackets(char, char);
+    void SetSetMarkers(char, char);
+    void SetAccessorMarkers(char, char);
+    void GetListSeperator(char);
+    void SetDecimalSeperator(char);
+    void SetFunctionParameterSeperator(char);
+    void SetStringEscapeMarker(char);
+
+    std::unordered_map<std::string, function_t> &GetFunctions();
+    std::unordered_map<std::string, Operator *> &GetOperators();
+    std::unordered_map<std::string, IValue *> &GetVariables();
+    Operator *GetOperator(const std::string &);
+    function_t GetFunction(const std::string &);
+    IValue *GetVariable(const std::string &);
+    CharPair &GetBrackets();
+    CharPair &GetBracketMarker();
+    CharPair &GetStringMarker();
+    CharPair &GetLazyEvalMarker();
+    CharPair &GetFunctionBrackets();
+    CharPair &GetSetMarkers();
+    CharPair &GetAccessorMarkers();
+
+    const std::unordered_map<std::string, function_t> &GetFunctions() const;
+    const std::unordered_map<std::string, Operator *> &GetOperators() const;
+    const std::unordered_map<std::string, IValue *> &GetVariables() const;
+    const Operator *GetOperator(const std::string &) const;
+    const function_t GetFunction(const std::string &) const;
+    const IValue *GetVariable(const std::string &) const;
+    const CharPair &GetBrackets() const;
+    const CharPair &GetBracketMarker() const;
+    const CharPair &GetStringMarker() const;
+    const CharPair &GetLazyEvalMarker() const;
+    const CharPair &GetFunctionBrackets() const;
+    const CharPair &GetSetMarkers() const;
+    const CharPair &GetAccessorMarkers() const;
+    char GetListSeperator() const;
+    char GetDecimalSeperator() const;
+    char GetFunctionParameterSeperator() const;
+    char GetStringEscapeMarker() const;
+};
+
+class EvaluationContext
+{
+private:
+    Config *config;
+
+public:
+    EvaluationContext(Config *config);
+
+    Operator *GetOperator(char);
+    function_t GetFunction(const std::string &);
+    IValue *GetVariable(const std::string &);
+};
+
+namespace tokenizing
+{
+enum class TokenType
+{
+    String = 0x0000,
+    Number = 0x0001,
+    Identifier = 0x0002,
+    Seperator = 0x0003,
+    OpeningBracket = 0x0004,
+    ClosingBracket = 0x0005,
+    SetStart = 0x0006,
+    SetEnd = 0x0007,
+    AccessorStart = 0x0008,
+    AccessorEnd = 0x0009,
+    FunctionStart = 0x000A,
+    FunctionEnd = 0x000B,
+    LazyEvalSeperator = 0x000C,
+    Operator = 0x1000,
+};
+
+class Token
+{
+private:
+    TokenType type;
+    std::string value;
+
+public:
+    Token();
+    Token(TokenType type);
+    Token(TokenType type, const std::string &value);
+
+    TokenType GetType() const;
+    const std::string &GetValue() const;
+};
+
+class TokenizerState
+{
+private:
+    char *data;
+    int pos;
+    Token *lastToken;
+
+public:
+    TokenizerState(const std::string &data, int pos, const Token &lastToken);
+
+    const char *GetData() const;
+    int GetPos() const;
+    const Token *GetLastToken() const;
+};
+
+class Tokenizer
+{
+private:
+    std::vector<std::string> sortedOperatorNames;
+
+    std::vector<Token> tokens;
+    char *data;
+    int pos;
+    int len;
+    const Config *config;
+    std::stack<char> bracketStack;
+    bool lastWasWhiteSpace;
+    Token buf;
+
+    void InitStateMachine(const std::string &, const Config *);
+    void ClearStateMachine();
+
+    bool ReadNext();
+    void SkipWhiteSpace();
+    bool IsStartOfNumber(char);
+    bool ReadString();
+    bool IsStartOfIdentifier(char);
+    bool ReadIdentifier();
+    bool ReadLazyExpression();
+    bool ReadNumber();
+    bool IsAfterFunction();
+    bool TryReadOperator();
+    bool IsPartOfIdentifier(char);
+    bool IsDigit(char);
+    bool IsStartOfNumber(char);
+
+public:
+    Tokenizer();
+    ~Tokenizer();
+
+    bool Tokenize(const std::string &, const Config *);
+    const std::vector<Token> &GetTokens() const;
+    TokenizerState GetState() const;
+
+    void UpdateOperatorNames();
+};
+
+class MissingBracketException : public util::Exception
+{
+public:
+    MissingBracketException(Tokenizer *);
+};
+
+class ExtraClosingBracketException : public util::Exception
+{
+public:
+    ExtraClosingBracketException(Tokenizer *);
+};
+
+class MismatchingBracketException : public util::Exception
+{
+public:
+    MismatchingBracketException(Tokenizer *);
+};
+
+class InvalidCharException : public util::Exception
+{
+public:
+    InvalidCharException(Tokenizer *);
+};
+
+class UnexpectedEndOfLazyExpressionException : public util::Exception
+{
+public:
+    UnexpectedEndOfLazyExpressionException(Tokenizer *);
+};
+
+class UnexpectedEndOfStringExpressionException : public util::Exception
+{
+public:
+    UnexpectedEndOfStringExpressionException(Tokenizer *);
+};
+
+} // namespace tokenizing
+
+namespace parsing
+{
+class ExpressionBase
+{
+private:
+    int argCount;
+
+public:
+    ExpressionBase(int);
+
+    int GetArgCount() const;
+
+    virtual IValue *Eval(const std::vector<IValue *> &args, EvaluationContext &) = 0;
+};
+
+class VariableExpression : public ExpressionBase
+{
+private:
+    std::string name;
+
+public:
+    VariableExpression(const std::string &);
+
+    IValue *Eval(const std::vector<IValue *> &args, EvaluationContext &);
+};
+
+class LazyExpression : public ExpressionBase
+{
+private:
+public:
+    LazyExpression(const std::string &);
+
+    IValue *Eval(const std::vector<IValue *> &args, EvaluationContext &);
+};
+
+class FunctionExpression : public ExpressionBase
+{
+private:
+    function_t function;
+    int args;
+
+public:
+    FunctionExpression(function_t, int args);
+
+    IValue *Eval(const std::vector<IValue *> &args, EvaluationContext &);
+};
+
+class ValueExpression : public ExpressionBase
+{
+private:
+    IValue *value;
+
+public:
+    ValueExpression(IValue *);
+    ValueExpression(const std::string &);
+
+    IValue *Eval(const std::vector<IValue *> &args, EvaluationContext &);
+};
+
+bool CreatePostFixExpression(const std::vector<tokenizing::Token> &tokens, std::vector<ExpressionBase *> &out, const Config &);
+} // namespace parsing
+
+class Calculator
+{
+private:
+    Config config;
+
+public:
+    Config &GetConfig();
+    void SetConfig(const Config &);
+
+    const IValue &Evaluate(const std::string &);
+};
+
+class ScriptingEngine
+{
+private:
+public:
+    void LoadFile(const std::string &);
+    void EvalScript(const std::string &);
+};
+} // namespace util

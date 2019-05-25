@@ -3,77 +3,54 @@
 #include <iostream>
 #include <cstdio>
 #include <cmath>
-#include "data/String.hpp"
-#include "data/Io.hpp"
-#include "glad/glad.h"
-#include "DummyData.hpp"
+#include <algorithm>
+
+// #include "data/String.hpp"
+// #include "data/Io.hpp"
+// #include "glad/glad.h"
+// #include "DummyData.hpp"
 
 namespace
 {
-struct vec1
+struct CMP
 {
-    union {
-        float x;
-        float r;
-    };
-};
+    int operator()(const std::string &a, const std::string &b)
+    {
+        int res = 0;
 
-struct vec2
-{
-    union {
-        float x;
-        float r;
-    };
+        for (size_t i = 0; i < a.length() && i < b.length() && res == 0; i++)
+        {
+            res = a[i] - b[i];
+        }
 
-    union {
-        float y;
-        float g;
-    };
-};
+        if (res == 0)
+            return a.length() - b.length();
 
-struct vec3
-{
-    union {
-        float x;
-        float r;
-    };
-
-    union {
-        float y;
-        float g;
-    };
-
-    union {
-        float z;
-        float b;
-    };
-};
-
-struct vec4
-{
-    union {
-        float x;
-        float r;
-    };
-
-    union {
-        float y;
-        float g;
-    };
-
-    union {
-        float z;
-        float b;
-    };
-
-    union {
-        float w;
-        float a;
-    };
+        return res;
+    }
 };
 } // namespace
 
 int main()
 {
-    std::printf("Golder Schnitt = %1.16lf", ((1.0 + std::sqrt(5.0)) / 2.0));
+    std::vector<std::string> v =
+        {
+            "=",
+            "!",
+            "!=",
+            "==",
+            "!===",
+            "====",
+            "*",
+            "*=",
+            "+",
+            "+=",
+        };
+
+    std::sort(v.begin(), v.end(), CMP());
+
+    for (const auto &val : v)
+    {
+        std::cout << val << std::endl;
+    };
 }
