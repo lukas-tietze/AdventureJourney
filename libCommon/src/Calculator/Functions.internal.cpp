@@ -110,27 +110,85 @@ IValue *FunctionCreateSet(IValue **, int, EvaluationContext &)
     return nullptr;
 }
 
+IValue *If(IValue **, int, EvaluationContext &);
+IValue *SetUnion(IValue **, int, EvaluationContext &);
+IValue *SetCut(IValue **, int, EvaluationContext &);
+IValue *SetNot(IValue **, int, EvaluationContext &);
+IValue *SetAdd(IValue **, int, EvaluationContext &);
+IValue *SetRemove(IValue **, int, EvaluationContext &);
+IValue *SetClear(IValue **, int, EvaluationContext &);
+IValue *SetFind(IValue **, int, EvaluationContext &);
+IValue *SetAt(IValue **, int, EvaluationContext &);
+IValue *Foreach(IValue **, int, EvaluationContext &);
+IValue *For(IValue **, int, EvaluationContext &);
+IValue *While(IValue **, int, EvaluationContext &);
+IValue *StringSubstr(IValue **, int, EvaluationContext &);
+IValue *StringTrim(IValue **, int, EvaluationContext &);
+IValue *StringConcat(IValue **, int, EvaluationContext &);
+IValue *StringFind(IValue **, int, EvaluationContext &);
+IValue *StringCharAt(IValue **, int, EvaluationContext &);
+// IValue *__template__(IValue **, int, EvaluationContext &);
 } // namespace
 
-util::InternalFunction util::OperatorAdd = {"Add", "+", 0, false, FunctionOperatorAdd};
-util::InternalFunction util::OperatorSub = {"Sub", "-", 0, false, FunctionOperatorSub};
-util::InternalFunction util::OperatorMul = {"Mul", "*", 0, false, FunctionOperatorMul};
-util::InternalFunction util::OperatorDiv = {"Div", "/", 0, false, FunctionOperatorDiv};
-util::InternalFunction util::OperatorMod = {"Mod", "%", 0, false, FunctionOperatorMod};
-util::InternalFunction util::OperatorPow = {"Pow", "^", 0, false, FunctionOperatorPow};
-util::InternalFunction util::OperatorEqual = {"Equal", "==", 0, false, FunctionOperatorEqual};
-util::InternalFunction util::OperatorNotEqual = {"NotEqual", "!=", 0, false, FunctionOperatorNotEqual};
-util::InternalFunction util::OperatorGreater = {"Greater", ">", 0, false, FunctionOperatorGreater};
-util::InternalFunction util::OperatorGreaterEqual = {"GreaterEqual", ">=", 0, false, FunctionOperatorGreaterEqual};
-util::InternalFunction util::OperatorLess = {"Less", "<", 0, false, FunctionOperatorLess};
-util::InternalFunction util::OperatorLessEqual = {"LessEqual", "<=", 0, false, FunctionOperatorLessEqual};
-util::InternalFunction util::OperatorEqualWithType = {"EqualWithType", "===", 0, false, FunctionOperatorEqualWithType};
-util::InternalFunction util::OperatorNotEqualWithType = {"NotEqualWithType", "!==", 0, false, FunctionOperatorNotEqualWithType};
-util::InternalFunction util::OperatorNot = {"Not", "!", 0, false, FunctionOperatorNot};
-util::InternalFunction util::OperatorAnd = {"And", "&", 0, false, FunctionOperatorAnd};
-util::InternalFunction util::OperatorOr = {"Or", "|", 0, false, FunctionOperatorOr};
-util::InternalFunction util::OperatorBool = {"Bool", "?", 0, false, FunctionOperatorBool};
-util::InternalFunction util::OperatorLength = {"Length", "#", 0, false, FunctionOperatorLength};
+util::InternalFunction::InternalFunction()
+{
+}
 
-util::InternalFunction util::OperatorXor = {"XOr", "", -1, false, FunctionOperatorXor};
-util::InternalFunction util::CreateSet = {"__create_set__", "", -1, false, FunctionCreateSet};
+util::InternalFunction::InternalFunction(const std::string &name, function_t func) : name(name),
+                                                                                     operatorSign(""),
+                                                                                     priority(-1),
+                                                                                     isUnary(false),
+                                                                                     func(func)
+
+{
+}
+
+util::InternalFunction::InternalFunction(std::string name, std::string operatorSign, int priority, bool isUnary, function_t func) : name(name),
+                                                                                                                                    operatorSign(operatorSign),
+                                                                                                                                    priority(priority),
+                                                                                                                                    isUnary(isUnary),
+                                                                                                                                    func(func)
+{
+}
+
+std::vector<util::InternalFunction> util::internalFunctions = {
+
+    util::InternalFunction("Add", "+", 0, false, FunctionOperatorAdd),
+    util::InternalFunction("Sub", "-", 0, false, FunctionOperatorSub),
+    util::InternalFunction("Mul", "*", 0, false, FunctionOperatorMul),
+    util::InternalFunction("Div", "/", 0, false, FunctionOperatorDiv),
+    util::InternalFunction("Mod", "%", 0, false, FunctionOperatorMod),
+    util::InternalFunction("Pow", "^", 0, false, FunctionOperatorPow),
+    util::InternalFunction("Equal", "==", 0, false, FunctionOperatorEqual),
+    util::InternalFunction("NotEqual", "!=", 0, false, FunctionOperatorNotEqual),
+    util::InternalFunction("Greater", ">", 0, false, FunctionOperatorGreater),
+    util::InternalFunction("GreaterEqual", ">=", 0, false, FunctionOperatorGreaterEqual),
+    util::InternalFunction("Less", "<", 0, false, FunctionOperatorLess),
+    util::InternalFunction("LessEqual", "<=", 0, false, FunctionOperatorLessEqual),
+    util::InternalFunction("EqualWithType", "===", 0, false, FunctionOperatorEqualWithType),
+    util::InternalFunction("NotEqualWithType", "!==", 0, false, FunctionOperatorNotEqualWithType),
+    util::InternalFunction("Not", "!", 0, false, FunctionOperatorNot),
+    util::InternalFunction("And", "&", 0, false, FunctionOperatorAnd),
+    util::InternalFunction("Or", "|", 0, false, FunctionOperatorOr),
+    util::InternalFunction("Bool", "?", 0, false, FunctionOperatorBool),
+    util::InternalFunction("Length", "#", 0, false, FunctionOperatorLength),
+    util::InternalFunction("XOr", FunctionOperatorXor),
+    util::InternalFunction("CreateSet", FunctionCreateSet),
+    util::InternalFunction("If", If),
+    util::InternalFunction("SetUnion", SetUnion),
+    util::InternalFunction("SetCut", SetCut),
+    util::InternalFunction("SetNot", SetNot),
+    util::InternalFunction("SetAdd", SetAdd),
+    util::InternalFunction("SetRemove", SetRemove),
+    util::InternalFunction("SetClear", SetClear),
+    util::InternalFunction("SetFind", SetFind),
+    util::InternalFunction("SetAt", SetAt),
+    util::InternalFunction("Foreach", Foreach),
+    util::InternalFunction("For", For),
+    util::InternalFunction("While", While),
+    util::InternalFunction("StringSubstr", StringSubstr),
+    util::InternalFunction("StringTrim", StringTrim),
+    util::InternalFunction("StringConcat", StringConcat),
+    util::InternalFunction("StringFind", StringFind),
+    util::InternalFunction("StringCharAt", StringCharAt),
+};
