@@ -1,6 +1,6 @@
 #include "Calculator.hpp"
 
-util::tokenizing::Token::Token() : type(0),
+util::tokenizing::Token::Token() : type(),
                                    value()
 {
 }

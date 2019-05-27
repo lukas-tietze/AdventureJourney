@@ -1,42 +1,11 @@
 #include "Calculator.hpp"
 #include "Functions.internal.hpp"
 
-namespace
-{
-using util::Config;
-using util::parsing::ExpressionBase;
-using util::parsing::FunctionExpression;
-using util::tokenizing::TokenType;
-
-ExpressionBase *CreateOperatorExpression(TokenType op, const Config &)
-{
-    switch (op)
-    {
-    case TokenType::String:
-    case TokenType::Number:
-    case TokenType::Identifier:
-    case TokenType::Seperator:
-        throw ArgumentException();
-    case TokenType::Operator:
-        return new FunctionExpression();
-    case TokenType::FunctionStart:
-    case TokenType::FunctionEnd:
-    case TokenType::SetStart:
-    case TokenType::SetEnd:
-        return nullptr;
-    case TokenType::OpeningBracket:
-    case TokenType::ClosingBracket:
-        return nullptr;
-    default:
-        throw util::InvalidCaseException::MakeException(op);
-    }
-}
-} // namespace
-
 bool util::parsing::CreatePostFixExpression(const std::vector<tokenizing::Token> &tokens, std::vector<ExpressionBase *> &out, const Config &config)
 {
-    std::stack<TokenType> operatorStack;
+    std::stack<util::tokenizing::TokenType> operatorStack;
     std::stack<std::string> functionStack;
+    std::stack<std::string> operatorNameStack;
     std::stack<int> argCountStack;
 
     for (auto i = 0; i < tokens.size(); i++)
@@ -45,56 +14,73 @@ bool util::parsing::CreatePostFixExpression(const std::vector<tokenizing::Token>
 
         switch (token.GetType())
         {
-        case TokenType::String:
+        case util::tokenizing::TokenType::String:
             out.push_back(new ValueExpression(token.GetValue()));
             break;
-        case TokenType::Number:
+        case util::tokenizing::TokenType::Number:
             out.push_back(new ValueExpression(token.GetValue()));
             break;
-        case TokenType::Identifier:
+        case util::tokenizing::TokenType::Identifier:
             out.push_back(new VariableExpression(token.GetValue()));
             break;
-        case TokenType::LazyEvalSeperator:
-            out.push_back(new LazyExpression(token.GetValue()));
+        case util::tokenizing::TokenType::LazyEvalSeperator:
+            out.push_back(new ValueExpression(new LazyValue(token.GetValue())));
             break;
-        case TokenType::OpeningBracket:
-        case TokenType::ClosingBracket:
+        case util::tokenizing::TokenType::OpeningBracket:
+        case util::tokenizing::TokenType::ClosingBracket:
             operatorStack.push(token.GetType());
             break;
-        case TokenType::FunctionStart:
+        case util::tokenizing::TokenType::FunctionStart:
             operatorStack.push(token.GetType());
             functionStack.push(token.GetValue());
             argCountStack.push(0);
             break;
-        case TokenType::SetStart:
+        case util::tokenizing::TokenType::SetStart:
             operatorStack.push(token.GetType());
             functionStack.push(util::CreateSet.name);
             argCountStack.push(0);
             break;
-        case TokenType::SetEnd:
-        case TokenType::FunctionEnd:
-        case TokenType::Seperator:
+        case util::tokenizing::TokenType::SetEnd:
+        case util::tokenizing::TokenType::FunctionEnd:
+        case util::tokenizing::TokenType::Seperator:
+        {
             auto top = operatorStack.top();
 
             while (operatorStack.size() > 0)
             {
-                if (top == TokenType::FunctionStart || top == TokenType::Seperator || top == TokenType::SetStart)
+                if (top == util::tokenizing::TokenType::FunctionStart || top == util::tokenizing::TokenType::Seperator || top == util::tokenizing::TokenType::SetStart)
                 {
                     break;
                 }
                 else
                 {
-                    AddOperatorExpression(operatorStack.Pop(), expressions);
+                    operatorStack.pop();
+
+                    if (top == util::tokenizing::TokenType::Operator)
+                    {
+                        auto op = config.GetOperator(operatorNameStack.top());
+
+                        if (op != nullptr)
+                        {
+                            out.push_back(new FunctionExpression(op));
+                            operatorNameStack.pop();
+                        }
+                        else
+                        {
+                            throw util::NotSupportedException();
+                        }
+                    }
                 }
 
-                top = operatorStack.Peek();
+                top = operatorStack.top();
             }
 
-            if (token.GetType() == TokenType::FunctionEnd || token.GetType() == TokenType::SetEnd)
+            if (token.GetType() == util::tokenizing::TokenType::FunctionEnd || token.GetType() == util::tokenizing::TokenType::SetEnd)
             {
-                auto argCount = argCountStack.Pop();
+                auto argCount = argCountStack.top();
+                argCountStack.pop();
 
-                if (tokens[i - 1].GetType() != TokenType::FunctionStart && tokens[i - 1].GetType() != TokenType::SetStart)
+                if (tokens[i - 1].GetType() != util::tokenizing::TokenType::FunctionStart && tokens[i - 1].GetType() != util::tokenizing::TokenType::SetStart)
                 {
                     argCount++;
                 }
@@ -109,43 +95,53 @@ bool util::parsing::CreatePostFixExpression(const std::vector<tokenizing::Token>
             }
 
             break;
-        case TokenType::AccessorStart:
-        case TokenType::AccessorEnd:
-            throw NotImplementedException();
-        case TokenType::Operator:
-            if ((token.GetType() & TokenType::Operator) != 0)
+        }
+        case util::tokenizing::TokenType::AccessorStart:
+        case util::tokenizing::TokenType::AccessorEnd:
+            throw util::NotImplementedException();
+        case util::tokenizing::TokenType::Operator:
+        {
+            auto op1 = config.GetOperator(token.GetValue());
+            auto op2 = operatorStack.empty() ? nullptr : config.GetOperator(operatorNameStack.top());
+
+            if (operatorStack.size() == 0 ||
+                (op1 && op2 && op1->GetPriority() > op2->GetPriority()))
             {
-                if (operatorStack.Count == 0 || IsHigherPriority(token.GetType(), operatorStack.Peek()))
-                {
-                    operatorStack.push(token.GetType());
-                }
-                else
-                {
-                    AddOperatorExpression(operatorStack.Pop(), expressions);
-
-                    while (operatorStack.Count > 0 && !IsHigherPriority(token.GetType(), operatorStack.Peek()))
-                    {
-                        AddOperatorExpression(operatorStack.Pop(), expressions);
-                    }
-
-                    operatorStack.push(token.GetType());
-                }
-
-                break;
+                operatorStack.push(token.GetType());
             }
             else
             {
-                throw util::NotSupportedException();
+                auto op = config.GetOperator(operatorNameStack.top());
+                operatorStack.pop();
+
+                if (op != nullptr)
+                    out.push_back(new FunctionExpression(op));
+                else
+                    throw util::NotSupportedException();
+
+                op2 = operatorStack.empty() ? nullptr : config.GetOperator(operatorNameStack.top());
+
+                while (operatorStack.size() > 0 && !(op1 && op2 && op1->GetPriority() > op2->GetPriority()))
+                {
+                    out.push_back(new FunctionExpression(config.GetOperator(operatorNameStack.top())));
+                    operatorNameStack.pop();
+                }
+
+                operatorStack.push(token.GetType());
             }
+
+            break;
+        }
         default:
-            throw NotSupportedException();
+            throw util::NotSupportedException();
         }
     }
 
-    while (operatorStack.Count > 0)
+    while (operatorStack.size() > 0)
     {
-        AddOperatorExpression(operatorStack.Pop(), expressions);
+        out.push_back(new FunctionExpression(config.GetOperator(operatorNameStack.top())));
+        operatorNameStack.pop();
     }
 
-    return expressions.AsReadOnly();
+    return true;
 }

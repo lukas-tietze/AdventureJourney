@@ -46,6 +46,9 @@ std::vector<std::string> &Split(const std::string &str, std::vector<std::string>
 std::vector<std::string> &Split(const std::string &str, std::vector<std::string> &buf, char seperator, bool removeEmtpyEntries = false);
 std::vector<std::string> &Split(const std::string &str, std::vector<std::string> &buf, const std::string &chars, bool removeEmtpyEntries = false);
 std::vector<std::string> &Split(const std::string &str, std::vector<std::string> &buf, bool (*)(char), bool removeEmtpyEntries = false);
+bool SplitKeyValue(const std::string &input, std::string &outKey, std::string &outValue);
+std::pair<std::string, std::string> SplitKeyValue(const std::string &input);
+
 
 std::string Strip(const std::string &);
 std::string StripFront(const std::string &);
@@ -56,6 +59,7 @@ std::string &StripBackInplace(std::string &);
 
 bool EndsWith(const std::string &str, const std::string &end);
 bool StartsWith(const std::string &str, const std::string &start);
+int OsaDistance(const std::string &s1, const std::string &s2);
 
 char Escape(char);
 std::string Unescape(char);
@@ -63,7 +67,7 @@ std::string UtfCodePointToNarrowString(uint32_t);
 
 class TimeFormatException : public util::Exception
 {
-  public:
+public:
     TimeFormatException(const std::string &, std::time_t);
 };
 
@@ -89,7 +93,7 @@ bool ParseFloat(const std::string &text, NumT &target);
 
 class FormatException : public util::Exception
 {
-  public:
+public:
     FormatException(const std::string &what);
 };
 

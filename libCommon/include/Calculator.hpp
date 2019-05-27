@@ -62,9 +62,12 @@ public:
     virtual const std::string &GetValueAsString() const = 0;
     virtual double GetValueAsNumber() const = 0;
     virtual const ValueSet &GetValueAsSet() const = 0;
+    virtual std::string &GetValueDescription() const;
 };
 
-class DoubleValue
+std::ostream &operator<<(std::ostream &, const IValue &);
+
+class DoubleValue : public IValue
 {
 private:
     double value;
@@ -78,7 +81,7 @@ public:
     const ValueSet &GetValueAsSet() const;
 };
 
-class StringValue
+class StringValue : public IValue
 {
 private:
     std::string value;
@@ -92,7 +95,7 @@ public:
     const ValueSet &GetValueAsSet() const;
 };
 
-class SetValue
+class SetValue : public IValue
 {
 private:
     ValueSet value;
@@ -106,31 +109,29 @@ public:
     const ValueSet &GetValueAsSet() const;
 };
 
-class Config
+class LazyValue : public IValue
 {
 private:
+public:
+    LazyValue(const std::string &);
+
+    const std::string &GetValueAsString() const;
+    double GetValueAsNumber() const;
+    const ValueSet &GetValueAsSet() const;
+};
+
+class Config
+{
+public:
     struct CharPair
     {
         char opening;
         char closing;
     };
 
-    std::unordered_map<std::string, function_t> functions;
-    std::unordered_map<std::string, Operator *> operators;
-    std::unordered_map<std::string, IValue *> variables;
-    CharPair bracketMarker;
-    CharPair stringMarker;
-    CharPair lazyEvalMarker;
-    CharPair functionBrackets;
-    CharPair setMarkers;
-    CharPair accessorMarkers;
-    char listSeperator;
-    char decimalSeperator;
-    char functionParameterSeperator;
-    char stringEscapeMarker;
-
-public:
     Config();
+
+    void CreateDefaultConfig();
 
     void AddOperator(const std::string &, Operator *);
     void AddFunction(const std::string &, function_t);
@@ -183,6 +184,21 @@ public:
     char GetDecimalSeperator() const;
     char GetFunctionParameterSeperator() const;
     char GetStringEscapeMarker() const;
+
+private:
+    std::unordered_map<std::string, function_t> functions;
+    std::unordered_map<std::string, Operator *> operators;
+    std::unordered_map<std::string, IValue *> variables;
+    CharPair bracketMarker;
+    CharPair stringMarker;
+    CharPair lazyEvalMarker;
+    CharPair functionBrackets;
+    CharPair setMarkers;
+    CharPair accessorMarkers;
+    char listSeperator;
+    char decimalSeperator;
+    char functionParameterSeperator;
+    char stringEscapeMarker;
 };
 
 class EvaluationContext
@@ -193,7 +209,7 @@ private:
 public:
     EvaluationContext(Config *config);
 
-    Operator *GetOperator(char);
+    Operator *GetOperator(const std::string &);
     function_t GetFunction(const std::string &);
     IValue *GetVariable(const std::string &);
 };
@@ -218,6 +234,8 @@ enum class TokenType
     Operator = 0x1000,
 };
 
+std::ostream &operator<<(std::ostream &, TokenType);
+
 class Token
 {
 private:
@@ -231,21 +249,6 @@ public:
 
     TokenType GetType() const;
     const std::string &GetValue() const;
-};
-
-class TokenizerState
-{
-private:
-    char *data;
-    int pos;
-    Token *lastToken;
-
-public:
-    TokenizerState(const std::string &data, int pos, const Token &lastToken);
-
-    const char *GetData() const;
-    int GetPos() const;
-    const Token *GetLastToken() const;
 };
 
 class Tokenizer
@@ -277,7 +280,6 @@ private:
     bool TryReadOperator();
     bool IsPartOfIdentifier(char);
     bool IsDigit(char);
-    bool IsStartOfNumber(char);
 
 public:
     Tokenizer();
@@ -285,7 +287,6 @@ public:
 
     bool Tokenize(const std::string &, const Config *);
     const std::vector<Token> &GetTokens() const;
-    TokenizerState GetState() const;
 
     void UpdateOperatorNames();
 };
@@ -354,23 +355,16 @@ public:
     IValue *Eval(const std::vector<IValue *> &args, EvaluationContext &);
 };
 
-class LazyExpression : public ExpressionBase
-{
-private:
-public:
-    LazyExpression(const std::string &);
-
-    IValue *Eval(const std::vector<IValue *> &args, EvaluationContext &);
-};
-
 class FunctionExpression : public ExpressionBase
 {
 private:
-    function_t function;
+    std::string name;
     int args;
 
 public:
+    FunctionExpression(const Operator *);
     FunctionExpression(function_t, int args);
+    FunctionExpression(const std::string &, int);
 
     IValue *Eval(const std::vector<IValue *> &args, EvaluationContext &);
 };
@@ -399,13 +393,74 @@ public:
     Config &GetConfig();
     void SetConfig(const Config &);
 
-    const IValue &Evaluate(const std::string &);
+    IValue *Evaluate(const std::string &);
 };
 
 class ScriptingEngine
 {
 private:
+    bool echo;
+    bool useAns;
+    bool loop;
+    Calculator calculator;
+    std::string workingDirectory;
+
+    util::Channel in;
+    util::Channel err;
+    util::Channel out;
+    util::Channel diagnostic;
+
+    typedef void (ScriptingEngine::*action_t)(const std::string &arg);
+
+    void Eval(const std::string &input);
+    void Tokenize(const std::string &);
+    void Parse(const std::string &);
+    void DefineVar(const std::string &);
+    void DefineExp(const std::string &);
+    void Undefine(const std::string &);
+    void Quit(const std::string &);
+    void Solve(const std::string &);
+    void OpenErr(const std::string &);
+    void OpenOut(const std::string &);
+    void OpenIn(const std::string &);
+    void ChangeDir(const std::string &);
+    void SetEcho(const std::string &);
+    void UseAns(const std::string &);
+    void ClearOut(const std::string &);
+    void ListFiles(const std::string &);
+    void ClearVars(const std::string &);
+    void ShowHelp(const std::string &);
+    void SetDiagnosticOut(const std::string &);
+    void HandleException(const std::exception &);
+    void HandleException(const util::Exception &);
+    int FindSimilarCommands(const std::string &command, std::vector<std::string> &out);
+    void ListSimilarCommands(const std::string &command, std::vector<std::string> &out);
+    void HandleUndefinedCommand(const std::string &command);
+    void Define(const std::string &expression, bool compress);
+
+    struct Action
+    {
+        std::string name;
+        std::string alias;
+        std::string description;
+        action_t action;
+
+        Action();
+        Action(const std::string &name,
+               const std::string &alias,
+               const std::string &description,
+               action_t action);
+
+        bool HasAlias() const;
+        bool HasDesciption() const;
+    };
+
+    static std::unordered_map<std::string, Action> actions;
+    static std::vector<Action> uniqeActions;
+
 public:
+    ScriptingEngine();
+
     void LoadFile(const std::string &);
     void EvalScript(const std::string &);
 };

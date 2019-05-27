@@ -73,3 +73,8 @@ void util::Channel::SetTarget(std::FILE *target)
 {
     this->file = target;
 }
+
+void util::Channel::WriteLine()
+{
+    std::fprintf(this->file, "\n");
+}

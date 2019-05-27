@@ -49,7 +49,7 @@ int PrintLine(const std::string &format, const TFirst &first, const TArgs &... a
 
 class Channel
 {
-  private:
+private:
     std::FILE *file;
     bool active;
 
@@ -57,7 +57,7 @@ class Channel
 
     static const std::string TimeFormat;
 
-  public:
+public:
     Channel();
     Channel(const Channel &copyFrom);
     Channel(std::FILE *);
@@ -112,6 +112,8 @@ class Channel
 
         return res;
     }
+
+    void WriteLine();
 };
 
 enum class CommunicationLevel
@@ -124,7 +126,7 @@ enum class CommunicationLevel
 
 class Communicator
 {
-  private:
+private:
     Channel message;
     Channel debug;
     Channel error;
@@ -134,7 +136,7 @@ class Communicator
 
     Channel &SelectChannel(CommunicationLevel);
 
-  public:
+public:
     Communicator();
     Communicator(const Communicator &copyFrom);
 

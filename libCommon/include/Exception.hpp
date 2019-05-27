@@ -75,6 +75,13 @@ public:
     NotSupportedException(const std::string &customMsg);
 };
 
+class NotImplementedException : public util::Exception
+{
+public:
+    NotImplementedException();
+    NotImplementedException(const std::string &customMsg);
+};
+
 class InvalidCaseException : public util::Exception
 {
 public:

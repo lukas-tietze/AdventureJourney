@@ -4,7 +4,7 @@ util::EvaluationContext::EvaluationContext(Config *config) : config(config)
 {
 }
 
-util::Operator *util::EvaluationContext::GetOperator(char op)
+util::Operator *util::EvaluationContext::GetOperator(const std::string &op)
 {
     return this->config->GetOperator(op);
 }

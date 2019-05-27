@@ -5,27 +5,111 @@ namespace
 using util::EvaluationContext;
 using util::IValue;
 
-IValue *FunctionOperatorAdd(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorSub(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorMul(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorDiv(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorMod(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorPow(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorEqual(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorNotEqual(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorGreater(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorGreaterEqual(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorLess(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorLessEqual(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorEqualWithType(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorNotEqualWithType(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorNot(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorAnd(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorOr(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorXor(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorBool(IValue **, int, EvaluationContext &);
-IValue *FunctionOperatorLength(IValue **, int, EvaluationContext &);
-IValue *FunctionCreateSet(IValue **, int, EvaluationContext &);
+IValue *FunctionOperatorAdd(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorSub(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorMul(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorDiv(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorMod(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorPow(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorEqual(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorNotEqual(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorGreater(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorGreaterEqual(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorLess(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorLessEqual(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorEqualWithType(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorNotEqualWithType(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorNot(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorAnd(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorOr(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorXor(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorBool(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorLength(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionCreateSet(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
 } // namespace
 
 util::InternalFunction util::OperatorAdd = {"Add", "+", 0, false, FunctionOperatorAdd};

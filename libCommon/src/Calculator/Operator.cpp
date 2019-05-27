@@ -21,12 +21,12 @@ bool util::Operator::IsBinary() const
     return !this->isUnary;
 }
 
-util::function_t *util::Operator::GetFunction()
+util::function_t util::Operator::GetFunction()
 {
     return this->function;
 }
 
-const util::function_t *util::Operator::GetFunction() const
+const util::function_t util::Operator::GetFunction() const
 {
     return this->function;
 }

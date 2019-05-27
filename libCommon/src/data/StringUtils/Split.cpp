@@ -127,3 +127,38 @@ std::vector<std::string> util::Split(const std::string &str, bool (*f)(char), bo
 
     return buf;
 }
+
+bool util::SplitKeyValue(const std::string &input, std::string &key, std::string &value)
+{
+    auto keyStart = 0;
+    auto keyEnd = 0;
+
+    while (keyStart < input.length() && std::isspace(input[keyStart]))
+    {
+        keyStart++;
+    }
+
+    keyEnd = keyStart + 1;
+
+    while (keyEnd < input.length() && !std::isspace(input[keyEnd]))
+    {
+        keyEnd++;
+    }
+
+    if (keyEnd < input.length() && keyStart < keyEnd)
+    {
+        key = input.substr(keyStart, keyEnd - keyStart);
+        value = input.substr(keyEnd + 1);
+    }
+
+    util::StripInplace(key);
+}
+
+std::pair<std::string, std::string> util::SplitKeyValue(const std::string &input)
+{
+    std::pair<std::string, std::string> res;
+
+    util::SplitKeyValue(input, res.first, res.second);
+
+    return res;
+}
