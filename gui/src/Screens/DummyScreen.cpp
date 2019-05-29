@@ -195,6 +195,9 @@ gui::DummyScreen::DummyScreen() : scene(),
 
     auto testMaterial = planet1Material;
 
+    auto textMesh = this->scene.GetMesh("Text");
+    bmf->CreateStringMesh("OpenGl Rocks!", textMesh);
+
     auto floorMesh = this->scene.GetMesh("Floor");
     gui::quadrics::Quad(*floorMesh);
 
@@ -216,14 +219,21 @@ gui::DummyScreen::DummyScreen() : scene(),
     auto coneMesh = this->scene.GetMesh("ConeMesh");
     gui::quadrics::Cone(32, 3, *coneMesh);
 
-    auto floorObj = this->scene.GetObject("floor");
+    auto textObj = this->scene.GetObject("Text");
+    textObj->SetGeometry(textMesh);
+    textObj->SetModelMatrix(glm::translate(glm::vec3(0.f, 3.f, 0.f)) * glm::scale(glm::vec3(5.f, 5.f, 5.f)));
+    textObj->SetBindingTarget(0);
+    textObj->SetMaterial(fontMaterial);
+    textObj->CreateGlObjects();
+
+    auto floorObj = this->scene.GetObject("Floor");
     floorObj->SetGeometry(floorMesh);
     floorObj->SetModelMatrix(glm::scale(glm::vec3(5, 5, 5)));
     floorObj->SetBindingTarget(2);
     floorObj->SetMaterial(pebbleMaterial);
     floorObj->CreateGlObjects();
 
-    auto lamp = this->scene.GetObject("lamp");
+    auto lamp = this->scene.GetObject("Lamp");
     lamp->SetGeometry(icoMesh);
     lamp->SetModelMatrix(glm::translate(glm::vec3(0, 1, 0)) * glm::scale(glm::vec3(0.1, 0.1, 0.1)));
     lamp->SetBindingTarget(2);

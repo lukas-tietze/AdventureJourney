@@ -150,6 +150,9 @@ bool glutil::BitMapFont::LoadCoordinates(const FontInfo &info)
     this->data.assign(info.charList.length(), BitMapFontUboData());
     this->SetDirty();
 
+    for (int i = 0; i < 256; i++)
+        this->charMapping[i] = -1;
+
     for (int i = 0; i < info.charList.length() && i < (info.rows * info.cols); i++)
     {
         int row = i / info.cols;
@@ -182,6 +185,54 @@ void glutil::BitMapFont::Bind(GLenum target)
 bool glutil::BitMapFont::HasChar(char c) const
 {
     return this->charMapping[c] > 0;
+}
+
+bool glutil::BitMapFont::CreateStringMesh(const std::string &text, Mesh *out)
+{
+    ////x = pos.x; y = pos.y; z = tex.s; w = tex.t;
+    std::vector<glm::vec4> vertices;
+    std::vector<uint16_t> indices;
+
+    vertices.reserve(text.length() * 4);
+    indices.reserve(text.length() * 6);
+
+    float pos = 0.f;
+
+    for (int i = 0; i < text.length(); i++)
+    {
+        char c = text[i];
+
+        if (this->HasChar(c))
+        {
+            const auto &item = this->data[this->charMapping[c]];
+            auto indexOffset = vertices.size();
+
+            auto ul = glm::vec4(pos + item.bearing.x, item.bearing.y, item.pos.s, item.pos.t);
+            auto lr = glm::vec4(ul.x + item.size.x, ul.y + item.size.y, item.pos.s + item.size.s, item.pos.t + item.size.t);
+
+            pos += item.advance.x;
+
+            vertices.push_back(ul);
+            vertices.push_back(glm::vec4(lr.x, ul.y, lr.s, ul.t));
+            vertices.push_back(lr);
+            vertices.push_back(glm::vec4(ul.x, lr.y, ul.s, lr.t));
+
+            indices.push_back(indexOffset + 0);
+            indices.push_back(indexOffset + 3);
+            indices.push_back(indexOffset + 2);
+            indices.push_back(indexOffset + 0);
+            indices.push_back(indexOffset + 2);
+            indices.push_back(indexOffset + 1);
+        }
+    }
+
+    return out->LoadFromData(vertices.size(), sizeof(glm::vec4), vertices.data(),
+                             indices.size(), GL_UNSIGNED_SHORT, indices.data(),
+                             {
+                                 glutil::MeshAttribute(0, 2, GL_FLOAT, false, 0),
+                                 glutil::MeshAttribute(1, 2, GL_FLOAT, false, 2 * sizeof(float)),
+                             },
+                             GL_TRIANGLES);
 }
 
 const glutil::BitMapFontUboData &glutil::BitMapFont::operator[](char c) const

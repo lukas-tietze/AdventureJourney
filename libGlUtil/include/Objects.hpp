@@ -711,6 +711,7 @@ public:
     Texture *GetTexture();
     void Bind(GLenum target);
     bool HasChar(char c) const;
+    bool CreateStringMesh(const std::string &text, Mesh *out);
 
     const BitMapFontUboData &operator[](char c) const;
     BitMapFont &operator=(BitMapFont &&);
@@ -731,39 +732,37 @@ public:
     TextImageFactory SetLineSpacing(float);
 };
 
-class TextOverlay
+#pragma pack(push, 1)
+struct SceneOverlayUboData
+{
+    glm::mat4 modelMatrix;
+};
+#pragma pack(pop)
+
+class SceneOverlay : public StaticUboOwner<SceneOverlayUboData>
 {
 private:
     bool enabled;
-    bool meshDirty;
-    Mesh mesh;
-    std::string text;
+    Mesh *mesh;
+    Material *material;
+    glm::vec2 scale;
+    glm::vec2 pos;
 
-    void TransferFrom(TextOverlay &);
+    void TransferFrom(SceneOverlay &);
     void Update();
 
 public:
-    TextOverlay();
-    TextOverlay(TextOverlay &&);
-    TextOverlay(const TextOverlay &) = delete;
+    SceneOverlay();
+    SceneOverlay(SceneOverlay &&);
+    SceneOverlay(const SceneOverlay &) = delete;
 
     void SetEnabled(bool);
     bool IsEnabled() const;
     void SetText(const std::string &);
     void Render();
 
-    TextOverlay &operator=(TextOverlay &&);
-    TextOverlay &operator=(const TextOverlay &) = delete;
-};
-
-#pragma pack(push, 1)
-struct SceneOverlayUboData
-{
-};
-#pragma pack(pop)
-
-class SceneOverlay : public StaticUboOwner<SceneOverlayUboData>
-{
+    SceneOverlay &operator=(SceneOverlay &&);
+    SceneOverlay &operator=(const SceneOverlay &) = delete;
 };
 
 class RenderGroup
@@ -797,6 +796,7 @@ private:
     std::map<resourceId_t, Mesh *> meshs;
     std::map<resourceId_t, LightSet *> lightSets;
     std::map<resourceId_t, BitMapFont *> fonts;
+    std::map<resourceId_t, SceneOverlay *> overlays;
 
     Camera *activeCamera;
     LightSet *activeLightSet;
@@ -814,6 +814,7 @@ public:
     Mesh *GetMesh(const resourceId_t &);
     LightSet *GetLightSet(const resourceId_t &);
     BitMapFont *GetFont(const resourceId_t &);
+    SceneOverlay *GetOverlay(const resourceId_t &);
 
     const SceneObject *GetObject(const resourceId_t &) const;
     const Material *GetMaterial(const resourceId_t &) const;
@@ -824,6 +825,7 @@ public:
     const Mesh *GetMesh(const resourceId_t &) const;
     const LightSet *GetLightSet(const resourceId_t &) const;
     const BitMapFont *GetFont(const resourceId_t &) const;
+    const SceneOverlay *GetOverlay(const resourceId_t &) const;
 
     bool RemoveObject(const resourceId_t &);
     bool RemoveMaterial(const resourceId_t &);
@@ -834,6 +836,7 @@ public:
     bool RemoveMesh(const resourceId_t &);
     bool RemoveLightSet(const resourceId_t &);
     bool RemoveFont(const resourceId_t &);
+    bool RemoveOverlay(const resourceId_t &);
 
     Shader *InitShader(const resourceId_t &, const std::string &sourcePath);
     Program *InitProgram(const resourceId_t &, const std::initializer_list<std::string> &shaderNames);

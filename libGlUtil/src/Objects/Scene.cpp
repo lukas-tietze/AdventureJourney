@@ -72,6 +72,11 @@ glutil::BitMapFont *glutil::Scene::GetFont(const resourceId_t &id)
     return this->FindOrCreateItem(this->fonts, id);
 }
 
+glutil::SceneOverlay *glutil::Scene::GetOverlay(const resourceId_t &id)
+{
+    return this->FindOrCreateItem(this->overlays, id);
+}
+
 const glutil::SceneObject *glutil::Scene::GetObject(const resourceId_t &id) const
 {
     return this->FindItemOrNull(this->objects, id);
@@ -117,6 +122,11 @@ const glutil::BitMapFont *glutil::Scene::GetFont(const resourceId_t &id) const
     return this->FindItemOrNull(this->fonts, id);
 }
 
+const glutil::SceneOverlay *glutil::Scene::GetOverlay(const resourceId_t &id) const
+{
+    return this->FindItemOrNull(this->overlays, id);
+}
+
 bool glutil::Scene::RemoveObject(const resourceId_t &id)
 {
     return this->DeleteItem(this->objects, id);
@@ -160,6 +170,11 @@ bool glutil::Scene::RemoveLightSet(const resourceId_t &id)
 bool glutil::Scene::RemoveFont(const resourceId_t &id)
 {
     return this->DeleteItem(this->fonts, id);
+}
+
+bool glutil::Scene::RemoveOverlay(const resourceId_t &id)
+{
+    return this->DeleteItem(this->overlays, id);
 }
 
 void glutil::Scene::ReloadAllShaders()
