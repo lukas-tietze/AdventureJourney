@@ -1,5 +1,5 @@
 #include "data/String.hpp"
-#include "cmath"
+#include "data/Math.hpp"
 
 bool util::EndsWith(const std::string &str, const std::string &end)
 {
@@ -56,13 +56,13 @@ int util::OsaDistance(const std::string &s1, const std::string &s2)
         {
             auto cost = s1[i - 1] == s2[j - 1] ? 0 : 1;
 
-            d[i, j] = std::min(std::min(d[i - 1, j] + 1,  // deletion
-                                        d[i, j - 1] + 1), // insertion
-                                        d[i - 1, j - 1] + cost);   // substitution
+            d[i, j] = util::Min(util::Min(d[i - 1, j] + 1,  // deletion
+                                          d[i, j - 1] + 1), // insertion
+                                d[i - 1, j - 1] + cost);    // substitution
 
             if (i > 2 && j > 2 && s1[i - 1] == s2[j - 2] && s1[i - 2] == s2[j - 1])
             {
-                d[i, j] = std::min(d[i, j], d[i - 2, j - 2] + cost); // transposition
+                d[i, j] = util::Min(d[i, j], d[i - 2, j - 2] + cost); // transposition
             }
         }
     }

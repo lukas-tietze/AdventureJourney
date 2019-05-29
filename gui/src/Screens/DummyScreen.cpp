@@ -129,6 +129,22 @@ gui::DummyScreen::DummyScreen() : scene(),
     light.SetType(glutil::LightType::Point);
     this->scene.SetActiveLightSet(MAIN_LIGHT);
 
+    auto bmf = this->scene.GetFont("BMF");
+    bmf->Load("assets/fonts/BMFTest.json");
+
+    // auto ttf = this->scene.GetFont("TTF");
+    // ttf->Load("assets/fonts/TTFTest.json");
+
+    auto planetTex2 = this->scene.GetTexture("Planet2");
+    planetTex2->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
+    planetTex2->SetMipmapsEnabled(true);
+    planetTex2->LoadData("assets/textures/planets/p2.png");
+
+    auto planetTex1 = this->scene.GetTexture("Planet1");
+    planetTex1->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
+    planetTex1->SetMipmapsEnabled(true);
+    planetTex1->LoadData("assets/textures/planets/p1.png");
+
     auto grassTex = this->scene.GetTexture("Grass");
     grassTex->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
     grassTex->SetMipmapsEnabled(true);
@@ -165,7 +181,19 @@ gui::DummyScreen::DummyScreen() : scene(),
     numGridMaterial->SetAlbedo(glm::vec4(0.3f, 0.3f, 0.3f, 1.f));
     numGridMaterial->SetAlbedoMap(numGridTex, GL_TEXTURE0);
 
-    auto testMaterial = numGridMaterial;
+    auto planet1Material = this->scene.GetMaterial("Planet1");
+    planet1Material->SetAlbedo(glm::vec4(0.3f, 0.3f, 0.3f, 1.f));
+    planet1Material->SetAlbedoMap(planetTex1, GL_TEXTURE0);
+
+    auto planet2Material = this->scene.GetMaterial("Planet2");
+    planet2Material->SetAlbedo(glm::vec4(0.3f, 0.3f, 0.3f, 1.f));
+    planet2Material->SetAlbedoMap(planetTex2, GL_TEXTURE0);
+
+    auto fontMaterial = this->scene.GetMaterial("Font");
+    fontMaterial->SetAlbedo(glm::vec4(0.f, 0.f, 0.f, 1.f));
+    fontMaterial->SetAlbedoMap(bmf->GetTexture(), GL_TEXTURE0);
+
+    auto testMaterial = planet1Material;
 
     auto floorMesh = this->scene.GetMesh("Floor");
     gui::quadrics::Quad(*floorMesh);
@@ -192,7 +220,7 @@ gui::DummyScreen::DummyScreen() : scene(),
     floorObj->SetGeometry(floorMesh);
     floorObj->SetModelMatrix(glm::scale(glm::vec3(5, 5, 5)));
     floorObj->SetBindingTarget(2);
-    floorObj->SetMaterial(pebbleMaterial);
+    floorObj->SetMaterial(fontMaterial);
     floorObj->CreateGlObjects();
 
     auto lamp = this->scene.GetObject("lamp");

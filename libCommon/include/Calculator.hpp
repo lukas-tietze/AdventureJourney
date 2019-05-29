@@ -137,11 +137,10 @@ public:
     void AddFunction(const std::string &, function_t);
     void AddVariable(const std::string &, IValue *);
 
-    bool RemoveOperator(char);
+    bool RemoveOperator(const std::string &);
     bool RemoveFunction(const std::string &);
     bool RemoveVariable(const std::string &);
 
-    void SetBrackets(char, char);
     void SetBracketMarker(char, char);
     void SetStringMarker(char, char);
     void SetLazyEvalMarker(char, char);
@@ -159,7 +158,6 @@ public:
     Operator *GetOperator(const std::string &);
     function_t GetFunction(const std::string &);
     IValue *GetVariable(const std::string &);
-    CharPair &GetBrackets();
     CharPair &GetBracketMarker();
     CharPair &GetStringMarker();
     CharPair &GetLazyEvalMarker();
@@ -173,7 +171,6 @@ public:
     const Operator *GetOperator(const std::string &) const;
     const function_t GetFunction(const std::string &) const;
     const IValue *GetVariable(const std::string &) const;
-    const CharPair &GetBrackets() const;
     const CharPair &GetBracketMarker() const;
     const CharPair &GetStringMarker() const;
     const CharPair &GetLazyEvalMarker() const;

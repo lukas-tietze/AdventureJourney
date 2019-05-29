@@ -15,7 +15,11 @@ if [[ $# == 0 ]]; then
     WARN "Nothing to do..."
 else
     for TASK in $@; do
-        if [[ $TASK == "clean" ]]; then
+        if [[ $TASK == "sync" ]]; then
+            git pull
+            git push
+            git status
+        elif [[ $TASK == "clean" ]]; then
             INFO "Cleaning..."
             rm -rf ./build/
         elif [[ $TASK == "make" ]]; then

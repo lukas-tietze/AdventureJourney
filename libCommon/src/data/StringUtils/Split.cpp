@@ -152,6 +152,8 @@ bool util::SplitKeyValue(const std::string &input, std::string &key, std::string
     }
 
     util::StripInplace(key);
+    
+    return true;
 }
 
 std::pair<std::string, std::string> util::SplitKeyValue(const std::string &input)

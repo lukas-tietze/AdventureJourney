@@ -61,6 +61,7 @@ include_directories(libs/glad/include)
 include_directories(libs/stb/include)
 include_directories(submodules/glfw/include)
 include_directories(submodules/glm/)
+include_directories(submodules/freeType/include)
 
 #projects - libs
 include_directories(libCommon/include)
@@ -72,6 +73,12 @@ include_directories(core/include)
 include_directories(playground)
 include_directories(terminal_ui/include)
 include_directories(gui/include)
+
+set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+add_subdirectory("submodules/glfw")
+add_subdirectory("submodules/freeType")
 
 #general (root as include dir)
 include_directories(.)
@@ -111,9 +118,8 @@ else()
 endif()
 
 #--------------------------------------------------------
-# LibTermUtil - enthält Wrapper für NCurses-Funktionen
+# LibGlUtil - enthält Wrapper  unt Utils für OpenGl
 #--------------------------------------------------------
-
 configure_file(libGlUtil/include/config.in.hpp libGlUtil/include/config.hpp)
 add_library(LibGlUtil STATIC ${LIB_GL_UTIL_SRC})
 target_link_libraries(LibGlUtil LibCommon ${CMAKE_DL_LIBS} )
@@ -127,7 +133,7 @@ else()
 endif()
 
 #--------------------------------------------------------
-# Common Library - enthält Utils und Wrapper, die in verschiedenen Projekten genutzt werden könnten.
+# LibTermUtil - enthält Wrapper für NCurses-Funktionen
 #--------------------------------------------------------
 if(CURSES_FOUND)
     include_directories(${CURSES_INCLUDE_DIRS})
@@ -200,11 +206,6 @@ endif()
 # GUI - Grafische UI mittels OpenGl
 #--------------------------------------------------------
 if(COMPILE_GUI)
-    set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-    set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-    add_subdirectory("submodules/glfw") 
-
     configure_file(gui/include/config.in.hpp gui/include/config.hpp)
     add_executable(Gui gui/src/main.cpp libs/stb/src/stb_image.cpp libs/glad/src/glad.c ${GUI_SRC})
     target_link_libraries(Gui LibCommon LibGlUtil Core glfw ${GLFW_LIBRARIES} ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} )

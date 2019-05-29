@@ -238,13 +238,9 @@ bool util::tokenizing::Tokenizer::ReadLazyExpression()
 
 bool util::tokenizing::Tokenizer::TryReadOperator()
 {
-    auto off = 0;
-    auto start = this->pos;
-    auto vecPos = 0;
-
-    while (vecPos)
-    {
-    }
+    char opc[3] = {this->data[this->pos + 0],
+                   this->data[this->pos + 1],
+                   this->data[this->pos + 2]};
 
     return true;
 }

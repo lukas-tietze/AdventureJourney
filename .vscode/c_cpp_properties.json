@@ -14,7 +14,8 @@
                 "${workspaceFolder}/libs/glad/include/",
                 "${workspaceFolder}/libs/stb/include",
                 "${workspaceFolder}/submodules/glm/",
-                "${workspaceFolder}/submodules/glfw/include/"
+                "${workspaceFolder}/submodules/glfw/include/",
+                "${workspaceFolder}/submodules/freeType/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

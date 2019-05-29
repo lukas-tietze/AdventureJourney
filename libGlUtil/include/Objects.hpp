@@ -284,12 +284,10 @@ private:
     void TransferFrom(Mesh &);
     void DestroyGlObjects();
 
-    Mesh(const Mesh &) = delete;
-    Mesh &operator=(const Mesh &) = delete;
-
 public:
     Mesh();
     Mesh(const MeshBuffer &);
+    Mesh(const Mesh &) = delete;
     Mesh(Mesh &&);
     ~Mesh();
 
@@ -304,6 +302,7 @@ public:
     void Draw();
 
     Mesh &operator=(Mesh &&);
+    Mesh &operator=(const Mesh &) = delete;
 };
 
 #pragma pack(push, 1)
@@ -637,16 +636,24 @@ public:
 #include "libGlUtil/src/Objects/Texture.inl"
 #include "libGlUtil/src/Objects/FormatConverter.inl"
 
-enum class BitMapFontContent
+enum class FontContent
 {
     AZaz09Space,
     Ascii32To126,
     Custom,
 };
 
-std::ostream &operator<<(std::ostream &, BitMapFontContent);
+std::ostream &operator<<(std::ostream &, FontContent);
 
-struct BitMapFontInfo : public json::IJsonSerializable
+enum class FontType
+{
+    BitMap,
+    TrueType,
+};
+
+std::ostream &operator<<(std::ostream &, FontType);
+
+struct FontInfo : public json::IJsonSerializable
 {
     int offsetX;
     int offsetY;
@@ -656,7 +663,8 @@ struct BitMapFontInfo : public json::IJsonSerializable
     int charHeight;
     int rows;
     int cols;
-    BitMapFontContent content;
+    FontContent content;
+    FontType type;
     std::string charList;
     std::string source;
 
@@ -667,20 +675,29 @@ struct BitMapFontInfo : public json::IJsonSerializable
 #pragma pack(push, 1)
 struct BitMapFontUboData
 {
-    glm::vec2 positions[256];
-    glm::vec2 charSize;
+    ///Texturekoordinaten oben links
+    glm::vec2 pos;
+    ///Größe auf der Textur (pos + size = untere rechte Ecke)
+    glm::vec2 size;
+    ///Abstand von Baseline zum oberen linken Punkt
+    glm::vec2 bearing;
+    ///Abstand zum nächsten Character
+    glm::vec2 advance;
 };
 #pragma pack(pop)
 
-class BitMapFont : public StaticUboOwner<BitMapFontUboData>
+class BitMapFont : public DynamicUboOwner<BitMapFontUboData>
 {
 private:
-    GLuint tex;
+    Texture tex;
+    int charMapping[256];
+    float lineHeight;
 
-    void DestroyGlObjects();
     void TransferFrom(BitMapFont &);
-    bool LoadTexture(const BitMapFontInfo &);
-    bool LoadCoordinates(const BitMapFontInfo &);
+    bool LoadTexture(const FontInfo &);
+    bool LoadCoordinates(const FontInfo &);
+    bool LoadBitMapFont(const FontInfo &);
+    bool LoadTrueTypeFont(const FontInfo &);
 
 public:
     BitMapFont();
@@ -689,11 +706,13 @@ public:
     ~BitMapFont();
 
     bool Load(const std::string &);
-    bool Load(const BitMapFontInfo &);
+    bool Load(const FontInfo &);
 
+    Texture *GetTexture();
     void Bind(GLenum target);
-    glm::vec4 GetTexCoords(char c);
+    bool HasChar(char c) const;
 
+    const BitMapFontUboData &operator[](char c) const;
     BitMapFont &operator=(BitMapFont &&);
     BitMapFont &operator=(const BitMapFont &) = delete;
 };
@@ -701,29 +720,40 @@ public:
 class TextImageFactory
 {
 private:
-    void DestroyGlObjects();
-    void TransferFrom(TextImageFactory &);
+    float lineSpacing;
+
+    glm::vec2 CalcImageSize();
 
 public:
-    TextImageFactory();
-    TextImageFactory(const TextImageFactory &) = delete;
-    TextImageFactory(TextImageFactory &&);
+    int DrawStringToTexture(const std::string &, const BitMapFont *, const Texture *);
+    int DrawLinesToTexture(const std::vector<std::string> &, const BitMapFont *, const Texture *);
 
-    int DrawStringToTxture(const std::string &, const BitMapFont &, const Texture *);
-
-    TextImageFactory &operator=(const TextImageFactory &) = delete;
-    TextImageFactory &operator=(TextImageFactory &&);
+    TextImageFactory SetLineSpacing(float);
 };
 
 class TextOverlay
 {
 private:
+    bool enabled;
+    bool meshDirty;
+    Mesh mesh;
     std::string text;
-    BitMapFont *font;
+
+    void TransferFrom(TextOverlay &);
+    void Update();
 
 public:
     TextOverlay();
-    ~TextOverlay();
+    TextOverlay(TextOverlay &&);
+    TextOverlay(const TextOverlay &) = delete;
+
+    void SetEnabled(bool);
+    bool IsEnabled() const;
+    void SetText(const std::string &);
+    void Render();
+
+    TextOverlay &operator=(TextOverlay &&);
+    TextOverlay &operator=(const TextOverlay &) = delete;
 };
 
 #pragma pack(push, 1)

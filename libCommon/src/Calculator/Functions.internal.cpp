@@ -110,23 +110,91 @@ IValue *FunctionCreateSet(IValue **, int, EvaluationContext &)
     return nullptr;
 }
 
-IValue *If(IValue **, int, EvaluationContext &);
-IValue *SetUnion(IValue **, int, EvaluationContext &);
-IValue *SetCut(IValue **, int, EvaluationContext &);
-IValue *SetNot(IValue **, int, EvaluationContext &);
-IValue *SetAdd(IValue **, int, EvaluationContext &);
-IValue *SetRemove(IValue **, int, EvaluationContext &);
-IValue *SetClear(IValue **, int, EvaluationContext &);
-IValue *SetFind(IValue **, int, EvaluationContext &);
-IValue *SetAt(IValue **, int, EvaluationContext &);
-IValue *Foreach(IValue **, int, EvaluationContext &);
-IValue *For(IValue **, int, EvaluationContext &);
-IValue *While(IValue **, int, EvaluationContext &);
-IValue *StringSubstr(IValue **, int, EvaluationContext &);
-IValue *StringTrim(IValue **, int, EvaluationContext &);
-IValue *StringConcat(IValue **, int, EvaluationContext &);
-IValue *StringFind(IValue **, int, EvaluationContext &);
-IValue *StringCharAt(IValue **, int, EvaluationContext &);
+IValue *If(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *SetUnion(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *SetCut(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *SetNot(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *SetAdd(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *SetRemove(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *SetClear(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *SetFind(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *SetAt(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *Foreach(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *For(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *While(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *StringSubstr(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *StringTrim(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *StringConcat(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *StringFind(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *StringCharAt(IValue **, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
 // IValue *__template__(IValue **, int, EvaluationContext &);
 } // namespace
 
