@@ -132,8 +132,8 @@ gui::DummyScreen::DummyScreen() : scene(),
     auto bmf = this->scene.GetFont("BMF");
     bmf->Load("assets/fonts/BMFTest.json");
 
-    // auto ttf = this->scene.GetFont("TTF");
-    // ttf->Load("assets/fonts/TTFTest.json");
+    auto ttf = this->scene.GetFont("TTF");
+    ttf->Load("assets/fonts/TTFTest.json");
 
     auto planetTex2 = this->scene.GetTexture("Planet2");
     planetTex2->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
@@ -220,7 +220,7 @@ gui::DummyScreen::DummyScreen() : scene(),
     floorObj->SetGeometry(floorMesh);
     floorObj->SetModelMatrix(glm::scale(glm::vec3(5, 5, 5)));
     floorObj->SetBindingTarget(2);
-    floorObj->SetMaterial(fontMaterial);
+    floorObj->SetMaterial(pebbleMaterial);
     floorObj->CreateGlObjects();
 
     auto lamp = this->scene.GetObject("lamp");

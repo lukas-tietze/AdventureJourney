@@ -1,4 +1,5 @@
 {
+    "type": "BitMap",
     "offsetX": 0,
     "offsetY": 0,
     "strideX": 16,
@@ -8,5 +9,5 @@
     "cols": 26,
     "lines": 3,
     "content": "AZaz09Space",
-    "src": "OCR A Extended 20.png"
+    "src": "assets/fonts/OCR A Extended 20.png"
 }
