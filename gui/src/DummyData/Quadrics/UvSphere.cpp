@@ -24,7 +24,7 @@ bool gui::quadrics::UvSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out
         {
             ///Bottom
             q.SetPositionAndNormal(0.f, -1.f, 0.f);
-            q.SetTexCoords(slice * sliceStep, 1.0f);
+            q.SetTexCoords(slice * sliceStep, 0.0f);
             q.Push();
 
             phi = 2.0f * M_PI * slice * sliceStep;
@@ -40,7 +40,7 @@ bool gui::quadrics::UvSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out
 
             ///Top
             q.SetPositionAndNormal(0.f, 1.f, 0.f);
-            q.SetTexCoords(slice * sliceStep, 0.0f);
+            q.SetTexCoords(slice * sliceStep, 1.0f);
             q.Push();
         }
         ///indices
@@ -54,7 +54,7 @@ bool gui::quadrics::UvSphere(uint32_t slices, uint32_t stacks, glutil::Mesh &out
                                (slice + 1) * (stacks + 1) + stack + 1,
                                slice * (stacks + 1) + stack + 1);
                 }
-                
+
                 q.PushTriangle(slice * (stacks + 1),
                                slice * (stacks + 1) + 1,
                                (slice + 1) * (stacks + 1) + 1);
