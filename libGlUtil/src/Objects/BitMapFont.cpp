@@ -121,10 +121,19 @@ bool glutil::BitMapFont::LoadTrueTypeFont(const FontInfo &info)
 
 bool glutil::BitMapFont::Load(const glutil::FontInfo &info)
 {
+    util::dbg.WriteLine("Loading font %:\n\tsource=%\n\tsize=%,%\n\tchars=%", this, info.source, info.cols, info.rows, info.charList);
+
+    bool res;
+
     if (info.type == FontType::BitMap)
-        return this->LoadBitMapFont(info);
+        res = this->LoadBitMapFont(info);
     else if (info.type == FontType::TrueType)
-        return this->LoadTrueTypeFont(info);
+        res = this->LoadTrueTypeFont(info);
+
+    if (res)
+        util::dbg.WriteLine("Done!");
+
+    return res;
 }
 
 bool glutil::BitMapFont::LoadBitMapFont(const glutil::FontInfo &info)
@@ -155,9 +164,10 @@ bool glutil::BitMapFont::LoadCoordinates(const FontInfo &info)
 
     for (int i = 0; i < info.charList.length() && i < (info.rows * info.cols); i++)
     {
-        int row = i / info.cols;
-        int col = i % info.cols;
+        this->charMapping[info.charList[i]] = i;
 
+        auto row = i / info.cols;
+        auto col = i % info.cols;
         auto &item = this->data[i];
 
         item.pos = offset + glm::vec2(col, row) * stride;
@@ -189,6 +199,8 @@ bool glutil::BitMapFont::HasChar(char c) const
 
 bool glutil::BitMapFont::CreateStringMesh(const std::string &text, Mesh *out)
 {
+    util::dbg.WriteLine("Creatign text mesh for %", text);
+
     ////x = pos.x; y = pos.y; z = tex.s; w = tex.t;
     std::vector<glm::vec4> vertices;
     std::vector<uint16_t> indices;

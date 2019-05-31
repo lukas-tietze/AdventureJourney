@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 CLR_OUT='\e[32m'
 CLR_WARN='\e[33m'
@@ -15,37 +15,39 @@ if [[ $# == 0 ]]; then
     WARN "Nothing to do..."
 else
     for TASK in $@; do
-        if [[ $TASK == "sync" ]]; then
+        case "$TASK" in
+        "sync")
             git pull
             git push
-            git status
-        elif [[ $TASK == "clean" ]]; then
+            git status;;
+        "clean")
             INFO "Cleaning..."
-            rm -rf ./build/
-        elif [[ $TASK == "make" ]]; then
+            rm -rf ./build/;;
+        "make")
             INFO "Creating build files..."
-            make
-        elif [[ $TASK == "build" ]]; then
+            make;;
+        "build")
             INFO "Building project..."
 
             if  [[ $OS == 'CYGWIN_NT-10.0' ]]; then
                 MSBuild.exe -nr:true -m "./build/debug/GalaxyAtWar.sln"
             elif [[ $OS == 'Linux' ]]; then
                 cd ./build/debug/ && make
+                cd ../../
             else
                 WARN 'Unknown Os, can not determine builder!'
-            fi
-        elif (( $TASK == "run")); then
+            fi;;
+        "run")
             if  [[ $OS == 'CYGWIN_NT-10.0' ]]; then
                 ./build/debug/Debug/Gui.exe
             elif [[ $OS == 'Linux' ]]; then
                 ./build/debug/Gui
             else
                 WARN 'Unknown Os, can not determine builder!'
-            fi
-        else
-            ERR "Unknown task $TASK!"
-        fi
+            fi;;
+        *)
+            ERR "Unknown task $TASK!";;
+        esac
 
         if [[ $? != 0 ]]; then
             WARN "Error Occured, exiting..."
