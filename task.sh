@@ -4,9 +4,12 @@ CLR_OUT='\e[32m'
 CLR_WARN='\e[33m'
 CLR_DEFAULT='\e[39m'
 
-function INFO { echo -e "$CLR_OUT ["`date`"] >> $1 $CLR_DEFAULT"; }
-function PRINT { echo -e "$CLR_DEFAULT ["`date`"] >> $1 $CLR_DEFAULT"; }
-function WARN { echo -e "$CLR_WARN ["`date`"] >> $1 $CLR_DEFAULT"; }
+GREP=/bin/grep
+DATE=/bin/date
+
+function INFO { echo -e "$CLR_OUT ["`$DATE`"] >> $1 $CLR_DEFAULT"; }
+function PRINT { echo -e "$CLR_DEFAULT ["`$DATE`"] >> $1 $CLR_DEFAULT"; }
+function WARN { echo -e "$CLR_WARN ["`$DATE`"] >> $1 $CLR_DEFAULT"; }
 
 OS=`uname`
 INFO "Detected Os as $OS"
@@ -16,6 +19,13 @@ if [[ $# == 0 ]]; then
 else
     for TASK in $@; do
         case "$TASK" in
+        "todo")
+            PATHS=(./libCommon/ ./libGlUtil ./libTermUtil ./gui/ ./playground ./terminal_ui)
+            
+            for PATH in ${PATHS[@]}; do
+                INFO "Searching $PATH"
+                $GREP -r -E "TODO|FIXME" $PATH
+            done;;            
         "sync")
             git pull
             git push
@@ -32,8 +42,7 @@ else
             if  [[ $OS == 'CYGWIN_NT-10.0' ]]; then
                 MSBuild.exe -nr:true -m "./build/debug/GalaxyAtWar.sln"
             elif [[ $OS == 'Linux' ]]; then
-                cd ./build/debug/ && make
-                cd ../../
+                make -C ./build/debug/ 
             else
                 WARN 'Unknown Os, can not determine builder!'
             fi;;
