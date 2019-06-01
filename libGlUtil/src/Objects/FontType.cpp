@@ -21,8 +21,10 @@ std::ostream &glutil::operator<<(std::ostream &s, FontType value)
 template <>
 const std::initializer_list<glutil::FontType> &util::ListValues<glutil::FontType>()
 {
-    return std::initializer_list<glutil::FontType>{
+    static constexpr std::initializer_list<glutil::FontType> values{
         glutil::FontType::BitMap,
         glutil::FontType::TrueType,
     };
+
+    return values;
 }

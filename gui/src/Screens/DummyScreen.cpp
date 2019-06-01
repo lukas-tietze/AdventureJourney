@@ -50,7 +50,9 @@ gui::DummyScreen::DummyScreen() : scene(),
     camera->SetUp(glutil::AXIS_Y);
     camera->SetBindingTarget(1);
     camera->CreateGlObjects();
+
     this->scene.SetActiveCamera(MAIN_CAM);
+    this->cameraUpdater.SetCamera(camera);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -326,26 +328,10 @@ void gui::DummyScreen::Render()
 
 void gui::DummyScreen::Update(double delta)
 {
-    int x = 0;
-    int y = 0;
-    int z = 0;
+    this->cameraUpdater.Update(delta);
 
-    auto camera = this->scene.GetCamera(MAIN_CAM);
-
-    if (glutil::IsKeyDown(GLFW_KEY_ESCAPE) || glutil::IsKeyDown(GLFW_KEY_Q))
+    if (glutil::WasKeyPressed(GLFW_KEY_Q))
         glutil::Quit();
-    if (glutil::IsKeyDown(GLFW_KEY_W))
-        x++;
-    if (glutil::IsKeyDown(GLFW_KEY_S))
-        x--;
-    if (glutil::IsKeyDown(GLFW_KEY_D))
-        z++;
-    if (glutil::IsKeyDown(GLFW_KEY_A))
-        z--;
-    if (glutil::IsKeyDown(GLFW_KEY_SPACE))
-        y++;
-    if (glutil::IsKeyDown(GLFW_KEY_LEFT_SHIFT))
-        y--;
     if (glutil::WasKeyPressed(GLFW_KEY_F2))
         this->debugProg = nullptr;
     if (glutil::WasKeyPressed(GLFW_KEY_F3))
@@ -371,47 +357,28 @@ void gui::DummyScreen::Update(double delta)
         this->ppProg = this->scene.GetProgram(EDGE_PROG);
     if (glutil::WasKeyPressed(GLFW_KEY_P))
         this->animationPaused = !this->animationPaused;
-    if (glutil::IsKeyDown(GLFW_KEY_C))
-        camera->SetViewDirection(-camera->GetViewDirection());
     if (glutil::WasKeyPressed(GLFW_KEY_R))
         this->scene.ReloadAllShaders();
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_1))
     {
+        this->cameraUpdater.Enable();
         glutil::SetCursorGameMode(true);
         this->mouseCaptured = true;
     }
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_2))
     {
+        this->cameraUpdater.Disable();
         glutil::SetCursorGameMode(false);
         this->mouseCaptured = false;
     }
-
-    auto viewFlat = camera->GetViewDirection();
-    viewFlat.y = 0;
-
-    auto viewCross = glm::cross(viewFlat, camera->GetUp());
-    viewCross.y = 0;
 
     if (!this->animationPaused)
         for (auto obj : this->objects)
             obj->Step(delta);
 
-    camera->MoveBy(viewFlat * static_cast<float>(delta * x) +
-                   camera->GetUp() * static_cast<float>(delta * y) +
-                   viewCross * static_cast<float>(delta * z));
-
-    if (this->mouseCaptured)
-    {
-        camera->Rotate(static_cast<float>(glutil::GetMouseDeltaX() * -1), glutil::AXIS_Y);
-        camera->Rotate(static_cast<float>(glutil::GetMouseDeltaY() * -1), viewCross);
-    }
-
     if (glutil::WasWindowResized())
     {
-        camera->SetAspectRation(glutil::GetAspectRatio());
         this->ppPipe.SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());
         this->ppPipe.Update();
     }
-
-    camera->UpdateMatrices();
 }

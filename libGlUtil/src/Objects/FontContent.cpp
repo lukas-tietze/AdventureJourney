@@ -24,9 +24,11 @@ std::ostream &glutil::operator<<(std::ostream &s, FontContent value)
 template <>
 const std::initializer_list<glutil::FontContent> &util::ListValues<glutil::FontContent>()
 {
-    return std::initializer_list<glutil::FontContent>{
+    static constexpr std::initializer_list<glutil::FontContent> values{
         glutil::FontContent::AZaz09Space,
         glutil::FontContent::Ascii32To126,
         glutil::FontContent::Custom,
     };
+
+    return values;
 }

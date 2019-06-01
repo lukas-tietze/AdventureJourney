@@ -55,7 +55,7 @@ else
                 WARN 'Unknown Os, can not determine builder!'
             fi;;
         *)
-            ERR "Unknown task $TASK!";;
+            WARN "Unknown task $TASK!";;
         esac
 
         if [[ $? != 0 ]]; then

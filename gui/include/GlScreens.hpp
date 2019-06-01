@@ -54,6 +54,7 @@ class DummyScreen : public glutil::Screen
 {
 private:
     glutil::Scene scene;
+    glutil::CameraUpdater cameraUpdater;
 
     bool mouseCaptured;
     bool animationPaused;
@@ -72,5 +73,15 @@ public:
 
     void Render();
     void Update(double);
+};
+
+class PlanetScreen : public glutil::Screen
+{
+private:
+    glutil::Scene scene;
+    glutil::CameraUpdater cameraUpdater;
+
+public:
+    PlanetScreen();
 };
 } // namespace gui

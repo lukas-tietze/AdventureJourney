@@ -397,6 +397,43 @@ public:
     float GetAspectRation() const;
 };
 
+class CameraUpdater
+{
+private:
+    int keys[6];
+    float moveSpeed[6];
+    float rotateSpeed[2];
+    bool flattenMove;
+    bool enabled;
+    bool invertVerticalRotation;
+    Camera *camera;
+
+public:
+    CameraUpdater();
+
+    void Update(double delta);
+
+    void SetKeyForward(int);
+    void SetKeyBack(int);
+    void SetKeyLeft(int);
+    void SetKeyRight(int);
+    void SetKeyUp(int);
+    void SetKeyDown(int);
+    void SetKeys(int, int, int, int, int, int);
+    void SetRotateSpeed(float, float);
+    void SetVerticalRotateSpeed(float);
+    void SetHorizontalSpeed(float);
+    void SetMovementSpeed(float);
+    void SetFlattenMove(bool);
+    void Enable();
+    void Disable();
+    void SetEnabled(bool);
+    void SetCamera(Camera *);
+
+    Camera *GetCamera();
+    const Camera *GetCamera() const;
+};
+
 #pragma pack(push, 1)
 struct LightSourceUboData
 {
