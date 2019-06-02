@@ -56,18 +56,20 @@ gui::PlanetScreen::PlanetScreen() : scene(),
 
     std::vector<PlanetInfo> planetInfos = {
 
-        {"RockyPlanet", "assets/textures/planets/p2.png", 1.f, 0.2f},
-        {"PebblePlanet", "assets/textures/pebble.png", 2.f, 0.2f},
-        {"WateryPlanet", "assets/textures/planets/p1.png", 3.f, 0.2f},
-        {"RockyPlanet", "assets/textures/planets/p2.png", 1.f, 0.2f},
-        {"PebblePlanet", "assets/textures/pebble.png", 2.f, 0.2f},
-        {"WateryPlanet", "assets/textures/planets/p1.png", 3.f, 0.2f},
-        {"RockyPlanet", "assets/textures/planets/p2.png", 1.f, 0.2f},
-        {"PebblePlanet", "assets/textures/pebble.png", 2.f, 0.2f},
-        {"WateryPlanet", "assets/textures/planets/p1.png", 3.f, 0.2f},
-        {"RockyPlanet", "assets/textures/planets/p2.png", 1.f, 0.2f},
-        {"PebblePlanet", "assets/textures/pebble.png", 2.f, 0.2f},
-        {"WateryPlanet", "assets/textures/planets/p1.png", 3.f, 0.2f},
+        {"sun", "assets/textures/planets/sun.jpg", 0.f, 0.2f},
+        {"mercury", "assets/textures/planets/mercury.jpg", 1.f, 0.2f},
+        {"venus", "assets/textures/planets/venusSurface.jpg", 2.f, 0.2f},
+        {"earthDay", "assets/textures/planets/earth/day.jpg", 3.f, 0.2f},
+        {"mars", "assets/textures/planets/mars.jpg", 4.f, 0.2f},
+        {"jupiter", "assets/textures/planets/jupiter.jpg", 5.f, 0.2f},
+        {"saturn", "assets/textures/planets/saturn.jpg", 6.f, 0.2f},
+        {"uranus", "assets/textures/planets/uranus.jpg", 7.f, 0.2f},
+        {"neptune", "assets/textures/planets/neptune.jpg", 8.f, 0.2f},
+        {"moonyWorld", "assets/textures/planets/moonyWorld.png", 9.f, 0.2f},
+        {"moon", "assets/textures/planets/moon.jpg", -1.f, 0.2f},
+        {"venus2", "assets/textures/planets/venusAtmosphere.jpg", -2.f, 0.2f},
+        {"wateryWorld", "assets/textures/planets/wateryWorld.png", -3.f, 0.2f},
+        {"earthNight", "assets/textures/planets/earth/night.jpg", -4.f, 0.2f},
     };
 
     auto planetMesh = this->scene.GetMesh("UvMesh");
