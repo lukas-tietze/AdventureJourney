@@ -224,7 +224,7 @@ gui::DummyScreen::DummyScreen() : scene(),
     auto textObj = this->scene.GetObject("Text");
     textObj->SetGeometry(textMesh);
     textObj->SetModelMatrix(glm::translate(glm::vec3(0.f, 3.f, 0.f)) * glm::scale(glm::vec3(5.f, 5.f, 5.f)));
-    textObj->SetBindingTarget(0);
+    textObj->SetBindingTarget(2);
     textObj->SetMaterial(fontMaterial);
     textObj->CreateGlObjects();
 

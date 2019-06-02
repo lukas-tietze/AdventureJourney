@@ -75,13 +75,26 @@ public:
     void Update(double);
 };
 
+class PlanetObject
+{
+private:
+    glutil::SceneObject *object;
+
+public:
+    PlanetObject(glutil::SceneObject *);
+};
+
 class PlanetScreen : public glutil::Screen
 {
 private:
     glutil::Scene scene;
     glutil::CameraUpdater cameraUpdater;
+    std::vector<PlanetObject> objects;
 
 public:
     PlanetScreen();
+
+    void Render();
+    void Update(double);
 };
 } // namespace gui

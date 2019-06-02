@@ -15,7 +15,7 @@ int main()
 
     try
     {
-        auto screen = new gui::DummyScreen();
+        auto screen = new gui::PlanetScreen();
 
         screen->Show();
         
