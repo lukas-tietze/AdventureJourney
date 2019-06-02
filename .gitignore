@@ -59,3 +59,7 @@ lastBuild.txt
 .vs
 *.vcxproj.filters
 *.vcxproj.user
+
+#resources
+assets/textures
+assets/models
