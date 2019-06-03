@@ -3,6 +3,7 @@
 #include <cstdio>
 
 #include "data/Io.hpp"
+#include "data/IteratorUtils.hpp"
 #include "stb/stb_image.h"
 
 namespace
@@ -12,7 +13,6 @@ constexpr uint32_t WRAP_S = 1;
 constexpr uint32_t WRAP_T = 2;
 constexpr uint32_t FILTER_MIN = 0;
 constexpr uint32_t FILTER_MAG = 1;
-
 } // namespace
 
 glutil::Texture::Texture() : format(GL_RGBA),
@@ -48,7 +48,6 @@ void glutil::Texture::PrepareLoad()
 
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glGenTextures(1, &this->tex);
-    glActiveTexture(GL_TEXTURE0);
     glBindTexture(this->target, this->tex);
 }
 
@@ -159,29 +158,121 @@ bool glutil::Texture::LoadData(const std::string &path)
     return res;
 }
 
+bool glutil::Texture::LoadCubeMapCore(const std::vector<std::string> &files)
+{
+    util::dbg.WriteLine("Loading cubemap from files...");
+
+    if (files.size() != 6)
+    {
+        util::err.WriteLine("Error: excatly 6 images required, % provided!", files.size());
+        return false;
+    }
+
+    util::dbg.WriteLine("Sources are: \n\tnx=%\n\tpx=%\n\tny=%\n\tpy=%\n\tnz=%\n\tpz=%",
+                        files[0], files[1], files[2], files[3], files[4], files[5]);
+
+    void *maps[6] = {nullptr, nullptr, nullptr, nullptr, nullptr, nullptr};
+    auto res = true;
+
+    for (int i = 0; i < 6; i++)
+    {
+        int nChannels;
+
+        stbi_set_flip_vertically_on_load(true);
+        maps[i] = stbi_load(files[i].c_str(), &this->width, &this->height, &nChannels, 0);
+
+        //TODO: hier könnte man noch prüfen, ob das Format stimmt!
+
+        this->format = this->GetFormatFromChannelCount(nChannels);
+
+        if (!maps[i])
+        {
+            util::dbg.WriteLine("Error: Invalid or corrupted data in %! Message: %", stbi_failure_reason());
+
+            res = false;
+
+            break;
+        }
+    }
+
+    if (res)
+        res = this->LoadCubeMapCore(&maps[0]);
+
+    for (int i = 0; i < 6; i++)
+        if (maps[i])
+            stbi_image_free(maps[i]);
+
+    return res;
+}
+
+bool glutil::Texture::LoadCubeMapCore(const void *const *bufs)
+{
+    this->target = GL_TEXTURE_CUBE_MAP;
+    this->SetWrapMode(GL_CLAMP_TO_EDGE);
+
+    this->PrepareLoad();
+
+    GLenum faces[] = {
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_X,
+        GL_TEXTURE_CUBE_MAP_POSITIVE_X,
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,
+        GL_TEXTURE_CUBE_MAP_POSITIVE_Y,
+        GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,
+        GL_TEXTURE_CUBE_MAP_POSITIVE_Z,
+    };
+
+    for (int i = 0; i < 6; i++)
+    {
+        glTexImage2D(faces[i], 0,
+                     this->internalFormat, this->width, this->height,
+                     0, this->format, GL_UNSIGNED_BYTE, bufs[i]);
+    }
+
+
+    this->SetTextureParameters();
+    
+    util::dbg.WriteLine("Copying data to buffer %. Target=%, internalFormat=%, width=%, height=%, format=%\nDone!\n",
+                        this->tex,
+                        this->target,
+                        this->internalFormat,
+                        this->width,
+                        this->height,
+                        this->format);
+
+    return true;
+}
+
 bool glutil::Texture::LoadCubeMap(const std::string &directory, const std::initializer_list<std::string> &files)
 {
-    return false;
+    std::vector<std::string> paths;
+
+    for (const auto &file : files)
+        paths.push_back(directory + file);
+
+    return this->LoadCubeMapCore(paths);
 }
 
 bool glutil::Texture::LoadCubeMap(const std::initializer_list<std::string> &files)
 {
-    return false;
-}
-
-bool glutil::Texture::LoadCubeMap(const std::vector<std::string> &paths)
-{
-    return false;
+    return this->LoadCubeMapCore(std::vector<std::string>(files.begin(), files.end()));
 }
 
 bool glutil::Texture::LoadCubeMap(const std::string &directory, const std::vector<std::string> &files)
 {
-    return false;
+    std::vector<std::string> paths;
+
+    for (const auto &file : files)
+        paths.push_back(directory + file);
+
+    return this->LoadCubeMapCore(paths);
 }
 
-bool glutil::Texture::LoadCubeMapFromMemory(const void **)
+bool glutil::Texture::LoadCubeMap(const std::vector<std::string> &paths)
 {
-    return false;
+}
+
+bool glutil::Texture::LoadCubeMapFromMemory(const void *const *bufs)
+{
 }
 
 void glutil::Texture::Bind(GLuint textureUnit)

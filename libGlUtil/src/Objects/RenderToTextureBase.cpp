@@ -1,13 +1,12 @@
 #include "Objects.hpp"
 
 #include "data/Io.hpp"
+#include "RenderUtils.hpp"
 
 glutil::RenderToTextureBase::RenderToTextureBase() : dirty(true),
                                                      useUboData(true),
                                                      ready(false),
                                                      autoUpdate(true),
-                                                     quadVao(0),
-                                                     quadVbo(0),
                                                      fbo(0)
 {
 }
@@ -20,7 +19,6 @@ glutil::RenderToTextureBase::RenderToTextureBase(RenderToTextureBase &&other)
 glutil::RenderToTextureBase::~RenderToTextureBase()
 {
     this->DestroyFrameBuffer();
-    this->DestroyQuad();
 }
 
 int glutil::RenderToTextureBase::GetWidth() const
@@ -37,50 +35,6 @@ void glutil::RenderToTextureBase::Update()
 {
     if (this->dirty)
         this->Recreate();
-}
-
-void glutil::RenderToTextureBase::CreateQuad()
-{
-    this->DestroyQuad();
-
-    glGenVertexArrays(1, &this->quadVao);
-    glBindVertexArray(this->quadVao);
-
-    glGenBuffers(1, &this->quadVbo);
-    glBindBuffer(GL_ARRAY_BUFFER, this->quadVbo);
-
-    const float data[] = {
-        -1.f,
-        1.f,
-        -1.f,
-        -1.f,
-        1.f,
-        1.f,
-        1.f,
-        -1.f,
-    };
-
-    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), data, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 2, GL_FLOAT, false, 2 * sizeof(float), 0);
-    glEnableVertexAttribArray(0);
-
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-}
-
-void glutil::RenderToTextureBase::DestroyQuad()
-{
-    if (this->quadVao)
-    {
-        glDeleteVertexArrays(1, &this->quadVao);
-        this->quadVao = 0;
-    }
-
-    if (this->quadVbo)
-    {
-        glDeleteBuffers(1, &this->quadVbo);
-        this->quadVbo = 0;
-    }
 }
 
 void glutil::RenderToTextureBase::DestroyFrameBuffer()
@@ -122,12 +76,8 @@ void glutil::RenderToTextureBase::TransferFrom(RenderToTextureBase &other)
 
     this->autoUpdate = other.autoUpdate;
     this->data = other.data;
-    this->quadVao = other.quadVao;
-    this->quadVbo = other.quadVbo;
     this->dirty = other.dirty;
 
-    other.quadVao = 0;
-    other.quadVbo = 0;
     other.fbo = 0;
     other.dirty = true;
 }
@@ -150,12 +100,6 @@ void glutil::RenderToTextureBase::SetFrameBufferDirty()
 
 void glutil::RenderToTextureBase::Recreate()
 {
-    if (!this->quadVao || !this->quadVbo)
-    {
-        this->DestroyQuad();
-        this->CreateQuad();
-    }
-
     this->DestroyFrameBuffer();
     this->CreateFrameBuffer();
     this->FillFrameBuffer();
@@ -194,9 +138,8 @@ void glutil::RenderToTextureBase::Render()
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
-    glBindVertexArray(this->quadVao);
 
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    glutil::renderUtil::RenderNdcRect();
 
     this->EndRender();
 }

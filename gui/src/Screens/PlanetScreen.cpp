@@ -43,6 +43,17 @@ gui::PlanetScreen::PlanetScreen() : scene(),
                                            "assets/shaders/fragment/textureOnly.frag",
                                        });
 
+    this->scene.InitProgramFromSources("sky",
+                                       {
+                                           "assets/shaders/base/full.vert",
+                                           "assets/shaders/vertex/skybox.vert",
+                                           "assets/shaders/base/color.frag",
+                                           "assets/shaders/fragment/lightingNone.frag",
+                                           "assets/shaders/fragment/materialPropsSimple.frag",
+                                           "assets/shaders/fragment/normalNull.frag",
+                                           "assets/shaders/fragment/albedoSkybox.frag",
+                                       });
+
     auto lights = this->scene.GetLightSet("light");
     lights->SetBindingTarget(4);
     auto light = lights->Add();
@@ -95,6 +106,20 @@ gui::PlanetScreen::PlanetScreen() : scene(),
         obj->SetBindingTarget(2);
         obj->CreateGlObjects();
     }
+
+    auto skyTexture = this->scene.GetTexture("sky");
+    skyTexture->LoadCubeMap("assets/textures/skyboxes/nightlySky/",
+                            {
+                                "xn.png",
+                                "xp.png",
+                                "yn.png",
+                                "yp.png",
+                                "zn.png",
+                                "zp.png",
+                            });
+
+    this->skyBox.SetProgram(this->scene.GetProgram("sky"));
+    this->skyBox.SetTexture(skyTexture, GL_TEXTURE4);
 }
 
 void gui::PlanetScreen::Render()
@@ -103,6 +128,8 @@ void gui::PlanetScreen::Render()
 
     this->scene.GetProgram("prog")->Use();
     this->scene.Render();
+
+    this->skyBox.Render();
 }
 
 void gui::PlanetScreen::Update(double delta)

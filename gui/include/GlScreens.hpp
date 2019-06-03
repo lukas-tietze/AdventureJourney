@@ -8,15 +8,56 @@
 
 namespace gui
 {
-class IDummyObject
+class IDebugObject
 {
 public:
-    virtual ~IDummyObject();
+    virtual ~IDebugObject();
 
     virtual void Step(double delta) = 0;
 };
 
-class DummyObject : public IDummyObject
+class DebugScreenBase : public glutil::Screen
+{
+protected:
+    glutil::Scene scene;
+    glutil::CameraUpdater cameraUpdater;
+
+    bool mouseCaptured;
+    bool animationPaused;
+    bool wireMode;
+    bool cullMode;
+
+    std::vector<IDebugObject *> objects;
+    glutil::Program *ppProg;
+    glutil::Program *debugProg;
+
+    glutil::PostProcessingPipeline ppPipe;
+
+protected:
+    virtual void BeforeRender();
+    virtual void AfterRender();
+    virtual void BeforeUpdate();
+    virtual void AfterUpdate();
+
+public:
+    DebugScreenBase();
+    ~DebugScreenBase();
+
+    void Render();
+    void Update(double);
+};
+
+class DummyScreen : public DebugScreenBase
+{
+public:
+    DummyScreen();
+    ~DummyScreen();
+
+    void Render();
+    void Update(double);
+};
+
+class DummyObject : public IDebugObject
 {
 private:
     glutil::SceneObject *sceneObject;
@@ -35,7 +76,7 @@ public:
     void Step(double delta);
 };
 
-class DummyLightSource : public IDummyObject
+class DummyLightSource : public IDebugObject
 {
 private:
     glutil::SceneObject *sceneObject;
@@ -48,31 +89,6 @@ public:
     DummyLightSource(glutil::SceneObject *sceneObject, glutil::LightSet::Light light, float pos, float speed, float radius);
 
     void Step(double delta);
-};
-
-class DummyScreen : public glutil::Screen
-{
-private:
-    glutil::Scene scene;
-    glutil::CameraUpdater cameraUpdater;
-
-    bool mouseCaptured;
-    bool animationPaused;
-    bool wireMode;
-    bool cullMode;
-
-    std::vector<IDummyObject *> objects;
-    glutil::Program *ppProg;
-    glutil::Program *debugProg;
-
-    glutil::PostProcessingPipeline ppPipe;
-
-public:
-    DummyScreen();
-    ~DummyScreen();
-
-    void Render();
-    void Update(double);
 };
 
 class PlanetObject
@@ -90,6 +106,7 @@ private:
     glutil::Scene scene;
     glutil::CameraUpdater cameraUpdater;
     std::vector<PlanetObject> objects;
+    glutil::SkyBox skyBox;
 
 public:
     PlanetScreen();

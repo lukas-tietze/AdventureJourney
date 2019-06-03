@@ -87,13 +87,9 @@ private:
     bool ready;
     bool autoUpdate;
 
-    GLuint quadVao;
-    GLuint quadVbo;
     GLuint fbo;
 
     bool CheckBeforUsage();
-    void CreateQuad();
-    void DestroyQuad();
     void DestroyFrameBuffer();
     void CreateFrameBuffer();
     void ValidateFrameBuffer();
@@ -166,6 +162,24 @@ public:
 
     DeferredRenderingPipeline &operator=(const DeferredRenderingPipeline &) = delete;
     DeferredRenderingPipeline &operator=(DeferredRenderingPipeline &&);
+};
+
+class Texture;
+class Program;
+
+class SkyBox
+{
+private:
+    Texture *texture;
+    Program *program;
+    GLuint textureUnit;
+
+public:
+    SkyBox();
+
+    void SetProgram(Program *);
+    void SetTexture(Texture *, GLuint);
+    void Render();
 };
 
 class PostProcessingPipeline : public RenderToTextureBase
@@ -631,6 +645,9 @@ private:
     template <class TBuilder, uint PChannels>
     bool LoadCubeMapFromBuilderCore(const TBuilder &);
 
+    bool LoadCubeMapCore(const std::vector<std::string> &);
+    bool LoadCubeMapCore(const void *const *);
+
 public:
     Texture();
     ~Texture();
@@ -643,7 +660,7 @@ public:
     bool LoadCubeMap(const std::initializer_list<std::string> &files);
     bool LoadCubeMap(const std::vector<std::string> &paths);
     bool LoadCubeMap(const std::string &directory, const std::vector<std::string> &files);
-    bool LoadCubeMapFromMemory(const void **);
+    bool LoadCubeMapFromMemory(const void *const *);
     template <class TBuilder>
     bool LoadCubeMapFromBuilder(const TBuilder &);
 

@@ -1,11 +1,11 @@
 #version 430 core
 
-in vec3 v_view_ray_ws;
+in vec3 vTex;
+
 layout(binding = 4) uniform samplerCube skybox;
 
-vec4 get_albedo()
+vec4 GetAlbedo()
 {
-   return texture(skybox,v_view_ray_ws);
-
+   return texture(skybox, vTex);
 }
 
