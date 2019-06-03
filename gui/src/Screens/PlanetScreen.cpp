@@ -88,8 +88,10 @@ gui::PlanetScreen::PlanetScreen() : scene(),
 
     util::Random rnd;
 
-    for (const auto &info : planetInfos)
+    for (int i = 0; i < planetInfos.size(); i++)
     {
+        auto &info = planetInfos[i];
+
         auto texture = this->scene.GetTexture(info.name);
         texture->SetMipmapsEnabled(true);
         texture->SetMinFilterMode(GL_LINEAR_MIPMAP_LINEAR);
@@ -99,27 +101,29 @@ gui::PlanetScreen::PlanetScreen() : scene(),
         material->SetAlbedo(glm::vec4(0.5f, 0.5f, 0.5f, 1.f));
         material->SetAlbedoMap(texture, GL_TEXTURE0);
 
+        float rad = static_cast<float>(i) / planetInfos.size() * 2 * M_PI;
+        float x = std::sin(rad);
+        float y = std::cos(rad);
+
         auto obj = this->scene.GetObject(info.name);
-        obj->SetModelMatrix(glm::translate(glm::vec3(0.f, 0.f, info.radius)) * glm::scale(glm::vec3(info.size, info.size, info.size)));
+        // obj->SetModelMatrix(glm::translate(glm::vec3(0.f, 0.f, info.radius)) * glm::scale(glm::vec3(info.size, info.size, info.size)));
+        obj->SetModelMatrix(glm::translate(glm::vec3(x, 0.f, y)) * glm::scale(glm::vec3(info.size, info.size, info.size)));
         obj->SetMaterial(material);
         obj->SetGeometry(planetMesh);
         obj->SetBindingTarget(2);
         obj->CreateGlObjects();
     }
 
-    auto skyTexture = this->scene.GetTexture("sky");
-    skyTexture->LoadCubeMap("assets/textures/skyboxes/nightlySky/",
-                            {
-                                "xn.png",
-                                "xp.png",
-                                "yn.png",
-                                "yp.png",
-                                "zn.png",
-                                "zp.png",
-                            });
+    this->scene.GetTexture("sky1")->LoadCubeMap("assets/textures/skyboxes/nightlySky/", ".png");
+    this->scene.GetTexture("sky2")->LoadCubeMap("assets/textures/skyboxes/tropicalSunnyDay/", ".jpg");
+    this->scene.GetTexture("sky3")->LoadCubeMap("assets/textures/skyboxes/lagoon/", ".tga");
+    this->scene.GetTexture("sky4")->LoadCubeMap("assets/textures/skyboxes/spires/", ".tga");
+    this->scene.GetTexture("sky5")->LoadCubeMap("assets/textures/skyboxes/thunder/", ".tga");
+    //TODO, Star map vorbereiten und richtig laden
+    this->scene.GetTexture("sky6")->LoadCubeMap("assets/textures/skyboxes/spires/", ".png");
 
     this->skyBox.SetProgram(this->scene.GetProgram("sky"));
-    this->skyBox.SetTexture(skyTexture, GL_TEXTURE4);
+    this->skyBox.SetTexture(this->scene.GetTexture("sky1"), GL_TEXTURE4);
 }
 
 void gui::PlanetScreen::Render()
@@ -143,9 +147,23 @@ void gui::PlanetScreen::Update(double delta)
         this->cameraUpdater.Enable();
         glutil::SetCursorGameMode(true);
     }
+
     if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_2))
     {
         this->cameraUpdater.Disable();
         glutil::SetCursorGameMode(false);
     }
+
+    if (glutil::WasKeyPressed(GLFW_KEY_1))
+        this->skyBox.SetTexture(this->scene.GetTexture("sky1"), GL_TEXTURE4);
+    if (glutil::WasKeyPressed(GLFW_KEY_2))
+        this->skyBox.SetTexture(this->scene.GetTexture("sky2"), GL_TEXTURE4);
+    if (glutil::WasKeyPressed(GLFW_KEY_3))
+        this->skyBox.SetTexture(this->scene.GetTexture("sky3"), GL_TEXTURE4);
+    if (glutil::WasKeyPressed(GLFW_KEY_4))
+        this->skyBox.SetTexture(this->scene.GetTexture("sky4"), GL_TEXTURE4);
+    if (glutil::WasKeyPressed(GLFW_KEY_5))
+        this->skyBox.SetTexture(this->scene.GetTexture("sky5"), GL_TEXTURE4);
+    if (glutil::WasKeyPressed(GLFW_KEY_6))
+        this->skyBox.SetTexture(this->scene.GetTexture("sky6"), GL_TEXTURE4);
 }

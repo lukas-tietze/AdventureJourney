@@ -51,8 +51,6 @@ void glutil::Texture::PrepareLoad()
     glBindTexture(this->target, this->tex);
 }
 
-#include "GlUtils.hpp"
-
 void glutil::Texture::SetTextureParameters()
 {
     glTexParameteri(this->target, GL_TEXTURE_WRAP_R, this->wrapModes[WRAP_R]);
@@ -187,7 +185,7 @@ bool glutil::Texture::LoadCubeMapCore(const std::vector<std::string> &files)
 
         if (!maps[i])
         {
-            util::dbg.WriteLine("Error: Invalid or corrupted data in %! Message: %", stbi_failure_reason());
+            util::dbg.WriteLine("Error: Invalid or corrupt data in %! Message: %", files[i], stbi_failure_reason());
 
             res = false;
 
@@ -228,9 +226,8 @@ bool glutil::Texture::LoadCubeMapCore(const void *const *bufs)
                      0, this->format, GL_UNSIGNED_BYTE, bufs[i]);
     }
 
-
     this->SetTextureParameters();
-    
+
     util::dbg.WriteLine("Copying data to buffer %. Target=%, internalFormat=%, width=%, height=%, format=%\nDone!\n",
                         this->tex,
                         this->target,
@@ -240,21 +237,6 @@ bool glutil::Texture::LoadCubeMapCore(const void *const *bufs)
                         this->format);
 
     return true;
-}
-
-bool glutil::Texture::LoadCubeMap(const std::string &directory, const std::initializer_list<std::string> &files)
-{
-    std::vector<std::string> paths;
-
-    for (const auto &file : files)
-        paths.push_back(directory + file);
-
-    return this->LoadCubeMapCore(paths);
-}
-
-bool glutil::Texture::LoadCubeMap(const std::initializer_list<std::string> &files)
-{
-    return this->LoadCubeMapCore(std::vector<std::string>(files.begin(), files.end()));
 }
 
 bool glutil::Texture::LoadCubeMap(const std::string &directory, const std::vector<std::string> &files)
@@ -267,12 +249,28 @@ bool glutil::Texture::LoadCubeMap(const std::string &directory, const std::vecto
     return this->LoadCubeMapCore(paths);
 }
 
+bool glutil::Texture::LoadCubeMap(const std::string &directory, const std::string &extension)
+{
+    return this->LoadCubeMapCore({
+        directory + "nx" + extension,
+        directory + "px" + extension,
+        directory + "ny" + extension,
+        directory + "py" + extension,
+        directory + "nz" + extension,
+        directory + "pz" + extension,
+    });
+}
+
 bool glutil::Texture::LoadCubeMap(const std::vector<std::string> &paths)
 {
+    return this->LoadCubeMapCore(paths);
 }
 
 bool glutil::Texture::LoadCubeMapFromMemory(const void *const *bufs)
 {
+    util::dbg.WriteLine("Loading cubemap from buffer...");
+
+    return this->LoadCubeMapCore(bufs);
 }
 
 void glutil::Texture::Bind(GLuint textureUnit)

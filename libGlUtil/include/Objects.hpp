@@ -656,8 +656,7 @@ public:
     template <class TBuilder>
     bool LoadDataFromBuilder(const TBuilder &);
     bool LoadData(const std::string &path);
-    bool LoadCubeMap(const std::string &directory, const std::initializer_list<std::string> &files);
-    bool LoadCubeMap(const std::initializer_list<std::string> &files);
+    bool LoadCubeMap(const std::string &directory, const std::string &extension);
     bool LoadCubeMap(const std::vector<std::string> &paths);
     bool LoadCubeMap(const std::string &directory, const std::vector<std::string> &files);
     bool LoadCubeMapFromMemory(const void *const *);

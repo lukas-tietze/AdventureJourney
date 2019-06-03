@@ -52,8 +52,25 @@ else
             elif [[ $OS == 'Linux' ]]; then
                 ./build/debug/Gui
             else
-                WARN 'Unknown Os, can not determine builder!'
+                WARN 'Unknown Os, can not locate executable!'
             fi;;
+        "trace")
+
+            INFO "Deleting old traces..."
+            
+            rm *.trace
+
+            INFO "Starting trace..."
+
+            if  [[ $OS == 'CYGWIN_NT-10.0' ]]; then
+                apitrace trace "./build/debug/Debug/Gui.exe"
+            elif [[ $OS == 'Linux' ]]; then
+                apitrace trace "./build/debug/Gui"
+            else
+                WARN 'Unknown Os, can not locate executable!'
+            fi
+
+            qapitrace "Gui.trace";;
         *)
             WARN "Unknown task $TASK!";;
         esac
