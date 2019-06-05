@@ -13,7 +13,7 @@ class IDebugObject
 public:
     virtual ~IDebugObject();
 
-    virtual void Step(double delta) = 0;
+    virtual void Update(double delta) = 0;
 };
 
 class DebugScreenBase : public glutil::Screen
@@ -73,7 +73,7 @@ private:
 public:
     DummyObject(glutil::SceneObject *);
 
-    void Step(double delta);
+    void Upate(double delta);
 };
 
 class DummyLightSource : public IDebugObject
@@ -88,16 +88,20 @@ private:
 public:
     DummyLightSource(glutil::SceneObject *sceneObject, glutil::LightSet::Light light, float pos, float speed, float radius);
 
-    void Step(double delta);
+    void Update(double delta);
 };
 
-class PlanetObject
+class PlanetObject : public IDebugObject
 {
 private:
     glutil::SceneObject *object;
+    float radius;
+    float arc;
 
 public:
-    PlanetObject(glutil::SceneObject *);
+    PlanetObject(glutil::SceneObject *, float radius);
+
+    void Update(double delta);
 };
 
 class PlanetScreen : public glutil::Screen
@@ -105,11 +109,12 @@ class PlanetScreen : public glutil::Screen
 private:
     glutil::Scene scene;
     glutil::CameraUpdater cameraUpdater;
-    std::vector<PlanetObject> objects;
+    std::vector<PlanetObject *> objects;
     glutil::SkyBox skyBox;
 
 public:
     PlanetScreen();
+    ~PlanetScreen();
 
     void Render();
     void Update(double);

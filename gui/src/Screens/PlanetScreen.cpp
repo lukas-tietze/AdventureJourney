@@ -101,29 +101,35 @@ gui::PlanetScreen::PlanetScreen() : scene(),
         material->SetAlbedo(glm::vec4(0.5f, 0.5f, 0.5f, 1.f));
         material->SetAlbedoMap(texture, GL_TEXTURE0);
 
-        float rad = static_cast<float>(i) / planetInfos.size() * 2 * M_PI;
-        float x = std::sin(rad);
-        float y = std::cos(rad);
-
         auto obj = this->scene.GetObject(info.name);
-        // obj->SetModelMatrix(glm::translate(glm::vec3(0.f, 0.f, info.radius)) * glm::scale(glm::vec3(info.size, info.size, info.size)));
-        obj->SetModelMatrix(glm::translate(glm::vec3(x, 0.f, y)) * glm::scale(glm::vec3(info.size, info.size, info.size)));
+        obj->SetModelMatrix(glm::translate(glm::vec3(info.radius, 0.f, 0.f) * info.radius) *
+                            glm::rotate(static_cast<float>(rnd.Next(0.0, 2 * M_PI)), glm::vec3(0, 1, 0)) *
+                            glm::scale(glm::vec3(info.size, info.size, info.size)));
         obj->SetMaterial(material);
         obj->SetGeometry(planetMesh);
         obj->SetBindingTarget(2);
         obj->CreateGlObjects();
+
+        this->objects.push_back(new PlanetObject(obj, info.radius));
     }
 
-    this->scene.GetTexture("sky1")->LoadCubeMap("assets/textures/skyboxes/nightlySky/", ".png");
+    this->scene.GetTexture("sky1")->LoadCubeMap("assets/textures/skyboxes/night/", ".png");
     this->scene.GetTexture("sky2")->LoadCubeMap("assets/textures/skyboxes/tropicalSunnyDay/", ".jpg");
     this->scene.GetTexture("sky3")->LoadCubeMap("assets/textures/skyboxes/lagoon/", ".tga");
     this->scene.GetTexture("sky4")->LoadCubeMap("assets/textures/skyboxes/spires/", ".tga");
     this->scene.GetTexture("sky5")->LoadCubeMap("assets/textures/skyboxes/thunder/", ".tga");
-    //TODO, Star map vorbereiten und richtig laden
-    this->scene.GetTexture("sky6")->LoadCubeMap("assets/textures/skyboxes/spires/", ".png");
+    this->scene.GetTexture("sky6")->LoadCubeMap("assets/textures/skyboxes/stars/", ".png");
 
     this->skyBox.SetProgram(this->scene.GetProgram("sky"));
     this->skyBox.SetTexture(this->scene.GetTexture("sky1"), GL_TEXTURE4);
+}
+
+gui::PlanetScreen::~PlanetScreen()
+{
+    for (auto obj : this->objects)
+        delete obj;
+
+    this->objects.clear();
 }
 
 void gui::PlanetScreen::Render()
@@ -138,6 +144,9 @@ void gui::PlanetScreen::Render()
 
 void gui::PlanetScreen::Update(double delta)
 {
+    for (auto &obj : this->objects)
+        obj->Update(delta);
+
     this->cameraUpdater.Update(delta);
 
     if (glutil::WasKeyPressed(GLFW_KEY_Q))

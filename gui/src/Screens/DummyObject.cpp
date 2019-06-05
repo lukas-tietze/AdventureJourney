@@ -36,7 +36,7 @@ gui::DummyObject::DummyObject(glutil::SceneObject *sceneObject) : sceneObject(sc
                                       glm::scale(glm::vec3(this->scale, this->scale, this->scale)));
 }
 
-void gui::DummyObject::Step(double delta)
+void gui::DummyObject::Upate(double delta)
 {
     this->rotation += static_cast<float>(glm::degrees(delta));
     this->pos += static_cast<float>(delta * this->speed);
