@@ -22,6 +22,29 @@
             "cStandard": "c11",
             "cppStandard": "c++17",
             "intelliSenseMode": "clang-x64"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "${workspaceFolder}/",
+                "${workspaceFolder}/libCommon/include/",
+                "${workspaceFolder}/libTermUtil/include/",
+                "${workspaceFolder}/libGlUtil/include/",
+                "${workspaceFolder}/terminal_ui/include/",
+                "${workspaceFolder}/gui/include/",
+                "${workspaceFolder}/core/include/",
+                "${workspaceFolder}/playground/",
+                "${workspaceFolder}/libs/glad/include/",
+                "${workspaceFolder}/libs/stb/include",
+                "${workspaceFolder}/submodules/glm/",
+                "${workspaceFolder}/submodules/glfw/include/",
+                "${workspaceFolder}/submodules/freeType/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "clang-x64"
         }
     ],
     "version": 4

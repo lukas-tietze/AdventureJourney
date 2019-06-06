@@ -18,26 +18,32 @@ public:
 
 class DebugScreenBase : public glutil::Screen
 {
-protected:
-    glutil::Scene scene;
-    glutil::CameraUpdater cameraUpdater;
-
+private:
     bool mouseCaptured;
     bool animationPaused;
     bool wireMode;
     bool cullMode;
 
+    std::unordered_map<int, std::string> progs;
+
+    void SetGlState();
+
+protected:
+    glutil::Scene scene;
+    glutil::CameraUpdater cameraUpdater;
+
     std::vector<IDebugObject *> objects;
-    glutil::Program *ppProg;
-    glutil::Program *debugProg;
+    std::string renderProg;
+    std::string postProcessorProg;
 
     glutil::PostProcessingPipeline ppPipe;
 
-protected:
     virtual void BeforeRender();
     virtual void AfterRender();
     virtual void BeforeUpdate();
     virtual void AfterUpdate();
+    virtual void LoadShaders();
+    virtual void LoadScene();
 
 public:
     DebugScreenBase();
@@ -47,7 +53,7 @@ public:
     void Update(double);
 };
 
-class DummyScreen : public DebugScreenBase
+class DummyScreen
 {
 public:
     DummyScreen();
@@ -97,6 +103,8 @@ private:
     glutil::SceneObject *object;
     float radius;
     float arc;
+    float speed;
+    float size;
 
 public:
     PlanetObject(glutil::SceneObject *, float radius);
@@ -104,13 +112,14 @@ public:
     void Update(double delta);
 };
 
-class PlanetScreen : public glutil::Screen
+class PlanetScreen : public DebugScreenBase
 {
 private:
     glutil::Scene scene;
     glutil::CameraUpdater cameraUpdater;
     std::vector<PlanetObject *> objects;
     glutil::SkyBox skyBox;
+    glutil::DeferredRenderingPipeline drp;
 
 public:
     PlanetScreen();
