@@ -37,51 +37,27 @@ public:
 };
 
 template <class TData>
-class StaticUboOwner
+class StaticUboOwner : public UboOwner
 {
-private:
-    GLuint ubo;
-    GLuint bindingTarget;
-    bool dirty;
-
 protected:
     TData data;
 
 public:
     StaticUboOwner();
-
-    void CreateGlObjects();
-    void DestroyGlObjects();
-    void Bind() const;
-    void SetBindingTarget(int);
-    void Upload(bool force = false);
-    void SetDirty();
 };
 
 #include "libGlUtil/src/Objects/StaticUboOwner.inl"
 
 template <class TData>
-class DynamicUboOwner
+class DynamicUboOwner : public UboOwner
 {
-private:
-    uint ubo;
-    uint bindingTarget;
-    bool dirty;
-    size_t bufferSize;
-
 protected:
     std::vector<TData> data;
 
 public:
     DynamicUboOwner();
 
-    void CreateGlObjects();
-    void DestroyGlObjects();
-    void Bind() const;
-    void SetBindingTarget(int);
-    void Upload(bool force = false);
     void Resize();
-    void SetDirty();
 };
 
 #include "libGlUtil/src/Objects/DynamicUboOwner.inl"
