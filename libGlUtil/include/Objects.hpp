@@ -10,6 +10,32 @@
 
 namespace glutil
 {
+class UboOwner
+{
+private:
+    GLuint ubo;
+    GLuint bindingTarget;
+    bool contentDirty;
+    bool bufferDirty;
+    void *data;
+    size_t dataSize;
+    bool autoUpdate;
+
+public:
+    UboOwner();
+    ~UboOwner();
+
+    void CreateGlObjects();
+    void DestroyGlObjects();
+    void Bind() const;
+    void SetBindingTarget(int);
+    void Upload(bool force = false);
+    void SetDirty();
+    void SetData(void *data, size_t size);
+    void Update(bool force = false);
+    void SetAutoUpdate(bool);
+};
+
 template <class TData>
 class StaticUboOwner
 {
