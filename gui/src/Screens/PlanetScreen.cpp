@@ -17,43 +17,8 @@ struct PlanetInfo
 };
 } // namespace
 
-gui::PlanetScreen::PlanetScreen() : scene(),
-                                    cameraUpdater()
+gui::PlanetScreen::PlanetScreen()
 {
-    auto camera = this->scene.GetCamera("cam");
-    camera->SetViewDirection(glm::vec3(0.f, 0.f, 1.f));
-    camera->SetPosition(glm::vec3(0.f, 0.f, 0.f));
-    camera->SetUp(glutil::AXIS_Y);
-    camera->SetBindingTarget(1);
-    camera->CreateGlObjects();
-
-    this->scene.SetActiveCamera("cam");
-    this->cameraUpdater.SetCamera(camera);
-
-    glEnable(GL_DEPTH_TEST);
-
-    this->scene.InitProgramFromSources("prog",
-                                       {
-                                           "assets/shaders/base/full.vert",
-                                           "assets/shaders/vertex/simple.vert",
-                                           "assets/shaders/base/color.frag",
-                                           "assets/shaders/fragment/lightingPhong.frag",
-                                           "assets/shaders/fragment/materialPropsSimple.frag",
-                                           "assets/shaders/fragment/normalAttrib.frag",
-                                           "assets/shaders/fragment/textureOnly.frag",
-                                       });
-
-    this->scene.InitProgramFromSources("sky",
-                                       {
-                                           "assets/shaders/base/full.vert",
-                                           "assets/shaders/vertex/skybox.vert",
-                                           "assets/shaders/base/color.frag",
-                                           "assets/shaders/fragment/lightingNone.frag",
-                                           "assets/shaders/fragment/materialPropsSimple.frag",
-                                           "assets/shaders/fragment/normalNull.frag",
-                                           "assets/shaders/fragment/albedoSkybox.frag",
-                                       });
-
     auto lights = this->scene.GetLightSet("light");
     lights->SetBindingTarget(4);
     auto light = lights->Add();
@@ -120,59 +85,41 @@ gui::PlanetScreen::PlanetScreen() : scene(),
     this->scene.GetTexture("sky5")->LoadCubeMap("assets/textures/skyboxes/thunder/", ".tga");
     this->scene.GetTexture("sky6")->LoadCubeMap("assets/textures/skyboxes/stars/", ".png");
 
-    this->skyBox.SetProgram(this->scene.GetProgram("sky"));
-    this->skyBox.SetTexture(this->scene.GetTexture("sky1"), GL_TEXTURE4);
+    this->skybox.SetProgram(this->scene.GetProgram("sky"));
+    this->skybox.SetTexture(this->scene.GetTexture("sky1"), GL_TEXTURE4);
 }
 
 gui::PlanetScreen::~PlanetScreen()
 {
-    for (auto obj : this->objects)
-        delete obj;
-
-    this->objects.clear();
 }
 
-void gui::PlanetScreen::Render()
+void gui::PlanetScreen::BeforeRender()
 {
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    this->scene.GetProgram("prog")->Use();
-    this->scene.Render();
-
-    this->skyBox.Render();
 }
 
-void gui::PlanetScreen::Update(double delta)
+void gui::PlanetScreen::AfterRender()
 {
-    for (auto &obj : this->objects)
-        obj->Update(delta);
+}
 
-    this->cameraUpdater.Update(delta);
-
-    if (glutil::WasKeyPressed(GLFW_KEY_Q))
-        glutil::Quit();
-    if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_1))
+void gui::PlanetScreen::BeforeUpdate()
+{
+    if (glutil::IsKeyDown(GLFW_KEY_RIGHT_SHIFT))
     {
-        this->cameraUpdater.Enable();
-        glutil::SetCursorGameMode(true);
+        if (glutil::WasKeyPressed(GLFW_KEY_1))
+            this->skybox.SetTexture(this->scene.GetTexture("sky1"), GL_TEXTURE4);
+        if (glutil::WasKeyPressed(GLFW_KEY_2))
+            this->skybox.SetTexture(this->scene.GetTexture("sky2"), GL_TEXTURE4);
+        if (glutil::WasKeyPressed(GLFW_KEY_3))
+            this->skybox.SetTexture(this->scene.GetTexture("sky3"), GL_TEXTURE4);
+        if (glutil::WasKeyPressed(GLFW_KEY_4))
+            this->skybox.SetTexture(this->scene.GetTexture("sky4"), GL_TEXTURE4);
+        if (glutil::WasKeyPressed(GLFW_KEY_5))
+            this->skybox.SetTexture(this->scene.GetTexture("sky5"), GL_TEXTURE4);
+        if (glutil::WasKeyPressed(GLFW_KEY_6))
+            this->skybox.SetTexture(this->scene.GetTexture("sky6"), GL_TEXTURE4);
     }
+}
 
-    if (glutil::WasButtonPressed(GLFW_MOUSE_BUTTON_2))
-    {
-        this->cameraUpdater.Disable();
-        glutil::SetCursorGameMode(false);
-    }
-
-    if (glutil::WasKeyPressed(GLFW_KEY_1))
-        this->skyBox.SetTexture(this->scene.GetTexture("sky1"), GL_TEXTURE4);
-    if (glutil::WasKeyPressed(GLFW_KEY_2))
-        this->skyBox.SetTexture(this->scene.GetTexture("sky2"), GL_TEXTURE4);
-    if (glutil::WasKeyPressed(GLFW_KEY_3))
-        this->skyBox.SetTexture(this->scene.GetTexture("sky3"), GL_TEXTURE4);
-    if (glutil::WasKeyPressed(GLFW_KEY_4))
-        this->skyBox.SetTexture(this->scene.GetTexture("sky4"), GL_TEXTURE4);
-    if (glutil::WasKeyPressed(GLFW_KEY_5))
-        this->skyBox.SetTexture(this->scene.GetTexture("sky5"), GL_TEXTURE4);
-    if (glutil::WasKeyPressed(GLFW_KEY_6))
-        this->skyBox.SetTexture(this->scene.GetTexture("sky6"), GL_TEXTURE4);
+void gui::PlanetScreen::AfterUpdate()
+{
 }

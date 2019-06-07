@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <tuple>
 
 #include "GlUtils.hpp"
 #include "Objects.hpp"
@@ -24,26 +25,21 @@ private:
     bool wireMode;
     bool cullMode;
 
-    std::unordered_map<int, std::string> progs;
+    std::vector<std::tuple<int, const char *>> postProcessProgs;
+    std::vector<std::tuple<int, const char *>> renderProgs;
+
+    std::string postProcessProg;
+    std::string renderProg;
 
     void SetGlState();
 
 protected:
     glutil::Scene scene;
     glutil::CameraUpdater cameraUpdater;
+    glutil::PostProcessingPipeline ppPipe;
+    glutil::SkyBox skybox;
 
     std::vector<IDebugObject *> objects;
-    std::string renderProg;
-    std::string postProcessorProg;
-
-    glutil::PostProcessingPipeline ppPipe;
-
-    virtual void BeforeRender();
-    virtual void AfterRender();
-    virtual void BeforeUpdate();
-    virtual void AfterUpdate();
-    virtual void LoadShaders();
-    virtual void LoadScene();
 
 public:
     DebugScreenBase();
@@ -51,16 +47,23 @@ public:
 
     void Render();
     void Update(double);
+
+    virtual void BeforeRender() = 0;
+    virtual void AfterRender() = 0;
+    virtual void BeforeUpdate() = 0;
+    virtual void AfterUpdate() = 0;
 };
 
-class DummyScreen
+class DummyScreen : public DebugScreenBase
 {
 public:
     DummyScreen();
     ~DummyScreen();
 
-    void Render();
-    void Update(double);
+    virtual void BeforeRender();
+    virtual void AfterRender();
+    virtual void BeforeUpdate();
+    virtual void AfterUpdate();
 };
 
 class DummyObject : public IDebugObject
@@ -114,18 +117,13 @@ public:
 
 class PlanetScreen : public DebugScreenBase
 {
-private:
-    glutil::Scene scene;
-    glutil::CameraUpdater cameraUpdater;
-    std::vector<PlanetObject *> objects;
-    glutil::SkyBox skyBox;
-    glutil::DeferredRenderingPipeline drp;
-
 public:
     PlanetScreen();
     ~PlanetScreen();
 
-    void Render();
-    void Update(double);
+    virtual void BeforeRender();
+    virtual void AfterRender();
+    virtual void BeforeUpdate();
+    virtual void AfterUpdate();
 };
 } // namespace gui

@@ -16,7 +16,7 @@ constexpr int VERTICAL = 1;
 } // namespace
 
 glutil::CameraUpdater::CameraUpdater() : keys{GLFW_KEY_W, GLFW_KEY_S, GLFW_KEY_A, GLFW_KEY_D, GLFW_KEY_SPACE, GLFW_KEY_LEFT_SHIFT},
-                                         moveSpeed{1.f, 1.f, 1.f, 1.f, 1.f, 1.f}, //TODO nicht implemntiert
+                                         moveSpeed{2.f, 2.f, 2.f, 2.f, 2.f, 2.f}, //TODO nicht implemntiert
                                          rotateSpeed{1.f, 1.f},                   //TODO nicht implemntiert
                                          flattenMove(true),                       //TODO nicht implemntiert
                                          enabled(true),
