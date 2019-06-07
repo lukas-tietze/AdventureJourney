@@ -53,17 +53,28 @@ void glutil::RenderToTextureBase::CreateFrameBuffer()
 
     glGenFramebuffers(1, &this->fbo);
     glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
-    util::dbg.WriteLine("Generated Framebuffer %", this->fbo);
+    util::dbg.WriteLine("Created Framebuffer %", this->fbo);
 }
 
 void glutil::RenderToTextureBase::ValidateFrameBuffer()
 {
-    this->ready = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
-
-    if (this->ready)
-        util::dbg.WriteLine("Created Framebuffer!");
-    else
-        util::dbg.WriteLine("Failed to create Framebuffer!");
+    switch (glCheckFramebufferStatus(GL_FRAMEBUFFER))
+    {
+    case GL_FRAMEBUFFER_INCOMPLETE_ATTACHMENT:
+        util::dbg.WriteLine("Error: Not all framebuffer attachment points are framebuffer attachment complete. This means that at least one attachment point with a renderbuffer or texture attached has its attached object no longer in existence or has an attached image with a width or height of zero, or the color attachment point has a non-color-renderable image attached, or the depth attachment point has a non-depth-renderable image attached, or the stencil attachment point has a non-stencil-renderable image attached.");
+        break;
+        util::dbg.WriteLine("Error: Not all attached images have the same width and height.");
+        break;
+    case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
+        util::dbg.WriteLine("Error: No images are attached to the framebuffer.");
+        break;
+    case GL_FRAMEBUFFER_UNSUPPORTED:
+        util::dbg.WriteLine("Error: The combination of internal formats of the attached images violates an implementation-dependent set of restrictions.");
+        break;
+    case GL_FRAMEBUFFER_COMPLETE:
+        this->ready = true;
+        break;
+    }
 
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
@@ -100,10 +111,16 @@ void glutil::RenderToTextureBase::SetFrameBufferDirty()
 
 void glutil::RenderToTextureBase::Recreate()
 {
-    this->DestroyFrameBuffer();
+    util::dbg.WriteLine("Creating RenderToTextureBase...");
     this->CreateFrameBuffer();
+
+    util::dbg.WriteLine("\tFilling Framebuffer!");
     this->FillFrameBuffer();
+
     this->ValidateFrameBuffer();
+
+    if (this->ready)
+        util::dbg.WriteLine("Done...\n");
 }
 
 bool glutil::RenderToTextureBase::CheckBeforUsage()
@@ -120,6 +137,7 @@ void glutil::RenderToTextureBase::StartRecording()
         return;
 
     glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void glutil::RenderToTextureBase::Render()
@@ -127,7 +145,7 @@ void glutil::RenderToTextureBase::Render()
     if (!this->CheckBeforUsage())
         return;
 
-    if (this->useUboData || true)
+    if (this->useUboData)
     {
         this->Bind();
         this->Upload(true);

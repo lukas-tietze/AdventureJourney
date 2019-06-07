@@ -131,11 +131,11 @@ gui::DebugScreenBase::DebugScreenBase() : scene(),
 
     this->ppPipe.SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());
     this->ppPipe.SetUseUboData(true);
+    this->ppPipe.SetBindingTarget(0);
     this->ppPipe.SetColorsEnabled(true);
     this->ppPipe.SetDepthAndStencilEnabled(true);
     this->ppPipe.SetColorBufferTextureTarget(GL_TEXTURE0);
     this->ppPipe.SetDepthStencilBufferTextureTarget(GL_TEXTURE1);
-    this->ppPipe.SetBindingTarget(0);
     this->ppPipe.Update();
     this->ppPipe.CreateGlObjects();
 }
@@ -159,21 +159,21 @@ void gui::DebugScreenBase::Render()
     auto dp = this->scene.GetProgram(PR_DEPTH);
 
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    this->ppPipe.StartRecording();
+    
     glDepthFunc(GL_LESS);
 
     dp->Use();
     this->scene.Render();
-
-    // this->ppPipe.StartRecording();
 
     glDepthFunc(GL_EQUAL);
 
     rp->Use();
     this->scene.Render();
 
-    // pp->Use();
-    // this->ppPipe.Render();
+    pp->Use();
+    this->ppPipe.Render();
 
     this->AfterRender();
 }

@@ -58,6 +58,8 @@ void glutil::PostProcessingPipeline::FillFrameBuffer()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, this->GetWidth(), this->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->colorTexture, 0);
+
+        util::dbg.WriteLine("\tCreated color attachment!");
     }
 
     if (this->requireDepthStencil)
@@ -70,6 +72,8 @@ void glutil::PostProcessingPipeline::FillFrameBuffer()
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, this->GetWidth(), this->GetHeight(), 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, nullptr);
         glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, this->depthStencilTexture, 0);
+
+        util::dbg.WriteLine("\tCreated depth & stencil attachment!");
     }
     else
     {
@@ -78,6 +82,8 @@ void glutil::PostProcessingPipeline::FillFrameBuffer()
         glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, this->GetWidth(), this->GetHeight());
         glBindRenderbuffer(GL_RENDERBUFFER, 0);
         glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, this->rbo);
+
+        util::dbg.WriteLine("\tCreated renderbuffer for depth and stencil buffers!");
     }
 }
 

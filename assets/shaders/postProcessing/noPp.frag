@@ -4,9 +4,10 @@ in vec2 vTex;
 
 layout(location = 0) uniform sampler2D color;
 
-out vec4 clr;
+out vec4 fclr;
 
 void main()
 {
-    clr = texture(color, vTex);
+    fclr = texture(color, vTex);
+    // fclr = vec4(vTex, 0.0, 1.0);
 }
