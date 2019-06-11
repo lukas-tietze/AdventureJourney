@@ -1,50 +1,73 @@
 #include "Objects.hpp"
 
-glutil::LightSet::Light::Light(LightSet *c, size_t i) : ConstLight(c, i),
-                                                        modifiableCollection(c)
+glutil::Light::Light()
 {
 }
 
-glutil::LightSet::Light &glutil::LightSet::Light::SetPosition(const glm::vec3 &pos)
+glutil::Light &glutil::Light::SetPosition(const glm::vec3 &pos)
 {
-    this->modifiableCollection->data[this->id].position_type.x = pos.x;
-    this->modifiableCollection->data[this->id].position_type.y = pos.y;
-    this->modifiableCollection->data[this->id].position_type.z = pos.z;
-    this->modifiableCollection->SetDirty();
+    this->position_type.x = pos.x;
+    this->position_type.y = pos.y;
+    this->position_type.z = pos.z;
 
     return *this;
 }
 
-glutil::LightSet::Light &glutil::LightSet::Light::SetType(LightType type)
+glutil::Light &glutil::Light::SetType(LightType type)
 {
-    this->modifiableCollection->data[this->id].position_type.w = static_cast<uint32_t>(type);
-    this->modifiableCollection->SetDirty();
+    this->position_type.w = static_cast<uint32_t>(type);
 
     return *this;
 }
 
-glutil::LightSet::Light &glutil::LightSet::Light::SetColor(const glm::vec3 &clr)
+glutil::Light &glutil::Light::SetColor(const glm::vec3 &clr)
 {
-    this->modifiableCollection->data[this->id].color_ambientFactor.r = clr.r;
-    this->modifiableCollection->data[this->id].color_ambientFactor.g = clr.g;
-    this->modifiableCollection->data[this->id].color_ambientFactor.b = clr.b;
-    this->modifiableCollection->SetDirty();
+    this->color_ambientFactor.r = clr.r;
+    this->color_ambientFactor.g = clr.g;
+    this->color_ambientFactor.b = clr.b;
 
     return *this;
 }
 
-glutil::LightSet::Light &glutil::LightSet::Light::SetAmbientFactor(float f)
+glutil::Light &glutil::Light::SetAmbientFactor(float f)
 {
-    this->modifiableCollection->data[this->id].color_ambientFactor.a = f;
-    this->modifiableCollection->SetDirty();
+    this->color_ambientFactor.a = f;
 
     return *this;
 }
 
-glutil::LightSet::Light &glutil::LightSet::Light::SetActive(bool active)
+glutil::Light &glutil::Light::SetActive(bool active)
 {
-    this->modifiableCollection->data[this->id].spotExponent_size_enabled.w = active;
-    this->modifiableCollection->SetDirty();
+    this->spotExponent_size_enabled.w = active;
 
     return *this;
+}
+
+glm::vec3 glutil::Light::GetPosition() const
+{
+    return glm::vec3(this->position_type.x,
+                     this->position_type.y,
+                     this->position_type.z);
+}
+
+glutil::LightType glutil::Light::GetType() const
+{
+    return static_cast<LightType>(static_cast<int>(this->position_type.w));
+}
+
+glm::vec3 glutil::Light::GetColor() const
+{
+    return glm::vec3(this->color_ambientFactor.r,
+                     this->color_ambientFactor.g,
+                     this->color_ambientFactor.b);
+}
+
+float glutil::Light::GetAmbientFactor() const
+{
+    return this->color_ambientFactor.a;
+}
+
+bool glutil::Light::IsActive() const
+{
+    return this->spotExponent_size_enabled.w;
 }

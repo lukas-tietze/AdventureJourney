@@ -49,21 +49,31 @@ public:
 #include "libGlUtil/src/Objects/StaticUboOwner.inl"
 
 template <class TData>
-class DynamicUboOwner : public UboOwner
+class VectoredUboOwner : public UboOwner
 {
 protected:
     std::vector<TData> data;
 
-public:
-    DynamicUboOwner();
-
     void Resize();
+
+public:
+    VectoredUboOwner();
+
+    TData &Add();
+    TData &Add(const TData &);
+    void Clear();
+    size_t Size() const;
+    bool Remove(const TData &);
+    bool RemoveAt(int index);
+
+    TData &operator[](size_t i);
+    const TData &operator[](size_t i) const;
 };
 
-#include "libGlUtil/src/Objects/DynamicUboOwner.inl"
+#include "libGlUtil/src/Objects/VectoredUboOwner.inl"
 
 template <class TData, class TAccessor, class TConstAccessor>
-class UboSet : public DynamicUboOwner<TData>
+class UboSet : public VectoredUboOwner<TData>
 {
 public:
     TAccessor Add();
@@ -450,71 +460,42 @@ public:
     const Camera *GetCamera() const;
 };
 
-#pragma pack(push, 1)
-struct LightSourceUboData
-{
-    glm::vec4 position_type;
-    glm::vec4 color_ambientFactor;
-    glm::vec4 spotDir_cutOff;
-    glm::vec4 spotExponent_size_enabled; // z  unused!
-    glm::mat4 worldSpaceToShadowMap;
-};
-#pragma pack(pop)
-
 enum class LightType
 {
     Directional,
     Point,
 };
 
-class LightSet : public DynamicUboOwner<LightSourceUboData>
+#pragma pack(push, 1)
+class Light
 {
-    friend class ConstLight;
-    friend class Light;
+private:
+    glm::vec4 position_type;
+    glm::vec4 color_ambientFactor;
+    glm::vec4 spotDir_cutOff;
+    glm::vec4 spotExponent_size_enabled; // z  unused!
+    glm::mat4 worldSpaceToShadowMap;
 
 public:
-    class ConstLight
-    {
-        friend LightSet;
+    glm::vec3 GetPosition() const;
+    Light &SetPosition(const glm::vec3 &);
 
-    protected:
-        size_t id;
-        const LightSet *collection;
+    LightType GetType() const;
+    Light &SetType(LightType);
 
-        ConstLight(const LightSet *, size_t);
+    float GetAmbientFactor() const;
+    Light &SetAmbientFactor(float);
 
-    public:
-        glm::vec3 GetPosition() const;
-        LightType GetType() const;
-        glm::vec3 GetColor() const;
-        float GetAmbientFactor() const;
-        bool IsActive() const;
-    };
+    bool IsActive() const;
+    Light &SetActive(bool);
 
-    class Light : public ConstLight
-    {
-        friend LightSet;
-
-    private:
-        LightSet *modifiableCollection;
-
-        Light(LightSet *, size_t);
-
-    public:
-        Light &SetPosition(const glm::vec3 &);
-        Light &SetType(LightType);
-        Light &SetColor(const glm::vec3 &);
-        Light &SetAmbientFactor(float);
-        Light &SetActive(bool);
-    };
-
-    Light Add();
-    void Clear();
-    size_t Size() const;
-
-    Light operator[](size_t i);
-    ConstLight operator[](size_t i) const;
+    glm::vec3 GetColor() const;
+    Light &SetColor(const glm::vec3 &);
 };
+#pragma pack(pop)
+
+typedef VectoredUboOwner<Light> LightSet;
+typedef StaticUboOwner<Light> MonoLight;
 
 #pragma pack(push, 1)
 struct MaterialUboData
@@ -741,7 +722,7 @@ struct BitMapFontUboData
 };
 #pragma pack(pop)
 
-class BitMapFont : public DynamicUboOwner<BitMapFontUboData>
+class BitMapFont : public VectoredUboOwner<BitMapFontUboData>
 {
 private:
     Texture tex;
