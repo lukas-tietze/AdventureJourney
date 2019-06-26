@@ -143,13 +143,8 @@ public:
 class DeferredRenderingPipeline : public RenderToTextureBase
 {
 private:
-    GLuint positionTex;
-    GLuint positionTarget;
-    GLuint normalTex;
-    GLuint normalTarget;
-    GLuint colorTex;
-    GLuint colorTarget;
-    GLuint rbo;
+    GLuint textures[4];
+    GLuint targets[4];
 
 protected:
     virtual void DestroyGlObjects();
@@ -165,12 +160,10 @@ public:
     DeferredRenderingPipeline(const DeferredRenderingPipeline &) = delete;
     virtual ~DeferredRenderingPipeline();
 
-    void SetPositionTex(GLuint);
-    void SetPositionTarget(GLuint);
-    void SetNormalTex(GLuint);
-    void SetNormalTarget(GLuint);
-    void SetColorTex(GLuint);
-    void SetColorTarget(GLuint);
+    void SetNormalTexureBindingTarget(GLuint);
+    void SetMaterialTexureBindingTarget(GLuint);
+    void SetAlbedoTexureBindingTarget(GLuint);
+    void SetDepthTexureBindingTarget(GLuint);
 
     DeferredRenderingPipeline &operator=(const DeferredRenderingPipeline &) = delete;
     DeferredRenderingPipeline &operator=(DeferredRenderingPipeline &&);
@@ -495,7 +488,6 @@ public:
 #pragma pack(pop)
 
 typedef VectoredUboOwner<Light> LightSet;
-typedef StaticUboOwner<Light> MonoLight;
 
 #pragma pack(push, 1)
 struct MaterialUboData

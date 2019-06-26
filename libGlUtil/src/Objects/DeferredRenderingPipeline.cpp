@@ -1,12 +1,33 @@
 #include "Objects.hpp"
 
-glutil::DeferredRenderingPipeline::DeferredRenderingPipeline() : positionTex(0),
-                                                                 positionTarget(GL_TEXTURE0),
-                                                                 normalTex(0),
-                                                                 normalTarget(GL_TEXTURE1),
-                                                                 colorTex(0),
-                                                                 colorTarget(GL_TEXTURE2),
-                                                                 rbo(0)
+namespace
+{
+constexpr int ALBEDO = 0;
+constexpr int NORMAL = 1;
+constexpr int MATERIAL = 2;
+constexpr int DEPTH = 3;
+
+// constexpr GLenum FORMATS[4] = {
+//     GL_SRGB8,
+//     GL_RG16,
+//     GL_RGB5_A1,
+//     GL_DEPTH_COMPONENT24,
+// };
+
+constexpr GLenum FORMATS[4] = {
+    GL_RGB,
+    GL_RGB,
+    GL_RGBA,
+    GL_DEPTH_COMPONENT24,
+};
+} // namespace
+
+glutil::DeferredRenderingPipeline::DeferredRenderingPipeline() : textures{0, 0, 0, 0},
+                                                                 targets{
+                                                                     GL_TEXTURE0,
+                                                                     GL_TEXTURE1,
+                                                                     GL_TEXTURE2,
+                                                                     GL_TEXTURE3}
 {
 }
 
@@ -22,47 +43,22 @@ glutil::DeferredRenderingPipeline::~DeferredRenderingPipeline()
 
 void glutil::DeferredRenderingPipeline::DestroyGlObjects()
 {
-    if (this->positionTex)
-    {
-        glDeleteTextures(1, &this->positionTex);
-        this->positionTex = 0;
-    }
+    glDeleteTextures(4, this->textures);
 
-    if (this->normalTex)
-    {
-        glDeleteTextures(1, &this->normalTex);
-        this->normalTex = 0;
-    }
-
-    if (this->colorTex)
-    {
-        glDeleteTextures(1, &this->colorTex);
-        this->colorTex = 0;
-    }
-
-    if (this->rbo)
-    {
-        glDeleteRenderbuffers(1, &this->rbo);
-        this->rbo = 0;
-    }
+    for (int i = 0; i < 4; i++)
+        this->textures[i] = 0;
 }
 
 void glutil::DeferredRenderingPipeline::TransferFrom(DeferredRenderingPipeline &other)
 {
     this->RenderToTextureBase::TransferFrom(other);
 
-    this->positionTex = other.positionTex;
-    this->positionTarget = other.positionTarget;
-    this->normalTex = other.normalTex;
-    this->normalTarget = other.normalTarget;
-    this->colorTex = other.colorTex;
-    this->colorTarget = other.colorTarget;
-    this->rbo = other.rbo;
-
-    other.positionTex = 0;
-    other.normalTex = 0;
-    other.colorTex = 0;
-    other.rbo = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        this->textures[i] = other.textures[i];
+        other.textures[i] = 0;
+        this->targets[i] = other.targets[i];
+    }
 }
 
 void glutil::DeferredRenderingPipeline::FillFrameBuffer()
@@ -70,39 +66,22 @@ void glutil::DeferredRenderingPipeline::FillFrameBuffer()
     this->DestroyGlObjects();
 
     glActiveTexture(GL_TEXTURE0);
+    glGenTextures(4, &this->textures[0]);
 
-    glGenTextures(1, &this->positionTex);
-    glBindTexture(GL_TEXTURE_2D, this->positionTex);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, this->GetWidth(), this->GetHeight(), 0, GL_RGB, GL_FLOAT, nullptr);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->colorTex, 0);
+    for (int i = 0; i < 4; i++)
+    {
+        glBindTexture(GL_TEXTURE_2D, this->textures[i]);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexImage2D(GL_TEXTURE_2D, 0, FORMATS[i], this->GetWidth(), this->GetHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
+    }
 
-    glGenTextures(1, &this->normalTex);
-    glBindTexture(GL_TEXTURE_2D, this->normalTex);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB16F, this->GetWidth(), this->GetHeight(), 0, GL_RGB, GL_FLOAT, nullptr);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, this->normalTex, 0);
-
-    glGenTextures(1, &this->colorTex);
-    glBindTexture(GL_TEXTURE_2D, this->colorTex);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, this->GetWidth(), this->GetHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
-    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, this->colorTex, 0);
-
-    glGenRenderbuffers(1, &this->rbo);
-    glBindRenderbuffer(GL_RENDERBUFFER, this->rbo);
-    glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, this->GetWidth(), this->GetHeight());
-    glBindRenderbuffer(GL_RENDERBUFFER, 0);
-    glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, this->rbo);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, this->textures[ALBEDO], 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, this->textures[NORMAL], 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, this->textures[MATERIAL], 0);
+    glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, this->textures[DEPTH], 0);
 }
 
 void glutil::DeferredRenderingPipeline::BeginRender()
@@ -114,70 +93,36 @@ void glutil::DeferredRenderingPipeline::BeginRender()
     };
 
     glDrawBuffers(3, attachements);
-    glActiveTexture(this->positionTarget);
-    glBindTexture(GL_TEXTURE_2D, this->positionTex);
-    glActiveTexture(this->normalTarget);
-    glBindTexture(GL_TEXTURE_2D, this->normalTex);
-    glActiveTexture(this->colorTarget);
-    glBindTexture(GL_TEXTURE_2D, this->colorTex);
+    glActiveTexture(this->targets[ALBEDO]);
+    glBindTexture(GL_TEXTURE_2D, this->textures[ALBEDO]);
+    glActiveTexture(this->targets[NORMAL]);
+    glBindTexture(GL_TEXTURE_2D, this->textures[NORMAL]);
+    glActiveTexture(this->targets[MATERIAL]);
+    glBindTexture(GL_TEXTURE_2D, this->targets[MATERIAL]);
 }
 
 void glutil::DeferredRenderingPipeline::EndRender()
 {
 }
 
-void glutil::DeferredRenderingPipeline::SetPositionTex(GLuint value)
+void glutil::DeferredRenderingPipeline::SetNormalTexureBindingTarget(GLuint value)
 {
-    if (this->positionTex != value)
-    {
-        this->positionTex = value;
-        this->SetFrameBufferDirty();
-    }
+    this->targets[NORMAL] = value;
 }
 
-void glutil::DeferredRenderingPipeline::SetPositionTarget(GLuint value)
+void glutil::DeferredRenderingPipeline::SetMaterialTexureBindingTarget(GLuint value)
 {
-    if (this->positionTarget != value)
-    {
-        this->positionTarget = value;
-        this->SetFrameBufferDirty();
-    }
+    this->targets[MATERIAL] = value;
 }
 
-void glutil::DeferredRenderingPipeline::SetNormalTex(GLuint value)
+void glutil::DeferredRenderingPipeline::SetAlbedoTexureBindingTarget(GLuint value)
 {
-    if (this->normalTex != value)
-    {
-        this->normalTex = value;
-        this->SetFrameBufferDirty();
-    }
+    this->targets[ALBEDO] = value;
 }
 
-void glutil::DeferredRenderingPipeline::SetNormalTarget(GLuint value)
+void glutil::DeferredRenderingPipeline::SetDepthTexureBindingTarget(GLuint value)
 {
-    if (this->normalTarget != value)
-    {
-        this->normalTarget = value;
-        this->SetFrameBufferDirty();
-    }
-}
-
-void glutil::DeferredRenderingPipeline::SetColorTex(GLuint value)
-{
-    if (this->colorTex != value)
-    {
-        this->colorTex = value;
-        this->SetFrameBufferDirty();
-    }
-}
-
-void glutil::DeferredRenderingPipeline::SetColorTarget(GLuint value)
-{
-    if (this->colorTarget != value)
-    {
-        this->colorTarget = value;
-        this->SetFrameBufferDirty();
-    }
+    this->targets[DEPTH] = value;
 }
 
 glutil::DeferredRenderingPipeline &glutil::DeferredRenderingPipeline::operator=(DeferredRenderingPipeline &&other)

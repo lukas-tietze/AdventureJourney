@@ -26,10 +26,11 @@ private:
     bool cullMode;
 
     std::vector<std::tuple<int, const char *>> postProcessProgs;
-    std::vector<std::tuple<int, const char *>> renderProgs;
+    std::vector<std::tuple<int, const char *>> lightingProgs;
 
     std::string postProcessProg;
     std::string renderProg;
+    std::string lightingProg;
 
     void SetGlState();
 
@@ -37,6 +38,7 @@ protected:
     glutil::Scene scene;
     glutil::CameraUpdater cameraUpdater;
     glutil::PostProcessingPipeline ppPipe;
+    glutil::DeferredRenderingPipeline drPipe;
     glutil::SkyBox skybox;
 
     std::vector<IDebugObject *> objects;
@@ -89,13 +91,13 @@ class DummyLightSource : public IDebugObject
 {
 private:
     glutil::SceneObject *sceneObject;
-    glutil::LightSet::Light light;
+    glutil::Light light;
     float pos;
     float speed;
     float radius;
 
 public:
-    DummyLightSource(glutil::SceneObject *sceneObject, glutil::LightSet::Light light, float pos, float speed, float radius);
+    DummyLightSource(glutil::SceneObject *sceneObject, glutil::Light light, float pos, float speed, float radius);
 
     void Update(double delta);
 };

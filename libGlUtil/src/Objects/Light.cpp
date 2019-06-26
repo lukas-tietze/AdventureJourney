@@ -1,9 +1,5 @@
 #include "Objects.hpp"
 
-glutil::Light::Light()
-{
-}
-
 glutil::Light &glutil::Light::SetPosition(const glm::vec3 &pos)
 {
     this->position_type.x = pos.x;

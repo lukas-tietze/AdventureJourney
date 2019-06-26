@@ -2,10 +2,10 @@
 
 in vec2 vTex;
 
-layout(location = 0) uniform sampler2D pos;
-layout(location = 1) uniform sampler2D nrm;
-layout(location = 2) uniform sampler2D clr;
-layout(location = 3) uniform sampler2D mat;
+layout(location = 0) uniform sampler2D gClr;
+layout(location = 1) uniform sampler2D gNrm;
+layout(location = 2) uniform sampler2D gMat;
+layout(location = 3) uniform sampler2D gDepth;
 
 out vec4 fClr;
 
@@ -13,10 +13,6 @@ vec4 CalcLighting(in vec3 pos, in vec3 normal, in vec3 albedo, in vec4 materialP
 
 void main()
 {
-    vec4 vPos = texture(pos, vTex);
-    vec4 vNrm = texture(nrm, vTex);
-    vec4 vClr = texture(clr, vTex);
-    vec4 vMat = texture(mat, vTex);
-
-    fClr = CalcLighting(vPos.xyz, vNrm.xyz, vClr.rgb, vMat);
+    // fClr = CalcLighting(vPos.xyz, vNrm.xyz, vClr.rgb, vMat);
+    fClr = texture(gClr, vTex);
 }

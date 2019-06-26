@@ -9,11 +9,15 @@ namespace
 {
 constexpr char MAIN_CAM[] = "MAIN_CAM";
 
-constexpr char PR_DEPTH[] = "pr_depth";
+constexpr char RP_DEPTH[] = "rp_depth";
+constexpr char RP_DEFERRED[] = "rp_deferred";
 
-constexpr char RP_COLOR[] = "pr_color";
-constexpr char RP_DEBUG_TEX[] = "pr_debug_tex";
-constexpr char RP_DEBUG_NRM[] = "pr_debug_nrm";
+constexpr char LP_FULL[] = "lp_color";
+constexpr char LP_DEBUG_COLOR[] = "lp_color";
+constexpr char LP_DEBUG_NRM[] = "lp_debug_nrm";
+constexpr char LP_DEBUG_ALBEDO[] = "lp_debug_albedo";
+constexpr char LP_DEBUG_MATERIAL[] = "lp_debug_material";
+constexpr char LP_DEBUG_DEPTH[] = "lp_debug_depth";
 
 constexpr char PP_OFF[] = "pp_off";
 constexpr char PP_PIXELATE[] = "pp_pixelate";
@@ -36,8 +40,9 @@ gui::DebugScreenBase::DebugScreenBase() : scene(),
                                           animationPaused(false),
                                           wireMode(false),
                                           cullMode(false),
-                                          renderProg(RP_COLOR),
-                                          postProcessProg(PP_OFF)
+                                          renderProg(RP_DEFERRED),
+                                          postProcessProg(PP_OFF),
+                                          lightingProg(LP_DEBUG_ALBEDO)
 {
     auto camera = this->scene.GetCamera(MAIN_CAM);
     camera->SetViewDirection(glm::vec3(1.f, 0.f, 0.f));
@@ -49,49 +54,23 @@ gui::DebugScreenBase::DebugScreenBase() : scene(),
     this->scene.SetActiveCamera(MAIN_CAM);
     this->cameraUpdater.SetCamera(camera);
 
-    this->renderProgs.push_back(std::make_tuple(GLFW_KEY_1, RP_COLOR));
-    this->renderProgs.push_back(std::make_tuple(GLFW_KEY_2, RP_DEBUG_TEX));
-    this->renderProgs.push_back(std::make_tuple(GLFW_KEY_3, RP_DEBUG_NRM));
+    this->lightingProgs.push_back(std::make_tuple(GLFW_KEY_1, LP_FULL));
+    this->lightingProgs.push_back(std::make_tuple(GLFW_KEY_2, LP_DEBUG_COLOR));
+    this->lightingProgs.push_back(std::make_tuple(GLFW_KEY_3, LP_DEBUG_NRM));
+    this->lightingProgs.push_back(std::make_tuple(GLFW_KEY_4, LP_DEBUG_ALBEDO));
+    this->lightingProgs.push_back(std::make_tuple(GLFW_KEY_5, LP_DEBUG_MATERIAL));
+    this->lightingProgs.push_back(std::make_tuple(GLFW_KEY_6, LP_DEBUG_DEPTH));
 
-    this->scene.InitProgramFromSources(RP_COLOR,
+    this->scene.InitProgramFromSources(this->renderProg,
                                        {
-                                           "assets/shaders/base/full.vert",
-                                           "assets/shaders/vertex/simple.vert",
-                                           "assets/shaders/base/color.frag",
-                                           "assets/shaders/fragment/lightingPhong.frag",
-                                           "assets/shaders/fragment/materialPropsSimple.frag",
-                                           "assets/shaders/fragment/normalAttrib.frag",
-                                           "assets/shaders/fragment/textureOnly.frag",
+                                           "assets/shaders/base/deferredIn.vert",
+                                           "assets/shaders/base/deferredIn.frag",
                                        });
 
-    this->scene.InitProgramFromSources(RP_DEBUG_TEX,
+    this->scene.InitProgramFromSources(LP_DEBUG_ALBEDO,
                                        {
-                                           "assets/shaders/base/full.vert",
-                                           "assets/shaders/vertex/simple.vert",
-                                           "assets/shaders/base/color.frag",
-                                           "assets/shaders/fragment/lightingDebugTexCoord.frag",
-                                           "assets/shaders/fragment/materialPropsSimple.frag",
-                                           "assets/shaders/fragment/normalAttrib.frag",
-                                           "assets/shaders/fragment/textureOnly.frag",
-                                       });
-
-    this->scene.InitProgramFromSources(RP_DEBUG_NRM,
-                                       {
-                                           "assets/shaders/base/full.vert",
-                                           "assets/shaders/vertex/simple.vert",
-                                           "assets/shaders/base/color.frag",
-                                           "assets/shaders/fragment/lightingDebugNrm.frag",
-                                           "assets/shaders/fragment/materialPropsSimple.frag",
-                                           "assets/shaders/fragment/normalAttrib.frag",
-                                           "assets/shaders/fragment/textureOnly.frag",
-                                       });
-
-    this->scene.InitProgramFromSources(PR_DEPTH,
-                                       {
-                                           "assets/shaders/base/positionOnly.vert",
-                                           "assets/shaders/vertex/simple.vert",
-                                           "assets/shaders/base/depth.frag",
-                                           "assets/shaders/fragment/textureOnly.frag",
+                                           "assets/shaders/base/deferredOut.vert",
+                                           "assets/shaders/base/deferredOut.frag",
                                        });
 
     this->postProcessProgs.push_back(std::make_tuple(GLFW_KEY_1, PP_PIXELATE));
@@ -138,6 +117,11 @@ gui::DebugScreenBase::DebugScreenBase() : scene(),
     this->ppPipe.SetDepthStencilBufferTextureTarget(GL_TEXTURE1);
     this->ppPipe.Update();
     this->ppPipe.CreateGlObjects();
+
+    this->drPipe.SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());
+    this->drPipe.SetUseUboData(false);
+    this->drPipe.Update();
+    this->drPipe.CreateGlObjects();
 }
 
 gui::DebugScreenBase::~DebugScreenBase()
@@ -151,30 +135,23 @@ gui::DebugScreenBase::~DebugScreenBase()
 void gui::DebugScreenBase::Render()
 {
     this->BeforeRender();
-
     this->SetGlState();
 
     auto pp = this->scene.GetProgram(this->postProcessProg);
     auto rp = this->scene.GetProgram(this->renderProg);
-    auto dp = this->scene.GetProgram(PR_DEPTH);
+    auto lp = this->scene.GetProgram(this->lightingProg);
 
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
-    this->ppPipe.StartRecording();
-    
-    glDepthFunc(GL_LESS);
-
-    dp->Use();
-    this->scene.Render();
-
-    glDepthFunc(GL_EQUAL);
+    this->drPipe.StartRecording();
 
     rp->Use();
+
     this->scene.Render();
 
-    pp->Use();
-    this->ppPipe.Render();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+    this->drPipe.Render();
     this->AfterRender();
 }
 
@@ -242,7 +219,7 @@ void gui::DebugScreenBase::Update(double delta)
     }
     else if (glutil::IsKeyDown(KEY_CHANGE_RP))
     {
-        for (const auto kvp : this->renderProgs)
+        for (const auto kvp : this->lightingProgs)
         {
             if (glutil::WasKeyPressed(std::get<0>(kvp)))
             {
@@ -260,6 +237,8 @@ void gui::DebugScreenBase::Update(double delta)
     {
         this->ppPipe.SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());
         this->ppPipe.Update();
+        this->drPipe.SetSize(glutil::GetWindowWidth(), glutil::GetWindowHeight());
+        this->drPipe.Update();
     }
 
     this->AfterUpdate();
