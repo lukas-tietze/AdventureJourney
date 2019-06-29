@@ -14,5 +14,6 @@ vec4 CalcLighting(in vec3 pos, in vec3 normal, in vec3 albedo, in vec4 materialP
 void main()
 {
     // fClr = CalcLighting(vPos.xyz, vNrm.xyz, vClr.rgb, vMat);
-    fClr = texture(gClr, vTex);
+    fClr.rgb = texture(gDepth, vTex).rgb / 2.0;
+    fClr.a = 1.0;
 }

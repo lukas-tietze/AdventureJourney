@@ -68,7 +68,7 @@ vec3 CalcOneLight(in int i, in vec3 N, in vec3 fpos, in vec3 albedo, in vec2 mp)
     return res;
 }
 
-vec3 CalcLighting(in vec3 albedo, in vec4 materialProps, in vec3 normal)
+vec3 CalcLighting(in vec3 albedo, in vec3 materialProps, in vec3 normal)
 {
     vec3 res = vec3(0.0, 0.0, 0.0);
 

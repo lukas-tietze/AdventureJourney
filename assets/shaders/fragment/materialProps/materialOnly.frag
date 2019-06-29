@@ -6,8 +6,8 @@ layout(std140,binding = 4) uniform materialDataBlock
     vec4 properties;
 } material;
 
-vec4 GetMaterialProps()
+vec3 GetMaterialProps()
 {
-    return material.properties;
+    return material.properties.xyz;
 }
 

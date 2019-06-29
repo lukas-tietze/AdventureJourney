@@ -4,10 +4,10 @@ layout(early_fragment_tests) in;
 layout(location = 0) out vec4 fclr;
 
 vec4 GetAlbedo();
-vec4 GetMaterialProps();
+vec3 GetMaterialProps();
 vec3 GetNormal();
 vec3 CalcLighting(in vec3 albedo,
-                  in vec4 material_props,
+                  in vec3 material_props,
                   in vec3 normal);
 
 void main()

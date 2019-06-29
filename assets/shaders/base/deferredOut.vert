@@ -2,13 +2,12 @@
 
 invariant gl_Position;
 
-in vec3 pos;
-in vec2 tex;
+in vec2 pos;
 
 out vec2 vTex;
 
 void main()
 {
-    gl_Position = pos;
-    vTex = tex;
+    gl_Position = vec4(pos, 1.0, 1.0);
+    vTex = pos * vec2(0.5) + vec2(0.5);
 }
