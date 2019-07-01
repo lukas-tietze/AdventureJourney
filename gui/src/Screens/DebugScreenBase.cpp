@@ -65,12 +65,16 @@ gui::DebugScreenBase::DebugScreenBase() : scene(),
                                        {
                                            "assets/shaders/base/deferredIn.vert",
                                            "assets/shaders/base/deferredIn.frag",
+                                           "assets/shaders/fragment/normal/attrib.frag",
+                                           "assets/shaders/fragment/albedo/textureOnly.frag",
+                                           "assets/shaders/fragment/materialProps/null.frag",
                                        });
 
     this->scene.InitProgramFromSources(LP_DEBUG_ALBEDO,
                                        {
                                            "assets/shaders/base/deferredOut.vert",
                                            "assets/shaders/base/deferredOut.frag",
+                                           "assets/shaders/fragment/lighting/phong.frag"
                                        });
 
     this->postProcessProgs.push_back(std::make_tuple(GLFW_KEY_1, PP_PIXELATE));
@@ -122,6 +126,13 @@ gui::DebugScreenBase::DebugScreenBase() : scene(),
     this->drPipe.SetUseUboData(false);
     this->drPipe.Update();
     this->drPipe.CreateGlObjects();
+
+    this->InitShaders();
+    this->InitModels();
+    this->InitCameras();
+    this->InitLights();
+    this->InitScene();
+    this->InitPipelines();
 }
 
 gui::DebugScreenBase::~DebugScreenBase()
@@ -130,6 +141,30 @@ gui::DebugScreenBase::~DebugScreenBase()
         delete obj;
 
     this->objects.clear();
+}
+
+void gui::DebugScreenBase::InitShaders()
+{
+}
+
+void gui::DebugScreenBase::InitModels()
+{
+}
+
+void gui::DebugScreenBase::InitCameras()
+{
+}
+
+void gui::DebugScreenBase::InitLights()
+{
+}
+
+void gui::DebugScreenBase::InitScene()
+{
+}
+
+void gui::DebugScreenBase::InitPipelines()
+{
 }
 
 void gui::DebugScreenBase::Render()
@@ -144,13 +179,9 @@ void gui::DebugScreenBase::Render()
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
     this->drPipe.StartRecording();
-
     rp->Use();
-
     this->scene.Render();
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    lp->Use();
     this->drPipe.Render();
     this->AfterRender();
 }

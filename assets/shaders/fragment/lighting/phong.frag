@@ -1,6 +1,5 @@
 #version 430 core
 
-in vec3 vPositionWs;
 const float CG2PI = 3.14159265359;
 
 layout(std140, binding = 1) uniform cameraDataBlock
@@ -68,13 +67,13 @@ vec3 CalcOneLight(in int i, in vec3 N, in vec3 fpos, in vec3 albedo, in vec2 mp)
     return res;
 }
 
-vec3 CalcLighting(in vec3 albedo, in vec3 materialProps, in vec3 normal)
+vec3 CalcLighting(in vec3 fpos, in vec3 normal, in vec3 albedo, in vec3 materialProps)
 {
     vec3 res = vec3(0.0, 0.0, 0.0);
 
     for(int i = 0; i < 1; i++) 
         if(LEnabled(i))
-            res += CalcOneLight(i, normal, vPositionWs, albedo, materialProps.xy);
+            res += CalcOneLight(i, normal, fpos, albedo, materialProps.xy);
 
     return res;
 }

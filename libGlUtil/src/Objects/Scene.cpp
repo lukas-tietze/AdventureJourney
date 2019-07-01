@@ -249,11 +249,15 @@ glutil::Program *glutil::Scene::InitProgramFromSources(const resourceId_t &id, c
 
 void glutil::Scene::Render()
 {
+    glutil::PushDebugGroup("scene.Render()");
+
     if (this->activeCamera)
     {
         this->activeCamera->Bind();
         this->activeCamera->Upload();
     }
+
+    glutil::NextDebugGroup("scene.Render()");
 
     if (this->activeLightSet)
     {
@@ -261,6 +265,10 @@ void glutil::Scene::Render()
         this->activeLightSet->Upload();
     }
 
+    glutil::NextDebugGroup("scene.Render()");
+
     for (auto &obj : this->objects)
         obj.second->Render();
+
+    glutil::PopDebugGroup();
 }

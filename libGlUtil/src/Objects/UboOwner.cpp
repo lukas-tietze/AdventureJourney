@@ -23,6 +23,7 @@ void glutil::UboOwner::CreateGlObjects()
     glBindBuffer(GL_UNIFORM_BUFFER, this->ubo);
     glBufferData(GL_UNIFORM_BUFFER, this->dataSize, this->data, GL_STATIC_DRAW);
     this->bufferDirty = false;
+    this->contentDirty = false;
 }
 
 void glutil::UboOwner::DestroyGlObjects()
@@ -75,7 +76,7 @@ void glutil::UboOwner::SetData(void *data, size_t size)
 
 void glutil::UboOwner::Update(bool force)
 {
-    if (this->contentDirty || force)
+    if (this->bufferDirty || force)
     {
         this->CreateGlObjects();
     }

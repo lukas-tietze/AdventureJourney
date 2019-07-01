@@ -19,14 +19,16 @@ template <class TData>
 TData &glutil::VectoredUboOwner<TData>::Add()
 {
     this->data.push_back(TData());
+    this->Resize();
 
     return this->data.back();
 }
 
 template <class TData>
-TData &glutil::VectoredUboOwner<TData>::Add(const TData &)
+TData &glutil::VectoredUboOwner<TData>::Add(const TData &item)
 {
-    this->data.push_back(TData());
+    this->data.push_back(item);
+    this->Resize();
 
     return this->data.back();
 }
@@ -35,6 +37,7 @@ template <class TData>
 void glutil::VectoredUboOwner<TData>::Clear()
 {
     this->data.clear();
+    this->Resize();
 }
 
 template <class TData>
@@ -51,6 +54,8 @@ bool glutil::VectoredUboOwner<TData>::Remove(const TData &item)
     if (pos != this->data.end())
     {
         this->data.erase(pos);
+        this->Resize();
+
         return true;
     }
 
@@ -61,6 +66,7 @@ template <class TData>
 bool glutil::VectoredUboOwner<TData>::RemoveAt(int index)
 {
     this->data.Erase(this->data.begin() + index);
+    this->Resize();
 
     return true;
 }

@@ -87,6 +87,13 @@ bool WasWindowResized();
 bool WasMouseMoved();
 bool WasScrolled();
 
+//Debugging
+void PushDebugGroup(const std::string &);
+void PopDebugGroup();
+void NextDebugGroup(const std::string &);
+
+//Screens
+
 class Screen
 {
 public:

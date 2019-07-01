@@ -43,17 +43,23 @@ protected:
 
     std::vector<IDebugObject *> objects;
 
+    virtual void InitShaders();
+    virtual void InitModels();
+    virtual void InitCameras();
+    virtual void InitLights();
+    virtual void InitScene();
+    virtual void InitPipelines();
+    virtual void BeforeRender() = 0;
+    virtual void AfterRender() = 0;
+    virtual void BeforeUpdate() = 0;
+    virtual void AfterUpdate() = 0;
+
 public:
     DebugScreenBase();
     ~DebugScreenBase();
 
     void Render();
     void Update(double);
-
-    virtual void BeforeRender() = 0;
-    virtual void AfterRender() = 0;
-    virtual void BeforeUpdate() = 0;
-    virtual void AfterUpdate() = 0;
 };
 
 class DummyScreen : public DebugScreenBase
