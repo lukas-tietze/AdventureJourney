@@ -249,26 +249,18 @@ glutil::Program *glutil::Scene::InitProgramFromSources(const resourceId_t &id, c
 
 void glutil::Scene::Render()
 {
-    glutil::PushDebugGroup("scene.Render()");
-
     if (this->activeCamera)
     {
-        this->activeCamera->Bind();
         this->activeCamera->Upload();
+        this->activeCamera->Bind();
     }
-
-    glutil::NextDebugGroup("scene.Render()");
 
     if (this->activeLightSet)
     {
-        this->activeLightSet->Bind();
         this->activeLightSet->Upload();
+        this->activeLightSet->Bind();
     }
-
-    glutil::NextDebugGroup("scene.Render()");
 
     for (auto &obj : this->objects)
         obj.second->Render();
-
-    glutil::PopDebugGroup();
 }

@@ -30,13 +30,14 @@ gui::DummyScreen::DummyScreen() : DebugScreenBase()
 {
     auto lights = this->scene.GetLightSet(MAIN_LIGHT);
     lights->SetBindingTarget(4);
-    auto light = lights->Add();
+    auto &light = lights->Add();
     light.SetActive(true);
     light.SetAmbientFactor(0.3f);
     light.SetColor(glm::vec3(1.0f, 1.0f, 1.0f) * 0.75f);
     light.SetPosition(glm::vec3(0.f, 1.f, 0.f));
     light.SetType(glutil::LightType::Point);
     this->scene.SetActiveLightSet(MAIN_LIGHT);
+    lights->CreateGlObjects();
 
     auto bmf = this->scene.GetFont("BMF");
     bmf->Load("assets/fonts/BMFTest.json");

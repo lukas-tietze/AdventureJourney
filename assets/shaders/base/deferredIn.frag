@@ -14,9 +14,14 @@ vec3 GetNormal();
 vec4 GetAlbedo();
 vec3 GetMaterialProps();
 
+const float ONE_HALF_V1 = 0.5;
+const vec2 ONE_HALF_V2 = vec2(0.5);
+const vec3 ONE_HALF_V3 = vec3(0.5);
+const vec4 ONE_HALF_V4 = vec4(0.5);
+
 void main()
 {
     gColor = GetAlbedo().rgb;
-    gNormal = GetNormal();
+    gNormal = GetNormal() * ONE_HALF_V3 + ONE_HALF_V3;
     gMaterial = GetMaterialProps();
 }

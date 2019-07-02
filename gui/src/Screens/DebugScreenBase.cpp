@@ -46,7 +46,7 @@ gui::DebugScreenBase::DebugScreenBase() : scene(),
 {
     auto camera = this->scene.GetCamera(MAIN_CAM);
     camera->SetViewDirection(glm::vec3(1.f, 0.f, 0.f));
-    camera->SetPosition(glm::vec3(0.f, 0.f, 0.f));
+    camera->SetPosition(glm::vec3(-2.f, 3.f, 0.f));
     camera->SetUp(glutil::AXIS_Y);
     camera->SetBindingTarget(1);
     camera->CreateGlObjects();
@@ -74,7 +74,7 @@ gui::DebugScreenBase::DebugScreenBase() : scene(),
                                        {
                                            "assets/shaders/base/deferredOut.vert",
                                            "assets/shaders/base/deferredOut.frag",
-                                           "assets/shaders/fragment/lighting/phong.frag"
+                                           "assets/shaders/fragment/lighting/phong.frag",
                                        });
 
     this->postProcessProgs.push_back(std::make_tuple(GLFW_KEY_1, PP_PIXELATE));
@@ -169,7 +169,12 @@ void gui::DebugScreenBase::InitPipelines()
 
 void gui::DebugScreenBase::Render()
 {
+    glutil::PushDebugGroup("Render loop");
+
+    glutil::PushDebugGroup("Before Render");
     this->BeforeRender();
+
+    glutil::NextDebugGroup("Set Gl State");
     this->SetGlState();
 
     auto pp = this->scene.GetProgram(this->postProcessProg);
@@ -178,12 +183,21 @@ void gui::DebugScreenBase::Render()
 
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
+    glutil::NextDebugGroup("dr record");
     this->drPipe.StartRecording();
     rp->Use();
     this->scene.Render();
+
+    glutil::NextDebugGroup("dr render");
     lp->Use();
+
     this->drPipe.Render();
+
+    glutil::NextDebugGroup("After Render");
     this->AfterRender();
+
+    glutil::PopDebugGroup();
+    glutil::PopDebugGroup();
 }
 
 void gui::DebugScreenBase::SetGlState()

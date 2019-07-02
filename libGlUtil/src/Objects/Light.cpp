@@ -1,5 +1,13 @@
 #include "Objects.hpp"
 
+glutil::Light::Light() : position_type(0.f),
+                         color_ambientFactor(0.f),
+                         spotDir_cutOff(0.f),
+                         spotExponent_size_enabled(0.f),
+                         worldSpaceToShadowMap(1.f)
+{
+}
+
 glutil::Light &glutil::Light::SetPosition(const glm::vec3 &pos)
 {
     this->position_type.x = pos.x;

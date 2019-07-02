@@ -22,7 +22,7 @@ struct Light
 
 layout(std140, binding = 4) uniform globalLightDataBlock
 {
-    Light lights[4];
+    Light lights[1];
 } global;
 
 #define LPos(i) (global.lights[i].position_type.xyz)
@@ -37,34 +37,7 @@ layout(std140, binding = 4) uniform globalLightDataBlock
 
 vec3 CalcOneLight(in int i, in vec3 N, in vec3 fpos, in vec3 albedo, in vec2 mp)
 {
-    vec3 res = LColor(i) * LAmbient(i);
-    vec3 L;
-    float a;
-
-    if(LIsDir(i))
-    {
-        L = LPos(i);
-        a = 1.0;
-    }
-    else
-    {
-        L = normalize(LPos(i) - fpos);
-        a = 1.0 / (1 + pow(length(LPos(i) - fpos), 2));
-    }
-
-    float NdotL = dot(N, L);
-    
-    if(NdotL > 0)
-    {
-        res += a * NdotL * LColor(i);
-
-        vec3 viewDir = normalize(camera.invViewMat[3].xyz - fpos);
-        vec3 reflectDir = reflect(-L, N);
-
-        res += LColor(i) * a * pow(max(dot(viewDir, reflectDir), 0.0), 32);
-    }
-
-    return res;
+    return albedo * LColor(i) * LAmbient(i) * N;
 }
 
 vec3 CalcLighting(in vec3 fpos, in vec3 normal, in vec3 albedo, in vec3 materialProps)
@@ -77,3 +50,4 @@ vec3 CalcLighting(in vec3 fpos, in vec3 normal, in vec3 albedo, in vec3 material
 
     return res;
 }
+

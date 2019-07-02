@@ -120,7 +120,7 @@ void glutil::RenderToTextureBase::Recreate()
     this->ValidateFrameBuffer();
 
     if (this->ready)
-        util::dbg.WriteLine("Done...\n");
+        util::dbg.WriteLine("Done!\n");
 }
 
 bool glutil::RenderToTextureBase::CheckBeforUsage()

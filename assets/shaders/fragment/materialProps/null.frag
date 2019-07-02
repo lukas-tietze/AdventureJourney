@@ -2,6 +2,6 @@
 
 vec3 GetMaterialProps()
 {
-    return vec3(0.0);
+    return vec3(1.0);
 }
 

@@ -99,16 +99,12 @@ void glutil::DeferredRenderingPipeline::BeginRender()
 {
     glActiveTexture(this->targets[ALBEDO]);
 
-    glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, this->textures[ALBEDO]);
     glActiveTexture(this->targets[NORMAL]);
-    glActiveTexture(GL_TEXTURE1);
     glBindTexture(GL_TEXTURE_2D, this->textures[NORMAL]);
     glActiveTexture(this->targets[MATERIAL]);
-    glActiveTexture(GL_TEXTURE2);
     glBindTexture(GL_TEXTURE_2D, this->textures[MATERIAL]);
     glActiveTexture(this->targets[DEPTH_STENCIL]);
-    glActiveTexture(GL_TEXTURE3);
     glBindTexture(GL_TEXTURE_2D, this->textures[DEPTH_STENCIL]);
 }
 

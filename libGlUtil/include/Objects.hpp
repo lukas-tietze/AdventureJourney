@@ -470,6 +470,8 @@ private:
     glm::mat4 worldSpaceToShadowMap;
 
 public:
+    Light();
+
     glm::vec3 GetPosition() const;
     Light &SetPosition(const glm::vec3 &);
 

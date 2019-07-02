@@ -10,7 +10,7 @@ void glutil::PopDebugGroup()
     glPopDebugGroup();
 }
 
-void glutil::NextDebugGroup(const std::string &)
+void glutil::NextDebugGroup(const std::string &msg)
 {
     glPopDebugGroup();
     glPushDebugGroup(GL_DEBUG_SOURCE_APPLICATION, 0, msg.length(), msg.c_str());

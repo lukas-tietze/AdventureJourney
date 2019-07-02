@@ -13,8 +13,16 @@ vec4 CalcLighting(in vec3 pos, in vec3 normal, in vec3 albedo, in vec3 materialP
 
 void main()
 {
-    fClr = CalcLighting(vec3(gl_FragCoord.xy, texture(gDepth, vTexcoord).r),
-     texture(gNormal, vTexcoord).xyz, 
-     texture(gColor, vTexcoord).rgb,
-     texture(gMaterial, vTexcoord).rgb);
+    vec3 color = texture(gColor, vTexcoord).rgb;
+    vec3 normal = texture(gNormal, vTexcoord).xyz * vec3(2.0) + vec3(-1.0);
+    vec3 materialProperties = texture(gMaterial, vTexcoord).rgb;
+    float depth = texture(gDepth, vTexcoord).r;
+
+    fClr = CalcLighting(vec3(gl_FragCoord.xy, depth),
+                        normal,
+                        color,
+                        materialProperties);
+
+    // fClr.rgb = color * normal * depth;
+    fClr.a = 1.0;
 }
