@@ -74,7 +74,7 @@ gui::DebugScreenBase::DebugScreenBase() : scene(),
                                        {
                                            "assets/shaders/base/deferredOut.vert",
                                            "assets/shaders/base/deferredOut.frag",
-                                           "assets/shaders/fragment/lighting/phong.frag",
+                                           "assets/shaders/fragment/lighting/debug.frag",
                                        });
 
     this->postProcessProgs.push_back(std::make_tuple(GLFW_KEY_1, PP_PIXELATE));

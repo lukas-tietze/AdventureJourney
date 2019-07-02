@@ -16,9 +16,9 @@ void main()
     vec3 color = texture(gColor, vTexcoord).rgb;
     vec3 normal = texture(gNormal, vTexcoord).xyz * vec3(2.0) + vec3(-1.0);
     vec3 materialProperties = texture(gMaterial, vTexcoord).rgb;
-    float depth = texture(gDepth, vTexcoord).r;
+    vec3 fPos = vec3(gl_FragCoord.xy / vec2(textureSize(gDepth, 0)), texture(gDepth, vTexcoord).r);
 
-    fClr = CalcLighting(vec3(gl_FragCoord.xy, depth),
+    fClr = CalcLighting(fPos,
                         normal,
                         color,
                         materialProperties);
