@@ -52,6 +52,8 @@ vec3 CalcOneLight(in int i, in vec3 N, in vec3 fpos, in vec2 mp)
         a = 1.0 / (1 + pow(length(LPos(i) - fpos), 2));
     }
 
+    a = 1.0;
+
     float NdotL = dot(N, L);
     
     if(NdotL > 0)

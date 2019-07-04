@@ -175,35 +175,11 @@ void gui::DebugScreenBase::Render()
     this->BeforeRender();
 
     glutil::NextDebugGroup("Set Gl State");
-    this->SetGlState();
-
-    auto pp = this->scene.GetProgram(this->postProcessProg);
-    auto rp = this->scene.GetProgram(this->renderProg);
-    auto lp = this->scene.GetProgram(this->lightingProg);
-
     glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
-
-    glutil::NextDebugGroup("dr record");
-    this->drPipe.StartRecording();
-    rp->Use();
-    this->scene.Render();
-
-    glutil::NextDebugGroup("dr render");
-    lp->Use();
-
-    this->drPipe.Render();
-
-    glutil::NextDebugGroup("After Render");
-    this->AfterRender();
-
-    glutil::PopDebugGroup();
-    glutil::PopDebugGroup();
-}
-
-void gui::DebugScreenBase::SetGlState()
-{
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
     glPolygonMode(GL_FRONT_AND_BACK, this->wireMode ? GL_LINE : GL_FILL);
     glEnable(GL_DEPTH_TEST);
+    glEnable(GL_STENCIL_TEST);
 
     if (this->cullMode)
     {
@@ -214,6 +190,32 @@ void gui::DebugScreenBase::SetGlState()
     {
         glDisable(GL_CULL_FACE);
     }
+
+    auto pp = this->scene.GetProgram(this->postProcessProg);
+    auto rp = this->scene.GetProgram(this->renderProg);
+    auto lp = this->scene.GetProgram(this->lightingProg);
+
+    glutil::NextDebugGroup("dr record");
+    this->drPipe.StartRecording();
+    rp->Use();
+    glStencilFunc(GL_ALWAYS, 1, 0xff);
+    glStencilMask(0xff);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
+    this->scene.Render();
+
+    glutil::NextDebugGroup("dr render");
+    lp->Use();
+
+    glStencilFunc(GL_EQUAL, 1, 0xff);
+    glStencilMask(0x00);
+    glDisable(GL_STENCIL_TEST);
+    this->drPipe.Render();
+
+    glutil::NextDebugGroup("After Render");
+    this->AfterRender();
+
+    glutil::PopDebugGroup();
+    glutil::PopDebugGroup();
 }
 
 void gui::DebugScreenBase::Update(double delta)

@@ -136,7 +136,7 @@ void glutil::RenderToTextureBase::StartRecording()
     if (!this->CheckBeforUsage())
         return;
 
-    glBindFramebuffer(GL_FRAMEBUFFER, this->fbo);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, this->fbo);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
@@ -153,7 +153,12 @@ void glutil::RenderToTextureBase::Render()
 
     this->BeginRender();
 
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    // glBlitFramebuffer(0, 0, this->data.width, this->data.height,
+    //                   0, 0, this->data.width, this->data.height,
+    //                   GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT,
+    //                   GL_NEAREST);
+    glBindFramebuffer(GL_READ_FRAMEBUFFER, this->fbo);
+    glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glDisable(GL_DEPTH_TEST);
 

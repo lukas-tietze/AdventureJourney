@@ -31,9 +31,6 @@ private:
     std::string postProcessProg;
     std::string renderProg;
     std::string lightingProg;
-
-    void SetGlState();
-
 protected:
     glutil::Scene scene;
     glutil::CameraUpdater cameraUpdater;
