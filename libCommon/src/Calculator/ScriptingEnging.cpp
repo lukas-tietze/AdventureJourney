@@ -1,6 +1,7 @@
 #include "Calculator.hpp"
 
 #include <unordered_map>
+#include <iostream>
 
 #include "data/String.hpp"
 #include "datetime/Timer.hpp"
@@ -29,42 +30,41 @@ bool util::ScriptingEngine::Action::HasAlias() const
     return !this->alias.empty();
 }
 
-std::vector<util::ScriptingEngine::Action> util::ScriptingEngine::uniqeActions =
-    {
-        Action("tokenize", "t", "Prints the list of tokens of the expression.", &util::ScriptingEngine::Tokenize),
-        Action("parse", "p", "Parses the expression and prints the created postfix expression.", &util::ScriptingEngine::Parse),
-        Action("def", "d", "Evaluates the given expression and defines a variable, which value is the result of the evaluation.", &util::ScriptingEngine::DefineVar),
-        Action("exp", "e", "Defines a variable that contains the given expression.", &util::ScriptingEngine::DefineExp),
-        Action("undef", "ud", "Removes a variable.", &util::ScriptingEngine::Undefine),
-        Action("quit", "q", "Quit the application.", &util::ScriptingEngine::Quit),
-        Action("solve", "s", "Evaluates the expression and prints the result.", &util::ScriptingEngine::Solve),
-        Action("load", "ld", "load a file from the specified path and interpret each line as a command.", &util::ScriptingEngine::LoadFile),
-        Action("err", "|", "Changes the error stream to the specified file. Use :err <std> to print to console.", &util::ScriptingEngine::OpenErr),
-        Action("out", ">", "Changes the output stream to the specified file. Use :out <std> to print to console.", &util::ScriptingEngine::OpenOut),
-        Action("in", "<", "Changes the input stream. Use :in <std> to use the console.", &util::ScriptingEngine::OpenIn),
-        Action("dir", "cd", "Changes the to specified directory and prints the current directory.", &util::ScriptingEngine::ChangeDir),
-        Action("echo", "#", "Use on, off to enable or disable echoing of commands", &util::ScriptingEngine::SetEcho),
-        Action("useAns", "ans", " use on, off to enable or disable the ANS-Variable. If enablad the result of the last calculation will be saved in a variable named ANS", &util::ScriptingEngine::UseAns),
-        Action("clear", "cl", "Clears the screen.", &util::ScriptingEngine::ClearOut),
-        Action("files", "ls", "List all Files and directories in the current directory.", &util::ScriptingEngine::ListFiles),
-        Action("clearvars", "clv", "Delete all variables, except e and pi. Use :clearvars all to also delete e and pi.", &util::ScriptingEngine::ClearVars),
-        Action("help", "h", "Prints the help.", &util::ScriptingEngine::ShowHelp),
-        Action("diagnostic", "dg", "Set diagnostic-Output to the specified stream.", &util::ScriptingEngine::SetDiagnosticOut),
-};
-
-util::ScriptingEngine::ScriptingEngine()
+util::ScriptingEngine::ScriptingEngine() : uniqeActions{
+                                               Action("tokenize", "t", "Prints the list of tokens of the expression.", &util::ScriptingEngine::Tokenize),
+                                               Action("parse", "p", "Parses the expression and prints the created postfix expression.", &util::ScriptingEngine::Parse),
+                                               Action("def", "d", "Evaluates the given expression and defines a variable, which value is the result of the evaluation.", &util::ScriptingEngine::DefineVar),
+                                               Action("exp", "e", "Defines a variable that contains the given expression.", &util::ScriptingEngine::DefineExp),
+                                               Action("undef", "ud", "Removes a variable.", &util::ScriptingEngine::Undefine),
+                                               Action("quit", "q", "Quit the application.", &util::ScriptingEngine::Quit),
+                                               Action("solve", "s", "Evaluates the expression and prints the result.", &util::ScriptingEngine::Solve),
+                                               Action("load", "ld", "load a file from the specified path and interpret each line as a command.", &util::ScriptingEngine::LoadFile),
+                                               Action("err", "|", "Changes the error stream to the specified file. Use :err <std> to print to console.", &util::ScriptingEngine::OpenErr),
+                                               Action("out", ">", "Changes the output stream to the specified file. Use :out <std> to print to console.", &util::ScriptingEngine::OpenOut),
+                                               Action("in", "<", "Changes the input stream. Use :in <std> to use the console.", &util::ScriptingEngine::OpenIn),
+                                               Action("dir", "cd", "Changes the to specified directory and prints the current directory.", &util::ScriptingEngine::ChangeDir),
+                                               Action("echo", "#", "Use on, off to enable or disable echoing of commands", &util::ScriptingEngine::SetEcho),
+                                               Action("useAns", "ans", " use on, off to enable or disable the ANS-Variable. If enablad the result of the last calculation will be saved in a variable named ANS", &util::ScriptingEngine::UseAns),
+                                               Action("clear", "cl", "Clears the screen.", &util::ScriptingEngine::ClearOut),
+                                               Action("files", "ls", "List all Files and directories in the current directory.", &util::ScriptingEngine::ListFiles),
+                                               Action("clearvars", "clv", "Delete all variables, except e and pi. Use :clearvars all to also delete e and pi.", &util::ScriptingEngine::ClearVars),
+                                               Action("help", "h", "Prints the help.", &util::ScriptingEngine::ShowHelp),
+                                               Action("diagnostic", "dg", "Set diagnostic-Output to the specified stream.", &util::ScriptingEngine::SetDiagnosticOut),
+                                           }
 {
     //TODO: Nicht Threadsafe -> Threadsafe wird an dieser Stelle aber auch nicht unbedingt benötigt!
-    if (ScriptingEngine::actions.empty())
+    for (const auto &action : ScriptingEngine::uniqeActions)
     {
-        for (const auto &action : ScriptingEngine::uniqeActions)
-        {
-            ScriptingEngine::actions.insert(std::make_pair(action.name, action));
+        this->actions.insert(std::make_pair(action.name, action));
 
-            if (action.HasAlias())
-                ScriptingEngine::actions.insert(std::make_pair(action.alias, action));
-        }
+        if (action.HasAlias())
+            this->actions.insert(std::make_pair(action.alias, action));
     }
+}
+
+void util::ScriptingEngine::Quit(const std::string &)
+{
+    this->loop = false;
 }
 
 void util::ScriptingEngine::Eval(const std::string &input)
@@ -92,9 +92,9 @@ void util::ScriptingEngine::Eval(const std::string &input)
 
             util::SplitKeyValue(input, command, expression);
 
-            auto actionKvp = ScriptingEngine::actions.find(command.substr(1));
+            auto actionKvp = this->actions.find(command.substr(1));
 
-            if (actionKvp == ScriptingEngine::actions.end())
+            if (actionKvp == this->actions.end())
                 this->HandleUndefinedCommand(command);
             else
                 ((*this).*(actionKvp->second.action))(expression);
@@ -149,7 +149,7 @@ void util::ScriptingEngine::ShowHelp(const std::string &expression)
     {
         this->out.WriteLine("% is an operator: %", expression, this->calculator.GetConfig().GetOperator(expression));
     }
-    else if (ScriptingEngine::actions.find(expression) != ScriptingEngine::actions.end())
+    else if (this->actions.find(expression) != this->actions.end())
     {
         this->out.WriteLine("% is an command: %", expression, actions[expression].description);
     }
@@ -163,7 +163,7 @@ int util::ScriptingEngine::FindSimilarCommands(const std::string &command, std::
 {
     int size = 0;
 
-    for (const auto &kvp : ScriptingEngine::actions)
+    for (const auto &kvp : this->actions)
     {
         const auto &existingCommand = kvp.first;
 
@@ -373,10 +373,48 @@ void util::ScriptingEngine::Tokenize(const std::string &expression)
 void util::ScriptingEngine::LoadFile(const std::string &path)
 {
     //TODO: richtigen Pfad bestimmenn
-    this->EvalScript(util::ReadFile(this->workingDirectory + util::Strip(path)));
+    // this->EvalScript(util::ReadFile(this->workingDirectory + util::Strip(path)));
 }
 
 void util::ScriptingEngine::EvalScript(const std::string &script)
 {
-    //TODO: string parsen, zeilenweise auswerten -> //Kommentar & \\=multiline
+    auto stream = std::stringstream();
+
+    stream.str(script);
+
+    this->EvalStream(stream);
 }
+
+void util::ScriptingEngine::EvalFromStdIn()
+{
+    this->EvalStream(std::cin);
+}
+
+void util::ScriptingEngine::EvalStream(std::istream &in)
+{
+    std::string buf;
+    std::string line;
+    bool append;
+
+    while (this->loop)
+    {
+        this->loop = !std::getline(in, buf).eof();
+
+        if (util::StartsWith(buf, "//"))
+            continue;
+
+        if (append)
+            line.append(buf);
+        else
+            line.assign(buf);
+
+        append = util::EndsWith(line, "\\\\");
+
+        if (!append)
+            this->Eval(line);
+    }
+}
+
+void util::ScriptingEngine::OpenErr(const std::string &) {}
+void util::ScriptingEngine::OpenOut(const std::string &) {}
+void util::ScriptingEngine::OpenIn(const std::string &) {}
