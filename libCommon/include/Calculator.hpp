@@ -409,7 +409,7 @@ private:
 
     typedef void (ScriptingEngine::*action_t)(const std::string &arg);
 
-    void Eval(const std::string &input);
+    void Eval(const std::string &);
     void Tokenize(const std::string &);
     void Parse(const std::string &);
     void DefineVar(const std::string &);
@@ -452,13 +452,15 @@ private:
         bool HasDesciption() const;
     };
 
-    static std::unordered_map<std::string, Action> actions;
-    static std::vector<Action> uniqeActions;
+    std::unordered_map<std::string, Action> actions;
+    std::vector<Action> uniqeActions;
 
 public:
     ScriptingEngine();
 
     void LoadFile(const std::string &);
     void EvalScript(const std::string &);
+    void EvalFromStdIn();
+    void EvalStream(std::istream &);
 };
 } // namespace util

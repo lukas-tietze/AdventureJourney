@@ -1,5 +1,6 @@
 #include "Calculator.hpp"
 #include "Functions.internal.hpp"
+#include "Exception.hpp"
 
 bool util::parsing::CreatePostFixExpression(const std::vector<tokenizing::Token> &tokens, std::vector<ExpressionBase *> &out, const Config &config)
 {
