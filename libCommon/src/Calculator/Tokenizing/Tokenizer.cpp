@@ -91,7 +91,7 @@ bool util::tokenizing::Tokenizer::Tokenize(const std::string &data, const Config
 
     if (this->bracketStack.size() != 0)
     {
-        throw MissingBracketException(this);
+        throw TokenizerException(TokenizerError::MissingBracket, this);
     }
 }
 
@@ -152,7 +152,7 @@ bool util::tokenizing::Tokenizer::ReadNext()
     {
         if (this->bracketStack.size() == 0)
         {
-            throw ExtraClosingBracketException(this);
+            throw TokenizerException(TokenizerError::ExtraClosingBracket, this);
         }
 
         this->pos++;
@@ -167,7 +167,7 @@ bool util::tokenizing::Tokenizer::ReadNext()
 
             if (last != this->config->GetFunctionBrackets().closing)
             {
-                throw MismatchingBracketException(this);
+                throw TokenizerException(TokenizerError::MismatchingBracket, this);
             }
         }
         else
@@ -176,7 +176,7 @@ bool util::tokenizing::Tokenizer::ReadNext()
 
             if (last != this->config->GetBracketMarker().closing)
             {
-                throw MismatchingBracketException(this);
+                throw TokenizerException(TokenizerError::MismatchingBracket, this);
             }
         }
 
@@ -213,7 +213,7 @@ bool util::tokenizing::Tokenizer::ReadNext()
     }
     else
     {
-        throw InvalidCharException(this);
+        throw TokenizerException(TokenizerError::InvalidChar, this);
     }
 }
 
@@ -225,7 +225,7 @@ bool util::tokenizing::Tokenizer::ReadLazyExpression()
     {
         if (this->pos >= this->len)
         {
-            throw UnexpectedEndOfLazyExpressionException(this);
+            throw TokenizerException(TokenizerError::UnexpectedEndOfLazyExpression, this);
         }
 
         pos++;

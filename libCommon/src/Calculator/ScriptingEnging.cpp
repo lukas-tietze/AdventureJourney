@@ -6,6 +6,16 @@
 #include "data/String.hpp"
 #include "datetime/Timer.hpp"
 
+namespace
+{
+bool AsTruthValue(const std::string &s)
+{
+    auto lower = util::ToLower(s);
+
+    return lower == "yes" || lower == "y" || lower == "on";
+}
+} // namespace
+
 util::ScriptingEngine::Action::Action()
 {
 }
@@ -252,6 +262,31 @@ void util::ScriptingEngine::HandleException(const util::Exception &e)
     //TODO
 }
 
+void util::ScriptingEngine::UseAns(const std::string &expression)
+{
+    this->useAns = AsTruthValue(expression);
+}
+
+void util::ScriptingEngine::SetEcho(const std::string &expression)
+{
+    this->echo = AsTruthValue(expression);
+}
+
+void util::ScriptingEngine::ClearOut(const std::string &expression)
+{
+    //TODO...
+}
+
+void util::ScriptingEngine::SetDiagnosticOut(const std::string &expression)
+{
+    //TODO...
+}
+
+void util::ScriptingEngine::ClearVars(const std::string &expression)
+{
+    this->calculator.GetConfig().ClearVariables();
+}
+
 void util::ScriptingEngine::Undefine(const std::string &expression)
 {
     if (expression.empty())
@@ -294,7 +329,7 @@ void util::ScriptingEngine::Define(const std::string &expression, bool compress)
 
     this->calculator.GetConfig().AddVariable(key, res);
 
-    this->out.WriteLine("Defined % as {1}.", key, res->GetValueDescription());
+    this->out.WriteLine("Defined % as %.", key, res);
 }
 
 void util::ScriptingEngine::Solve(const std::string &expression)

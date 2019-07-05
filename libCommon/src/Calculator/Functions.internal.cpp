@@ -5,197 +5,197 @@ namespace
 using util::EvaluationContext;
 using util::IValue;
 
-IValue *FunctionOperatorAdd(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorAdd(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorSub(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorSub(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorMul(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorMul(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorDiv(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorDiv(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorMod(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorMod(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorPow(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorPow(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorEqual(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorEqual(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorNotEqual(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorNotEqual(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorGreater(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorGreater(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorGreaterEqual(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorGreaterEqual(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorLess(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorLess(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorLessEqual(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorLessEqual(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorEqualWithType(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorEqualWithType(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorNotEqualWithType(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorNotEqualWithType(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorNot(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorNot(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorAnd(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorAnd(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorOr(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorOr(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorXor(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorXor(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorBool(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorBool(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorLength(IValue **, int, EvaluationContext &)
+IValue *FunctionOperatorLength(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionCreateSet(IValue **, int, EvaluationContext &)
+IValue *FunctionCreateSet(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *If(IValue **, int, EvaluationContext &)
+IValue *If(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *SetUnion(IValue **, int, EvaluationContext &)
+IValue *SetUnion(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *SetCut(IValue **, int, EvaluationContext &)
+IValue *SetCut(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *SetNot(IValue **, int, EvaluationContext &)
+IValue *SetNot(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *SetAdd(IValue **, int, EvaluationContext &)
+IValue *SetAdd(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *SetRemove(IValue **, int, EvaluationContext &)
+IValue *SetRemove(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *SetClear(IValue **, int, EvaluationContext &)
+IValue *SetClear(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *SetFind(IValue **, int, EvaluationContext &)
+IValue *SetFind(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *SetAt(IValue **, int, EvaluationContext &)
+IValue *SetAt(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *Foreach(IValue **, int, EvaluationContext &)
+IValue *Foreach(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *For(IValue **, int, EvaluationContext &)
+IValue *For(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *While(IValue **, int, EvaluationContext &)
+IValue *While(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *StringSubstr(IValue **, int, EvaluationContext &)
+IValue *StringSubstr(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *StringTrim(IValue **, int, EvaluationContext &)
+IValue *StringTrim(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *StringConcat(IValue **, int, EvaluationContext &)
+IValue *StringConcat(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *StringFind(IValue **, int, EvaluationContext &)
+IValue *StringFind(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *StringCharAt(IValue **, int, EvaluationContext &)
+IValue *StringCharAt(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-// IValue *__template__(IValue **, int, EvaluationContext &);
+// IValue *__template__(IValue *const*, int, EvaluationContext &);
 } // namespace
 
 util::InternalFunction::InternalFunction()
@@ -220,7 +220,6 @@ util::InternalFunction::InternalFunction(std::string name, std::string operatorS
 }
 
 std::vector<util::InternalFunction> util::internalFunctions = {
-
     util::InternalFunction("Add", "+", 0, false, FunctionOperatorAdd),
     util::InternalFunction("Sub", "-", 0, false, FunctionOperatorSub),
     util::InternalFunction("Mul", "*", 0, false, FunctionOperatorMul),

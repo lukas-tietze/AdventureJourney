@@ -38,6 +38,21 @@ bool util::Config::RemoveVariable(const std::string &name)
     return this->variables.erase(name);
 }
 
+void util::Config::ClearOperators()
+{
+    this->operators.clear();
+}
+
+void util::Config::ClearFunctions()
+{
+    this->functions.clear();
+}
+
+void util::Config::ClearVariables()
+{
+    this->variables.clear();
+}
+
 void util::Config::SetBracketMarker(char opening, char closing)
 {
     this->bracketMarker.opening = opening;

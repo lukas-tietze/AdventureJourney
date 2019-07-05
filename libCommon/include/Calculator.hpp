@@ -20,7 +20,7 @@ enum class ValueType
 class IValue;
 class EvaluationContext;
 
-typedef IValue *(*function_t)(IValue **, int, EvaluationContext &);
+typedef IValue *(*function_t)(IValue *const *, int, EvaluationContext &);
 
 class Operator
 {
@@ -46,6 +46,7 @@ private:
 
 public:
     ValueSet();
+    ValueSet(const std::initializer_list<IValue *> &);
 };
 
 class IValue
@@ -62,7 +63,7 @@ public:
     virtual const std::string &GetValueAsString() const = 0;
     virtual double GetValueAsNumber() const = 0;
     virtual const ValueSet &GetValueAsSet() const = 0;
-    virtual std::string &GetValueDescription() const;
+    virtual void PrintValueDescription(std::ostream &) const = 0;
 };
 
 std::ostream &operator<<(std::ostream &, const IValue &);
@@ -79,6 +80,7 @@ public:
     const std::string &GetValueAsString() const;
     double GetValueAsNumber() const;
     const ValueSet &GetValueAsSet() const;
+    void PrintValueDescription(std::ostream &) const;
 };
 
 class StringValue : public IValue
@@ -93,6 +95,7 @@ public:
     const std::string &GetValueAsString() const;
     double GetValueAsNumber() const;
     const ValueSet &GetValueAsSet() const;
+    void PrintValueDescription(std::ostream &) const;
 };
 
 class SetValue : public IValue
@@ -107,6 +110,7 @@ public:
     const std::string &GetValueAsString() const;
     double GetValueAsNumber() const;
     const ValueSet &GetValueAsSet() const;
+    void PrintValueDescription(std::ostream &) const;
 };
 
 class LazyValue : public IValue
@@ -118,6 +122,7 @@ public:
     const std::string &GetValueAsString() const;
     double GetValueAsNumber() const;
     const ValueSet &GetValueAsSet() const;
+    void PrintValueDescription(std::ostream &) const;
 };
 
 class Config
@@ -140,6 +145,10 @@ public:
     bool RemoveOperator(const std::string &);
     bool RemoveFunction(const std::string &);
     bool RemoveVariable(const std::string &);
+
+    void ClearOperators();
+    void ClearFunctions();
+    void ClearVariables();
 
     void SetBracketMarker(char, char);
     void SetStringMarker(char, char);
@@ -288,42 +297,21 @@ public:
     void UpdateOperatorNames();
 };
 
-class MissingBracketException : public util::Exception
+enum class TokenizerError
 {
-public:
-    MissingBracketException(Tokenizer *);
+    MissingBracket,
+    ExtraClosingBracket,
+    MismatchingBracket,
+    InvalidChar,
+    UnexpectedEndOfLazyExpression,
+    UnexpectedEndOfStringExpression,
 };
 
-class ExtraClosingBracketException : public util::Exception
+class TokenizerException : public util::Exception
 {
 public:
-    ExtraClosingBracketException(Tokenizer *);
+    TokenizerException(TokenizerError what, Tokenizer *);
 };
-
-class MismatchingBracketException : public util::Exception
-{
-public:
-    MismatchingBracketException(Tokenizer *);
-};
-
-class InvalidCharException : public util::Exception
-{
-public:
-    InvalidCharException(Tokenizer *);
-};
-
-class UnexpectedEndOfLazyExpressionException : public util::Exception
-{
-public:
-    UnexpectedEndOfLazyExpressionException(Tokenizer *);
-};
-
-class UnexpectedEndOfStringExpressionException : public util::Exception
-{
-public:
-    UnexpectedEndOfStringExpressionException(Tokenizer *);
-};
-
 } // namespace tokenizing
 
 namespace parsing
@@ -388,6 +376,7 @@ private:
 
 public:
     Config &GetConfig();
+    const Config &GetConfig() const;
     void SetConfig(const Config &);
 
     IValue *Evaluate(const std::string &);
