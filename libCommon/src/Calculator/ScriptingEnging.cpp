@@ -254,12 +254,12 @@ void util::ScriptingEngine::ChangeDir(const std::string &expression)
 
 void util::ScriptingEngine::HandleException(const std::exception &e)
 {
-    //TODO
+    util::err.WriteLine("!> Exception ocurred: %", e.what());
 }
 
 void util::ScriptingEngine::HandleException(const util::Exception &e)
 {
-    //TODO
+    util::err.WriteLine("!> Exception ocurred: %", e.GetMessage());
 }
 
 void util::ScriptingEngine::UseAns(const std::string &expression)
@@ -415,6 +415,8 @@ void util::ScriptingEngine::EvalScript(const std::string &script)
 {
     auto stream = std::stringstream();
 
+    util::dbg.WriteLine("Evaluating script \"%\"", script);
+
     stream.str(script);
 
     this->EvalStream(stream);
@@ -429,7 +431,7 @@ void util::ScriptingEngine::EvalStream(std::istream &in)
 {
     std::string buf;
     std::string line;
-    bool append;
+    bool append = false;
 
     while (this->loop)
     {

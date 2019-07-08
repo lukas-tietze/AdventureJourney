@@ -24,6 +24,9 @@ private:
     std::string msg;
     boost::stacktrace::stacktrace trace;
 
+protected:
+    void SetMessage(const std::string &message);
+
 public:
     Exception();
     Exception(int);

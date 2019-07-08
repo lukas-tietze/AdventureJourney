@@ -11,5 +11,5 @@ int main()
 {
     util::ScriptingEngine engine;
 
-    engine.EvalFromStdIn();
+    engine.EvalScript("5+2");
 }

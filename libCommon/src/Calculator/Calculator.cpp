@@ -15,7 +15,10 @@ void util::Calculator::SetConfig(const Config &c)
     this->config = c;
 }
 
-util::IValue *Evaluate(const std::string &)
+util::IValue *util::Calculator::Evaluate(const std::string &s)
 {
-    return nullptr;
+    util::tokenizing::Tokenizer t;
+    std::vector<util::parsing::ExpressionBase *> expressions;
+    t.Tokenize(s, &this->config);
+    util::parsing::CreatePostFixExpression(t.GetTokens(), expressions, this->config);
 }
