@@ -1,19 +1,19 @@
 #include "Calculator.hpp"
 
-util::IValue::IValue(ValueType type) : type(type)
+calculator::IValue::IValue(ValueType type) : type(type)
 {
 }
 
-util::IValue::~IValue()
+calculator::IValue::~IValue()
 {
 }
 
-util::ValueType util::IValue::GetType() const
+calculator::ValueType calculator::IValue::GetType() const
 {
     return this->type;
 }
 
-std::ostream &util::operator<<(std::ostream &s, const IValue &v)
+std::ostream &calculator::operator<<(std::ostream &s, const IValue &v)
 {
     v.PrintValueDescription(s);
 

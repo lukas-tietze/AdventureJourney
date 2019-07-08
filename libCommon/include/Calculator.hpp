@@ -8,7 +8,15 @@
 
 #include "data/Io.hpp"
 
-namespace util
+namespace
+{
+constexpr uint8_t PRIO(const uint8_t i)
+{
+    return (i << 8) & 0x00000f00;
+}
+} // namespace
+
+namespace calculator
 {
 enum class ValueType
 {
@@ -238,6 +246,32 @@ enum class TokenType
     FunctionEnd = 0x000B,
     LazyEvalSeperator = 0x000C,
     Operator = 0x1000,
+    OperatorAdd = Operator | PRIO(0) | 1,      // +
+    OperatorAddEq = Operator | PRIO(0) | 2,    // +=
+    OperatorSub = Operator | PRIO(0) | 3,      // -
+    OperatorSubEq = Operator | PRIO(0) | 4,    // -=
+    OperatorMul = Operator | PRIO(0) | 5,      // *
+    OperatorMulEq = Operator | PRIO(0) | 6,    // *=
+    OperatorDiv = Operator | PRIO(0) | 7,      // /
+    OperatorDivEq = Operator | PRIO(0) | 8,    // /=
+    OperatorEq = Operator | PRIO(0) | 9,       // =
+    OperatorNot = Operator | PRIO(0) | 10,     // !
+    OperatorEqEq = Operator | PRIO(0) | 11,    // ==
+    OperatorNotEq = Operator | PRIO(0) | 12,   // !=
+    OperatorNotNot = Operator | PRIO(0) | 13,  // !!
+    OperatorEqEqEq = Operator | PRIO(0) | 14,  // ===
+    OperatorNotEqEq = Operator | PRIO(0) | 15, // !==
+    OperatorGt = Operator | PRIO(0) | 16,      // >
+    OperatorGtEq = Operator | PRIO(0) | 17,    // >=
+    OperatorGtGt = Operator | PRIO(0) | 18,    // >>
+    OperatorGtGtEq = Operator | PRIO(0) | 19,  // >>=
+    OperatorLs = Operator | PRIO(0) | 20,      // <
+    OperatorLsEq = Operator | PRIO(0) | 21,    // <=
+    OperatorLsLs = Operator | PRIO(0) | 22,    // <<
+    OperatorLsLsEq = Operator | PRIO(0) | 23,  // <<=
+    OperatorNeq = Operator | PRIO(0) | 24,     // <>
+    OperatorQe = Operator | PRIO(0) | 25,      // ?
+    OperatorQeQe = Operator | PRIO(0) | 26,    // ??
 };
 
 std::ostream &operator<<(std::ostream &, TokenType);
@@ -260,8 +294,6 @@ public:
 class Tokenizer
 {
 private:
-    std::vector<std::string> sortedOperatorNames;
-
     std::vector<Token> tokens;
     char *data;
     int pos;
@@ -293,8 +325,6 @@ public:
 
     bool Tokenize(const std::string &, const Config *);
     const std::vector<Token> &GetTokens() const;
-
-    void UpdateOperatorNames();
 };
 
 enum class TokenizerError
@@ -452,4 +482,4 @@ public:
     void EvalFromStdIn();
     void EvalStream(std::istream &);
 };
-} // namespace util
+} // namespace calculator

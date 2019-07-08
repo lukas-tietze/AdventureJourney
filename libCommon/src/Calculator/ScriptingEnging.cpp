@@ -16,11 +16,11 @@ bool AsTruthValue(const std::string &s)
 }
 } // namespace
 
-util::ScriptingEngine::Action::Action()
+calculator::ScriptingEngine::Action::Action()
 {
 }
 
-util::ScriptingEngine::Action::Action(const std::string &name,
+calculator::ScriptingEngine::Action::Action(const std::string &name,
                                       const std::string &alias,
                                       const std::string &description,
                                       action_t action) : name(name),
@@ -30,36 +30,36 @@ util::ScriptingEngine::Action::Action(const std::string &name,
 {
 }
 
-bool util::ScriptingEngine::Action::HasDesciption() const
+bool calculator::ScriptingEngine::Action::HasDesciption() const
 {
     return this->description.empty();
 }
 
-bool util::ScriptingEngine::Action::HasAlias() const
+bool calculator::ScriptingEngine::Action::HasAlias() const
 {
     return !this->alias.empty();
 }
 
-util::ScriptingEngine::ScriptingEngine() : uniqeActions{
-                                               Action("tokenize", "t", "Prints the list of tokens of the expression.", &util::ScriptingEngine::Tokenize),
-                                               Action("parse", "p", "Parses the expression and prints the created postfix expression.", &util::ScriptingEngine::Parse),
-                                               Action("def", "d", "Evaluates the given expression and defines a variable, which value is the result of the evaluation.", &util::ScriptingEngine::DefineVar),
-                                               Action("exp", "e", "Defines a variable that contains the given expression.", &util::ScriptingEngine::DefineExp),
-                                               Action("undef", "ud", "Removes a variable.", &util::ScriptingEngine::Undefine),
-                                               Action("quit", "q", "Quit the application.", &util::ScriptingEngine::Quit),
-                                               Action("solve", "s", "Evaluates the expression and prints the result.", &util::ScriptingEngine::Solve),
-                                               Action("load", "ld", "load a file from the specified path and interpret each line as a command.", &util::ScriptingEngine::LoadFile),
-                                               Action("err", "|", "Changes the error stream to the specified file. Use :err <std> to print to console.", &util::ScriptingEngine::OpenErr),
-                                               Action("out", ">", "Changes the output stream to the specified file. Use :out <std> to print to console.", &util::ScriptingEngine::OpenOut),
-                                               Action("in", "<", "Changes the input stream. Use :in <std> to use the console.", &util::ScriptingEngine::OpenIn),
-                                               Action("dir", "cd", "Changes the to specified directory and prints the current directory.", &util::ScriptingEngine::ChangeDir),
-                                               Action("echo", "#", "Use on, off to enable or disable echoing of commands", &util::ScriptingEngine::SetEcho),
-                                               Action("useAns", "ans", " use on, off to enable or disable the ANS-Variable. If enablad the result of the last calculation will be saved in a variable named ANS", &util::ScriptingEngine::UseAns),
-                                               Action("clear", "cl", "Clears the screen.", &util::ScriptingEngine::ClearOut),
-                                               Action("files", "ls", "List all Files and directories in the current directory.", &util::ScriptingEngine::ListFiles),
-                                               Action("clearvars", "clv", "Delete all variables, except e and pi. Use :clearvars all to also delete e and pi.", &util::ScriptingEngine::ClearVars),
-                                               Action("help", "h", "Prints the help.", &util::ScriptingEngine::ShowHelp),
-                                               Action("diagnostic", "dg", "Set diagnostic-Output to the specified stream.", &util::ScriptingEngine::SetDiagnosticOut),
+calculator::ScriptingEngine::ScriptingEngine() : uniqeActions{
+                                               Action("tokenize", "t", "Prints the list of tokens of the expression.", &calculator::ScriptingEngine::Tokenize),
+                                               Action("parse", "p", "Parses the expression and prints the created postfix expression.", &calculator::ScriptingEngine::Parse),
+                                               Action("def", "d", "Evaluates the given expression and defines a variable, which value is the result of the evaluation.", &calculator::ScriptingEngine::DefineVar),
+                                               Action("exp", "e", "Defines a variable that contains the given expression.", &calculator::ScriptingEngine::DefineExp),
+                                               Action("undef", "ud", "Removes a variable.", &calculator::ScriptingEngine::Undefine),
+                                               Action("quit", "q", "Quit the application.", &calculator::ScriptingEngine::Quit),
+                                               Action("solve", "s", "Evaluates the expression and prints the result.", &calculator::ScriptingEngine::Solve),
+                                               Action("load", "ld", "load a file from the specified path and interpret each line as a command.", &calculator::ScriptingEngine::LoadFile),
+                                               Action("err", "|", "Changes the error stream to the specified file. util :err <std> to print to console.", &calculator::ScriptingEngine::OpenErr),
+                                               Action("out", ">", "Changes the output stream to the specified file. Use :out <std> to print to console.", &calculator::ScriptingEngine::OpenOut),
+                                               Action("in", "<", "Changes the input stream. Use :in <std> to use the console.", &calculator::ScriptingEngine::OpenIn),
+                                               Action("dir", "cd", "Changes the to specified directory and prints the current directory.", &calculator::ScriptingEngine::ChangeDir),
+                                               Action("echo", "#", "Use on, off to enable or disable echoing of commands", &calculator::ScriptingEngine::SetEcho),
+                                               Action("useAns", "ans", " use on, off to enable or disable the ANS-Variable. If enablad the result of the last calculation will be saved in a variable named ANS", &calculator::ScriptingEngine::UseAns),
+                                               Action("clear", "cl", "Clears the screen.", &calculator::ScriptingEngine::ClearOut),
+                                               Action("files", "ls", "List all Files and directories in the current directory.", &calculator::ScriptingEngine::ListFiles),
+                                               Action("clearvars", "clv", "Delete all variables, except e and pi. Use :clearvars all to also delete e and pi.", &calculator::ScriptingEngine::ClearVars),
+                                               Action("help", "h", "Prints the help.", &calculator::ScriptingEngine::ShowHelp),
+                                               Action("diagnostic", "dg", "Set diagnostic-Output to the specified stream.", &calculator::ScriptingEngine::SetDiagnosticOut),
                                            }
 {
     //TODO: Nicht Threadsafe -> Threadsafe wird an dieser Stelle aber auch nicht unbedingt benötigt!
@@ -72,12 +72,12 @@ util::ScriptingEngine::ScriptingEngine() : uniqeActions{
     }
 }
 
-void util::ScriptingEngine::Quit(const std::string &)
+void calculator::ScriptingEngine::Quit(const std::string &)
 {
     this->loop = false;
 }
 
-void util::ScriptingEngine::Eval(const std::string &input)
+void calculator::ScriptingEngine::Eval(const std::string &input)
 {
     if (input.empty())
     {
@@ -127,7 +127,7 @@ void util::ScriptingEngine::Eval(const std::string &input)
     this->diagnostic.WriteLine("Evaluation of <%> took %ms.", input, timer.Elapsed());
 }
 
-void util::ScriptingEngine::ShowHelp(const std::string &expression)
+void calculator::ScriptingEngine::ShowHelp(const std::string &expression)
 {
     if (expression.empty())
     {
@@ -169,7 +169,7 @@ void util::ScriptingEngine::ShowHelp(const std::string &expression)
     }
 }
 
-int util::ScriptingEngine::FindSimilarCommands(const std::string &command, std::vector<std::string> &out)
+int calculator::ScriptingEngine::FindSimilarCommands(const std::string &command, std::vector<std::string> &out)
 {
     int size = 0;
 
@@ -179,7 +179,7 @@ int util::ScriptingEngine::FindSimilarCommands(const std::string &command, std::
 
         if (existingCommand.find(command) != std::string::npos ||
             command.find(existingCommand) != std::string::npos ||
-            OsaDistance(existingCommand, command) < 3)
+            util::OsaDistance(existingCommand, command) < 3)
         {
             out.push_back(existingCommand);
             size++;
@@ -189,7 +189,7 @@ int util::ScriptingEngine::FindSimilarCommands(const std::string &command, std::
     return size;
 }
 
-void util::ScriptingEngine::HandleUndefinedCommand(const std::string &command)
+void calculator::ScriptingEngine::HandleUndefinedCommand(const std::string &command)
 {
     if (command.empty())
     {
@@ -213,7 +213,7 @@ void util::ScriptingEngine::HandleUndefinedCommand(const std::string &command)
     }
 }
 
-void util::ScriptingEngine::ListFiles(const std::string &)
+void calculator::ScriptingEngine::ListFiles(const std::string &)
 {
     // TODO!
     // auto directories = Directory.GetDirectories(workingDirectory);
@@ -233,7 +233,7 @@ void util::ScriptingEngine::ListFiles(const std::string &)
     // }
 }
 
-void util::ScriptingEngine::ChangeDir(const std::string &expression)
+void calculator::ScriptingEngine::ChangeDir(const std::string &expression)
 {
     if (!expression.empty())
     {
@@ -252,42 +252,42 @@ void util::ScriptingEngine::ChangeDir(const std::string &expression)
     this->out.WriteLine("current directory is \"{0}\"", this->workingDirectory);
 }
 
-void util::ScriptingEngine::HandleException(const std::exception &e)
+void calculator::ScriptingEngine::HandleException(const std::exception &e)
 {
     util::err.WriteLine("!> Exception ocurred: %", e.what());
 }
 
-void util::ScriptingEngine::HandleException(const util::Exception &e)
+void calculator::ScriptingEngine::HandleException(const util::Exception &e)
 {
     util::err.WriteLine("!> Exception ocurred: %", e.GetMessage());
 }
 
-void util::ScriptingEngine::UseAns(const std::string &expression)
+void calculator::ScriptingEngine::UseAns(const std::string &expression)
 {
     this->useAns = AsTruthValue(expression);
 }
 
-void util::ScriptingEngine::SetEcho(const std::string &expression)
+void calculator::ScriptingEngine::SetEcho(const std::string &expression)
 {
     this->echo = AsTruthValue(expression);
 }
 
-void util::ScriptingEngine::ClearOut(const std::string &expression)
+void calculator::ScriptingEngine::ClearOut(const std::string &expression)
 {
     //TODO...
 }
 
-void util::ScriptingEngine::SetDiagnosticOut(const std::string &expression)
+void calculator::ScriptingEngine::SetDiagnosticOut(const std::string &expression)
 {
     //TODO...
 }
 
-void util::ScriptingEngine::ClearVars(const std::string &expression)
+void calculator::ScriptingEngine::ClearVars(const std::string &expression)
 {
     this->calculator.GetConfig().ClearVariables();
 }
 
-void util::ScriptingEngine::Undefine(const std::string &expression)
+void calculator::ScriptingEngine::Undefine(const std::string &expression)
 {
     if (expression.empty())
     {
@@ -297,17 +297,17 @@ void util::ScriptingEngine::Undefine(const std::string &expression)
     this->calculator.GetConfig().RemoveVariable(util::ToLower(util::Strip(expression)));
 }
 
-void util::ScriptingEngine::DefineVar(const std::string &expression)
+void calculator::ScriptingEngine::DefineVar(const std::string &expression)
 {
     this->Define(expression, true);
 }
 
-void util::ScriptingEngine::DefineExp(const std::string &expression)
+void calculator::ScriptingEngine::DefineExp(const std::string &expression)
 {
     this->Define(expression, false);
 }
 
-void util::ScriptingEngine::Define(const std::string &expression, bool compress)
+void calculator::ScriptingEngine::Define(const std::string &expression, bool compress)
 {
     std::string key;
     std::string value;
@@ -332,7 +332,7 @@ void util::ScriptingEngine::Define(const std::string &expression, bool compress)
     this->out.WriteLine("Defined % as %.", key, res);
 }
 
-void util::ScriptingEngine::Solve(const std::string &expression)
+void calculator::ScriptingEngine::Solve(const std::string &expression)
 {
     if (expression.empty())
     {
@@ -350,7 +350,7 @@ void util::ScriptingEngine::Solve(const std::string &expression)
     this->out.WriteLine("> %", *res);
 }
 
-void util::ScriptingEngine::Parse(const std::string &expression)
+void calculator::ScriptingEngine::Parse(const std::string &expression)
 {
     if (expression.empty())
     {
@@ -379,7 +379,7 @@ void util::ScriptingEngine::Parse(const std::string &expression)
     }
 }
 
-void util::ScriptingEngine::Tokenize(const std::string &expression)
+void calculator::ScriptingEngine::Tokenize(const std::string &expression)
 {
     if (expression.empty())
     {
@@ -405,13 +405,13 @@ void util::ScriptingEngine::Tokenize(const std::string &expression)
     }
 }
 
-void util::ScriptingEngine::LoadFile(const std::string &path)
+void calculator::ScriptingEngine::LoadFile(const std::string &path)
 {
     //TODO: richtigen Pfad bestimmenn
-    // this->EvalScript(util::ReadFile(this->workingDirectory + util::Strip(path)));
+    // this->EvalScript(calculator::ReadFile(this->workingDirectory + calculator::Strip(path)));
 }
 
-void util::ScriptingEngine::EvalScript(const std::string &script)
+void calculator::ScriptingEngine::EvalScript(const std::string &script)
 {
     auto stream = std::stringstream();
 
@@ -422,12 +422,12 @@ void util::ScriptingEngine::EvalScript(const std::string &script)
     this->EvalStream(stream);
 }
 
-void util::ScriptingEngine::EvalFromStdIn()
+void calculator::ScriptingEngine::EvalFromStdIn()
 {
     this->EvalStream(std::cin);
 }
 
-void util::ScriptingEngine::EvalStream(std::istream &in)
+void calculator::ScriptingEngine::EvalStream(std::istream &in)
 {
     std::string buf;
     std::string line;
@@ -452,6 +452,6 @@ void util::ScriptingEngine::EvalStream(std::istream &in)
     }
 }
 
-void util::ScriptingEngine::OpenErr(const std::string &) {}
-void util::ScriptingEngine::OpenOut(const std::string &) {}
-void util::ScriptingEngine::OpenIn(const std::string &) {}
+void calculator::ScriptingEngine::OpenErr(const std::string &) {}
+void calculator::ScriptingEngine::OpenOut(const std::string &) {}
+void calculator::ScriptingEngine::OpenIn(const std::string &) {}

@@ -1,30 +1,30 @@
 #include "Calculator.hpp"
 
-util::SetValue::SetValue() : IValue(ValueType::Set),
-                             value()
+calculator::SetValue::SetValue() : IValue(ValueType::Set),
+                                   value()
 {
 }
 
-util::SetValue::SetValue(const std::initializer_list<IValue *> values) : IValue(ValueType::Set),
-                                                                         value(values)
+calculator::SetValue::SetValue(const std::initializer_list<IValue *> values) : IValue(ValueType::Set),
+                                                                               value(values)
 {
 }
 
-const std::string &util::SetValue::GetValueAsString() const
+const std::string &calculator::SetValue::GetValueAsString() const
 {
-    throw NotSupportedException();
+    throw util::NotSupportedException();
 }
 
-double util::SetValue::GetValueAsNumber() const
+double calculator::SetValue::GetValueAsNumber() const
 {
-    throw NotSupportedException();
+    throw util::NotSupportedException();
 }
 
-const util::ValueSet &util::SetValue::GetValueAsSet() const
+const calculator::ValueSet &calculator::SetValue::GetValueAsSet() const
 {
     return this->value;
 }
 
-void util::SetValue::PrintValueDescription(std::ostream &s) const
+void calculator::SetValue::PrintValueDescription(std::ostream &s) const
 {
 }

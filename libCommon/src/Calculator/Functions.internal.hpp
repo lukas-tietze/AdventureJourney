@@ -1,6 +1,6 @@
 #include "Calculator.hpp"
 
-namespace util
+namespace calculator
 {
 struct InternalFunction
 {
@@ -17,4 +17,4 @@ struct InternalFunction
 
 extern std::vector<InternalFunction> internalFunctions;
 
-} // namespace util
+} // namespace calculator

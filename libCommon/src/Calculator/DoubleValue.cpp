@@ -1,30 +1,30 @@
 #include "Calculator.hpp"
 
-util::DoubleValue::DoubleValue() : IValue(ValueType::Number),
-                                   value()
+calculator::DoubleValue::DoubleValue() : IValue(ValueType::Number),
+                                         value()
 {
 }
 
-util::DoubleValue::DoubleValue(double value) : IValue(ValueType::Number),
-                                               value(value)
+calculator::DoubleValue::DoubleValue(double value) : IValue(ValueType::Number),
+                                                     value(value)
 {
 }
 
-const std::string &util::DoubleValue::GetValueAsString() const
+const std::string &calculator::DoubleValue::GetValueAsString() const
 {
-    throw NotSupportedException();
+    throw util::NotSupportedException();
 }
 
-double util::DoubleValue::GetValueAsNumber() const
+double calculator::DoubleValue::GetValueAsNumber() const
 {
     return this->value;
 }
 
-const util::ValueSet &util::DoubleValue::GetValueAsSet() const
+const calculator::ValueSet &calculator::DoubleValue::GetValueAsSet() const
 {
-    throw NotSupportedException();
+    throw util::NotSupportedException();
 }
 
-void util::DoubleValue::PrintValueDescription(std::ostream &s) const
+void calculator::DoubleValue::PrintValueDescription(std::ostream &s) const
 {
 }

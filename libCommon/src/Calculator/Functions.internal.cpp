@@ -2,8 +2,8 @@
 
 namespace
 {
-using util::EvaluationContext;
-using util::IValue;
+using calculator::EvaluationContext;
+using calculator::IValue;
 
 IValue *FunctionOperatorAdd(IValue *const *, int, EvaluationContext &)
 {
@@ -198,11 +198,11 @@ IValue *StringCharAt(IValue *const *, int, EvaluationContext &)
 // IValue *__template__(IValue *const*, int, EvaluationContext &);
 } // namespace
 
-util::InternalFunction::InternalFunction()
+calculator::InternalFunction::InternalFunction()
 {
 }
 
-util::InternalFunction::InternalFunction(const std::string &name, function_t func) : name(name),
+calculator::InternalFunction::InternalFunction(const std::string &name, function_t func) : name(name),
                                                                                      operatorSign(""),
                                                                                      priority(-1),
                                                                                      isUnary(false),
@@ -211,7 +211,7 @@ util::InternalFunction::InternalFunction(const std::string &name, function_t fun
 {
 }
 
-util::InternalFunction::InternalFunction(std::string name, std::string operatorSign, int priority, bool isUnary, function_t func) : name(name),
+calculator::InternalFunction::InternalFunction(std::string name, std::string operatorSign, int priority, bool isUnary, function_t func) : name(name),
                                                                                                                                     operatorSign(operatorSign),
                                                                                                                                     priority(priority),
                                                                                                                                     isUnary(isUnary),
@@ -219,43 +219,43 @@ util::InternalFunction::InternalFunction(std::string name, std::string operatorS
 {
 }
 
-std::vector<util::InternalFunction> util::internalFunctions = {
-    util::InternalFunction("Add", "+", 0, false, FunctionOperatorAdd),
-    util::InternalFunction("Sub", "-", 0, false, FunctionOperatorSub),
-    util::InternalFunction("Mul", "*", 0, false, FunctionOperatorMul),
-    util::InternalFunction("Div", "/", 0, false, FunctionOperatorDiv),
-    util::InternalFunction("Mod", "%", 0, false, FunctionOperatorMod),
-    util::InternalFunction("Pow", "^", 0, false, FunctionOperatorPow),
-    util::InternalFunction("Equal", "==", 0, false, FunctionOperatorEqual),
-    util::InternalFunction("NotEqual", "!=", 0, false, FunctionOperatorNotEqual),
-    util::InternalFunction("Greater", ">", 0, false, FunctionOperatorGreater),
-    util::InternalFunction("GreaterEqual", ">=", 0, false, FunctionOperatorGreaterEqual),
-    util::InternalFunction("Less", "<", 0, false, FunctionOperatorLess),
-    util::InternalFunction("LessEqual", "<=", 0, false, FunctionOperatorLessEqual),
-    util::InternalFunction("EqualWithType", "===", 0, false, FunctionOperatorEqualWithType),
-    util::InternalFunction("NotEqualWithType", "!==", 0, false, FunctionOperatorNotEqualWithType),
-    util::InternalFunction("Not", "!", 0, false, FunctionOperatorNot),
-    util::InternalFunction("And", "&", 0, false, FunctionOperatorAnd),
-    util::InternalFunction("Or", "|", 0, false, FunctionOperatorOr),
-    util::InternalFunction("Bool", "?", 0, false, FunctionOperatorBool),
-    util::InternalFunction("Length", "#", 0, false, FunctionOperatorLength),
-    util::InternalFunction("XOr", FunctionOperatorXor),
-    util::InternalFunction("CreateSet", FunctionCreateSet),
-    util::InternalFunction("If", If),
-    util::InternalFunction("SetUnion", SetUnion),
-    util::InternalFunction("SetCut", SetCut),
-    util::InternalFunction("SetNot", SetNot),
-    util::InternalFunction("SetAdd", SetAdd),
-    util::InternalFunction("SetRemove", SetRemove),
-    util::InternalFunction("SetClear", SetClear),
-    util::InternalFunction("SetFind", SetFind),
-    util::InternalFunction("SetAt", SetAt),
-    util::InternalFunction("Foreach", Foreach),
-    util::InternalFunction("For", For),
-    util::InternalFunction("While", While),
-    util::InternalFunction("StringSubstr", StringSubstr),
-    util::InternalFunction("StringTrim", StringTrim),
-    util::InternalFunction("StringConcat", StringConcat),
-    util::InternalFunction("StringFind", StringFind),
-    util::InternalFunction("StringCharAt", StringCharAt),
+std::vector<calculator::InternalFunction> calculator::internalFunctions = {
+    calculator::InternalFunction("Add", "+", 0, false, FunctionOperatorAdd),
+    calculator::InternalFunction("Sub", "-", 0, false, FunctionOperatorSub),
+    calculator::InternalFunction("Mul", "*", 0, false, FunctionOperatorMul),
+    calculator::InternalFunction("Div", "/", 0, false, FunctionOperatorDiv),
+    calculator::InternalFunction("Mod", "%", 0, false, FunctionOperatorMod),
+    calculator::InternalFunction("Pow", "^", 0, false, FunctionOperatorPow),
+    calculator::InternalFunction("Equal", "==", 0, false, FunctionOperatorEqual),
+    calculator::InternalFunction("NotEqual", "!=", 0, false, FunctionOperatorNotEqual),
+    calculator::InternalFunction("Greater", ">", 0, false, FunctionOperatorGreater),
+    calculator::InternalFunction("GreaterEqual", ">=", 0, false, FunctionOperatorGreaterEqual),
+    calculator::InternalFunction("Less", "<", 0, false, FunctionOperatorLess),
+    calculator::InternalFunction("LessEqual", "<=", 0, false, FunctionOperatorLessEqual),
+    calculator::InternalFunction("EqualWithType", "===", 0, false, FunctionOperatorEqualWithType),
+    calculator::InternalFunction("NotEqualWithType", "!==", 0, false, FunctionOperatorNotEqualWithType),
+    calculator::InternalFunction("Not", "!", 0, false, FunctionOperatorNot),
+    calculator::InternalFunction("And", "&", 0, false, FunctionOperatorAnd),
+    calculator::InternalFunction("Or", "|", 0, false, FunctionOperatorOr),
+    calculator::InternalFunction("Bool", "?", 0, false, FunctionOperatorBool),
+    calculator::InternalFunction("Length", "#", 0, false, FunctionOperatorLength),
+    calculator::InternalFunction("XOr", FunctionOperatorXor),
+    calculator::InternalFunction("CreateSet", FunctionCreateSet),
+    calculator::InternalFunction("If", If),
+    calculator::InternalFunction("SetUnion", SetUnion),
+    calculator::InternalFunction("SetCut", SetCut),
+    calculator::InternalFunction("SetNot", SetNot),
+    calculator::InternalFunction("SetAdd", SetAdd),
+    calculator::InternalFunction("SetRemove", SetRemove),
+    calculator::InternalFunction("SetClear", SetClear),
+    calculator::InternalFunction("SetFind", SetFind),
+    calculator::InternalFunction("SetAt", SetAt),
+    calculator::InternalFunction("Foreach", Foreach),
+    calculator::InternalFunction("For", For),
+    calculator::InternalFunction("While", While),
+    calculator::InternalFunction("StringSubstr", StringSubstr),
+    calculator::InternalFunction("StringTrim", StringTrim),
+    calculator::InternalFunction("StringConcat", StringConcat),
+    calculator::InternalFunction("StringFind", StringFind),
+    calculator::InternalFunction("StringCharAt", StringCharAt),
 };

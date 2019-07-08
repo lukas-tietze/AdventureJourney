@@ -1,24 +1,24 @@
 #include "Calculator.hpp"
 
-util::LazyValue::LazyValue(const std::string &) : IValue(ValueType::String)
+calculator::LazyValue::LazyValue(const std::string &) : IValue(ValueType::String)
 {
 }
 
-const std::string &util::LazyValue::GetValueAsString() const
+const std::string &calculator::LazyValue::GetValueAsString() const
 {
-    throw NotImplementedException();
+    throw util::NotImplementedException();
 }
 
-double util::LazyValue::GetValueAsNumber() const
+double calculator::LazyValue::GetValueAsNumber() const
 {
-    throw NotImplementedException();
+    throw util::NotImplementedException();
 }
 
-const util::ValueSet &util::LazyValue::GetValueAsSet() const
+const calculator::ValueSet &calculator::LazyValue::GetValueAsSet() const
 {
-    throw NotImplementedException();
+    throw util::NotImplementedException();
 }
 
-void util::LazyValue::PrintValueDescription(std::ostream &s) const
+void calculator::LazyValue::PrintValueDescription(std::ostream &s) const
 {
 }

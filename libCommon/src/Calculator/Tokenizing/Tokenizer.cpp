@@ -7,59 +7,29 @@
 namespace
 {
 constexpr char FUNCTION_BRACKET_MASK = (char)(1 << (sizeof(char) * 8 - 2));
-
-struct OperatorNameComparer
-{
-    int operator()(const std::string &a, const std::string &b)
-    {
-        int res = 0;
-
-        for (size_t i = 0; i < a.length() && i < b.length() && res == 0; i++)
-        {
-            res = a[i] - b[i];
-        }
-
-        if (res == 0)
-            res = a.length() - b.length();
-
-        return res;
-    }
-};
-
 } // namespace
 
-util::tokenizing::Tokenizer::Tokenizer() : tokens(),
-                                           data(nullptr),
-                                           pos(0),
-                                           len(0),
-                                           config(nullptr),
-                                           bracketStack(),
-                                           lastWasWhiteSpace(false)
+calculator::tokenizing::Tokenizer::Tokenizer() : tokens(),
+                                                 data(nullptr),
+                                                 pos(0),
+                                                 len(0),
+                                                 config(nullptr),
+                                                 bracketStack(),
+                                                 lastWasWhiteSpace(false)
 {
 }
 
-util::tokenizing::Tokenizer::~Tokenizer()
+calculator::tokenizing::Tokenizer::~Tokenizer()
 {
     this->ClearStateMachine();
 }
 
-void util::tokenizing::Tokenizer::UpdateOperatorNames()
-{
-    this->sortedOperatorNames.clear();
-    this->sortedOperatorNames.reserve(this->config->GetOperators().size());
-
-    for (const auto kvp : this->config->GetOperators())
-        this->sortedOperatorNames.push_back(kvp.first);
-
-    std::sort(this->sortedOperatorNames.begin(), this->sortedOperatorNames.end(), OperatorNameComparer());
-}
-
-const std::vector<util::tokenizing::Token> &util::tokenizing::Tokenizer::GetTokens() const
+const std::vector<calculator::tokenizing::Token> &calculator::tokenizing::Tokenizer::GetTokens() const
 {
     return this->tokens;
 }
 
-void util::tokenizing::Tokenizer::InitStateMachine(const std::string &data, const Config *config)
+void calculator::tokenizing::Tokenizer::InitStateMachine(const std::string &data, const Config *config)
 {
     this->len = data.length();
     this->pos = 0;
@@ -67,7 +37,7 @@ void util::tokenizing::Tokenizer::InitStateMachine(const std::string &data, cons
     this->config = config;
 }
 
-void util::tokenizing::Tokenizer::ClearStateMachine()
+void calculator::tokenizing::Tokenizer::ClearStateMachine()
 {
     if (this->data)
         delete[] this->data;
@@ -76,7 +46,7 @@ void util::tokenizing::Tokenizer::ClearStateMachine()
     this->tokens.clear();
 }
 
-bool util::tokenizing::Tokenizer::Tokenize(const std::string &data, const Config *config)
+bool calculator::tokenizing::Tokenizer::Tokenize(const std::string &data, const Config *config)
 {
     this->ClearStateMachine();
     this->InitStateMachine(data, config);
@@ -95,7 +65,7 @@ bool util::tokenizing::Tokenizer::Tokenize(const std::string &data, const Config
     }
 }
 
-bool util::tokenizing::Tokenizer::ReadNext()
+bool calculator::tokenizing::Tokenizer::ReadNext()
 {
     this->lastWasWhiteSpace = false;
 
@@ -217,7 +187,7 @@ bool util::tokenizing::Tokenizer::ReadNext()
     }
 }
 
-bool util::tokenizing::Tokenizer::ReadLazyExpression()
+bool calculator::tokenizing::Tokenizer::ReadLazyExpression()
 {
     auto start = ++this->pos;
 
@@ -236,16 +206,128 @@ bool util::tokenizing::Tokenizer::ReadLazyExpression()
     this->buf = Token(TokenType::LazyEvalSeperator, std::string(this->data + start, pos - start - 1));
 }
 
-bool util::tokenizing::Tokenizer::TryReadOperator()
+bool calculator::tokenizing::Tokenizer::TryReadOperator()
 {
-    char opc[3] = {this->data[this->pos + 0],
-                   this->data[this->pos + 1],
-                   this->data[this->pos + 2]};
+    char opc[3] = {
+        this->data[this->pos + 0],
+        this->pos + 1 < this->len ? this->data[this->pos + 1] : 0,
+        this->pos + 2 < this->len ? this->data[this->pos + 2] : 0,
+    };
+
+    TokenType res;
+
+    switch (opc[0])
+    {
+    case '+':
+        res = opc[1] == '='
+                  ? calculator::tokenizing::TokenType::OperatorAddEq
+                  : calculator::tokenizing::TokenType::OperatorAdd;
+        break;
+    case '-':
+        res = opc[1] == '='
+                  ? calculator::tokenizing::TokenType::OperatorSub
+                  : calculator::tokenizing::TokenType::OperatorSubEq;
+        break;
+    case '*':
+        res = opc[1] == '='
+                  ? calculator::tokenizing::TokenType::OperatorMul
+                  : calculator::tokenizing::TokenType::OperatorMulEq;
+        break;
+    case '/':
+        res = opc[1] == '='
+                  ? calculator::tokenizing::TokenType::OperatorDiv
+                  : calculator::tokenizing::TokenType::OperatorDivEq;
+        break;
+    case '=':
+        if (opc[1] == '=')
+            res = opc[2] == '='
+                      ? calculator::tokenizing::TokenType::OperatorEqEqEq
+                      : calculator::tokenizing::TokenType::OperatorEqEq;
+        else
+            calculator::tokenizing::TokenType::OperatorEq;
+        break;
+    case '!':
+        if (opc[1] == '=')
+            res = opc[2] == '='
+                      ? calculator::tokenizing::TokenType::OperatorNotEqEq
+                      : calculator::tokenizing::TokenType::OperatorNotEq;
+        else if (opc[1] == '!')
+            res = calculator::tokenizing::TokenType::OperatorNotNot;
+        else
+            res = calculator::tokenizing::TokenType::OperatorNot;
+        break;
+    case '>':
+        if (opc[1] == '>')
+            res = opc[2] == '='
+                      ? calculator::tokenizing::TokenType::OperatorGtGtEq
+                      : calculator::tokenizing::TokenType::OperatorGtGt;
+        else if (opc[1] == '=')
+            res = calculator::tokenizing::TokenType::OperatorGtEq;
+        else
+            res = calculator::tokenizing::TokenType::OperatorGt;
+        break;
+    case '<':
+        if (opc[1] == '<')
+            res = opc[2] == '='
+                      ? calculator::tokenizing::TokenType::OperatorLsLsEq
+                      : calculator::tokenizing::TokenType::OperatorLsLs;
+        else if (opc[1] == '=')
+            res = calculator::tokenizing::TokenType::OperatorLsEq;
+        else if (opc[1] == '>')
+            res = calculator::tokenizing::TokenType::OperatorNeq;
+        else
+            res = calculator::tokenizing::TokenType::OperatorLs;
+        break;
+    case '?':
+        res = opc[1] == '?'
+                  ? calculator::tokenizing::TokenType::OperatorQeQe
+                  : calculator::tokenizing::TokenType::OperatorQe;
+        break;
+    default:
+        return false;
+    }
+
+    this->buf = Token(res);
+
+    switch (res)
+    {
+    case calculator::tokenizing::TokenType::OperatorAdd:
+    case calculator::tokenizing::TokenType::OperatorSub:
+    case calculator::tokenizing::TokenType::OperatorMul:
+    case calculator::tokenizing::TokenType::OperatorDiv:
+    case calculator::tokenizing::TokenType::OperatorEq:
+    case calculator::tokenizing::TokenType::OperatorNot:
+    case calculator::tokenizing::TokenType::OperatorGt:
+    case calculator::tokenizing::TokenType::OperatorLs:
+    case calculator::tokenizing::TokenType::OperatorNeq:
+    case calculator::tokenizing::TokenType::OperatorQe:
+        this->pos++;
+        break;
+    case calculator::tokenizing::TokenType::OperatorAddEq:
+    case calculator::tokenizing::TokenType::OperatorSubEq:
+    case calculator::tokenizing::TokenType::OperatorMulEq:
+    case calculator::tokenizing::TokenType::OperatorDivEq:
+    case calculator::tokenizing::TokenType::OperatorEqEq:
+    case calculator::tokenizing::TokenType::OperatorNotEq:
+    case calculator::tokenizing::TokenType::OperatorGtEq:
+    case calculator::tokenizing::TokenType::OperatorGtGt:
+    case calculator::tokenizing::TokenType::OperatorLsEq:
+    case calculator::tokenizing::TokenType::OperatorLsLs:
+    case calculator::tokenizing::TokenType::OperatorQeQe:
+    case calculator::tokenizing::TokenType::OperatorNotNot:
+        this->pos += 2;
+        break;
+    case calculator::tokenizing::TokenType::OperatorEqEqEq:
+    case calculator::tokenizing::TokenType::OperatorNotEqEq:
+    case calculator::tokenizing::TokenType::OperatorGtGtEq:
+    case calculator::tokenizing::TokenType::OperatorLsLsEq:
+        this->pos += 3;
+    };
 
     return true;
 }
 
-bool util::tokenizing::Tokenizer::ReadIdentifier()
+bool calculator::tokenizing::Tokenizer::ReadIdentifier()
 {
     auto readStart = this->pos;
 
@@ -257,7 +339,7 @@ bool util::tokenizing::Tokenizer::ReadIdentifier()
     return new Token(TokenType::Identifier, std::string(this->data + readStart, this->pos - readStart));
 }
 
-bool util::tokenizing::Tokenizer::ReadString()
+bool calculator::tokenizing::Tokenizer::ReadString()
 {
     std::string sb;
     auto escaped = false;
@@ -289,7 +371,7 @@ bool util::tokenizing::Tokenizer::ReadString()
     return new Token(TokenType::String, sb);
 }
 
-bool util::tokenizing::Tokenizer::ReadNumber()
+bool calculator::tokenizing::Tokenizer::ReadNumber()
 {
     auto decSeperatorRead = false;
     auto prefixRead = false;
@@ -319,7 +401,7 @@ bool util::tokenizing::Tokenizer::ReadNumber()
     return new Token(TokenType::Number, std::string(this->data + readStart, this->pos - readStart));
 }
 
-void util::tokenizing::Tokenizer::SkipWhiteSpace()
+void calculator::tokenizing::Tokenizer::SkipWhiteSpace()
 {
     auto readStart = this->pos;
 
@@ -331,19 +413,19 @@ void util::tokenizing::Tokenizer::SkipWhiteSpace()
     this->lastWasWhiteSpace = true;
 }
 
-bool util::tokenizing::Tokenizer::IsAfterFunction()
+bool calculator::tokenizing::Tokenizer::IsAfterFunction()
 {
     return this->tokens.size() != 0 && this->tokens[this->tokens.size() - 1].GetType() == TokenType::Identifier;
 }
 
-bool util::tokenizing::Tokenizer::IsStartOfIdentifier(char c)
+bool calculator::tokenizing::Tokenizer::IsStartOfIdentifier(char c)
 {
     return c >= 'a' && c <= 'z' ||
            c >= 'A' && c <= 'Z' ||
            c == '_';
 }
 
-bool util::tokenizing::Tokenizer::IsPartOfIdentifier(char c)
+bool calculator::tokenizing::Tokenizer::IsPartOfIdentifier(char c)
 {
     return c >= 'a' && c <= 'z' ||
            c >= 'A' && c <= 'Z' ||
@@ -351,12 +433,12 @@ bool util::tokenizing::Tokenizer::IsPartOfIdentifier(char c)
            c == '_';
 }
 
-bool util::tokenizing::Tokenizer::IsDigit(char c)
+bool calculator::tokenizing::Tokenizer::IsDigit(char c)
 {
     return c >= '0' && c <= '9';
 }
 
-bool util::tokenizing::Tokenizer::IsStartOfNumber(char c)
+bool calculator::tokenizing::Tokenizer::IsStartOfNumber(char c)
 {
     return this->IsDigit(c) || c == this->config->GetDecimalSeperator() ||
            (c == '-' && (this->tokens.size() == 0 ||

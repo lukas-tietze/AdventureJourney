@@ -1,20 +1,20 @@
 #include "Calculator.hpp"
 
-util::tokenizing::TokenizerException::TokenizerException(TokenizerError what, Tokenizer *t)
+calculator::tokenizing::TokenizerException::TokenizerException(TokenizerError what, Tokenizer *t)
 {
     switch (what)
     {
-    case util::tokenizing::TokenizerError::MissingBracket:
+    case calculator::tokenizing::TokenizerError::MissingBracket:
         break;
-    case util::tokenizing::TokenizerError::ExtraClosingBracket:
+    case calculator::tokenizing::TokenizerError::ExtraClosingBracket:
         break;
-    case util::tokenizing::TokenizerError::MismatchingBracket:
+    case calculator::tokenizing::TokenizerError::MismatchingBracket:
         break;
-    case util::tokenizing::TokenizerError::InvalidChar:
+    case calculator::tokenizing::TokenizerError::InvalidChar:
         break;
-    case util::tokenizing::TokenizerError::UnexpectedEndOfLazyExpression:
+    case calculator::tokenizing::TokenizerError::UnexpectedEndOfLazyExpression:
         break;
-    case util::tokenizing::TokenizerError::UnexpectedEndOfStringExpression:
+    case calculator::tokenizing::TokenizerError::UnexpectedEndOfStringExpression:
         break;
     default:
         break;

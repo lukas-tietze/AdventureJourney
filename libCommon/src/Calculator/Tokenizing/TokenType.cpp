@@ -1,54 +1,132 @@
 #include "Calculator.hpp"
 #include "data/EnumHelper.hpp"
 
-std::ostream &util::tokenizing::operator<<(std::ostream &s, util::tokenizing::TokenType v)
+std::ostream &calculator::tokenizing::operator<<(std::ostream &s, calculator::tokenizing::TokenType v)
 {
     switch (v)
     {
-    case util::tokenizing::TokenType::String:
+    case calculator::tokenizing::TokenType::String:
         s << "String";
         break;
-    case util::tokenizing::TokenType::Number:
+    case calculator::tokenizing::TokenType::Number:
         s << "Number";
         break;
-    case util::tokenizing::TokenType::Identifier:
+    case calculator::tokenizing::TokenType::Identifier:
         s << "Identifier";
         break;
-    case util::tokenizing::TokenType::Seperator:
+    case calculator::tokenizing::TokenType::Seperator:
         s << "Seperator";
         break;
-    case util::tokenizing::TokenType::OpeningBracket:
+    case calculator::tokenizing::TokenType::OpeningBracket:
         s << "OpeningBracket";
         break;
-    case util::tokenizing::TokenType::ClosingBracket:
+    case calculator::tokenizing::TokenType::ClosingBracket:
         s << "ClosingBracket";
         break;
-    case util::tokenizing::TokenType::SetStart:
+    case calculator::tokenizing::TokenType::SetStart:
         s << "SetStart";
         break;
-    case util::tokenizing::TokenType::SetEnd:
+    case calculator::tokenizing::TokenType::SetEnd:
         s << "SetEnd";
         break;
-    case util::tokenizing::TokenType::AccessorStart:
+    case calculator::tokenizing::TokenType::AccessorStart:
         s << "AccessorStart";
         break;
-    case util::tokenizing::TokenType::AccessorEnd:
+    case calculator::tokenizing::TokenType::AccessorEnd:
         s << "AccessorEnd";
         break;
-    case util::tokenizing::TokenType::FunctionStart:
+    case calculator::tokenizing::TokenType::FunctionStart:
         s << "FunctionStart";
         break;
-    case util::tokenizing::TokenType::FunctionEnd:
+    case calculator::tokenizing::TokenType::FunctionEnd:
         s << "FunctionEnd";
         break;
-    case util::tokenizing::TokenType::LazyEvalSeperator:
+    case calculator::tokenizing::TokenType::LazyEvalSeperator:
         s << "LazyEvalSeperator";
         break;
-    case util::tokenizing::TokenType::Operator:
+    case calculator::tokenizing::TokenType::Operator:
         s << "Operator";
         break;
+    case calculator::tokenizing::TokenType::OperatorAdd:
+        s << "op +";
+        break;
+    case calculator::tokenizing::TokenType::OperatorAddEq:
+        s << "op +=";
+        break;
+    case calculator::tokenizing::TokenType::OperatorSub:
+        s << "op -";
+        break;
+    case calculator::tokenizing::TokenType::OperatorSubEq:
+        s << "op -=";
+        break;
+    case calculator::tokenizing::TokenType::OperatorMul:
+        s << "op *";
+        break;
+    case calculator::tokenizing::TokenType::OperatorMulEq:
+        s << "op *=";
+        break;
+    case calculator::tokenizing::TokenType::OperatorDiv:
+        s << "op /";
+        break;
+    case calculator::tokenizing::TokenType::OperatorDivEq:
+        s << "op /=";
+        break;
+    case calculator::tokenizing::TokenType::OperatorEq:
+        s << "op =";
+        break;
+    case calculator::tokenizing::TokenType::OperatorNot:
+        s << "op !";
+        break;
+    case calculator::tokenizing::TokenType::OperatorEqEq:
+        s << "op ==";
+        break;
+    case calculator::tokenizing::TokenType::OperatorNotEq:
+        s << "op !=";
+        break;
+    case calculator::tokenizing::TokenType::OperatorNotNot:
+        s << "op !!";
+        break;
+    case calculator::tokenizing::TokenType::OperatorEqEqEq:
+        s << "op ===";
+        break;
+    case calculator::tokenizing::TokenType::OperatorNotEqEq:
+        s << "op !==";
+        break;
+    case calculator::tokenizing::TokenType::OperatorGt:
+        s << "op >";
+        break;
+    case calculator::tokenizing::TokenType::OperatorGtEq:
+        s << "op >=";
+        break;
+    case calculator::tokenizing::TokenType::OperatorGtGt:
+        s << "op >>";
+        break;
+    case calculator::tokenizing::TokenType::OperatorGtGtEq:
+        s << "op >>=";
+        break;
+    case calculator::tokenizing::TokenType::OperatorLs:
+        s << "op <";
+        break;
+    case calculator::tokenizing::TokenType::OperatorLsEq:
+        s << "op <=";
+        break;
+    case calculator::tokenizing::TokenType::OperatorLsLs:
+        s << "op <<";
+        break;
+    case calculator::tokenizing::TokenType::OperatorLsLsEq:
+        s << "op <<=";
+        break;
+    case calculator::tokenizing::TokenType::OperatorNeq:
+        s << "op <>";
+        break;
+    case calculator::tokenizing::TokenType::OperatorQe:
+        s << "op ?";
+        break;
+    case calculator::tokenizing::TokenType::OperatorQeQe:
+        s << "op ??";
+        break;
     default:
-        throw InvalidCaseException::MakeException(v);
+        throw util::InvalidCaseException::MakeException(v);
         break;
     }
 
@@ -56,23 +134,49 @@ std::ostream &util::tokenizing::operator<<(std::ostream &s, util::tokenizing::To
 }
 
 template <>
-const std::initializer_list<util::tokenizing::TokenType> &util::ListValues<util::tokenizing::TokenType>()
+const std::initializer_list<calculator::tokenizing::TokenType> &util::ListValues<calculator::tokenizing::TokenType>()
 {
-    static const std::initializer_list<util::tokenizing::TokenType> list = {
-        util::tokenizing::TokenType::String,
-        util::tokenizing::TokenType::Number,
-        util::tokenizing::TokenType::Identifier,
-        util::tokenizing::TokenType::Seperator,
-        util::tokenizing::TokenType::OpeningBracket,
-        util::tokenizing::TokenType::ClosingBracket,
-        util::tokenizing::TokenType::SetStart,
-        util::tokenizing::TokenType::SetEnd,
-        util::tokenizing::TokenType::AccessorStart,
-        util::tokenizing::TokenType::AccessorEnd,
-        util::tokenizing::TokenType::FunctionStart,
-        util::tokenizing::TokenType::FunctionEnd,
-        util::tokenizing::TokenType::LazyEvalSeperator,
-        util::tokenizing::TokenType::Operator,
+    static const std::initializer_list<calculator::tokenizing::TokenType> list = {
+        calculator::tokenizing::TokenType::String,
+        calculator::tokenizing::TokenType::Number,
+        calculator::tokenizing::TokenType::Identifier,
+        calculator::tokenizing::TokenType::Seperator,
+        calculator::tokenizing::TokenType::OpeningBracket,
+        calculator::tokenizing::TokenType::ClosingBracket,
+        calculator::tokenizing::TokenType::SetStart,
+        calculator::tokenizing::TokenType::SetEnd,
+        calculator::tokenizing::TokenType::AccessorStart,
+        calculator::tokenizing::TokenType::AccessorEnd,
+        calculator::tokenizing::TokenType::FunctionStart,
+        calculator::tokenizing::TokenType::FunctionEnd,
+        calculator::tokenizing::TokenType::LazyEvalSeperator,
+        calculator::tokenizing::TokenType::Operator,
+        calculator::tokenizing::TokenType::OperatorAdd,
+        calculator::tokenizing::TokenType::OperatorAddEq,
+        calculator::tokenizing::TokenType::OperatorSub,
+        calculator::tokenizing::TokenType::OperatorSubEq,
+        calculator::tokenizing::TokenType::OperatorMul,
+        calculator::tokenizing::TokenType::OperatorMulEq,
+        calculator::tokenizing::TokenType::OperatorDiv,
+        calculator::tokenizing::TokenType::OperatorDivEq,
+        calculator::tokenizing::TokenType::OperatorEq,
+        calculator::tokenizing::TokenType::OperatorNot,
+        calculator::tokenizing::TokenType::OperatorEqEq,
+        calculator::tokenizing::TokenType::OperatorNotEq,
+        calculator::tokenizing::TokenType::OperatorNotNot,
+        calculator::tokenizing::TokenType::OperatorEqEqEq,
+        calculator::tokenizing::TokenType::OperatorNotEqEq,
+        calculator::tokenizing::TokenType::OperatorGt,
+        calculator::tokenizing::TokenType::OperatorGtEq,
+        calculator::tokenizing::TokenType::OperatorGtGt,
+        calculator::tokenizing::TokenType::OperatorGtGtEq,
+        calculator::tokenizing::TokenType::OperatorLs,
+        calculator::tokenizing::TokenType::OperatorLsEq,
+        calculator::tokenizing::TokenType::OperatorLsLs,
+        calculator::tokenizing::TokenType::OperatorLsLsEq,
+        calculator::tokenizing::TokenType::OperatorNeq,
+        calculator::tokenizing::TokenType::OperatorQe,
+        calculator::tokenizing::TokenType::OperatorQeQe,
     };
 
     return list;

@@ -2,7 +2,7 @@
 #include "Functions.internal.hpp"
 #include "Exception.hpp"
 
-bool util::parsing::CreatePostFixExpression(const std::vector<tokenizing::Token> &tokens, std::vector<ExpressionBase *> &out, const Config &config)
+bool calculator::parsing::CreatePostFixExpression(const std::vector<tokenizing::Token> &tokens, std::vector<ExpressionBase *> &out, const Config &config)
 {
     std::stack<std::string> operatorStack;
     std::stack<std::string> functionStack;
@@ -14,37 +14,37 @@ bool util::parsing::CreatePostFixExpression(const std::vector<tokenizing::Token>
 
         switch (token.GetType())
         {
-        case util::tokenizing::TokenType::String:
+        case calculator::tokenizing::TokenType::String:
             out.push_back(new ValueExpression(token.GetValue()));
             break;
-        case util::tokenizing::TokenType::Number:
+        case calculator::tokenizing::TokenType::Number:
             out.push_back(new ValueExpression(token.GetValue()));
             break;
-        case util::tokenizing::TokenType::Identifier:
+        case calculator::tokenizing::TokenType::Identifier:
             out.push_back(new VariableExpression(token.GetValue()));
             break;
-        case util::tokenizing::TokenType::LazyEvalSeperator:
+        case calculator::tokenizing::TokenType::LazyEvalSeperator:
             out.push_back(new ValueExpression(new LazyValue(token.GetValue())));
             break;
-        case util::tokenizing::TokenType::OpeningBracket:
+        case calculator::tokenizing::TokenType::OpeningBracket:
             operatorStack.push(std::string({config.GetBracketMarker().opening}));
             break;
-        case util::tokenizing::TokenType::ClosingBracket:
+        case calculator::tokenizing::TokenType::ClosingBracket:
             operatorStack.push(std::string({config.GetBracketMarker().closing}));
             break;
-        case util::tokenizing::TokenType::FunctionStart:
+        case calculator::tokenizing::TokenType::FunctionStart:
             operatorStack.push(std::string({config.GetFunctionBrackets().opening}));
             functionStack.push(token.GetValue());
             argCountStack.push(0);
             break;
-        case util::tokenizing::TokenType::SetStart:
+        case calculator::tokenizing::TokenType::SetStart:
             operatorStack.push(std::string({config.GetSetMarkers().opening}));
             functionStack.push("CreateSet");
             argCountStack.push(0);
             break;
-        case util::tokenizing::TokenType::SetEnd:
-        case util::tokenizing::TokenType::FunctionEnd:
-        case util::tokenizing::TokenType::Seperator:
+        case calculator::tokenizing::TokenType::SetEnd:
+        case calculator::tokenizing::TokenType::FunctionEnd:
+        case calculator::tokenizing::TokenType::Seperator:
         {
             auto top = operatorStack.top();
 
@@ -71,12 +71,12 @@ bool util::parsing::CreatePostFixExpression(const std::vector<tokenizing::Token>
                 top = operatorStack.top();
             }
 
-            if (token.GetType() == util::tokenizing::TokenType::FunctionEnd || token.GetType() == util::tokenizing::TokenType::SetEnd)
+            if (token.GetType() == calculator::tokenizing::TokenType::FunctionEnd || token.GetType() == calculator::tokenizing::TokenType::SetEnd)
             {
                 auto argCount = argCountStack.top();
                 argCountStack.pop();
 
-                if (tokens[i - 1].GetType() != util::tokenizing::TokenType::FunctionStart && tokens[i - 1].GetType() != util::tokenizing::TokenType::SetStart)
+                if (tokens[i - 1].GetType() != calculator::tokenizing::TokenType::FunctionStart && tokens[i - 1].GetType() != calculator::tokenizing::TokenType::SetStart)
                 {
                     argCount++;
                 }
@@ -92,10 +92,10 @@ bool util::parsing::CreatePostFixExpression(const std::vector<tokenizing::Token>
 
             break;
         }
-        case util::tokenizing::TokenType::AccessorStart:
-        case util::tokenizing::TokenType::AccessorEnd:
+        case calculator::tokenizing::TokenType::AccessorStart:
+        case calculator::tokenizing::TokenType::AccessorEnd:
             throw util::NotImplementedException();
-        case util::tokenizing::TokenType::Operator:
+        case calculator::tokenizing::TokenType::Operator:
         {
             auto op1 = config.GetOperator(token.GetValue());
             auto op2 = operatorStack.empty() ? nullptr : config.GetOperator(operatorStack.top());

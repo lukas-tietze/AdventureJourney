@@ -1,10 +1,10 @@
 #include "Calculator.hpp"
 
-util::parsing::ExpressionBase::ExpressionBase(int)
+calculator::parsing::ExpressionBase::ExpressionBase(int)
 {
 }
 
-int util::parsing::ExpressionBase::GetArgCount() const
+int calculator::parsing::ExpressionBase::GetArgCount() const
 {
     return this->argCount;
 }

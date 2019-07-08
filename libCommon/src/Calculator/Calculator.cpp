@@ -1,24 +1,24 @@
 #include "Calculator.hpp"
 
-util::Config &util::Calculator::GetConfig()
+calculator::Config &calculator::Calculator::GetConfig()
 {
     return this->config;
 }
 
-const util::Config &util::Calculator::GetConfig() const
+const calculator::Config &calculator::Calculator::GetConfig() const
 {
     return this->config;
 }
 
-void util::Calculator::SetConfig(const Config &c)
+void calculator::Calculator::SetConfig(const Config &c)
 {
     this->config = c;
 }
 
-util::IValue *util::Calculator::Evaluate(const std::string &s)
+calculator::IValue *calculator::Calculator::Evaluate(const std::string &s)
 {
-    util::tokenizing::Tokenizer t;
-    std::vector<util::parsing::ExpressionBase *> expressions;
+    calculator::tokenizing::Tokenizer t;
+    std::vector<calculator::parsing::ExpressionBase *> expressions;
     t.Tokenize(s, &this->config);
-    util::parsing::CreatePostFixExpression(t.GetTokens(), expressions, this->config);
+    calculator::parsing::CreatePostFixExpression(t.GetTokens(), expressions, this->config);
 }
