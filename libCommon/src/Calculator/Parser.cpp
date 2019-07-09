@@ -2,9 +2,9 @@
 #include "Functions.internal.hpp"
 #include "Exception.hpp"
 
-bool calculator::parsing::CreatePostFixExpression(const std::vector<tokenizing::Token> &tokens, std::vector<ExpressionBase *> &out, const Config &config)
+bool calculator::parsing::CreatePostFixExpression(const std::vector<calculator::tokenizing::Token> &tokens, std::vector<ExpressionBase *> &out, const Config &config)
 {
-    std::stack<std::string> operatorStack;
+    std::stack<tokenizing::TokenType> operatorStack;
     std::stack<std::string> functionStack;
     std::stack<int> argCountStack;
 
@@ -27,18 +27,18 @@ bool calculator::parsing::CreatePostFixExpression(const std::vector<tokenizing::
             out.push_back(new ValueExpression(new LazyValue(token.GetValue())));
             break;
         case calculator::tokenizing::TokenType::OpeningBracket:
-            operatorStack.push(std::string({config.GetBracketMarker().opening}));
+            operatorStack.push(tokenizing::TokenType::OpeningBracket);
             break;
         case calculator::tokenizing::TokenType::ClosingBracket:
-            operatorStack.push(std::string({config.GetBracketMarker().closing}));
+            operatorStack.push(tokenizing::TokenType::ClosingBracket);
             break;
         case calculator::tokenizing::TokenType::FunctionStart:
-            operatorStack.push(std::string({config.GetFunctionBrackets().opening}));
+            operatorStack.push(tokenizing::TokenType::FunctionStart);
             functionStack.push(token.GetValue());
             argCountStack.push(0);
             break;
         case calculator::tokenizing::TokenType::SetStart:
-            operatorStack.push(std::string({config.GetSetMarkers().opening}));
+            operatorStack.push(tokenizing::TokenType::SetStart);
             functionStack.push("CreateSet");
             argCountStack.push(0);
             break;
@@ -50,17 +50,16 @@ bool calculator::parsing::CreatePostFixExpression(const std::vector<tokenizing::
 
             while (operatorStack.size() > 0)
             {
-                if (top.length() == 1 &&
-                    (top[0] == config.GetFunctionBrackets().opening ||
-                     top[0] == config.GetListSeperator() ||
-                     top[0] == config.GetSetMarkers().opening))
+                if (top == tokenizing::TokenType::FunctionStart ||
+                    top == tokenizing::TokenType::Seperator ||
+                    top == tokenizing::TokenType::SetStart)
                 {
                     break;
                 }
                 else
                 {
                     operatorStack.pop();
-                    auto op = config.GetOperator(top);
+                    auto op = config.GetOperator((OperatorType)top);
 
                     if (op != nullptr)
                         out.push_back(new FunctionExpression(op));
@@ -97,13 +96,13 @@ bool calculator::parsing::CreatePostFixExpression(const std::vector<tokenizing::
             throw util::NotImplementedException();
         case calculator::tokenizing::TokenType::Operator:
         {
-            auto op1 = config.GetOperator(token.GetValue());
+            auto op1 = config.GetOperator(token.GetType());
             auto op2 = operatorStack.empty() ? nullptr : config.GetOperator(operatorStack.top());
 
             if (operatorStack.size() == 0 ||
                 (op1 && op2 && op1->GetPriority() > op2->GetPriority()))
             {
-                operatorStack.push(token.GetValue());
+                operatorStack.push(token.GetType());
             }
             else
             {
@@ -123,7 +122,7 @@ bool calculator::parsing::CreatePostFixExpression(const std::vector<tokenizing::
                     operatorStack.pop();
                 }
 
-                operatorStack.push(token.GetValue());
+                operatorStack.push(token.GetType());
             }
 
             break;

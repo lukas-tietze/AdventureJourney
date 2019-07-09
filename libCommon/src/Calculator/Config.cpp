@@ -8,9 +8,9 @@ void calculator::Config::CreateDefaultConfig()
 {
 }
 
-void calculator::Config::AddOperator(const std::string &name, Operator *op)
+void calculator::Config::AddOperator(OperatorType type, Operator *op)
 {
-    this->operators[name] = op;
+    this->operators[type] = op;
 }
 
 void calculator::Config::AddFunction(const std::string &name, function_t f)
@@ -23,9 +23,9 @@ void calculator::Config::AddVariable(const std::string &name, IValue *v)
     this->variables[name] = v;
 }
 
-bool calculator::Config::RemoveOperator(const std::string &name)
+bool calculator::Config::RemoveOperator(OperatorType type)
 {
-    return this->operators.erase(name);
+    return this->operators.erase(type);
 }
 
 bool calculator::Config::RemoveFunction(const std::string &name)
@@ -114,7 +114,7 @@ std::unordered_map<std::string, calculator::function_t> &calculator::Config::Get
     return this->functions;
 }
 
-std::unordered_map<std::string, calculator::Operator *> &calculator::Config::GetOperators()
+std::unordered_map<calculator::OperatorType, calculator::Operator *> &calculator::Config::GetOperators()
 {
     return this->operators;
 }
@@ -124,9 +124,9 @@ std::unordered_map<std::string, calculator::IValue *> &calculator::Config::GetVa
     return this->variables;
 }
 
-calculator::Operator *calculator::Config::GetOperator(const std::string &name)
+calculator::Operator *calculator::Config::GetOperator(OperatorType type)
 {
-    auto res = this->operators.find(name);
+    auto res = this->operators.find(type);
 
     return res == this->operators.end() ? nullptr : res->second;
 }
@@ -180,7 +180,7 @@ const std::unordered_map<std::string, calculator::function_t> &calculator::Confi
     return this->functions;
 }
 
-const std::unordered_map<std::string, calculator::Operator *> &calculator::Config::GetOperators() const
+const std::unordered_map<calculator::OperatorType, calculator::Operator *> &calculator::Config::GetOperators() const
 {
     return this->operators;
 }
@@ -190,9 +190,9 @@ const std::unordered_map<std::string, calculator::IValue *> &calculator::Config:
     return this->variables;
 }
 
-const calculator::Operator *calculator::Config::GetOperator(const std::string &name) const
+const calculator::Operator *calculator::Config::GetOperator(OperatorType type) const
 {
-    auto res = this->operators.find(name);
+    auto res = this->operators.find(type);
 
     return res == this->operators.end() ? nullptr : res->second;
 }

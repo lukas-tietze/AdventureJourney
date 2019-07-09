@@ -133,6 +133,36 @@ public:
     void PrintValueDescription(std::ostream &) const;
 };
 
+enum class OperatorType
+{
+    Add = PRIO(0) | 1,      // +
+    AddEq = PRIO(0) | 2,    // +=
+    Sub = PRIO(0) | 3,      // -
+    SubEq = PRIO(0) | 4,    // -=
+    Mul = PRIO(0) | 5,      // *
+    MulEq = PRIO(0) | 6,    // *=
+    Div = PRIO(0) | 7,      // /
+    DivEq = PRIO(0) | 8,    // /=
+    Eq = PRIO(0) | 9,       // =
+    Not = PRIO(0) | 10,     // !
+    EqEq = PRIO(0) | 11,    // ==
+    NotEq = PRIO(0) | 12,   // !=
+    NotNot = PRIO(0) | 13,  // !!
+    EqEqEq = PRIO(0) | 14,  // ===
+    NotEqEq = PRIO(0) | 15, // !==
+    Gt = PRIO(0) | 16,      // >
+    GtEq = PRIO(0) | 17,    // >=
+    GtGt = PRIO(0) | 18,    // >>
+    GtGtEq = PRIO(0) | 19,  // >>=
+    Ls = PRIO(0) | 20,      // <
+    LsEq = PRIO(0) | 21,    // <=
+    LsLs = PRIO(0) | 22,    // <<
+    LsLsEq = PRIO(0) | 23,  // <<=
+    Neq = PRIO(0) | 24,     // <>
+    Qe = PRIO(0) | 25,      // ?
+    QeQe = PRIO(0) | 26,    // ??
+};
+
 class Config
 {
 public:
@@ -146,11 +176,11 @@ public:
 
     void CreateDefaultConfig();
 
-    void AddOperator(const std::string &, Operator *);
+    void AddOperator(OperatorType, Operator *);
     void AddFunction(const std::string &, function_t);
     void AddVariable(const std::string &, IValue *);
 
-    bool RemoveOperator(const std::string &);
+    bool RemoveOperator(OperatorType);
     bool RemoveFunction(const std::string &);
     bool RemoveVariable(const std::string &);
 
@@ -170,9 +200,9 @@ public:
     void SetStringEscapeMarker(char);
 
     std::unordered_map<std::string, function_t> &GetFunctions();
-    std::unordered_map<std::string, Operator *> &GetOperators();
+    std::unordered_map<OperatorType, Operator *> &GetOperators();
     std::unordered_map<std::string, IValue *> &GetVariables();
-    Operator *GetOperator(const std::string &);
+    Operator *GetOperator(OperatorType);
     function_t GetFunction(const std::string &);
     IValue *GetVariable(const std::string &);
     CharPair &GetBracketMarker();
@@ -183,9 +213,9 @@ public:
     CharPair &GetAccessorMarkers();
 
     const std::unordered_map<std::string, function_t> &GetFunctions() const;
-    const std::unordered_map<std::string, Operator *> &GetOperators() const;
+    const std::unordered_map<OperatorType, Operator *> &GetOperators() const;
     const std::unordered_map<std::string, IValue *> &GetVariables() const;
-    const Operator *GetOperator(const std::string &) const;
+    const Operator *GetOperator(OperatorType) const;
     const function_t GetFunction(const std::string &) const;
     const IValue *GetVariable(const std::string &) const;
     const CharPair &GetBracketMarker() const;
@@ -201,8 +231,8 @@ public:
 
 private:
     std::unordered_map<std::string, function_t> functions;
-    std::unordered_map<std::string, Operator *> operators;
     std::unordered_map<std::string, IValue *> variables;
+    std::unordered_map<OperatorType, Operator *> operators;
     CharPair bracketMarker;
     CharPair stringMarker;
     CharPair lazyEvalMarker;
@@ -223,7 +253,7 @@ private:
 public:
     EvaluationContext(Config *config);
 
-    Operator *GetOperator(const std::string &);
+    Operator *GetOperator(OperatorType);
     function_t GetFunction(const std::string &);
     IValue *GetVariable(const std::string &);
 };
@@ -246,32 +276,32 @@ enum class TokenType
     FunctionEnd = 0x000B,
     LazyEvalSeperator = 0x000C,
     Operator = 0x1000,
-    OperatorAdd = Operator | PRIO(0) | 1,      // +
-    OperatorAddEq = Operator | PRIO(0) | 2,    // +=
-    OperatorSub = Operator | PRIO(0) | 3,      // -
-    OperatorSubEq = Operator | PRIO(0) | 4,    // -=
-    OperatorMul = Operator | PRIO(0) | 5,      // *
-    OperatorMulEq = Operator | PRIO(0) | 6,    // *=
-    OperatorDiv = Operator | PRIO(0) | 7,      // /
-    OperatorDivEq = Operator | PRIO(0) | 8,    // /=
-    OperatorEq = Operator | PRIO(0) | 9,       // =
-    OperatorNot = Operator | PRIO(0) | 10,     // !
-    OperatorEqEq = Operator | PRIO(0) | 11,    // ==
-    OperatorNotEq = Operator | PRIO(0) | 12,   // !=
-    OperatorNotNot = Operator | PRIO(0) | 13,  // !!
-    OperatorEqEqEq = Operator | PRIO(0) | 14,  // ===
-    OperatorNotEqEq = Operator | PRIO(0) | 15, // !==
-    OperatorGt = Operator | PRIO(0) | 16,      // >
-    OperatorGtEq = Operator | PRIO(0) | 17,    // >=
-    OperatorGtGt = Operator | PRIO(0) | 18,    // >>
-    OperatorGtGtEq = Operator | PRIO(0) | 19,  // >>=
-    OperatorLs = Operator | PRIO(0) | 20,      // <
-    OperatorLsEq = Operator | PRIO(0) | 21,    // <=
-    OperatorLsLs = Operator | PRIO(0) | 22,    // <<
-    OperatorLsLsEq = Operator | PRIO(0) | 23,  // <<=
-    OperatorNeq = Operator | PRIO(0) | 24,     // <>
-    OperatorQe = Operator | PRIO(0) | 25,      // ?
-    OperatorQeQe = Operator | PRIO(0) | 26,    // ??
+    OperatorAdd = Operator | static_cast<int>(OperatorType::Add),
+    OperatorAddEq = Operator | static_cast<int>(OperatorType::AddEq),
+    OperatorSub = Operator | static_cast<int>(OperatorType::Sub),
+    OperatorSubEq = Operator | static_cast<int>(OperatorType::SubEq),
+    OperatorMul = Operator | static_cast<int>(OperatorType::Mul),
+    OperatorMulEq = Operator | static_cast<int>(OperatorType::MulEq),
+    OperatorDiv = Operator | static_cast<int>(OperatorType::Div),
+    OperatorDivEq = Operator | static_cast<int>(OperatorType::DivEq),
+    OperatorEq = Operator | static_cast<int>(OperatorType::Eq),
+    OperatorNot = Operator | static_cast<int>(OperatorType::Not),
+    OperatorEqEq = Operator | static_cast<int>(OperatorType::EqEq),
+    OperatorNotEq = Operator | static_cast<int>(OperatorType::NotEq),
+    OperatorNotNot = Operator | static_cast<int>(OperatorType::NotNot),
+    OperatorEqEqEq = Operator | static_cast<int>(OperatorType::EqEqEq),
+    OperatorNotEqEq = Operator | static_cast<int>(OperatorType::NotEqEq),
+    OperatorGt = Operator | static_cast<int>(OperatorType::Gt),
+    OperatorGtEq = Operator | static_cast<int>(OperatorType::GtEq),
+    OperatorGtGt = Operator | static_cast<int>(OperatorType::GtGt),
+    OperatorGtGtEq = Operator | static_cast<int>(OperatorType::GtGtEq),
+    OperatorLs = Operator | static_cast<int>(OperatorType::Ls),
+    OperatorLsEq = Operator | static_cast<int>(OperatorType::LsEq),
+    OperatorLsLs = Operator | static_cast<int>(OperatorType::LsLs),
+    OperatorLsLsEq = Operator | static_cast<int>(OperatorType::LsLsEq),
+    OperatorNeq = Operator | static_cast<int>(OperatorType::Neq),
+    OperatorQe = Operator | static_cast<int>(OperatorType::Qe),
+    OperatorQeQe = Operator | static_cast<int>(OperatorType::QeQe),
 };
 
 std::ostream &operator<<(std::ostream &, TokenType);
@@ -289,6 +319,16 @@ public:
 
     TokenType GetType() const;
     const std::string &GetValue() const;
+};
+
+enum class TokenizerError
+{
+    MissingBracket,
+    ExtraClosingBracket,
+    MismatchingBracket,
+    InvalidChar,
+    UnexpectedEndOfLazyExpression,
+    UnexpectedEndOfStringExpression,
 };
 
 class Tokenizer
@@ -318,6 +358,7 @@ private:
     bool TryReadOperator();
     bool IsPartOfIdentifier(char);
     bool IsDigit(char);
+    void HandleError(TokenizerError);
 
 public:
     Tokenizer();
@@ -325,16 +366,6 @@ public:
 
     bool Tokenize(const std::string &, const Config *);
     const std::vector<Token> &GetTokens() const;
-};
-
-enum class TokenizerError
-{
-    MissingBracket,
-    ExtraClosingBracket,
-    MismatchingBracket,
-    InvalidChar,
-    UnexpectedEndOfLazyExpression,
-    UnexpectedEndOfStringExpression,
 };
 
 class TokenizerException : public util::Exception

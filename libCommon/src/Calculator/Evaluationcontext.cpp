@@ -4,9 +4,9 @@ calculator::EvaluationContext::EvaluationContext(Config *config) : config(config
 {
 }
 
-calculator::Operator *calculator::EvaluationContext::GetOperator(const std::string &op)
+calculator::Operator *calculator::EvaluationContext::GetOperator(OperatorType type)
 {
-    return this->config->GetOperator(op);
+    return this->config->GetOperator(type);
 }
 
 calculator::function_t calculator::EvaluationContext::GetFunction(const std::string &name)

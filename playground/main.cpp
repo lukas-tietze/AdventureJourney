@@ -9,7 +9,7 @@
 
 int main()
 {
-    util::ScriptingEngine engine;
+    calculator::ScriptingEngine engine;
 
     engine.EvalScript("5+2");
 }

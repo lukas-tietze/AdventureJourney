@@ -61,7 +61,7 @@ bool calculator::tokenizing::Tokenizer::Tokenize(const std::string &data, const 
 
     if (this->bracketStack.size() != 0)
     {
-        throw TokenizerException(TokenizerError::MissingBracket, this);
+        this->HandleError(TokenizerError::MissingBracket);
     }
 }
 
@@ -122,7 +122,7 @@ bool calculator::tokenizing::Tokenizer::ReadNext()
     {
         if (this->bracketStack.size() == 0)
         {
-            throw TokenizerException(TokenizerError::ExtraClosingBracket, this);
+            this->HandleError(TokenizerError::ExtraClosingBracket);
         }
 
         this->pos++;
@@ -137,7 +137,7 @@ bool calculator::tokenizing::Tokenizer::ReadNext()
 
             if (last != this->config->GetFunctionBrackets().closing)
             {
-                throw TokenizerException(TokenizerError::MismatchingBracket, this);
+                this->HandleError(TokenizerError::MismatchingBracket);
             }
         }
         else
@@ -146,7 +146,7 @@ bool calculator::tokenizing::Tokenizer::ReadNext()
 
             if (last != this->config->GetBracketMarker().closing)
             {
-                throw TokenizerException(TokenizerError::MismatchingBracket, this);
+                this->HandleError(TokenizerError::MismatchingBracket);
             }
         }
 
@@ -183,7 +183,7 @@ bool calculator::tokenizing::Tokenizer::ReadNext()
     }
     else
     {
-        throw TokenizerException(TokenizerError::InvalidChar, this);
+        this->HandleError(TokenizerError::InvalidChar);
     }
 }
 
@@ -195,7 +195,7 @@ bool calculator::tokenizing::Tokenizer::ReadLazyExpression()
     {
         if (this->pos >= this->len)
         {
-            throw TokenizerException(TokenizerError::UnexpectedEndOfLazyExpression, this);
+            this->HandleError(TokenizerError::UnexpectedEndOfLazyExpression);
         }
 
         pos++;
@@ -443,4 +443,9 @@ bool calculator::tokenizing::Tokenizer::IsStartOfNumber(char c)
     return this->IsDigit(c) || c == this->config->GetDecimalSeperator() ||
            (c == '-' && (this->tokens.size() == 0 ||
                          (this->tokens.size() > 0 && this->tokens[this->tokens.size() - 1].GetType() == TokenType::OpeningBracket)));
+}
+
+void calculator::tokenizing::Tokenizer::HandleError(TokenizerError error)
+{
+    throw TokenizerException(error, this);
 }
