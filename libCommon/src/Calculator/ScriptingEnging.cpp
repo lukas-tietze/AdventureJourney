@@ -21,12 +21,12 @@ calculator::ScriptingEngine::Action::Action()
 }
 
 calculator::ScriptingEngine::Action::Action(const std::string &name,
-                                      const std::string &alias,
-                                      const std::string &description,
-                                      action_t action) : name(name),
-                                                         alias(alias),
-                                                         description(description),
-                                                         action(action)
+                                            const std::string &alias,
+                                            const std::string &description,
+                                            action_t action) : name(name),
+                                                               alias(alias),
+                                                               description(description),
+                                                               action(action)
 {
 }
 
@@ -41,26 +41,26 @@ bool calculator::ScriptingEngine::Action::HasAlias() const
 }
 
 calculator::ScriptingEngine::ScriptingEngine() : uniqeActions{
-                                               Action("tokenize", "t", "Prints the list of tokens of the expression.", &calculator::ScriptingEngine::Tokenize),
-                                               Action("parse", "p", "Parses the expression and prints the created postfix expression.", &calculator::ScriptingEngine::Parse),
-                                               Action("def", "d", "Evaluates the given expression and defines a variable, which value is the result of the evaluation.", &calculator::ScriptingEngine::DefineVar),
-                                               Action("exp", "e", "Defines a variable that contains the given expression.", &calculator::ScriptingEngine::DefineExp),
-                                               Action("undef", "ud", "Removes a variable.", &calculator::ScriptingEngine::Undefine),
-                                               Action("quit", "q", "Quit the application.", &calculator::ScriptingEngine::Quit),
-                                               Action("solve", "s", "Evaluates the expression and prints the result.", &calculator::ScriptingEngine::Solve),
-                                               Action("load", "ld", "load a file from the specified path and interpret each line as a command.", &calculator::ScriptingEngine::LoadFile),
-                                               Action("err", "|", "Changes the error stream to the specified file. util :err <std> to print to console.", &calculator::ScriptingEngine::OpenErr),
-                                               Action("out", ">", "Changes the output stream to the specified file. Use :out <std> to print to console.", &calculator::ScriptingEngine::OpenOut),
-                                               Action("in", "<", "Changes the input stream. Use :in <std> to use the console.", &calculator::ScriptingEngine::OpenIn),
-                                               Action("dir", "cd", "Changes the to specified directory and prints the current directory.", &calculator::ScriptingEngine::ChangeDir),
-                                               Action("echo", "#", "Use on, off to enable or disable echoing of commands", &calculator::ScriptingEngine::SetEcho),
-                                               Action("useAns", "ans", " use on, off to enable or disable the ANS-Variable. If enablad the result of the last calculation will be saved in a variable named ANS", &calculator::ScriptingEngine::UseAns),
-                                               Action("clear", "cl", "Clears the screen.", &calculator::ScriptingEngine::ClearOut),
-                                               Action("files", "ls", "List all Files and directories in the current directory.", &calculator::ScriptingEngine::ListFiles),
-                                               Action("clearvars", "clv", "Delete all variables, except e and pi. Use :clearvars all to also delete e and pi.", &calculator::ScriptingEngine::ClearVars),
-                                               Action("help", "h", "Prints the help.", &calculator::ScriptingEngine::ShowHelp),
-                                               Action("diagnostic", "dg", "Set diagnostic-Output to the specified stream.", &calculator::ScriptingEngine::SetDiagnosticOut),
-                                           }
+                                                     Action("tokenize", "t", "Prints the list of tokens of the expression.", &calculator::ScriptingEngine::Tokenize),
+                                                     Action("parse", "p", "Parses the expression and prints the created postfix expression.", &calculator::ScriptingEngine::Parse),
+                                                     Action("def", "d", "Evaluates the given expression and defines a variable, which value is the result of the evaluation.", &calculator::ScriptingEngine::DefineVar),
+                                                     Action("exp", "e", "Defines a variable that contains the given expression.", &calculator::ScriptingEngine::DefineExp),
+                                                     Action("undef", "ud", "Removes a variable.", &calculator::ScriptingEngine::Undefine),
+                                                     Action("quit", "q", "Quit the application.", &calculator::ScriptingEngine::Quit),
+                                                     Action("solve", "s", "Evaluates the expression and prints the result.", &calculator::ScriptingEngine::Solve),
+                                                     Action("load", "ld", "load a file from the specified path and interpret each line as a command.", &calculator::ScriptingEngine::LoadFile),
+                                                     Action("err", "|", "Changes the error stream to the specified file. util :err <std> to print to console.", &calculator::ScriptingEngine::OpenErr),
+                                                     Action("out", ">", "Changes the output stream to the specified file. Use :out <std> to print to console.", &calculator::ScriptingEngine::OpenOut),
+                                                     Action("in", "<", "Changes the input stream. Use :in <std> to use the console.", &calculator::ScriptingEngine::OpenIn),
+                                                     Action("dir", "cd", "Changes the to specified directory and prints the current directory.", &calculator::ScriptingEngine::ChangeDir),
+                                                     Action("echo", "#", "Use on, off to enable or disable echoing of commands", &calculator::ScriptingEngine::SetEcho),
+                                                     Action("useAns", "ans", " use on, off to enable or disable the ANS-Variable. If enablad the result of the last calculation will be saved in a variable named ANS", &calculator::ScriptingEngine::UseAns),
+                                                     Action("clear", "cl", "Clears the screen.", &calculator::ScriptingEngine::ClearOut),
+                                                     Action("files", "ls", "List all Files and directories in the current directory.", &calculator::ScriptingEngine::ListFiles),
+                                                     Action("clearvars", "clv", "Delete all variables, except e and pi. Use :clearvars all to also delete e and pi.", &calculator::ScriptingEngine::ClearVars),
+                                                     Action("help", "h", "Prints the help.", &calculator::ScriptingEngine::ShowHelp),
+                                                     Action("diagnostic", "dg", "Set diagnostic-Output to the specified stream.", &calculator::ScriptingEngine::SetDiagnosticOut),
+                                                 }
 {
     //TODO: Nicht Threadsafe -> Threadsafe wird an dieser Stelle aber auch nicht unbedingt benötigt!
     for (const auto &action : ScriptingEngine::uniqeActions)
@@ -155,10 +155,10 @@ void calculator::ScriptingEngine::ShowHelp(const std::string &expression)
     {
         this->out.WriteLine("% is a function: %", expression, this->calculator.GetConfig().GetFunction(expression));
     }
-    else if (this->calculator.GetConfig().GetOperator(expression) != nullptr)
-    {
-        this->out.WriteLine("% is an operator: %", expression, this->calculator.GetConfig().GetOperator(expression));
-    }
+    // else if (this->calculator.GetConfig().GetOperator(expression) != nullptr)
+    // {
+    //     this->out.WriteLine("% is an operator: %", expression, this->calculator.GetConfig().GetOperator(expression));
+    // }
     else if (this->actions.find(expression) != this->actions.end())
     {
         this->out.WriteLine("% is an command: %", expression, actions[expression].description);
@@ -432,10 +432,13 @@ void calculator::ScriptingEngine::EvalStream(std::istream &in)
     std::string buf;
     std::string line;
     bool append = false;
+    bool loop = false;
 
-    while (this->loop)
+    this->loop = true;
+
+    while (!in.eof() && this->loop)
     {
-        this->loop = !std::getline(in, buf).eof();
+        std::getline(in, buf);
 
         if (util::StartsWith(buf, "//"))
             continue;

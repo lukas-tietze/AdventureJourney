@@ -1,4 +1,4 @@
-#include "Calculator.hpp"
+#include "Internal.hpp"
 
 #include "data/String.hpp"
 
@@ -24,38 +24,33 @@ calculator::tokenizing::Tokenizer::~Tokenizer()
     this->ClearStateMachine();
 }
 
-const std::vector<calculator::tokenizing::Token> &calculator::tokenizing::Tokenizer::GetTokens() const
-{
-    return this->tokens;
-}
-
-void calculator::tokenizing::Tokenizer::InitStateMachine(const std::string &data, const Config *config)
+void calculator::tokenizing::Tokenizer::InitStateMachine(const std::string &data, const Config &config, std::vector<Token> &buf)
 {
     this->len = data.length();
     this->pos = 0;
-    this->data = new char[this->len];
-    this->config = config;
+    this->data = data.c_str();
+    this->config = &config;
+    this->tokens = &buf;
 }
 
 void calculator::tokenizing::Tokenizer::ClearStateMachine()
 {
-    if (this->data)
-        delete[] this->data;
-
+    this->data = nullptr;
+    this->config = nullptr;
+    this->tokens = nullptr;
     this->bracketStack = std::stack<char>();
-    this->tokens.clear();
 }
 
-bool calculator::tokenizing::Tokenizer::Tokenize(const std::string &data, const Config *config)
+bool calculator::tokenizing::Tokenizer::Run(const std::string &data, std::vector<Token> &buf, const Config &config)
 {
     this->ClearStateMachine();
-    this->InitStateMachine(data, config);
+    this->InitStateMachine(data, config, buf);
 
     while (this->pos < this->len)
     {
         if (this->ReadNext())
         {
-            this->tokens.push_back(this->buf);
+            this->tokens->push_back(this->buf);
         }
     }
 
@@ -99,8 +94,8 @@ bool calculator::tokenizing::Tokenizer::ReadNext()
     }
     else if (c == this->config->GetFunctionBrackets().opening && this->IsAfterFunction())
     {
-        auto functionName = this->tokens[this->tokens.size() - 1].GetValue();
-        this->tokens.erase(--this->tokens.end());
+        auto functionName = this->tokens[this->tokens->size() - 1].GetValue();
+        this->tokens->erase(--this->tokens->end());
         this->buf = Token(TokenType::FunctionStart, functionName);
 
         c |= FUNCTION_BRACKET_MASK;
@@ -155,27 +150,37 @@ bool calculator::tokenizing::Tokenizer::ReadNext()
     else if (c == this->config->GetSetMarkers().opening)
     {
         this->pos++;
-        return new Token(TokenType::SetStart);
+        this->buf = Token(TokenType::SetStart);
+
+        return true;
     }
     else if (c == this->config->GetSetMarkers().closing)
     {
         this->pos++;
-        return new Token(TokenType::SetEnd);
+        this->buf = Token(TokenType::SetEnd);
+
+        return true;
     }
     else if (c == this->config->GetAccessorMarkers().opening)
     {
         this->pos++;
-        return new Token(TokenType::AccessorStart);
+        this->buf = Token(TokenType::AccessorStart);
+
+        return true;
     }
     else if (c == this->config->GetAccessorMarkers().closing)
     {
         this->pos++;
-        return new Token(TokenType::AccessorEnd);
+        this->buf = Token(TokenType::AccessorEnd);
+
+        return true;
     }
     else if (c == this->config->GetListSeperator())
     {
         this->pos++;
-        return new Token(TokenType::Seperator, std::string({c}));
+        this->buf = Token(TokenType::Seperator, std::string({c}));
+
+        return true;
     }
     else if (this->TryReadOperator())
     {
@@ -336,7 +341,9 @@ bool calculator::tokenizing::Tokenizer::ReadIdentifier()
         ++this->pos;
     } while (this->pos < this->len && this->IsPartOfIdentifier(this->data[this->pos]));
 
-    return new Token(TokenType::Identifier, std::string(this->data + readStart, this->pos - readStart));
+    this->buf = Token(TokenType::Identifier, std::string(this->data + readStart, this->pos - readStart));
+
+    return true;
 }
 
 bool calculator::tokenizing::Tokenizer::ReadString()
@@ -368,7 +375,9 @@ bool calculator::tokenizing::Tokenizer::ReadString()
         }
     }
 
-    return new Token(TokenType::String, sb);
+    this->buf = Token(TokenType::String, sb);
+
+    return true;
 }
 
 bool calculator::tokenizing::Tokenizer::ReadNumber()
@@ -398,7 +407,9 @@ bool calculator::tokenizing::Tokenizer::ReadNumber()
         this->pos++;
     }
 
-    return new Token(TokenType::Number, std::string(this->data + readStart, this->pos - readStart));
+    this->buf = Token(TokenType::Number, std::string(this->data + readStart, this->pos - readStart));
+
+    return true;
 }
 
 void calculator::tokenizing::Tokenizer::SkipWhiteSpace()
@@ -415,7 +426,7 @@ void calculator::tokenizing::Tokenizer::SkipWhiteSpace()
 
 bool calculator::tokenizing::Tokenizer::IsAfterFunction()
 {
-    return this->tokens.size() != 0 && this->tokens[this->tokens.size() - 1].GetType() == TokenType::Identifier;
+    return this->tokens->size() != 0 && this->tokens[this->tokens->size() - 1].GetType() == TokenType::Identifier;
 }
 
 bool calculator::tokenizing::Tokenizer::IsStartOfIdentifier(char c)
@@ -441,8 +452,8 @@ bool calculator::tokenizing::Tokenizer::IsDigit(char c)
 bool calculator::tokenizing::Tokenizer::IsStartOfNumber(char c)
 {
     return this->IsDigit(c) || c == this->config->GetDecimalSeperator() ||
-           (c == '-' && (this->tokens.size() == 0 ||
-                         (this->tokens.size() > 0 && this->tokens[this->tokens.size() - 1].GetType() == TokenType::OpeningBracket)));
+           (c == '-' && (this->tokens->size() == 0 ||
+                         (this->tokens->size() > 0 && this->tokens[this->tokens->size() - 1].GetType() == TokenType::OpeningBracket)));
 }
 
 void calculator::tokenizing::Tokenizer::HandleError(TokenizerError error)

@@ -1,26 +1,19 @@
-#include "Calculator.hpp"
+#include "Internal.hpp"
 
 calculator::tokenizing::Token::Token() : type(),
-                                   value()
+                                         start(0),
+                                         len(0)
 {
 }
 
 calculator::tokenizing::Token::Token(TokenType type) : type(type),
-                                                 value()
+                                                       start(0),
+                                                       len(0)
 {
 }
 
-calculator::tokenizing::Token::Token(TokenType type, const std::string &value) : type(type),
-                                                                           value(value)
+calculator::tokenizing::Token::Token(TokenType type, int start, int len) : type(type),
+                                                                           start(start),
+                                                                           len(len)
 {
-}
-
-calculator::tokenizing::TokenType calculator::tokenizing::Token::GetType() const
-{
-    return this->type;
-}
-
-const std::string &calculator::tokenizing::Token::GetValue() const
-{
-    return this->value;
 }

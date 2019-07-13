@@ -2,9 +2,17 @@
 #include "Functions.internal.hpp"
 #include "Exception.hpp"
 
+namespace
+{
+calculator::OperatorType GetOperatorType(calculator::tokenizing::TokenType type)
+{
+    return static_cast<calculator::OperatorType>(static_cast<int>(type) & ~static_cast<int>(calculator::tokenizing::TokenType::Operator));
+}
+} // namespace
+
 bool calculator::parsing::CreatePostFixExpression(const std::vector<calculator::tokenizing::Token> &tokens, std::vector<ExpressionBase *> &out, const Config &config)
 {
-    std::stack<tokenizing::TokenType> operatorStack;
+    std::stack<calculator::tokenizing::TokenType> operatorStack;
     std::stack<std::string> functionStack;
     std::stack<int> argCountStack;
 
@@ -96,8 +104,8 @@ bool calculator::parsing::CreatePostFixExpression(const std::vector<calculator::
             throw util::NotImplementedException();
         case calculator::tokenizing::TokenType::Operator:
         {
-            auto op1 = config.GetOperator(token.GetType());
-            auto op2 = operatorStack.empty() ? nullptr : config.GetOperator(operatorStack.top());
+            auto op1 = config.GetOperator(GetOperatorType(token.GetType()));
+            auto op2 = operatorStack.empty() ? nullptr : config.GetOperator(GetOperatorType(operatorStack.top()));
 
             if (operatorStack.size() == 0 ||
                 (op1 && op2 && op1->GetPriority() > op2->GetPriority()))
@@ -106,7 +114,7 @@ bool calculator::parsing::CreatePostFixExpression(const std::vector<calculator::
             }
             else
             {
-                auto op = config.GetOperator(operatorStack.top());
+                auto op = config.GetOperator(GetOperatorType(operatorStack.top()));
                 operatorStack.pop();
 
                 if (op != nullptr)
@@ -114,11 +122,11 @@ bool calculator::parsing::CreatePostFixExpression(const std::vector<calculator::
                 else
                     throw util::NotSupportedException();
 
-                op2 = operatorStack.empty() ? nullptr : config.GetOperator(operatorStack.top());
+                op2 = operatorStack.empty() ? nullptr : config.GetOperator(GetOperatorType(operatorStack.top()));
 
                 while (operatorStack.size() > 0 && !(op1 && op2 && op1->GetPriority() > op2->GetPriority()))
                 {
-                    out.push_back(new FunctionExpression(config.GetOperator(operatorStack.top())));
+                    out.push_back(new FunctionExpression(config.GetOperator(GetOperatorType(operatorStack.top()))));
                     operatorStack.pop();
                 }
 
@@ -134,7 +142,7 @@ bool calculator::parsing::CreatePostFixExpression(const std::vector<calculator::
 
     while (operatorStack.size() > 0)
     {
-        out.push_back(new FunctionExpression(config.GetOperator(operatorStack.top())));
+        out.push_back(new FunctionExpression(config.GetOperator(GetOperatorType(operatorStack.top()))));
         operatorStack.pop();
     }
 

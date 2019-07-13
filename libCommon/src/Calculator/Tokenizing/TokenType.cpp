@@ -1,4 +1,4 @@
-#include "Calculator.hpp"
+#include "Internal.hpp"
 #include "data/EnumHelper.hpp"
 
 std::ostream &calculator::tokenizing::operator<<(std::ostream &s, calculator::tokenizing::TokenType v)

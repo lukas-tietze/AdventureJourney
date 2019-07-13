@@ -1,4 +1,4 @@
-#include "Calculator.hpp"
+#include "Internal.hpp"
 
 calculator::tokenizing::TokenizerException::TokenizerException(TokenizerError what, Tokenizer *t)
 {

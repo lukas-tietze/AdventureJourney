@@ -8,6 +8,7 @@
 #include <sstream>
 #include <Exception.hpp>
 #include <ctime>
+#include <limits>
 
 namespace util
 {
@@ -127,7 +128,7 @@ public:
     String(char c, uint32_t count);
 
     uint32_t Length() const;
-    bool Empty() const;
+    bool IsEmpty() const;
 
     bool Contains(const std::string &);
     bool Contains(const String &);
@@ -234,7 +235,7 @@ public:
     static StringBuilder &Acquire();
     static void Release();
     static String CreateStringAndRelease();
-}
+};
 } // namespace util
 
 #include "libCommon/src/data/StringUtils/Format.inl"
