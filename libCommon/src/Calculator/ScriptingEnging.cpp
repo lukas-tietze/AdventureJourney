@@ -6,6 +6,9 @@
 #include "data/String.hpp"
 #include "datetime/Timer.hpp"
 
+#include "./Tokenizing/Internal.hpp"
+#include "./Parsing/Internal.hpp"
+
 namespace
 {
 bool AsTruthValue(const std::string &s)
@@ -359,10 +362,10 @@ void calculator::ScriptingEngine::Parse(const std::string &expression)
     }
 
     std::vector<parsing::ExpressionBase *> expressions;
+    std::vector<tokenizing::Token> tokens;
 
-    tokenizing::Tokenizer tokenizer;
-    tokenizer.Tokenize(expression, &this->calculator.GetConfig());
-    parsing::CreatePostFixExpression(tokenizer.GetTokens(), expressions, this->calculator.GetConfig());
+    tokenizing::Tokenize(expression, tokens, this->calculator.GetConfig());
+    parsing::CreatePostFixExpression(tokens, expressions, this->calculator.GetConfig());
 
     for (auto i = 0; i < expressions.size(); i++)
     {
@@ -387,15 +390,14 @@ void calculator::ScriptingEngine::Tokenize(const std::string &expression)
         return;
     }
 
-    tokenizing::Tokenizer tokenizer;
-    tokenizer.Tokenize(expression, &this->calculator.GetConfig());
-    const auto &tokens = tokenizer.GetTokens();
+    std::vector<tokenizing::Token> tokens;
+    tokenizing::Tokenize(expression, tokens, this->calculator.GetConfig());
 
     if (tokens.size() > 0)
     {
         for (auto i = 0; i < tokens.size(); i++)
         {
-            this->out.Write("(%:%)", tokens[i].GetType(), tokens[i].GetValue());
+            this->out.Write(tokens[i]);
 
             if (i != tokens.size() - 1)
                 this->out.Write(", ");

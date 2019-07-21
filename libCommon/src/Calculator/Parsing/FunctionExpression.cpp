@@ -1,4 +1,4 @@
-#include "Calculator.hpp"
+#include "Internal.hpp"
 
 calculator::parsing::FunctionExpression::FunctionExpression(const Operator *op) : ExpressionBase(op->IsBinary() ? 2 : 1),
                                                                                   name(),

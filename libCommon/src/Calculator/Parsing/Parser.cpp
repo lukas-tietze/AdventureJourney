@@ -1,5 +1,7 @@
 #include "Calculator.hpp"
-#include "Functions.internal.hpp"
+#include "../Functions.internal.hpp"
+#include "./Internal.hpp"
+#include "../Tokenizing/Internal.hpp"
 #include "Exception.hpp"
 
 namespace
@@ -7,6 +9,44 @@ namespace
 calculator::OperatorType GetOperatorType(calculator::tokenizing::TokenType type)
 {
     return static_cast<calculator::OperatorType>(static_cast<int>(type) & ~static_cast<int>(calculator::tokenizing::TokenType::Operator));
+}
+
+int GetOperatorPriority(calculator::tokenizing::TokenType type)
+{
+    return static_cast<int>(type) & 0x00000f00;
+}
+
+std::string GetEscapedValue(const calculator::tokenizing::Token &token, const calculator::Config &config)
+{
+    std::string buf;
+
+    buf.reserve(token.len);
+
+    bool escaped = false;
+
+    for (int i = 0; i < token.len; i++)
+    {
+        if (escaped)
+        {
+            buf.push_back(util::Escape(token.start[i]));
+            escaped = false;
+        }
+        else if (token.start[i] == config.GetStringEscapeMarker())
+        {
+            escaped = true;
+        }
+        else
+        {
+            buf.push_back(token.start[i]);
+        }
+    }
+
+    return buf;
+}
+
+std::string GetValue(const calculator::tokenizing::Token &token)
+{
+    return std::string(token.start, token.len);
 }
 } // namespace
 
@@ -20,19 +60,19 @@ bool calculator::parsing::CreatePostFixExpression(const std::vector<calculator::
     {
         const auto &token = tokens[i];
 
-        switch (token.GetType())
+        switch (token.type)
         {
         case calculator::tokenizing::TokenType::String:
-            out.push_back(new ValueExpression(token.GetValue()));
+            out.push_back(new ValueExpression(GetEscapedValue(token, config)));
             break;
         case calculator::tokenizing::TokenType::Number:
-            out.push_back(new ValueExpression(token.GetValue()));
+            out.push_back(new ValueExpression(GetValue(token)));
             break;
         case calculator::tokenizing::TokenType::Identifier:
-            out.push_back(new VariableExpression(token.GetValue()));
+            out.push_back(new VariableExpression(GetValue(token)));
             break;
         case calculator::tokenizing::TokenType::LazyEvalSeperator:
-            out.push_back(new ValueExpression(new LazyValue(token.GetValue())));
+            out.push_back(new ValueExpression(new LazyValue(GetValue(token))));
             break;
         case calculator::tokenizing::TokenType::OpeningBracket:
             operatorStack.push(tokenizing::TokenType::OpeningBracket);
@@ -42,7 +82,7 @@ bool calculator::parsing::CreatePostFixExpression(const std::vector<calculator::
             break;
         case calculator::tokenizing::TokenType::FunctionStart:
             operatorStack.push(tokenizing::TokenType::FunctionStart);
-            functionStack.push(token.GetValue());
+            functionStack.push(GetValue(token));
             argCountStack.push(0);
             break;
         case calculator::tokenizing::TokenType::SetStart:
@@ -78,12 +118,12 @@ bool calculator::parsing::CreatePostFixExpression(const std::vector<calculator::
                 top = operatorStack.top();
             }
 
-            if (token.GetType() == calculator::tokenizing::TokenType::FunctionEnd || token.GetType() == calculator::tokenizing::TokenType::SetEnd)
+            if (token.type == calculator::tokenizing::TokenType::FunctionEnd || token.type == calculator::tokenizing::TokenType::SetEnd)
             {
                 auto argCount = argCountStack.top();
                 argCountStack.pop();
 
-                if (tokens[i - 1].GetType() != calculator::tokenizing::TokenType::FunctionStart && tokens[i - 1].GetType() != calculator::tokenizing::TokenType::SetStart)
+                if (tokens[i - 1].type != calculator::tokenizing::TokenType::FunctionStart && tokens[i - 1].type != calculator::tokenizing::TokenType::SetStart)
                 {
                     argCount++;
                 }
@@ -102,41 +142,34 @@ bool calculator::parsing::CreatePostFixExpression(const std::vector<calculator::
         case calculator::tokenizing::TokenType::AccessorStart:
         case calculator::tokenizing::TokenType::AccessorEnd:
             throw util::NotImplementedException();
-        case calculator::tokenizing::TokenType::Operator:
-        {
-            auto op1 = config.GetOperator(GetOperatorType(token.GetType()));
-            auto op2 = operatorStack.empty() ? nullptr : config.GetOperator(GetOperatorType(operatorStack.top()));
-
-            if (operatorStack.size() == 0 ||
-                (op1 && op2 && op1->GetPriority() > op2->GetPriority()))
+        default:
+            if (static_cast<int>(token.type) & static_cast<int>(tokenizing::TokenType::Operator))
             {
-                operatorStack.push(token.GetType());
+                if (operatorStack.empty() || GetOperatorPriority(token.type) > GetOperatorPriority(operatorStack.top()))
+                {
+                    operatorStack.push(token.type);
+                }
+                else
+                {
+                    auto op = operatorStack.top();
+                    operatorStack.pop();
+
+                    out.push_back(new FunctionExpression(config.GetOperator(GetOperatorType(op))));
+
+                    while (!operatorStack.empty() && GetOperatorPriority(op) > GetOperatorPriority(operatorStack.top()))
+                    {
+                        out.push_back(new FunctionExpression(config.GetOperator(GetOperatorType(operatorStack.top()))));
+                        operatorStack.pop();
+                    }
+
+                    operatorStack.push(token.type);
+                }
             }
             else
             {
-                auto op = config.GetOperator(GetOperatorType(operatorStack.top()));
-                operatorStack.pop();
-
-                if (op != nullptr)
-                    out.push_back(new FunctionExpression(op));
-                else
-                    throw util::NotSupportedException();
-
-                op2 = operatorStack.empty() ? nullptr : config.GetOperator(GetOperatorType(operatorStack.top()));
-
-                while (operatorStack.size() > 0 && !(op1 && op2 && op1->GetPriority() > op2->GetPriority()))
-                {
-                    out.push_back(new FunctionExpression(config.GetOperator(GetOperatorType(operatorStack.top()))));
-                    operatorStack.pop();
-                }
-
-                operatorStack.push(token.GetType());
+                throw util::InvalidCaseException::MakeException(token.type);
             }
-
             break;
-        }
-        default:
-            throw util::NotSupportedException();
         }
     }
 

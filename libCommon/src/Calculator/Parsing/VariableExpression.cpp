@@ -1,4 +1,4 @@
-#include "Calculator.hpp"
+#include "Internal.hpp"
 
 calculator::parsing::VariableExpression::VariableExpression(const std::string &name) : ExpressionBase(0),
                                                                                  name(name)

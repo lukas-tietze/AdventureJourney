@@ -56,12 +56,14 @@ struct Token
 {
     Token();
     Token(TokenType type);
-    Token(TokenType type, int, int);
+    Token(TokenType type, const char *, int);
 
     TokenType type;
-    int start;
+    const char *start;
     int len;
 };
+
+std::ostream &operator<<(std::ostream &, const Token &);
 
 enum class TokenizerError
 {
