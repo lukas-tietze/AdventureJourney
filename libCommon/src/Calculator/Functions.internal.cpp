@@ -203,19 +203,19 @@ calculator::InternalFunction::InternalFunction()
 }
 
 calculator::InternalFunction::InternalFunction(const std::string &name, function_t func) : name(name),
-                                                                                     operatorSign(""),
-                                                                                     priority(-1),
-                                                                                     isUnary(false),
-                                                                                     func(func)
+                                                                                           operatorSign(""),
+                                                                                           priority(-1),
+                                                                                           isUnary(false),
+                                                                                           func(func)
 
 {
 }
 
-calculator::InternalFunction::InternalFunction(std::string name, std::string operatorSign, int priority, bool isUnary, function_t func) : name(name),
-                                                                                                                                    operatorSign(operatorSign),
-                                                                                                                                    priority(priority),
-                                                                                                                                    isUnary(isUnary),
-                                                                                                                                    func(func)
+calculator::InternalFunction::InternalFunction(std::string name, calculator::OperatorType op, int priority, bool isUnary, function_t func) : name(name),
+                                                                                                                                             opType(op),
+                                                                                                                                             priority(priority),
+                                                                                                                                             isUnary(isUnary),
+                                                                                                                                             func(func)
 {
 }
 
