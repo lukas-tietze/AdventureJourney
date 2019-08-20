@@ -58,6 +58,8 @@ bool calculator::tokenizing::Tokenizer::Run(const std::string &data, std::vector
     {
         this->HandleError(TokenizerError::MissingBracket);
     }
+
+    return true;
 }
 
 bool calculator::tokenizing::Tokenizer::ReadNext()
@@ -209,6 +211,8 @@ bool calculator::tokenizing::Tokenizer::ReadLazyExpression()
     pos++;
 
     this->buf = Token(TokenType::LazyEvalSeperator, this->data + start, pos - start - 1);
+
+    return true;
 }
 
 bool calculator::tokenizing::Tokenizer::TryReadOperator()

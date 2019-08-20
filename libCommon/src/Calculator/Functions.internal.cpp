@@ -203,7 +203,7 @@ calculator::InternalFunction::InternalFunction()
 }
 
 calculator::InternalFunction::InternalFunction(const std::string &name, function_t func) : name(name),
-                                                                                           operatorSign(""),
+                                                                                           opType((OperatorType)-1),
                                                                                            priority(-1),
                                                                                            isUnary(false),
                                                                                            func(func)

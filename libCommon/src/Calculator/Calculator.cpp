@@ -23,4 +23,6 @@ calculator::IValue *calculator::Calculator::Evaluate(const std::string &s)
     std::vector<calculator::parsing::ExpressionBase *> expressions;
     calculator::tokenizing::Tokenize(s, tokens, this->config);
     calculator::parsing::CreatePostFixExpression(tokens, expressions, this->config);
+
+    return nullptr;
 }
