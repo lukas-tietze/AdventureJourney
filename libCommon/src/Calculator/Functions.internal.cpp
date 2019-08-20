@@ -10,7 +10,17 @@ IValue *FunctionOperatorAdd(IValue *const *, int, EvaluationContext &)
     return nullptr;
 }
 
+IValue *FunctionOperatorAddEq(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
 IValue *FunctionOperatorSub(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorSubEq(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
@@ -20,57 +30,22 @@ IValue *FunctionOperatorMul(IValue *const *, int, EvaluationContext &)
     return nullptr;
 }
 
+IValue *FunctionOperatorMulEq(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
 IValue *FunctionOperatorDiv(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorMod(IValue *const *, int, EvaluationContext &)
+IValue *FunctionOperatorDivEq(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorPow(IValue *const *, int, EvaluationContext &)
-{
-    return nullptr;
-}
-
-IValue *FunctionOperatorEqual(IValue *const *, int, EvaluationContext &)
-{
-    return nullptr;
-}
-
-IValue *FunctionOperatorNotEqual(IValue *const *, int, EvaluationContext &)
-{
-    return nullptr;
-}
-
-IValue *FunctionOperatorGreater(IValue *const *, int, EvaluationContext &)
-{
-    return nullptr;
-}
-
-IValue *FunctionOperatorGreaterEqual(IValue *const *, int, EvaluationContext &)
-{
-    return nullptr;
-}
-
-IValue *FunctionOperatorLess(IValue *const *, int, EvaluationContext &)
-{
-    return nullptr;
-}
-
-IValue *FunctionOperatorLessEqual(IValue *const *, int, EvaluationContext &)
-{
-    return nullptr;
-}
-
-IValue *FunctionOperatorEqualWithType(IValue *const *, int, EvaluationContext &)
-{
-    return nullptr;
-}
-
-IValue *FunctionOperatorNotEqualWithType(IValue *const *, int, EvaluationContext &)
+IValue *FunctionOperatorEq(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
@@ -80,27 +55,92 @@ IValue *FunctionOperatorNot(IValue *const *, int, EvaluationContext &)
     return nullptr;
 }
 
-IValue *FunctionOperatorAnd(IValue *const *, int, EvaluationContext &)
+IValue *FunctionOperatorEqEq(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorOr(IValue *const *, int, EvaluationContext &)
+IValue *FunctionOperatorNotEq(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorXor(IValue *const *, int, EvaluationContext &)
+IValue *FunctionOperatorNotNot(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorBool(IValue *const *, int, EvaluationContext &)
+IValue *FunctionOperatorEqEqEq(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
 
-IValue *FunctionOperatorLength(IValue *const *, int, EvaluationContext &)
+IValue *FunctionOperatorNotEqEq(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorGt(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorGtEq(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorGtGt(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorGtGtEq(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorLs(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorLsEq(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorLsLs(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorLsLsEq(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorNeq(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorQe(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorQeQe(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionOperatorHash(IValue *const *, int, EvaluationContext &)
+{
+    return nullptr;
+}
+
+IValue *FunctionXor(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
@@ -194,8 +234,6 @@ IValue *StringCharAt(IValue *const *, int, EvaluationContext &)
 {
     return nullptr;
 }
-
-// IValue *__template__(IValue *const*, int, EvaluationContext &);
 } // namespace
 
 calculator::InternalFunction::InternalFunction()
@@ -203,7 +241,7 @@ calculator::InternalFunction::InternalFunction()
 }
 
 calculator::InternalFunction::InternalFunction(const std::string &name, function_t func) : name(name),
-                                                                                           operatorSign(""),
+                                                                                           opType(static_cast<calculator::OperatorType>(0)),
                                                                                            priority(-1),
                                                                                            isUnary(false),
                                                                                            func(func)
@@ -211,51 +249,60 @@ calculator::InternalFunction::InternalFunction(const std::string &name, function
 {
 }
 
-calculator::InternalFunction::InternalFunction(std::string name, calculator::OperatorType op, int priority, bool isUnary, function_t func) : name(name),
-                                                                                                                                             opType(op),
-                                                                                                                                             priority(priority),
-                                                                                                                                             isUnary(isUnary),
-                                                                                                                                             func(func)
+calculator::InternalFunction::InternalFunction(std::string name, calculator::OperatorType op, bool isUnary, function_t func) : name(name),
+                                                                                                                               opType(op),
+                                                                                                                               priority(GET_OPERATOR_PRIO(op)),
+                                                                                                                               isUnary(isUnary),
+                                                                                                                               func(func)
 {
 }
 
-std::vector<calculator::InternalFunction> calculator::internalFunctions = {
-    calculator::InternalFunction("Add", "+", 0, false, FunctionOperatorAdd),
-    calculator::InternalFunction("Sub", "-", 0, false, FunctionOperatorSub),
-    calculator::InternalFunction("Mul", "*", 0, false, FunctionOperatorMul),
-    calculator::InternalFunction("Div", "/", 0, false, FunctionOperatorDiv),
-    calculator::InternalFunction("Mod", "%", 0, false, FunctionOperatorMod),
-    calculator::InternalFunction("Pow", "^", 0, false, FunctionOperatorPow),
-    calculator::InternalFunction("Equal", "==", 0, false, FunctionOperatorEqual),
-    calculator::InternalFunction("NotEqual", "!=", 0, false, FunctionOperatorNotEqual),
-    calculator::InternalFunction("Greater", ">", 0, false, FunctionOperatorGreater),
-    calculator::InternalFunction("GreaterEqual", ">=", 0, false, FunctionOperatorGreaterEqual),
-    calculator::InternalFunction("Less", "<", 0, false, FunctionOperatorLess),
-    calculator::InternalFunction("LessEqual", "<=", 0, false, FunctionOperatorLessEqual),
-    calculator::InternalFunction("EqualWithType", "===", 0, false, FunctionOperatorEqualWithType),
-    calculator::InternalFunction("NotEqualWithType", "!==", 0, false, FunctionOperatorNotEqualWithType),
-    calculator::InternalFunction("Not", "!", 0, false, FunctionOperatorNot),
-    calculator::InternalFunction("And", "&", 0, false, FunctionOperatorAnd),
-    calculator::InternalFunction("Or", "|", 0, false, FunctionOperatorOr),
-    calculator::InternalFunction("Bool", "?", 0, false, FunctionOperatorBool),
-    calculator::InternalFunction("Length", "#", 0, false, FunctionOperatorLength),
-    calculator::InternalFunction("XOr", FunctionOperatorXor),
-    calculator::InternalFunction("CreateSet", FunctionCreateSet),
-    calculator::InternalFunction("If", If),
-    calculator::InternalFunction("SetUnion", SetUnion),
-    calculator::InternalFunction("SetCut", SetCut),
-    calculator::InternalFunction("SetNot", SetNot),
-    calculator::InternalFunction("SetAdd", SetAdd),
-    calculator::InternalFunction("SetRemove", SetRemove),
-    calculator::InternalFunction("SetClear", SetClear),
-    calculator::InternalFunction("SetFind", SetFind),
-    calculator::InternalFunction("SetAt", SetAt),
-    calculator::InternalFunction("Foreach", Foreach),
-    calculator::InternalFunction("For", For),
-    calculator::InternalFunction("While", While),
-    calculator::InternalFunction("StringSubstr", StringSubstr),
-    calculator::InternalFunction("StringTrim", StringTrim),
-    calculator::InternalFunction("StringConcat", StringConcat),
-    calculator::InternalFunction("StringFind", StringFind),
-    calculator::InternalFunction("StringCharAt", StringCharAt),
+std::vector<calculator::InternalFunction> calculator::internalFunctions =
+    {
+        calculator::InternalFunction("Add", calculator::OperatorType::Add, false, FunctionOperatorAdd),
+        calculator::InternalFunction("AddEq", calculator::OperatorType::AddEq, false, FunctionOperatorAddEq),
+        calculator::InternalFunction("Sub", calculator::OperatorType::Sub, false, FunctionOperatorSub),
+        calculator::InternalFunction("SubEq", calculator::OperatorType::SubEq, false, FunctionOperatorSubEq),
+        calculator::InternalFunction("Mul", calculator::OperatorType::Mul, false, FunctionOperatorMul),
+        calculator::InternalFunction("MulEq", calculator::OperatorType::MulEq, false, FunctionOperatorMulEq),
+        calculator::InternalFunction("Div", calculator::OperatorType::Div, false, FunctionOperatorDiv),
+        calculator::InternalFunction("DivEq", calculator::OperatorType::DivEq, false, FunctionOperatorDivEq),
+        calculator::InternalFunction("Eq", calculator::OperatorType::Eq, false, FunctionOperatorEq),
+        calculator::InternalFunction("Not", calculator::OperatorType::Not, false, FunctionOperatorNot),
+        calculator::InternalFunction("EqEq", calculator::OperatorType::EqEq, false, FunctionOperatorEqEq),
+        calculator::InternalFunction("NotEq", calculator::OperatorType::NotEq, false, FunctionOperatorNotEq),
+        calculator::InternalFunction("NotNot", calculator::OperatorType::NotNot, false, FunctionOperatorNotNot),
+        calculator::InternalFunction("EqEqEq", calculator::OperatorType::EqEqEq, false, FunctionOperatorEqEqEq),
+        calculator::InternalFunction("NotEqEq", calculator::OperatorType::NotEqEq, false, FunctionOperatorNotEqEq),
+        calculator::InternalFunction("Gt", calculator::OperatorType::Gt, false, FunctionOperatorGt),
+        calculator::InternalFunction("GtEq", calculator::OperatorType::GtEq, false, FunctionOperatorGtEq),
+        calculator::InternalFunction("GtGt", calculator::OperatorType::GtGt, false, FunctionOperatorGtGt),
+        calculator::InternalFunction("GtGtEq", calculator::OperatorType::GtGtEq, false, FunctionOperatorGtGtEq),
+        calculator::InternalFunction("Ls", calculator::OperatorType::Ls, false, FunctionOperatorLs),
+        calculator::InternalFunction("LsEq", calculator::OperatorType::LsEq, false, FunctionOperatorLsEq),
+        calculator::InternalFunction("LsLs", calculator::OperatorType::LsLs, false, FunctionOperatorLsLs),
+        calculator::InternalFunction("LsLsEq", calculator::OperatorType::LsLsEq, false, FunctionOperatorLsLsEq),
+        calculator::InternalFunction("Neq", calculator::OperatorType::Neq, false, FunctionOperatorNeq),
+        calculator::InternalFunction("Qe", calculator::OperatorType::Qe, false, FunctionOperatorQe),
+        calculator::InternalFunction("QeQe", calculator::OperatorType::QeQe, false, FunctionOperatorQeQe),
+        calculator::InternalFunction("Hash", calculator::OperatorType::Hash, false, FunctionOperatorHash),
+        calculator::InternalFunction("XOr", FunctionXor),
+        calculator::InternalFunction("CreateSet", FunctionCreateSet),
+        calculator::InternalFunction("If", If),
+        calculator::InternalFunction("SetUnion", SetUnion),
+        calculator::InternalFunction("SetCut", SetCut),
+        calculator::InternalFunction("SetNot", SetNot),
+        calculator::InternalFunction("SetAdd", SetAdd),
+        calculator::InternalFunction("SetRemove", SetRemove),
+        calculator::InternalFunction("SetClear", SetClear),
+        calculator::InternalFunction("SetFind", SetFind),
+        calculator::InternalFunction("SetAt", SetAt),
+        calculator::InternalFunction("Foreach", Foreach),
+        calculator::InternalFunction("For", For),
+        calculator::InternalFunction("While", While),
+        calculator::InternalFunction("StringSubstr", StringSubstr),
+        calculator::InternalFunction("StringTrim", StringTrim),
+        calculator::InternalFunction("StringConcat", StringConcat),
+        calculator::InternalFunction("StringFind", StringFind),
+        calculator::InternalFunction("StringCharAt", StringCharAt),
 };

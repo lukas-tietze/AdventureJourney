@@ -12,7 +12,7 @@ struct InternalFunction
 
     InternalFunction();
     InternalFunction(const std::string &, function_t func);
-    InternalFunction(std::string name, calculator::OperatorType t, int priority, bool isUnary, function_t func);
+    InternalFunction(std::string name, calculator::OperatorType t, bool isUnary, function_t func);
 };
 
 extern std::vector<InternalFunction> internalFunctions;

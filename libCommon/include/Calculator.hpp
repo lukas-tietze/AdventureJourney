@@ -8,14 +8,6 @@
 
 #include "data/Io.hpp"
 
-namespace
-{
-constexpr uint8_t PRIO(const uint8_t i)
-{
-    return (i << 8) & 0x00000f00;
-}
-} // namespace
-
 namespace calculator
 {
 enum class ValueType
@@ -133,6 +125,11 @@ public:
     void PrintValueDescription(std::ostream &) const;
 };
 
+constexpr uint8_t PRIO(const uint8_t i)
+{
+    return (i << 8) & 0x00000f00;
+}
+
 enum class OperatorType
 {
     Add = PRIO(0) | 1,      // +
@@ -161,7 +158,13 @@ enum class OperatorType
     Neq = PRIO(0) | 24,     // <>
     Qe = PRIO(0) | 25,      // ?
     QeQe = PRIO(0) | 26,    // ??
+    Hash = PRIO(0) | 27,    // #
 };
+
+constexpr int GET_OPERATOR_PRIO(OperatorType type)
+{
+    return static_cast<int>(type) & 0x00000f00;
+}
 
 class Config
 {
