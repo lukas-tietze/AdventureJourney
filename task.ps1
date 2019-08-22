@@ -71,7 +71,8 @@ foreach ($arg in $args) {
         
         "run" {
             Info "Running program..."
-            Err "Not implemented!"
+            
+             .\build\debug\Debug\Gui.exe
         }
     
         "todo" {
@@ -79,5 +80,11 @@ foreach ($arg in $args) {
             Err "Not implemented!"
         }
         Default { Warn "Unknown task '$arg'" }       
+    }
+
+    if (-not $?) {
+        Err "Error in last step, stopping..."
+
+        break;
     }
 }
