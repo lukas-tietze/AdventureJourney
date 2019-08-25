@@ -26,14 +26,12 @@
         {
             "name": "Win32",
             "includePath": [
-                "${workspaceFolder}/",
-                "${workspaceFolder}/libCommon/include/",
-                "${workspaceFolder}/libTermUtil/include/",
-                "${workspaceFolder}/libGlUtil/include/",
-                "${workspaceFolder}/terminal_ui/include/",
-                "${workspaceFolder}/gui/include/",
-                "${workspaceFolder}/core/include/",
-                "${workspaceFolder}/playground/",
+                "${workspaceFolder}/src/",
+                "${workspaceFolder}/src/libCommon/include/",
+                "${workspaceFolder}/src/libTermUtil/include/",
+                "${workspaceFolder}/src/libGlUtil/include/",
+                "${workspaceFolder}/src/terminal_ui/include/",
+                "${workspaceFolder}/src/gui/include/",
                 "${workspaceFolder}/libs/glad/include/",
                 "${workspaceFolder}/libs/stb/include",
                 "${workspaceFolder}/submodules/glm/",
@@ -41,10 +39,10 @@
                 "${workspaceFolder}/submodules/freeType/include"
             ],
             "defines": [],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.22.27905/bin/Hostx64/x64/cl.exe",
             "cStandard": "c11",
             "cppStandard": "c++17",
-            "intelliSenseMode": "clang-x64"
+            "intelliSenseMode": "msvc-x64"
         }
     ],
     "version": 4
