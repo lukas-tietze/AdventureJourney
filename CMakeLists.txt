@@ -11,19 +11,21 @@ set(ENABLE_BACKTRACE off)
 include(compile.cfg OPTIONAl)
 include(ExternalData) 
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DGLM_ENABLE_EXPERIMENTAL")
 
 set(CMAKE_BUILD_TYPE Debug)
 
 enable_language(CXX)
 
-add_subdirectory(src/gui)
-add_subdirectory(src/libCommon)
-add_subdirectory(src/libGlUtil)
-add_subdirectory(src/libTermUtil)
+project(GalaxyAtWar)
+
+# add_subdirectory(src/gui)
+# add_subdirectory(src/libCommon)
+# add_subdirectory(src/libGlUtil)
+# add_subdirectory(src/libTermUtil)
 add_subdirectory(src/playground)
-add_subdirectory(src/terminal_ui)
+# add_subdirectory(src/terminal_ui)
 
 # #--------------------------------------------------------
 # # General
