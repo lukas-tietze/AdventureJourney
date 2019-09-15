@@ -32,14 +32,34 @@ if (-not(Test-Path $RELEASE_DIR)) {
     New-Item -Path $RELEASE_DIR -ItemType Directory;
 }
 
-foreach ($arg in $args) {
-    Write-Host $arg
+$input = Read-Host 
+$param = ""
+$mode = "debug"
+
+while (-not($input -eq "quit") -and -not($input -eq "q")) {
+    $splitInput = $input.Split(' ')
+    $arg = $splitInput[0];
+
+    if ($splitInput.Length -ge 1) {
+        $param = $splitInput[1]
+    }
+    else {
+        $param = ""
+    }    
+
+    Write-Host "Input was $arg"
 
     switch ($arg) {
+        "mode" {
+            Info "Setting mode to $mode"
+
+            mode = $param
+        }
+
         "gen" {
             Info "Generating Buildfiles..."
     
-            Set-Location $DEBUG_DIR
+            Set-Location $BUILD_DIR\$mode
             cmake -DCMAKE_BUILD_TYPE=Debug "..\.."
             Set-Location "..\.."
         }
@@ -47,7 +67,9 @@ foreach ($arg in $args) {
         "build" {
             Info "Building project..."
     
-            MSBuild.exe -nr:true -m "./build/debug/GalaxyAtWar.sln"
+            Set-Location $DEBUG_DIR
+            cmake --build .
+            Set-Location "..\.."
         }
     
         "sync" {
@@ -72,7 +94,7 @@ foreach ($arg in $args) {
         "run" {
             Info "Running program..."
             
-             .\build\debug\Debug\Gui.exe
+            .\build\debug\Debug\Gui.exe
         }
     
         "todo" {
@@ -82,9 +104,5 @@ foreach ($arg in $args) {
         Default { Warn "Unknown task '$arg'" }       
     }
 
-    if (-not $?) {
-        Err "Error in last step, stopping..."
-
-        break;
-    }
+    $input = Read-Host 
 }
