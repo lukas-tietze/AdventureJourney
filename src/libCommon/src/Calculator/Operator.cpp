@@ -1,4 +1,4 @@
-#include "Calculator.hpp"
+#include "libCommon/Calculator.hpp"
 
 calculator::Operator::Operator(int priority, bool isUnary, function_t function) : priority(priority),
                                                                             isUnary(isUnary),

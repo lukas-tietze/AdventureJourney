@@ -1,6 +1,6 @@
-#include "data/Json.hpp"
-#include "Exception.hpp"
-#include "data/String.hpp"
+#include "libCommon/data/Json.hpp"
+#include "libCommon/Exception.hpp"
+#include "libCommon/data/String.hpp"
 
 json::PrimitiveNode::PrimitiveNode(const std::string &value) : Node(),
                                                                stringValue(value),

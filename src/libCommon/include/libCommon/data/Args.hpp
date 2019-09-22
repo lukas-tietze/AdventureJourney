@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "Defs.hpp"
+#include "libCommon/Defs.hpp"
 
 namespace util
 {

@@ -23,8 +23,6 @@ project(GalaxyAtWar)
 add_subdirectory(src/libCommon)
 # add_subdirectory(src/gui)
 # add_subdirectory(src/libGlUtil)
-# add_subdirectory(src/libTermUtil)
-# add_subdirectory(src/terminal_ui)
 add_subdirectory(src/playground)
 
 # #--------------------------------------------------------

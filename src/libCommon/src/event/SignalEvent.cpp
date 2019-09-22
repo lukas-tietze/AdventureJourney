@@ -1,7 +1,7 @@
 #include <csignal>
 
-#include "Event.hpp"
-#include "Exception.hpp"
+#include "libCommon/Event.hpp"
+#include "libCommon/Exception.hpp"
 
 namespace
 {

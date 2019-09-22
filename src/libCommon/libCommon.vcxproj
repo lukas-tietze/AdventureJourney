@@ -20,32 +20,32 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{0C90A05E-33BE-4136-AB86-F6A17207EB16}</ProjectGuid>
+    <ProjectGuid>{8740AF69-3B7E-4389-A4A4-D3746A207274}</ProjectGuid>
     <RootNamespace>Playground</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>Application</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v142</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -69,17 +69,36 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(BOOST_ROOT)\include\boost-1_70;$(SolutionDir)src\libCommon\include;$(SolutionDir)src;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(BOOST_ROOT)\include\boost-1_70;$(SolutionDir)src\libCommon\include;$(SolutionDir)src;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(BOOST_ROOT)\include\boost-1_70;$(SolutionDir)src\libCommon\include;$(SolutionDir)src;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <IncludePath>$(BOOST_ROOT)\include\boost-1_70;$(SolutionDir)src\libCommon\include;$(SolutionDir)src;$(IncludePath)</IncludePath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <AdditionalDependencies>libboost_stacktrace_windbg-vc$(PlatformToolsetversion)-mt-x64-1_70;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -87,10 +106,18 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <AdditionalDependencies>libboost_stacktrace_windbg-vc$(PlatformToolsetversion)-mt-x64-1_70;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -100,12 +127,20 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <AdditionalDependencies>libboost_stacktrace_windbg-vc$(PlatformToolsetversion)-mt-x64-1_70;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -115,14 +150,179 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
+    <Lib>
+      <AdditionalDependencies>libboost_stacktrace_windbg-vc$(PlatformToolsetversion)-mt-x64-1_70;%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
+    <Lib>
+      <AdditionalLibraryDirectories>$(BOOST_ROOT)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Calculator\Calculator.cpp" />
+    <ClCompile Include="src\Calculator\Config.cpp" />
+    <ClCompile Include="src\Calculator\DoubleValue.cpp" />
+    <ClCompile Include="src\Calculator\Evaluationcontext.cpp" />
+    <ClCompile Include="src\Calculator\Functions.internal.cpp" />
+    <ClCompile Include="src\Calculator\Ivalue.cpp" />
+    <ClCompile Include="src\Calculator\Lazyvalue.cpp" />
+    <ClCompile Include="src\Calculator\Operator.cpp" />
+    <ClCompile Include="src\Calculator\Parsing\ExpressionBase.cpp" />
+    <ClCompile Include="src\Calculator\Parsing\FunctionExpression.cpp" />
+    <ClCompile Include="src\Calculator\Parsing\Parser.cpp" />
+    <ClCompile Include="src\Calculator\Parsing\ValueExpression.cpp" />
+    <ClCompile Include="src\Calculator\Parsing\VariableExpression.cpp" />
+    <ClCompile Include="src\Calculator\ScriptingEnging.cpp" />
+    <ClCompile Include="src\Calculator\SetValue.cpp" />
+    <ClCompile Include="src\Calculator\StringValue.cpp" />
+    <ClCompile Include="src\Calculator\Tokenizing\Token.cpp" />
+    <ClCompile Include="src\Calculator\Tokenizing\Tokenizer.cpp" />
+    <ClCompile Include="src\Calculator\Tokenizing\TokenizerException.cpp" />
+    <ClCompile Include="src\Calculator\Tokenizing\TokenType.cpp" />
+    <ClCompile Include="src\data\Args.cpp" />
+    <ClCompile Include="src\data\collection\Cache.cpp" />
+    <ClCompile Include="src\data\Io\Channel.cpp" />
+    <ClCompile Include="src\data\Io\Communicator.cpp" />
+    <ClCompile Include="src\data\Io\Io.cpp" />
+    <ClCompile Include="src\data\Io\Statics.cpp" />
+    <ClCompile Include="src\data\json\ArrayNode.cpp" />
+    <ClCompile Include="src\data\json\Conversions.cpp" />
+    <ClCompile Include="src\data\json\FormattedPrinter.cpp" />
+    <ClCompile Include="src\data\json\IJsonSerializable.cpp" />
+    <ClCompile Include="src\data\json\Node.cpp" />
+    <ClCompile Include="src\data\json\ObjectNode.cpp" />
+    <ClCompile Include="src\data\json\OperationException.cpp" />
+    <ClCompile Include="src\data\json\Parser.cpp" />
+    <ClCompile Include="src\data\json\ParserException.cpp" />
+    <ClCompile Include="src\data\json\PrimitiveNode.cpp" />
+    <ClCompile Include="src\data\json\Tokenizer.cpp" />
+    <ClCompile Include="src\data\json\TokenizerException.cpp" />
+    <ClCompile Include="src\data\json\ValueException.cpp" />
+    <ClCompile Include="src\data\keyValueSettings\settings.cpp" />
+    <ClCompile Include="src\data\ParsingException.cpp" />
+    <ClCompile Include="src\data\random\Random.cpp" />
+    <ClCompile Include="src\data\StringUtils\Escaping.cpp" />
+    <ClCompile Include="src\data\StringUtils\FormatException.cpp" />
+    <ClCompile Include="src\data\StringUtils\FormatTime.cpp" />
+    <ClCompile Include="src\data\StringUtils\HexNumberConversions.cpp" />
+    <ClCompile Include="src\data\StringUtils\Justification.cpp" />
+    <ClCompile Include="src\data\StringUtils\SetupStream.cpp" />
+    <ClCompile Include="src\data\StringUtils\Split.cpp" />
+    <ClCompile Include="src\data\StringUtils\Strip.cpp" />
+    <ClCompile Include="src\data\StringUtils\StructureAnalysis.cpp" />
+    <ClCompile Include="src\data\StringUtils\TimeFormatException.cpp" />
+    <ClCompile Include="src\data\StringUtils\UpperLowerConversions.cpp" />
+    <ClCompile Include="src\datetime\Conversions.cpp" />
+    <ClCompile Include="src\datetime\RoundTimer.cpp" />
+    <ClCompile Include="src\datetime\Timer.cpp" />
+    <ClCompile Include="src\event\SignalEvent.cpp" />
+    <ClCompile Include="src\exception\Exception.cpp" />
+    <ClCompile Include="src\exception\FileNotFoundException.cpp" />
+    <ClCompile Include="src\exception\IndexOutOfRangeException.cpp" />
+    <ClCompile Include="src\exception\InvalidCaseException.cpp" />
+    <ClCompile Include="src\exception\MissingKeyException.cpp" />
+    <ClCompile Include="src\exception\NotImplementedException.cpp" />
+    <ClCompile Include="src\exception\NotSupportedException.cpp" />
+    <ClCompile Include="src\exception\OverflowException.cpp" />
+    <ClCompile Include="src\exception\Utils.cpp" />
+    <ClCompile Include="src\graphics\Color.cpp" />
+    <ClCompile Include="src\testFramework\Runner.cpp" />
+    <ClCompile Include="src\testFramework\SimpleTest.cpp" />
+    <ClCompile Include="src\testFramework\Source.cpp" />
+    <ClCompile Include="src\testFramework\Test.cpp" />
+    <ClCompile Include="src\testFramework\TestBase.cpp" />
+    <ClCompile Include="src\testFramework\TestConfig.cpp" />
+    <ClCompile Include="src\testFramework\TestRun.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\data\Args.hpp" />
+    <ClInclude Include="include\data\collection\Array.hpp" />
+    <ClInclude Include="include\data\collection\Cache.hpp" />
+    <ClInclude Include="include\data\collection\CollectRope.hpp" />
+    <ClInclude Include="include\data\collection\IndexMapper.hpp" />
+    <ClInclude Include="include\data\collection\List.hpp" />
+    <ClInclude Include="include\data\collection\Set.hpp" />
+    <ClInclude Include="include\data\collection\Stack.hpp" />
+    <ClInclude Include="include\data\collection\Storage.hpp" />
+    <ClInclude Include="include\data\collection\Utils.hpp" />
+    <ClInclude Include="include\data\EnumHelper.hpp" />
+    <ClInclude Include="include\data\Helper.hpp" />
+    <ClInclude Include="include\data\Io.hpp" />
+    <ClInclude Include="include\data\IteratorUtils.hpp" />
+    <ClInclude Include="include\data\Json.hpp" />
+    <ClInclude Include="include\data\KeyValueSettings.hpp" />
+    <ClInclude Include="include\data\Math.hpp" />
+    <ClInclude Include="include\data\Random.hpp" />
+    <ClInclude Include="include\data\String.hpp" />
+    <ClInclude Include="include\datetime\Conversions.hpp" />
+    <ClInclude Include="include\datetime\Timer.hpp" />
+    <ClInclude Include="include\event\FunctionEvent.hpp" />
+    <ClInclude Include="include\event\GeneralizedEvent.hpp" />
+    <ClInclude Include="include\event\HandlerEvent.hpp" />
+    <ClInclude Include="include\event\ListenerEvent.hpp" />
+    <ClInclude Include="include\event\SignalEvent.hpp" />
+    <ClInclude Include="include\geometry\Dimension.hpp" />
+    <ClInclude Include="include\geometry\Point.hpp" />
+    <ClInclude Include="include\geometry\Rectangle.hpp" />
+    <ClInclude Include="include\graphics\Color.hpp" />
+    <ClInclude Include="include\graphics\Vulkan.hpp" />
+    <ClInclude Include="include\libCommon\Calculator.hpp" />
+    <ClInclude Include="include\libCommon\config.hpp" />
+    <ClInclude Include="include\libCommon\config.in.hpp" />
+    <ClInclude Include="include\libCommon\data\Args.hpp" />
+    <ClInclude Include="include\libCommon\data\collection\Array.hpp" />
+    <ClInclude Include="include\libCommon\data\collection\Cache.hpp" />
+    <ClInclude Include="include\libCommon\data\collection\CollectRope.hpp" />
+    <ClInclude Include="include\libCommon\data\collection\IndexMapper.hpp" />
+    <ClInclude Include="include\libCommon\data\collection\List.hpp" />
+    <ClInclude Include="include\libCommon\data\collection\Set.hpp" />
+    <ClInclude Include="include\libCommon\data\collection\Stack.hpp" />
+    <ClInclude Include="include\libCommon\data\collection\Storage.hpp" />
+    <ClInclude Include="include\libCommon\data\collection\Utils.hpp" />
+    <ClInclude Include="include\libCommon\data\EnumHelper.hpp" />
+    <ClInclude Include="include\libCommon\data\Helper.hpp" />
+    <ClInclude Include="include\libCommon\data\Io.hpp" />
+    <ClInclude Include="include\libCommon\data\IteratorUtils.hpp" />
+    <ClInclude Include="include\libCommon\data\Json.hpp" />
+    <ClInclude Include="include\libCommon\data\KeyValueSettings.hpp" />
+    <ClInclude Include="include\libCommon\data\Math.hpp" />
+    <ClInclude Include="include\libCommon\data\Random.hpp" />
+    <ClInclude Include="include\libCommon\data\String.hpp" />
+    <ClInclude Include="include\libCommon\datetime\Conversions.hpp" />
+    <ClInclude Include="include\libCommon\datetime\Timer.hpp" />
+    <ClInclude Include="include\libCommon\Defs.hpp" />
+    <ClInclude Include="include\libCommon\Event.hpp" />
+    <ClInclude Include="include\libCommon\event\FunctionEvent.hpp" />
+    <ClInclude Include="include\libCommon\event\GeneralizedEvent.hpp" />
+    <ClInclude Include="include\libCommon\event\HandlerEvent.hpp" />
+    <ClInclude Include="include\libCommon\event\ListenerEvent.hpp" />
+    <ClInclude Include="include\libCommon\event\SignalEvent.hpp" />
+    <ClInclude Include="include\libCommon\Exception.hpp" />
+    <ClInclude Include="include\libCommon\Geometry.hpp" />
+    <ClInclude Include="include\libCommon\geometry\Dimension.hpp" />
+    <ClInclude Include="include\libCommon\geometry\Point.hpp" />
+    <ClInclude Include="include\libCommon\geometry\Rectangle.hpp" />
+    <ClInclude Include="include\libCommon\Graphics.hpp" />
+    <ClInclude Include="include\libCommon\graphics\Color.hpp" />
+    <ClInclude Include="include\libCommon\graphics\Vulkan.hpp" />
+    <ClInclude Include="include\libCommon\Lib.hpp" />
+    <ClInclude Include="include\libCommon\Linq.hpp" />
+    <ClInclude Include="include\libCommon\Test.hpp" />
+    <ClInclude Include="src\Calculator\Functions.internal.hpp" />
+    <ClInclude Include="src\Calculator\Parsing\Internal.hpp" />
+    <ClInclude Include="src\Calculator\Tokenizing\Internal.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\data\StringUtils\Conversions.inl" />
+    <None Include="src\data\StringUtils\Format.inl" />
+    <None Include="src\data\StringUtils\StreamOperators.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

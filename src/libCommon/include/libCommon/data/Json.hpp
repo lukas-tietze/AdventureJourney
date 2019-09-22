@@ -6,8 +6,8 @@
 #include <iostream>
 #include <unordered_map>
 
-#include "Defs.hpp"
-#include "Exception.hpp"
+#include "libCommon/Defs.hpp"
+#include "libCommon/Exception.hpp"
 
 namespace json
 {

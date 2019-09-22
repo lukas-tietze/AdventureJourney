@@ -1,6 +1,6 @@
 #include <sstream>
 
-#include "Exception.hpp"
+#include "libCommon/Exception.hpp"
 
 std::string util::FormatStacktrace(const boost::stacktrace::stacktrace &trace, uint indent, uint maxLen, bool showAdress)
 {

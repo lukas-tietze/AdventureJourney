@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Calculator.hpp"
+#include "libCommon/Calculator.hpp"
 #include "../Tokenizing/Internal.hpp"
 
 namespace calculator

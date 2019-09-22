@@ -1,7 +1,7 @@
 #include <codecvt>
 #include <iomanip>
 
-#include "data/String.hpp"
+#include "libCommon/data/String.hpp"
 
 char util::Escape(char c)
 {

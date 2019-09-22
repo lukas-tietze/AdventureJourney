@@ -1,5 +1,5 @@
-#include "data/String.hpp"
-#include "data/Math.hpp"
+#include "libCommon/data/String.hpp"
+#include "libCommon/data/Math.hpp"
 
 bool util::EndsWith(const std::string &str, const std::string &end)
 {

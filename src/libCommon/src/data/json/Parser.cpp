@@ -5,9 +5,9 @@
 #include <cstring>
 #include <cstdlib>
 
-#include "data/Json.hpp"
-#include "data/Math.hpp"
-#include "data/String.hpp"
+#include "libCommon/data/Json.hpp"
+#include "libCommon/data/Math.hpp"
+#include "libCommon/data/String.hpp"
 
 json::Parser::Parser()
 {

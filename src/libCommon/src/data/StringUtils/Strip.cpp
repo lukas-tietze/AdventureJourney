@@ -1,4 +1,4 @@
-#include "data/String.hpp"
+#include "libCommon/data/String.hpp"
 
 std::string util::Strip(const std::string &str)
 {

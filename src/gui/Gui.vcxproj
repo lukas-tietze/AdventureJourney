@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{0C90A05E-33BE-4136-AB86-F6A17207EB16}</ProjectGuid>
+    <ProjectGuid>{F77E0C4C-FD7C-4A5D-B213-EB4973FC4F79}</ProjectGuid>
     <RootNamespace>Playground</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>

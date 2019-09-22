@@ -1,6 +1,6 @@
-#include "data/String.hpp"
-#include "Exception.hpp"
-#include "Defs.hpp"
+#include "libCommon/data/String.hpp"
+#include "libCommon/Exception.hpp"
+#include "libCommon/Defs.hpp"
 
 bool util::IsHexChar(char c)
 {

@@ -1,6 +1,6 @@
 #include <thread>
 
-#include "Test.hpp"
+#include "libCommon/Test.hpp"
 
 test::TestConfig::TestConfig() : breakAfterFirstFailure(false),
                                  threadCount(1),

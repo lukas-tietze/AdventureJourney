@@ -1,10 +1,10 @@
-#include "Calculator.hpp"
+#include "libCommon/Calculator.hpp"
 
 #include <unordered_map>
 #include <iostream>
 
-#include "data/String.hpp"
-#include "datetime/Timer.hpp"
+#include "libCommon/data/String.hpp"
+#include "libCommon/datetime/Timer.hpp"
 
 #include "./Tokenizing/Internal.hpp"
 #include "./Parsing/Internal.hpp"

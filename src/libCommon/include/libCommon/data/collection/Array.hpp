@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "Exception.hpp"
+#include "libCommon/Exception.hpp"
 
 namespace util
 {

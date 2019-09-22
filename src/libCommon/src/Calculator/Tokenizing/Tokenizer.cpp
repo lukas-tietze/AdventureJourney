@@ -1,6 +1,6 @@
 #include "Internal.hpp"
 
-#include "data/String.hpp"
+#include "libCommon/data/String.hpp"
 
 #include <algorithm>
 

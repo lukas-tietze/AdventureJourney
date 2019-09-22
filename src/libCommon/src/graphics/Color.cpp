@@ -1,10 +1,10 @@
 #include <cmath>
 #include <iomanip>
 
-#include "graphics/Color.hpp"
-#include "data/collection/Array.hpp"
-#include "data/Math.hpp"
-#include "data/String.hpp"
+#include "libCommon/graphics/Color.hpp"
+#include "libCommon/data/collection/Array.hpp"
+#include "libCommon/data/Math.hpp"
+#include "libCommon/data/String.hpp"
 
 util::Color::Color() : util::Color(0)
 {

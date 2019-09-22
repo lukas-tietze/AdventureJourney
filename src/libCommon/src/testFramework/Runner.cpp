@@ -1,6 +1,6 @@
 #include <csignal>
 
-#include "Test.hpp"
+#include "libCommon/Test.hpp"
 // #include "boost/thread.hpp"
 
 namespace

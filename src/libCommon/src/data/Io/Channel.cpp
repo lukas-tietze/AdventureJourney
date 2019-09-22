@@ -1,7 +1,7 @@
 #include <cstdarg>
 
-#include "data/Io.hpp"
-#include "Exception.hpp"
+#include "libCommon/data/Io.hpp"
+#include "libCommon/Exception.hpp"
 
 const std::string util::Channel::TimeFormat = "%Y-%m-%d %H:%M:%S";
 

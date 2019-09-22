@@ -3,8 +3,8 @@
 #include <streambuf>
 #include <iostream>
 
-#include "data/Io.hpp"
-#include "Exception.hpp"
+#include "libCommon/data/Io.hpp"
+#include "libCommon/Exception.hpp"
 
 std::string util::ReadFile(const std::string &file)
 {

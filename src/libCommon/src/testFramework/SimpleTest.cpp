@@ -1,4 +1,4 @@
-#include "Test.hpp"
+#include "libCommon/Test.hpp"
 
 test::SimpleTest::SimpleTest(const std::string &name, TestFunction func) : TestBase(name),
                                                                            func(func)

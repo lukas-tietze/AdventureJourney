@@ -1,0 +1,179 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(992,5): warning MSB8027: Two or more files with the name of Parser.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\Calculator\Parsing\Parser.cpp, src\data\json\Parser.cpp.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(992,5): warning MSB8027: Two or more files with the name of Tokenizer.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\Calculator\Tokenizing\Tokenizer.cpp, src\data\json\Tokenizer.cpp.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(992,5): warning MSB8027: Two or more files with the name of TokenizerException.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\Calculator\Tokenizing\TokenizerException.cpp, src\data\json\TokenizerException.cpp.
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(992,5): warning MSB8027: Two or more files with the name of Conversions.cpp will produce outputs to the same location. This can lead to an incorrect build result.  The files involved are src\data\json\Conversions.cpp, src\datetime\Conversions.cpp.
+  Calculator.cpp
+  Config.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  DoubleValue.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Evaluationcontext.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Functions.internal.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Ivalue.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Lazyvalue.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Operator.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  ExpressionBase.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  FunctionExpression.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Parser.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  ValueExpression.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\Calculator\Parsing\Parser.cpp(59,24): warning C4018:  "<": Konflikt zwischen "signed" und "unsigned"
+  VariableExpression.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  ScriptingEnging.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\Calculator\ScriptingEnging.cpp(370,24): warning C4018:  "<": Konflikt zwischen "signed" und "unsigned"
+  SetValue.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\Calculator\ScriptingEnging.cpp(398,28): warning C4018:  "<": Konflikt zwischen "signed" und "unsigned"
+  StringValue.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Token.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Tokenizer.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  TokenizerException.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  TokenType.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Code wird generiert...
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Kompilieren...
+  Args.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\Calculator\Tokenizing\Tokenizer.cpp(196): warning C4715:  "calculator::tokenizing::Tokenizer::ReadNext": Nicht alle Codepfade geben einen Wert zurück.
+  Cache.cpp
+  Channel.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Communicator.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Io.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\Io\Io.cpp(20,24): warning C4244:  "Argument": Konvertierung von "std::streamoff" in "const unsigned int", möglicher Datenverlust
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\Io\Io.cpp(43,28): warning C4244:  "Argument": Konvertierung von "std::streamoff" in "const unsigned int", möglicher Datenverlust
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\Io\Io.cpp(97,1): error C4996:  'scanf': This function or variable may be unsafe. Consider using scanf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  Statics.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\stdio.h(1274): message :  Siehe Deklaration von "scanf"
+  ArrayNode.cpp
+  Conversions.cpp
+  FormattedPrinter.cpp
+  IJsonSerializable.cpp
+  Node.cpp
+  ObjectNode.cpp
+  OperationException.cpp
+  Parser.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  ParserException.cpp
+  PrimitiveNode.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Tokenizer.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  TokenizerException.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  ValueException.cpp
+  settings.cpp
+  Code wird generiert...
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Kompilieren...
+  ParsingException.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\keyValueSettings\settings.cpp(82): warning C4715:  "util::SettingCollection::ReadSettings": Nicht alle Codepfade geben einen Wert zurück.
+  Random.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Escaping.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\random\Random.cpp(13,158): warning C4244:  "Argument": Konvertierung von "double" in "unsigned int", möglicher Datenverlust
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\Escaping.cpp(21,16): warning C4129:  "e": nicht erkannte Folge von Escapesequenz
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\Escaping.cpp(47,10): warning C4129:  "e": nicht erkannte Folge von Escapesequenz
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\Escaping.cpp(62,59): error C4996:  'std::codecvt_utf8<wchar_t,1114111,0>': warning STL4017: std::wbuffer_convert, std::wstring_convert, and the <codecvt> header (containing std::codecvt_mode, std::codecvt_utf8, std::codecvt_utf16, and std::codecvt_utf8_utf16) are deprecated in C++17. (The std::codecvt class template is NOT deprecated.) The C++ Standard doesn't provide equivalent non-deprecated functionality; consider using MultiByteToWideChar() and WideCharToMultiByte() from <Windows.h> instead. You can define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING or _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS to acknowledge that you have received this warning.
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\Escaping.cpp(62): message :  Siehe Deklaration von "std::codecvt_utf8<wchar_t,1114111,0>"
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\Escaping.cpp(62,1): error C4996:  'std::wstring_convert<std::codecvt_utf8<wchar_t,1114111,0>,wchar_t,std::allocator<wchar_t>,std::allocator<char>>::to_bytes': warning STL4017: std::wbuffer_convert, std::wstring_convert, and the <codecvt> header (containing std::codecvt_mode, std::codecvt_utf8, std::codecvt_utf16, and std::codecvt_utf8_utf16) are deprecated in C++17. (The std::codecvt class template is NOT deprecated.) The C++ Standard doesn't provide equivalent non-deprecated functionality; consider using MultiByteToWideChar() and WideCharToMultiByte() from <Windows.h> instead. You can define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING or _SILENCE_ALL_CXX17_DEPRECATION_WARNINGS to acknowledge that you have received this warning.
+  FormatException.cpp
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.22.27905\include\xlocbuf(408): message :  Siehe Deklaration von "std::wstring_convert<std::codecvt_utf8<wchar_t,1114111,0>,wchar_t,std::allocator<wchar_t>,std::allocator<char>>::to_bytes"
+  FormatTime.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\FormatTime.cpp(11,1): error C4996:  'localtime': This function or variable may be unsafe. Consider using localtime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  HexNumberConversions.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\time.h(506): message :  Siehe Deklaration von "localtime"
+  Justification.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\Justification.cpp(67,29): warning C4018:  ">": Konflikt zwischen "signed" und "unsigned"
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\Justification.cpp(72,36): warning C4018:  ">": Konflikt zwischen "signed" und "unsigned"
+  SetupStream.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\Justification.cpp(80,46): warning C4018:  ">": Konflikt zwischen "signed" und "unsigned"
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Split.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\SetupStream.cpp(23,23): warning C4018:  "<": Konflikt zwischen "signed" und "unsigned"
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\Split.cpp(136,21): warning C4018:  "<": Konflikt zwischen "signed" und "unsigned"
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\Split.cpp(143,19): warning C4018:  "<": Konflikt zwischen "signed" und "unsigned"
+  Strip.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\Split.cpp(148,16): warning C4018:  "<": Konflikt zwischen "signed" und "unsigned"
+  StructureAnalysis.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\StructureAnalysis.cpp(43,24): warning C4018:  "<=": Konflikt zwischen "signed" und "unsigned"
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\StructureAnalysis.cpp(48,24): warning C4018:  "<=": Konflikt zwischen "signed" und "unsigned"
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\StructureAnalysis.cpp(53,24): warning C4018:  "<=": Konflikt zwischen "signed" und "unsigned"
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\StructureAnalysis.cpp(55,28): warning C4018:  "<=": Konflikt zwischen "signed" und "unsigned"
+  TimeFormatException.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\StructureAnalysis.cpp(70,23): warning C4834:  Der Rückgabewert einer Funktion mit dem "nodiscard"-Attribut wird verworfen.
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\data\StringUtils\TimeFormatException.cpp(7,1): error C4996:  'ctime': This function or variable may be unsafe. Consider using ctime_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+  UpperLowerConversions.cpp
+C:\Program Files (x86)\Windows Kits\10\Include\10.0.18362.0\ucrt\time.h(476): message :  Siehe Deklaration von "ctime"
+  Conversions.cpp
+  RoundTimer.cpp
+  Timer.cpp
+  SignalEvent.cpp
+  Exception.cpp
+  FileNotFoundException.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  IndexOutOfRangeException.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Code wird generiert...
+  Kompilieren...
+  InvalidCaseException.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  MissingKeyException.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  NotImplementedException.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  NotSupportedException.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  OverflowException.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Utils.cpp
+  Color.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\graphics\Color.cpp(59,26): warning C4244:  "return": Konvertierung von "double" in "float", möglicher Datenverlust
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\graphics\Color.cpp(64,24): warning C4244:  "return": Konvertierung von "double" in "float", möglicher Datenverlust
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\graphics\Color.cpp(69,26): warning C4244:  "return": Konvertierung von "double" in "float", möglicher Datenverlust
+  Runner.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\graphics\Color.cpp(74,25): warning C4244:  "return": Konvertierung von "double" in "float", möglicher Datenverlust
+  SimpleTest.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  Source.cpp
+  Test.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  TestBase.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  TestConfig.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+  TestRun.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\include\libCommon\data\String.hpp(164,1): warning C4522:  "util::String": Mehrere Zuweisungsoperatoren angegeben
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\testFramework\TestRun.cpp(27,28): warning C4101:  "e": Unreferenzierte lokale Variable
+  Code wird generiert...
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\testFramework\TestRun.cpp(57,28): warning C4101:  "e": Unreferenzierte lokale Variable
+D:\Entwicklung\Projekte\Galaxy at War\src\libCommon\src\graphics\Color.cpp(188): warning C4715:  "util::Color::FromHexString": Nicht alle Codepfade geben einen Wert zurück.

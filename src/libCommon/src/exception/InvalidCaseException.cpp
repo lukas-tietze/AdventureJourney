@@ -1,5 +1,5 @@
-#include "Exception.hpp"
-#include "data/String.hpp"
+#include "libCommon/Exception.hpp"
+#include "libCommon/data/String.hpp"
 
 util::InvalidCaseException::InvalidCaseException() : util::Exception("Switch hit invalid case!")
 {

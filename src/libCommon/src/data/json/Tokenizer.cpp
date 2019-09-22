@@ -3,9 +3,9 @@
 #include <cstring>
 #include <stdexcept>
 
-#include "data/String.hpp"
-#include "data/Math.hpp"
-#include "data/Json.hpp"
+#include "libCommon/data/String.hpp"
+#include "libCommon/data/Math.hpp"
+#include "libCommon/data/Json.hpp"
 
 json::Tokenizer::Tokenizer() : tokens(),
                                bracketStack(),
