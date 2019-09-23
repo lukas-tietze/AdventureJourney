@@ -123,6 +123,40 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\core\battle_simulation\SimulationCore.hpp" />
+    <ClInclude Include="include\core\config.hpp" />
+    <ClInclude Include="include\core\config.in.hpp" />
+    <ClInclude Include="include\core\engine\Achievement.hpp" />
+    <ClInclude Include="include\core\engine\CivilisationConfig.hpp" />
+    <ClInclude Include="include\core\engine\Engine.hpp" />
+    <ClInclude Include="include\core\engine\GameConfig.hpp" />
+    <ClInclude Include="include\core\engine\Profile.hpp" />
+    <ClInclude Include="include\core\engine\Settings.hpp" />
+    <ClInclude Include="include\core\entities\Army.hpp" />
+    <ClInclude Include="include\core\entities\Builder.hpp" />
+    <ClInclude Include="include\core\entities\Commanders.hpp" />
+    <ClInclude Include="include\core\entities\Planet.hpp" />
+    <ClInclude Include="include\core\entities\Product.hpp" />
+    <ClInclude Include="include\core\entities\Resources.hpp" />
+    <ClInclude Include="include\core\entities\Units.hpp" />
+    <ClInclude Include="include\core\fileSystem\DataLoader.hpp" />
+    <ClInclude Include="include\core\GameCore.hpp" />
+    <ClInclude Include="include\core\util\Conversions.hpp" />
+    <ClInclude Include="include\core\util\HasEngineBase.hpp" />
+    <ClInclude Include="include\core\util\HasIdBase.hpp" />
+    <ClInclude Include="include\core\util\HasNameBase.hpp" />
+    <ClInclude Include="include\core\util\IdGeneratorBase.hpp" />
+    <ClInclude Include="include\core\util\IHandleRound.hpp" />
+    <ClInclude Include="include\core\util\Version.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\engine\Engine.cpp" />
+    <ClCompile Include="src\fileSystem\DataLoader.cpp" />
+    <ClCompile Include="src\util\Conversions.cpp" />
+    <ClCompile Include="src\util\Version.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

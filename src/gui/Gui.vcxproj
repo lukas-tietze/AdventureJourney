@@ -123,6 +123,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="include\gui\config.hpp" />
+    <ClInclude Include="include\gui\config.in.hpp" />
+    <ClInclude Include="include\gui\DummyData.hpp" />
+    <ClInclude Include="include\gui\GlScreens.hpp" />
+    <ClInclude Include="src\DummyData\Quadrics\QuadricHelper.internal.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\DummyData\Models\Coords.cpp" />
+    <ClCompile Include="src\DummyData\Models\Coords3D.cpp" />
+    <ClCompile Include="src\DummyData\Models\Cube.cpp" />
+    <ClCompile Include="src\DummyData\Quadrics\Box.cpp" />
+    <ClCompile Include="src\DummyData\Quadrics\Cone.cpp" />
+    <ClCompile Include="src\DummyData\Quadrics\Cylinder.cpp" />
+    <ClCompile Include="src\DummyData\Quadrics\Disk.cpp" />
+    <ClCompile Include="src\DummyData\Quadrics\IcoSphere.cpp" />
+    <ClCompile Include="src\DummyData\Quadrics\Quad.cpp" />
+    <ClCompile Include="src\DummyData\Quadrics\QuadricHelper.cpp" />
+    <ClCompile Include="src\DummyData\Quadrics\UvSphere.cpp" />
+    <ClCompile Include="src\DummyData\StreamOperators.cpp" />
+    <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\Screens\DebugScreenBase.cpp" />
+    <ClCompile Include="src\Screens\DummyObject.cpp" />
+    <ClCompile Include="src\Screens\DummyScreen.cpp" />
+    <ClCompile Include="src\Screens\IDebugObject.cpp" />
+    <ClCompile Include="src\Screens\PlanetObject.cpp" />
+    <ClCompile Include="src\Screens\PlanetScreen.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

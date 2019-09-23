@@ -145,7 +145,7 @@ public:
     String Concat(const char *, int len = -1);
     String &operator=(const std::string &);
     String &operator=(const String &);
-    String &operator=(std::string &);
+    //String &operator=(std::string &);
     String &operator=(String &);
     String Trim(char = ' ');
     String Trim(const char *, int = -1);

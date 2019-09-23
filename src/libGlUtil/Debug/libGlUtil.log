@@ -1,0 +1,69 @@
+﻿  Debug.cpp
+  GlErrorException.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\GlUtils\Debug.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "GlUtils.hpp": No such file or directory
+  GlUtilCore.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\GlUtils\GlErrorException.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "GlUtils.hpp": No such file or directory
+  Screen.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\GlUtils\GlUtilCore.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "GlUtils.hpp": No such file or directory
+  SpecialVectors.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\GlUtils\Screen.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "GlUtils.hpp": No such file or directory
+  Utils.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\GlUtils\SpecialVectors.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "GlUtils.hpp": No such file or directory
+  BitMapFont.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\GlUtils\Utils.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "GlUtils.hpp": No such file or directory
+  Camera.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\BitMapFont.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  CameraUpdater.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\Camera.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "GlUtils.hpp": No such file or directory
+  DeferredRenderingPipeline.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\CameraUpdater.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "ScreenUtils.hpp": No such file or directory
+  FontContent.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\DeferredRenderingPipeline.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  FontInfo.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\FontContent.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  FontType.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\FontInfo.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  FormatConverter.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\FontType.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  Light.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\FormatConverter.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  Material.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\Light.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  Mesh.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\Material.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  MeshAttribute.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\Mesh.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  MeshBuffer.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\MeshAttribute.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  MeshBuffer.LoadCg2vdg.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\MeshBuffer.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  Code wird generiert...
+  Kompilieren...
+  MeshBuffer.LoadJson.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\MeshBuffer.LoadCg2vdg.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  PostProcessingPipeline.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\MeshBuffer.LoadJson.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  Program.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\PostProcessingPipeline.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  RenderToTextureBase.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\Program.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  Scene.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\RenderToTextureBase.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  SceneObject.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\Scene.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  SceneOverlay.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\SceneObject.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  Shader.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\SceneOverlay.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  SkyBox.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\Shader.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  Texture.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\SkyBox.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  UboOwner.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\Texture.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  RenderUtils.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\Objects\UboOwner.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "Objects.hpp": No such file or directory
+  SceneViewBase.cpp
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\RenderUtils\RenderUtils.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "RenderUtils.hpp": No such file or directory
+  Code wird generiert...
+D:\Entwicklung\Projekte\Galaxy at War\src\libGlUtil\src\ScreenUtils\SceneViewBase.cpp(1,10): error C1083:  Datei (Include) kann nicht geöffnet werden: "ScreenUtils.hpp": No such file or directory
