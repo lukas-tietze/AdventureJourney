@@ -1,3 +1,7 @@
+#define __STDC_WANT_LIB_EXT1__ 1
+
+#include <ctime>
+
 #include "libCommon/data/String.hpp"
 
 std::string util::FormatLocalTime(const std::string &format)
@@ -8,8 +12,9 @@ std::string util::FormatLocalTime(const std::string &format)
 std::string util::FormatLocalTime(const std::string &format, std::time_t time)
 {
     char buf[256];
-    auto localTime = std::localtime(&time);
-    auto count = std::strftime(buf, 256, format.c_str(), localTime);
+    struct tm localTime;
+    localtime_s(&time, &localTime);
+    auto count = strftime(buf, 256, format.c_str(), &localTime);
 
     if (count == 0)
         throw util::TimeFormatException(format, time);

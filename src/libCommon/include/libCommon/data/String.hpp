@@ -237,6 +237,11 @@ public:
     static void Release();
     static String CreateStringAndRelease();
 };
+
+namespace conversions
+{
+std::ostream &operator<<(std::ostream &, const std::time_t &);
+}
 } // namespace util
 
 #include "libCommon/src/data/StringUtils/Format.inl"

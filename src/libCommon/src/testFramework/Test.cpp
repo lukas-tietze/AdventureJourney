@@ -1,6 +1,5 @@
 #include <cstring>
 #include <string>
-#include <boost/stacktrace/stacktrace.hpp>
 
 #include "libCommon/data/String.hpp"
 #include "libCommon/Test.hpp"

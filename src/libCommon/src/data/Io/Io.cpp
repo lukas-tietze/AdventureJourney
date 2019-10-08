@@ -1,3 +1,7 @@
+#define __STDC_WANT_LIB_EXT1__ 1
+
+#include <string.h>
+
 #include <string>
 #include <fstream>
 #include <streambuf>
@@ -94,7 +98,7 @@ bool util::TryWriteFile(const std::string &file, const std::string &data)
 void util::WaitForKeyPress()
 {
     char c;
-    std::scanf("%c", &c);
+    scanf_s("%c", &c, 1);
 }
 
 void util::WaitForKeyPress(const std::string &message)

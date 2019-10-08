@@ -5,20 +5,17 @@ util::Exception::Exception() : msg("")
 }
 
 util::Exception::Exception(const std::string &msg) : errorCode(0),
-                                                     msg(msg),
-                                                     trace()
+                                                     msg(msg)
 {
 }
 
 util::Exception::Exception(int errorCode) : errorCode(errorCode),
-                                            msg(),
-                                            trace()
+                                            msg()
 {
 }
 
 util::Exception::Exception(int errorCode, const std::string &msg) : errorCode(errorCode),
-                                                                    msg(msg),
-                                                                    trace()
+                                                                    msg(msg)
 {
 }
 
@@ -35,9 +32,4 @@ const std::string &util::Exception::GetMessage() const
 int util::Exception::GetErrorCode() const
 {
     return this->errorCode;
-}
-
-const boost::stacktrace::stacktrace &util::Exception::GetStacktrace() const
-{
-    return this->trace;
 }

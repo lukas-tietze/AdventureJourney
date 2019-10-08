@@ -6,8 +6,6 @@
 #include <string>
 #include <sstream>
 
-#include <boost/stacktrace/stacktrace.hpp>
-
 namespace util
 {
 namespace error_codes
@@ -15,14 +13,11 @@ namespace error_codes
 const std::string &GetMessage(int errorCode);
 }
 
-std::string FormatStacktrace(const boost::stacktrace::stacktrace &trace, uint indent, uint maxLen, bool showAddress = false);
-
 class Exception : public std::exception
 {
 private:
     int errorCode;
     std::string msg;
-    boost::stacktrace::stacktrace trace;
 
 protected:
     void SetMessage(const std::string &message);
@@ -36,7 +31,6 @@ public:
     const char *what() const throw();
     const std::string &GetMessage() const;
     int GetErrorCode() const;
-    const boost::stacktrace::stacktrace &GetStacktrace() const;
 };
 
 class IndexOutOfRangeException : public util::Exception
