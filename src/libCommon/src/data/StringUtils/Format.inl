@@ -53,6 +53,19 @@ size_t PrepareFormat(const std::string &format, std::stringstream &buf, size_t p
     return end;
 }
 
+template<typename TIterator, typename ... TArgs>
+void Format(const TIterator& begin, const TIterator& end, const TArgs& ...args) {
+
+	if constexpr (is_iterator<TIterator>::value) {
+		std::cout << "Printing iterators\n";
+	}
+	else {
+		std::cout << "Printing normal values of same type\n";
+	}
+
+	Format(args...);
+}
+
 template <class T>
 size_t WriteArray(const std::string &format, std::stringstream &buf, size_t pos, const T &arg)
 {

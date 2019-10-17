@@ -8,6 +8,7 @@
 #include <sstream>
 #include <ctime>
 #include <limits>
+#include <chrono>
 
 #include "libCommon/Exception.hpp"
 
@@ -65,15 +66,6 @@ int OsaDistance(const std::string &s1, const std::string &s2);
 char Escape(char);
 std::string Unescape(char);
 std::string UtfCodePointToNarrowString(uint32_t);
-
-class TimeFormatException : public util::Exception
-{
-public:
-    TimeFormatException(const std::string &, std::time_t);
-};
-
-std::string FormatLocalTime(const std::string &format);
-std::string FormatLocalTime(const std::string &format, std::time_t);
 
 uint32_t Hex4ToNumber(const std::string &);
 uint32_t Hex4ToNumber(const char *);

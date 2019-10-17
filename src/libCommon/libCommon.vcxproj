@@ -211,14 +211,12 @@
     <ClCompile Include="src\data\StringUtils\Conversions\Conversions.cpp" />
     <ClCompile Include="src\data\StringUtils\Escaping.cpp" />
     <ClCompile Include="src\data\StringUtils\FormatException.cpp" />
-    <ClCompile Include="src\data\StringUtils\FormatTime.cpp" />
     <ClCompile Include="src\data\StringUtils\HexNumberConversions.cpp" />
     <ClCompile Include="src\data\StringUtils\Justification.cpp" />
     <ClCompile Include="src\data\StringUtils\SetupStream.cpp" />
     <ClCompile Include="src\data\StringUtils\Split.cpp" />
     <ClCompile Include="src\data\StringUtils\Strip.cpp" />
     <ClCompile Include="src\data\StringUtils\StructureAnalysis.cpp" />
-    <ClCompile Include="src\data\StringUtils\TimeFormatException.cpp" />
     <ClCompile Include="src\data\StringUtils\UpperLowerConversions.cpp" />
     <ClCompile Include="src\datetime\Conversions.cpp" />
     <ClCompile Include="src\datetime\RoundTimer.cpp" />
@@ -281,6 +279,7 @@
     <ClInclude Include="include\libCommon\data\collection\Cache.hpp" />
     <ClInclude Include="include\libCommon\data\collection\CollectRope.hpp" />
     <ClInclude Include="include\libCommon\data\collection\IndexMapper.hpp" />
+    <ClInclude Include="include\libCommon\data\collection\IteratorExceptions.hpp" />
     <ClInclude Include="include\libCommon\data\collection\List.hpp" />
     <ClInclude Include="include\libCommon\data\collection\Set.hpp" />
     <ClInclude Include="include\libCommon\data\collection\Stack.hpp" />
@@ -294,6 +293,8 @@
     <ClInclude Include="include\libCommon\data\KeyValueSettings.hpp" />
     <ClInclude Include="include\libCommon\data\Math.hpp" />
     <ClInclude Include="include\libCommon\data\Random.hpp" />
+    <ClInclude Include="include\libCommon\data\range\IndexedRange.hpp" />
+    <ClInclude Include="include\libCommon\data\range\Range.hpp" />
     <ClInclude Include="include\libCommon\data\String.hpp" />
     <ClInclude Include="include\libCommon\datetime\Conversions.hpp" />
     <ClInclude Include="include\libCommon\datetime\Timer.hpp" />
@@ -320,6 +321,11 @@
     <ClInclude Include="src\Calculator\Tokenizing\Internal.hpp" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="src\data\collection\circularList\CircularList.inl" />
+    <None Include="src\data\collection\circularList\ConstIterator.inl" />
+    <None Include="src\data\collection\circularList\ConstReverseIterator.inl" />
+    <None Include="src\data\collection\circularList\Iterator.inl" />
+    <None Include="src\data\collection\circularList\ReverseIterator.inl" />
     <None Include="src\data\StringUtils\Conversions.inl" />
     <None Include="src\data\StringUtils\Format.inl" />
     <None Include="src\data\StringUtils\StreamOperators.inl" />
