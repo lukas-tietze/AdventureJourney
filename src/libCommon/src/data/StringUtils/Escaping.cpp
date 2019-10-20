@@ -1,4 +1,4 @@
-#include <codecvt>
+#include <locale>
 #include <iomanip>
 
 #include "libCommon/data/String.hpp"
@@ -59,5 +59,5 @@ std::string util::Unescape(char c)
 
 std::string util::UtfCodePointToNarrowString(uint32_t codePoint)
 {
-    return std::wstring_convert<std::codecvt_utf8<wchar_t>, wchar_t>().to_bytes(codePoint);
+    return std::wstring_convert<std::codecvt<char32_t, char, std::mbstate_t>>().to_bytes(codePoint);
 }

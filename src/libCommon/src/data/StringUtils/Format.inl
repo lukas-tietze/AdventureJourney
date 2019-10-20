@@ -1,4 +1,5 @@
 #include "libCommon/data/String.hpp"
+#include "libCommon/TypetraitUtils.hpp"
 
 namespace
 {

@@ -28,9 +28,7 @@
             "includePath": [
                 "${workspaceFolder}/src/",
                 "${workspaceFolder}/src/libCommon/include/",
-                "${workspaceFolder}/src/libTermUtil/include/",
                 "${workspaceFolder}/src/libGlUtil/include/",
-                "${workspaceFolder}/src/terminal_ui/include/",
                 "${workspaceFolder}/src/gui/include/",
                 "${workspaceFolder}/libs/glad/include/",
                 "${workspaceFolder}/libs/stb/include",
