@@ -1,6 +1,6 @@
 #include <cstdarg>
 
-#include "libCommon/data/Io.hpp"
+#include "libCommon/io/Io.hpp"
 #include "libCommon/Exception.hpp"
 
 util::Communicator::Communicator() : message(stdout),

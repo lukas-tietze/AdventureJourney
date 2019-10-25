@@ -6,10 +6,9 @@
 #include <iostream>
 #include <cstring>
 
-#include "data/String.hpp"
-#include "data/Io.hpp"
-#include "datetime/Conversions.hpp"
-#include "Exception.hpp"
+#include "libCommon/data/String.hpp"
+#include "libCommon/datetime/Conversions.hpp"
+#include "libCommon/Exception.hpp"
 
 namespace test
 {

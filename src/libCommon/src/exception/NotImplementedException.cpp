@@ -1,5 +1,5 @@
 #include "libCommon/Exception.hpp"
-#include "libCommon/data/Io.hpp"
+#include "libCommon/data/String.hpp"
 
 util::NotImplementedException::NotImplementedException() : util::Exception("The function is not implemented!")
 {

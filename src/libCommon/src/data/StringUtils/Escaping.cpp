@@ -59,5 +59,9 @@ std::string util::Unescape(char c)
 
 std::string util::UtfCodePointToNarrowString(uint32_t codePoint)
 {
-    return std::wstring_convert<std::codecvt<char32_t, char, std::mbstate_t>>().to_bytes(codePoint);
+    //return std::wstring_convert<std::codecvt<char32_t, char, std::mbstate_t>>().to_bytes(codePoint);
+
+	//TODO wieder implementieren!
+
+	return "";
 }

@@ -1,5 +1,6 @@
 #include "libCommon/Calculator.hpp"
 #include "libCommon/Exception.hpp"
+#include "libCommon/data/String.hpp"
 #include "../Functions.internal.hpp"
 #include "./Internal.hpp"
 #include "../Tokenizing/Internal.hpp"

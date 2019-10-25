@@ -1,5 +1,3 @@
-#define __STDC_WANT_LIB_EXT1__ 1
-
 #include <string.h>
 
 #include <string>
@@ -7,8 +5,8 @@
 #include <streambuf>
 #include <iostream>
 
-#include "libCommon/data/Io.hpp"
 #include "libCommon/Exception.hpp"
+#include "libCommon/io/File.hpp"
 
 std::string util::ReadFile(const std::string &file)
 {

@@ -126,7 +126,7 @@ bool InitGlfw(const glutil::CreateInfo &info)
         return false;
 
     /* register our callbacks */
-    // glfwSetFramebufferSizeCallback(win, HandleResize);
+    glfwSetFramebufferSizeCallback(win, HandleResize);
     glfwSetWindowSizeCallback(win, HandleResize);
     glfwSetKeyCallback(win, HandleKeyboard);
     glfwSetMouseButtonCallback(win, HandleMouseButton);

@@ -257,12 +257,12 @@ void calculator::ScriptingEngine::ChangeDir(const std::string &expression)
 
 void calculator::ScriptingEngine::HandleException(const std::exception &e)
 {
-    util::err.WriteLine("!> Exception ocurred: %", e.what());
+    this->err.WriteLine("!> Exception ocurred: %", e.what());
 }
 
 void calculator::ScriptingEngine::HandleException(const util::Exception &e)
 {
-    util::err.WriteLine("!> Exception ocurred: %", e.GetMessage());
+	this->err.WriteLine("!> Exception ocurred: %", e.GetMessage());
 }
 
 void calculator::ScriptingEngine::UseAns(const std::string &expression)
@@ -417,7 +417,7 @@ void calculator::ScriptingEngine::EvalScript(const std::string &script)
 {
     auto stream = std::stringstream();
 
-    util::dbg.WriteLine("Evaluating script \"%\"", script);
+    this->dbg.WriteLine("Evaluating script \"%\"", script);
 
     stream.str(script);
 

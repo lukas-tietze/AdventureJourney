@@ -84,7 +84,8 @@
         "typeindex": "cpp",
         "*.ipp": "cpp",
         "future": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "queue": "cpp"
     },
     "C_Cpp.intelliSenseEngineFallback": "Disabled",
     "python.promptToInstallJupyter": false,

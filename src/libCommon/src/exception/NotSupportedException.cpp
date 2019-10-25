@@ -1,5 +1,5 @@
 #include "libCommon/Exception.hpp"
-#include "libCommon/data/Io.hpp"
+#include "libCommon/data/String.hpp"
 
 util::NotSupportedException::NotSupportedException() : util::Exception("The process is not supported!")
 {

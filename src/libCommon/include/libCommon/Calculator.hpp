@@ -6,7 +6,8 @@
 #include <stack>
 #include <set>
 
-#include "data/Io.hpp"
+#include "libCommon/Exception.hpp"
+#include "libCommon/io/Writer.hpp"
 
 namespace calculator
 {
@@ -283,10 +284,10 @@ private:
     Calculator calculator;
     std::string workingDirectory;
 
-    util::Channel in;
-    util::Channel err;
-    util::Channel out;
-    util::Channel diagnostic;
+    util::io::Writer err;
+    util::io::Writer dbg;
+    util::io::Writer out;
+    util::io::Writer diagnostic;
 
     typedef void (ScriptingEngine::*action_t)(const std::string &arg);
 
