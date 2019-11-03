@@ -92,15 +92,3 @@ bool util::TryWriteFile(const std::string &file, const std::string &data)
 
     return true;
 }
-
-void util::WaitForKeyPress()
-{
-    char c;
-    scanf_s("%c", &c, 1);
-}
-
-void util::WaitForKeyPress(const std::string &message)
-{
-    std::printf("%s", message.c_str());
-    WaitForKeyPress();
-}

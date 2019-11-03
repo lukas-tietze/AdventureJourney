@@ -1,6 +1,6 @@
-#pragma
+#pragma once
 
-#include <>
+#include "Channel.hpp"
 
 namespace util
 {

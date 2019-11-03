@@ -4,15 +4,15 @@ util::io::StringStreamChannel::StringStreamChannel() : stream()
 {
 }
 
-util::io::StringStreamChannel::StringStreamChannel(const StringStreamChannel &copy) : stream(copy.stream)
+util::io::StringStreamChannel::StringStreamChannel(const StringStreamChannel &copy) : stream(copy.stream.str())
 {
 }
 
-util::io::StringStreamChannel::StringStreamChannel(StringStreamChannel &&transfer) : stream(transfer.stream)
+util::io::StringStreamChannel::StringStreamChannel(StringStreamChannel &&transfer) : stream(std::move(transfer.stream))
 {
 }
 
-const std::string &util::io::StringStreamChannel::Value()
+std::string util::io::StringStreamChannel::Value()
 {
     return this->stream.str();
 }

@@ -192,6 +192,8 @@ bool calculator::tokenizing::Tokenizer::ReadNext()
     else
     {
         this->HandleError(TokenizerError::InvalidChar);
+
+		return false;
     }
 }
 

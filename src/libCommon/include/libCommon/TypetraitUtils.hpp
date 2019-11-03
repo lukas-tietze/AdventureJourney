@@ -16,4 +16,14 @@ struct is_iterator<T, typename std::enable_if<!std::is_same<typename std::iterat
 
 template<typename T>
 inline constexpr bool is_iterator_v = util::is_iterator<T>::value;
+
+template<typename TLhs, typename ...TRhs>
+struct is_one_of
+{
+	static constexpr bool value = std::disjunction_v<std::is_same<TLhs, TRhs>...>;
+};
+
+template<typename TLhs, typename TRhs1, typename ...TRhs>
+constexpr auto is_one_of_v = is_one_of<TLhs, TRhs1, TRhs...>::value;
+
 } // namespace util
