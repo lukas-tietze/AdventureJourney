@@ -24,7 +24,7 @@ void test::TestRun::Execute()
 	{
 		this->test->Init();
 	}
-	catch (std::exception& e)
+	catch (...)
 	{
 	}
 
@@ -43,19 +43,24 @@ void test::TestRun::Execute()
 		this->end = std::clock();
 		this->good = false;
 		this->message = e.GetMessage();
-		this->message.push_back('.\n');
+		this->message.push_back('\n');
 	}
 	catch (std::exception& e)
 	{
 		this->good = false;
-		this->message.assign(e.what());
+		this->message = e.what();
+	}
+	catch (...)
+	{
+		this->good = false;
+		this->message = "Unidentified object thrown!";
 	}
 
 	try
 	{
 		this->test->Dispose();
 	}
-	catch (std::exception& e)
+	catch (...)
 	{
 	}
 }

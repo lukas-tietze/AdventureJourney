@@ -19,7 +19,7 @@ util::io::FileChannel::~FileChannel()
 {
 	std::fflush(this->file);
 
-	if (this->file != std::stdout && this->file != std::stderr)
+	if (this->file != stdout && this->file != stderr)
 	{
 		std::fclose(this->file);
 	}
@@ -29,7 +29,7 @@ void util::io::FileChannel::Write(const std::string& s)
 {
 	if (this->file != nullptr)
 	{
-		std::fprintf(this->file, "%s", s);
+		std::fprintf(this->file, "%s", s.c_str());
 	}
 }
 
@@ -67,6 +67,6 @@ void util::io::FileChannel::Flush()
 {
 	if (this->file != nullptr)
 	{
-		std::fflush(this->file)
+		std::fflush(this->file);
 	}
 }

@@ -188,10 +188,6 @@
     <ClCompile Include="src\Calculator\Tokenizing\TokenType.cpp" />
     <ClCompile Include="src\data\Args.cpp" />
     <ClCompile Include="src\data\collection\Cache.cpp" />
-    <ClCompile Include="src\data\Io\Channel.cpp" />
-    <ClCompile Include="src\data\Io\Communicator.cpp" />
-    <ClCompile Include="src\data\Io\Io.cpp" />
-    <ClCompile Include="src\data\Io\Statics.cpp" />
     <ClCompile Include="src\data\json\ArrayNode.cpp" />
     <ClCompile Include="src\data\json\Conversions.cpp" />
     <ClCompile Include="src\data\json\FormattedPrinter.cpp" />
@@ -208,7 +204,6 @@
     <ClCompile Include="src\data\keyValueSettings\settings.cpp" />
     <ClCompile Include="src\data\ParsingException.cpp" />
     <ClCompile Include="src\data\random\Random.cpp" />
-    <ClCompile Include="src\data\StringUtils\Conversions\Conversions.cpp" />
     <ClCompile Include="src\data\StringUtils\Escaping.cpp" />
     <ClCompile Include="src\data\StringUtils\FormatException.cpp" />
     <ClCompile Include="src\data\StringUtils\HexNumberConversions.cpp" />
@@ -231,12 +226,12 @@
     <ClCompile Include="src\exception\NotSupportedException.cpp" />
     <ClCompile Include="src\exception\OverflowException.cpp" />
     <ClCompile Include="src\graphics\Color.cpp" />
+    <ClCompile Include="src\Io\ChannelHelper.cpp" />
     <ClCompile Include="src\Io\Communicator.cpp" />
     <ClCompile Include="src\Io\FileChannel.cpp" />
     <ClCompile Include="src\Io\FileStreamChannel.cpp" />
     <ClCompile Include="src\Io\IChannel.cpp" />
     <ClCompile Include="src\Io\Io.cpp" />
-    <ClCompile Include="src\Io\Statics.cpp" />
     <ClCompile Include="src\Io\StdErrFileChannel.cpp" />
     <ClCompile Include="src\Io\StdErrStreamChannel.cpp" />
     <ClCompile Include="src\Io\StdOutFileChannel.cpp" />
@@ -301,6 +296,7 @@
     <ClInclude Include="include\libCommon\data\collection\Storage.hpp" />
     <ClInclude Include="include\libCommon\data\collection\Utils.hpp" />
     <ClInclude Include="include\libCommon\data\EnumHelper.hpp" />
+    <ClInclude Include="include\libCommon\data\FlagHelper.hpp" />
     <ClInclude Include="include\libCommon\data\Helper.hpp" />
     <ClInclude Include="include\libCommon\data\Io.hpp" />
     <ClInclude Include="include\libCommon\data\IteratorUtils.hpp" />
@@ -336,6 +332,7 @@
     <ClInclude Include="include\libCommon\io\Writer.hpp" />
     <ClInclude Include="include\libCommon\Lib.hpp" />
     <ClInclude Include="include\libCommon\Linq.hpp" />
+    <ClInclude Include="include\libCommon\TemplateUtils.hpp" />
     <ClInclude Include="include\libCommon\Test.hpp" />
     <ClInclude Include="include\libCommon\TypetraitUtils.hpp" />
     <ClInclude Include="src\Calculator\Functions.internal.hpp" />
