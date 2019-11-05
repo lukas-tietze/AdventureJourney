@@ -5,7 +5,7 @@
 namespace util
 {
 template <typename TCounter>
-class _RangeIterator
+class RangeIterator
 {
 private:
     TCounter value;
@@ -53,7 +53,7 @@ public:
                this->step == other.step;
     }
 
-    Iterator<typename TCounter> operator++()
+    Iterator<TCounter> operator++()
     {
         auto res = *this;
 
@@ -62,31 +62,31 @@ public:
         return res;
     }
 
-    Iterator<typename TCounter> &operator++(int)
+    Iterator<TCounter> &operator++(int)
     {
         this->value += this->step;
 
         return &this;
     }
 
-    Iterator<typename TCounter> operator+(int i)
+    Iterator<TCounter> operator+(int i)
     {
         return Iterator(this->value + i * this->step);
     }
 
-    Iterator<typename TCounter> operator-(int i)
+    Iterator<TCounter> operator-(int i)
     {
         return Iterator(this->value - i * this->step);
     }
 
-    Iterator<typename TCounter> &operator+=(int i)
+    Iterator<TCounter> &operator+=(int i)
     {
         this->value += i * this->step;
 
         return *this;
     }
 
-    Iterator<typename TCounter> &operator-=(int i)
+    Iterator<TCounter> &operator-=(int i)
     {
         this->value -= i * this->step;
 
@@ -108,7 +108,7 @@ private:
     TCounter step;
 
 public:
-    using _RangeIterator<TCounter> = iterator;
+    using RangeIterator<TCounter> = iterator;
 
     Range(TCounter start, TCounter end, TCounter step) : start(start),
                                                          end(end),
@@ -126,4 +126,10 @@ public:
         return iterator(this->end, this->step);
     }
 };
+
+template <typename T>
+Range<T> MakeRange(T begin, T end, T step)
+{
+    return Range<T>(begin, end, step);
+}
 } // namespace  util

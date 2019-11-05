@@ -1,8 +1,8 @@
 #include <cmath>
 #include <iomanip>
+#include <array>
 
 #include "libCommon/graphics/Color.hpp"
-#include "libCommon/data/collection/Array.hpp"
 #include "libCommon/data/Math.hpp"
 #include "libCommon/data/String.hpp"
 
@@ -128,7 +128,7 @@ util::Color util::Color::FromHSV(double hue, double saturation, double value)
 	auto c = value * saturation;
 	auto x = c * (1.0 - std::abs(util::Mod(hue / 60.0, 2.0) - 1.0));
 
-	util::Array<double> data(3);
+	std::array<double, 3> data;
 
 	if (hue < 60)
 		data = { c, x, 0.0 };
